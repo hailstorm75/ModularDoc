@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MarkDoc.Elements
+﻿namespace MarkDoc.Elements
 {
+  /// <summary>
+  /// Interface for events
+  /// </summary>
   public interface IEvent
   {
+    /// <summary>
+    /// Event name
+    /// </summary>
+    string Name { get; }
   }
 }
