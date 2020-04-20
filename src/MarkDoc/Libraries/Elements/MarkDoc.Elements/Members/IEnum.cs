@@ -8,10 +8,11 @@ namespace MarkDoc.Elements.Members
   /// Interface for enums 
   /// </summary>
   public interface IEnum
+    : IType
   {
     /// <summary>
-    /// Enum name
+    /// Enum fields
     /// </summary>
-    string Name { get; }
+    IReadOnlyCollection<string> Fields { get; }
   }
 }

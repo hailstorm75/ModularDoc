@@ -1,13 +1,11 @@
-﻿namespace MarkDoc.Elements
+﻿namespace MarkDoc.Elements.Members
 {
   /// <summary>
   /// Interface for events
   /// </summary>
   public interface IEvent
+    : IClass
   {
-    /// <summary>
-    /// Event name
-    /// </summary>
-    string Name { get; }
+
   }
 }

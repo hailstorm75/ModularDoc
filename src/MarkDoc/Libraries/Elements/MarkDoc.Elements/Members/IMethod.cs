@@ -1,19 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace MarkDoc.Elements
+namespace MarkDoc.Elements.Members
 {
   /// <summary>
   /// Interface for methods
   /// </summary>
   public interface IMethod
+    : IConstructor
   {
-    /// <summary>
-    /// Method name
-    /// </summary>
-    string Name { get; }
-    /// <summary>
-    /// Method arguments
-    /// </summary>
-    IReadOnlyCollection<IArgument> Arguments { get; }
   }
 }

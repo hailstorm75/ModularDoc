@@ -1,9 +1,13 @@
-﻿namespace MarkDoc.Elements
+﻿using MarkDoc.Elements.Members;
+using System;
+
+namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for <see cref="IMethod"/> arguments
   /// </summary>
   public interface IArgument
+    : IMember
   {
     /// <summary>
     /// Types of arguments
@@ -27,14 +31,14 @@
     #region Properties
 
     /// <summary>
-    /// Argument name
+    /// Argument keyword
     /// </summary>
-    string Name { get; }
+    ArgumentType Keyword { get; } 
 
     /// <summary>
     /// Argument type
     /// </summary>
-    ArgumentType Type { get; } 
+    Lazy<IType> Type { get; }
 
     #endregion
   }
