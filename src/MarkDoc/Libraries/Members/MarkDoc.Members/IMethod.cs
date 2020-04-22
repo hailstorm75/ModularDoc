@@ -12,7 +12,7 @@ namespace MarkDoc.Members
     /// <summary>
     /// Method visibility
     /// </summary>
-    MemberVisibility Visibility { get; }
+    MemberInheritance Inheritance { get; }
 
     /// <summary>
     /// Determines whether the method is asynchronous

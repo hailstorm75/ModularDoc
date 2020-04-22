@@ -1,5 +1,7 @@
-﻿using System;
+﻿using dnlib.DotNet;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -25,10 +27,14 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public ClassDef()
-      : base()
+    public ClassDef(dnlib.DotNet.TypeDef source)
+      : base(source)
     {
-
+      Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
+                                            && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                                            && x.IsConstructor)
+                                   .Select(x => new ConstructorDef(x))
+                                   .ToArray();
     }
   }
 }

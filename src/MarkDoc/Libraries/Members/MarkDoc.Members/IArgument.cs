@@ -7,7 +7,6 @@ namespace MarkDoc.Members
   /// Interface for <see cref="IMethod"/> arguments
   /// </summary>
   public interface IArgument
-    : IMember
   {
     /// <summary>
     /// Argument keyword

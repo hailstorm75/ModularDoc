@@ -4,7 +4,6 @@
   /// Interface for types
   /// </summary>
   public interface IType
-    : IMember
   {
     /// <summary>
     /// Type namespace

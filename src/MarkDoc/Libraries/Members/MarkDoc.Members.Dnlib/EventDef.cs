@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MarkDoc.Members.Dnlib
+﻿namespace MarkDoc.Members.Dnlib
 {
   public class EventDef
-    : ClassDef, IEvent
+    //: MemberDef, IEvent
   {
+    /// <inheritdoc />
+    //public override bool IsStatic { get; }
   }
 }

@@ -17,7 +17,7 @@ namespace MarkDoc.Members
     /// <summary>
     /// Generics name, and their variance and constraints
     /// </summary>
-    IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IInterface>> constraints)> Generics { get; }
+    IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IType>> constraints)> Generics { get; }
 
     /// <summary>
     /// Collection of nested enums

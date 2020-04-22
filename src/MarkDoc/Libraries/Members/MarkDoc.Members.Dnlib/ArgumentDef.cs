@@ -4,7 +4,7 @@ using System;
 namespace MarkDoc.Members.Dnlib
 {
   public class ArgumentDef
-    : MemberDef, IArgument
+    : IArgument
   {
     #region Properties
 
@@ -19,8 +19,7 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public ArgumentDef()
-      : base()
+    public ArgumentDef(dnlib.DotNet.Parameter source)
     {
 
     }

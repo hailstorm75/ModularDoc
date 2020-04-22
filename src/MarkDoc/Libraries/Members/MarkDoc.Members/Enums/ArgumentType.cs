@@ -18,7 +18,7 @@
     /// </summary>
     Out,
     /// <summary>
-    /// Argument with the out keyword
+    /// Argument with the in keyword
     /// </summary>
     In
   }

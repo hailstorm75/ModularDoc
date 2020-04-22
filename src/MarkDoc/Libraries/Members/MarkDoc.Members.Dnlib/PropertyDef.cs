@@ -9,7 +9,10 @@ namespace MarkDoc.Members.Dnlib
     #region Properties
 
     /// <inheritdoc />
-    public MemberVisibility Visibility { get; }
+    public override bool IsStatic { get; }
+
+    /// <inheritdoc />
+    public MemberInheritance Visibility { get; }
 
     /// <inheritdoc />
     public Lazy<IType> Type { get; }
@@ -25,8 +28,8 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public PropertyDef()
-      : base()
+    public PropertyDef(dnlib.DotNet.PropertyDef source)
+      : base(source)
     {
 
     }

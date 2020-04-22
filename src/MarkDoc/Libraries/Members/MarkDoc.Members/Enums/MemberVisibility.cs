@@ -1,7 +1,8 @@
 ﻿namespace MarkDoc.Members.Enums
 {
-  public enum MemberVisibility
+  public enum MemberInheritance
   {
+    Normal,
     Abstract,
     Virtual,
     Override,

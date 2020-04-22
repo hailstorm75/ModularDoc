@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -15,10 +17,13 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public EnumDef()
-      : base()
+    public EnumDef(dnlib.DotNet.TypeDef source)
+      : base(source)
     {
+      if (source == null)
+        throw new ArgumentNullException(nameof(source));
 
+      Fields = source.Fields.Select(x => x.Name.String).ToArray();
     }
   }
 }

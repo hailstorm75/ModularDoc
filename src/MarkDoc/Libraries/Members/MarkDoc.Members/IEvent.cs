@@ -4,7 +4,7 @@
   /// Interface for events
   /// </summary>
   public interface IEvent
-    : IClass
+    : IMember
   {
 
   }

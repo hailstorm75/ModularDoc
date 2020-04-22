@@ -5,8 +5,8 @@
   /// </summary>
   public enum Variance
   {
-    Contravariance,
-    Covariance,
-    Variance
+    NonVariant,
+    Covariant,
+    Contravariant,
   }
 }

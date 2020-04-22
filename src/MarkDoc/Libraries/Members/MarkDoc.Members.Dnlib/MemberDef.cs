@@ -1,4 +1,6 @@
-﻿using MarkDoc.Members.Enums;
+﻿using dnlib.DotNet;
+using MarkDoc.Members.Enums;
+using System;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -11,7 +13,7 @@ namespace MarkDoc.Members.Dnlib
     public bool IsObsolete { get; }
 
     /// <inheritdoc />
-    public bool IsStatic { get; }
+    public abstract bool IsStatic { get; }
 
     /// <inheritdoc />
     public string Name { get; }
@@ -24,9 +26,15 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    protected MemberDef()
+    protected MemberDef(dnlib.DotNet.IMemberDef source)
     {
+      if (source == null)
+        throw new ArgumentNullException(nameof(source));
 
+      Name = ResolveName(source);
     }
+
+    private static string ResolveName(dnlib.DotNet.IMemberDef source)
+      => source.FullName;
   }
 }

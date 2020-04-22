@@ -12,7 +12,7 @@ namespace MarkDoc.Members
     /// <summary>
     /// Property visibility
     /// </summary>
-    MemberVisibility Visibility { get; }
+    MemberInheritance Visibility { get; }
 
     /// <summary>
     /// Property type
