@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MarkDoc.Elements.Members.Enums
+﻿namespace MarkDoc.Elements.Members.Enums
 {
+  /// <summary>
+  /// Types of member accessors
+  /// </summary>
   public enum AccessorType
   {
+    /// <summary>
+    /// Visible to everyone
+    /// </summary>
     Public,
-    Protected
+    /// <summary>
+    /// Visible to children
+    /// </summary>
+    Protected,
+    /// <summary>
+    /// Visible within library
+    /// </summary>
+    Internal,
   }
 }

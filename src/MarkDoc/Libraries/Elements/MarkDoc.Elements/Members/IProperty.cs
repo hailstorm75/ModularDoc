@@ -1,8 +1,5 @@
-﻿using MarkDoc.Elements.Members;
-using MarkDoc.Elements.Members.Enums;
+﻿using MarkDoc.Elements.Members.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MarkDoc.Elements.Members
 {
@@ -13,16 +10,23 @@ namespace MarkDoc.Elements.Members
     : IMember
   {
     /// <summary>
-    /// Is property static
+    /// Property visibility
     /// </summary>
-    bool IsStatic { get; }
+    MemberVisibility Visibility { get; }
 
     /// <summary>
     /// Property type
     /// </summary>
     Lazy<IType> Type { get; }
 
+    /// <summary>
+    /// Property get accessor type
+    /// </summary>
     AccessorType GetAccessor { get; }
+
+    /// <summary>
+    /// Property set accessor type
+    /// </summary>
     AccessorType SetAccessor { get; }
   }
 }

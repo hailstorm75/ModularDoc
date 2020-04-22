@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MarkDoc.Elements.Members.Enums;
+using System;
 
 namespace MarkDoc.Elements.Members
 {
@@ -8,5 +9,19 @@ namespace MarkDoc.Elements.Members
   public interface IMethod
     : IConstructor
   {
+    /// <summary>
+    /// Method visibility
+    /// </summary>
+    MemberVisibility Visibility { get; }
+
+    /// <summary>
+    /// Determines whether the method is asynchronous
+    /// </summary>
+    bool IsAsync { get; }
+
+    /// <summary>
+    /// Method return type
+    /// </summary>
+    Lazy<IType?> Returns { get; }
   }
 }

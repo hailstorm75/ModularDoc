@@ -1,10 +1,10 @@
-﻿using MarkDoc.Elements.Members.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MarkDoc.Elements.Members
 {
+  /// <summary>
+  /// Interface for type constructors
+  /// </summary>
   public interface IConstructor
     : IMember
   {

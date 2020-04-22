@@ -1,12 +1,17 @@
 ﻿using MarkDoc.Elements.Members.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MarkDoc.Elements.Members
 {
+  /// <summary>
+  /// Interface for type members
+  /// </summary>
   public interface IMember
   {
+    /// <summary>
+    /// Is member obsolete
+    /// </summary>
+    bool IsObsolete { get; }
+
     /// <summary>
     /// Is method static
     /// </summary>
