@@ -1,5 +1,4 @@
-﻿using MarkDoc.Elements.Elements;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MarkDoc.Elements
 {

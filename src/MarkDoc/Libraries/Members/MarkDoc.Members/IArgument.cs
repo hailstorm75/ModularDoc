@@ -1,8 +1,7 @@
-﻿using MarkDoc.Elements.Members;
-using MarkDoc.Elements.Members.Enums;
+﻿using MarkDoc.Members.Enums;
 using System;
 
-namespace MarkDoc.Elements
+namespace MarkDoc.Members
 {
   /// <summary>
   /// Interface for <see cref="IMethod"/> arguments

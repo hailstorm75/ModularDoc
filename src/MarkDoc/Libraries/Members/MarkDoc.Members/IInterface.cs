@@ -1,8 +1,8 @@
-﻿using MarkDoc.Elements.Members.Enums;
+﻿using MarkDoc.Members.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace MarkDoc.Elements.Members
+namespace MarkDoc.Members
 {
   /// <summary>
   /// Interface for interface types

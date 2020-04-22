@@ -1,4 +1,4 @@
-﻿namespace MarkDoc.Elements.Elements
+﻿namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for elements

@@ -1,7 +1,7 @@
-﻿using MarkDoc.Elements.Members.Enums;
+﻿using MarkDoc.Members.Enums;
 using System;
 
-namespace MarkDoc.Elements.Members
+namespace MarkDoc.Members
 {
   /// <summary>
   /// Interface for properties

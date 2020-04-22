@@ -1,6 +1,4 @@
-﻿using MarkDoc.Elements.Elements;
-
-namespace MarkDoc.Elements
+﻿namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for list elements

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MarkDoc.Elements.Elements
+﻿namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for teext elements

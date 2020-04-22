@@ -1,4 +1,4 @@
-﻿namespace MarkDoc.Elements.Members.Enums
+﻿namespace MarkDoc.Members.Enums
 {
   public enum MemberVisibility
   {
