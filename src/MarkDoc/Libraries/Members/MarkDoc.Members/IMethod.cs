@@ -1,5 +1,6 @@
 ﻿using MarkDoc.Members.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace MarkDoc.Members
 {
@@ -13,6 +14,11 @@ namespace MarkDoc.Members
     /// Method visibility
     /// </summary>
     MemberInheritance Inheritance { get; }
+
+    /// <summary>
+    /// Method generic arguments
+    /// </summary>
+    IReadOnlyCollection<string> Generics { get; }
 
     /// <summary>
     /// Determines whether the method is asynchronous

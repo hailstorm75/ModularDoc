@@ -20,6 +20,10 @@
     /// <summary>
     /// Argument with the in keyword
     /// </summary>
-    In
+    In,
+    /// <summary>
+    /// Argument is optional
+    /// </summary>
+    Optional,
   }
 }

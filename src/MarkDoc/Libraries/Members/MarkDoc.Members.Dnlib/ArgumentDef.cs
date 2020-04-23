@@ -1,8 +1,10 @@
 ﻿using MarkDoc.Members.Enums;
 using System;
+using System.Diagnostics;
 
 namespace MarkDoc.Members.Dnlib
 {
+  [DebuggerDisplay(nameof(ArgumentDef) + ": {Name}")]
   public class ArgumentDef
     : IArgument
   {
@@ -14,6 +16,9 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public Lazy<IType> Type { get; }
 
+    /// <inheritdoc />
+    public string Name { get; }
+
     #endregion
 
     /// <summary>
@@ -21,7 +26,27 @@ namespace MarkDoc.Members.Dnlib
     /// </summary>
     public ArgumentDef(dnlib.DotNet.Parameter source)
     {
+      if (source == null)
+        throw new ArgumentNullException(nameof(source));
 
+      Name = source.Name;
+      Keyword = ResolveKeyword(source);
+    }
+
+    private static ArgumentType ResolveKeyword(dnlib.DotNet.Parameter source)
+    {
+      var def = source.ParamDef;
+
+      // TODO: Implement ref support
+
+      if (def.IsIn)
+        return ArgumentType.In;
+      if (def.IsOut)
+        return ArgumentType.Out;
+      if (def.IsOptional)
+        return ArgumentType.Optional;
+
+      return ArgumentType.Normal;
     }
   }
 }

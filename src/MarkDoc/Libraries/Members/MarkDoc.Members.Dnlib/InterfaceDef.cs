@@ -2,10 +2,12 @@
 using MarkDoc.Members.Enums;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
 {
+  [DebuggerDisplay(nameof(InterfaceDef) + ": {Name}")]
   public class InterfaceDef
     : TypeDef, IInterface
   {
@@ -48,7 +50,8 @@ namespace MarkDoc.Members.Dnlib
                                        && !x.IsConstructor)
                               .Select(x => new MethodDef(x))
                               .ToArray();
-      var properties = source.Properties;
+      Properties = source.Properties.Select(x => new PropertyDef(x))
+                                    .ToArray();
       var events = source.Events;
     }
 

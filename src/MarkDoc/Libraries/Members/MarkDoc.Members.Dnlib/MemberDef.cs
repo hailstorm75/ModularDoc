@@ -1,5 +1,4 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Members.Enums;
+﻿using MarkDoc.Members.Enums;
 using System;
 
 namespace MarkDoc.Members.Dnlib
@@ -16,7 +15,7 @@ namespace MarkDoc.Members.Dnlib
     public abstract bool IsStatic { get; }
 
     /// <inheritdoc />
-    public string Name { get; }
+    public abstract string Name { get; }
 
     /// <inheritdoc />
     public AccessorType Accessor { get; }
@@ -31,10 +30,6 @@ namespace MarkDoc.Members.Dnlib
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      Name = ResolveName(source);
     }
-
-    private static string ResolveName(dnlib.DotNet.IMemberDef source)
-      => source.FullName;
   }
 }

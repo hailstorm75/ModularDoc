@@ -1,10 +1,12 @@
 ﻿using dnlib.DotNet;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
 {
+  [DebuggerDisplay(nameof(ClassDef) + ": {Name}")]
   public class ClassDef
     : InterfaceDef, IClass
   {

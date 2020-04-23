@@ -9,6 +9,11 @@ namespace MarkDoc.Members
   public interface IArgument
   {
     /// <summary>
+    /// Argument name
+    /// </summary>
+    string Name { get; }
+
+    /// <summary>
     /// Argument keyword
     /// </summary>
     ArgumentType Keyword { get; } 
