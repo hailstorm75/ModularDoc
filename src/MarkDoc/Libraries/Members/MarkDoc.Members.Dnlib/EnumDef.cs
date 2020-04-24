@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
 {
+  [DebuggerDisplay(nameof(EnumDef) + ": {Name}")]
   public class EnumDef
     : TypeDef, IEnum
   {
@@ -17,8 +19,8 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public EnumDef(dnlib.DotNet.TypeDef source)
-      : base(source)
+    public EnumDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+      : base(source, parent)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));

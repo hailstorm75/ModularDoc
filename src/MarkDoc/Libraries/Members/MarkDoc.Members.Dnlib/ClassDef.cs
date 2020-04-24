@@ -1,6 +1,7 @@
 ﻿using dnlib.DotNet;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Diagnostics;
 using System.Linq;
 
@@ -19,9 +20,6 @@ namespace MarkDoc.Members.Dnlib
     public Lazy<IClass?> BaseClass { get; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<Lazy<IClass>> NestedClasses { get; }
-
-    /// <inheritdoc />
     public IReadOnlyCollection<IConstructor> Constructors { get; }
 
     #endregion
@@ -29,13 +27,16 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public ClassDef(dnlib.DotNet.TypeDef source)
-      : base(source)
+    public ClassDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+      : base(source, parent)
     {
+      // TODO: Implement type resolver
+      BaseClass = new Lazy<IClass?>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
+      IsAbstract = source.IsAbstract;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                                             && x.IsConstructor)
-                                   .Select(x => new ConstructorDef(x))
+                                   .Select(x => new ConstructorDef(x, parent != null))
                                    .ToArray();
     }
   }

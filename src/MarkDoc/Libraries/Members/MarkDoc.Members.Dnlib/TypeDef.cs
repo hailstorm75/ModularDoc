@@ -1,4 +1,5 @@
-﻿using MarkDoc.Members.Enums;
+﻿using dnlib.DotNet;
+using MarkDoc.Members.Enums;
 using System;
 
 namespace MarkDoc.Members.Dnlib
@@ -25,25 +26,43 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    protected TypeDef(dnlib.DotNet.TypeDef source)
+    /// <param name="source">Type source</param>
+    /// <param name="parent">Nested type parent</param>
+    protected TypeDef(dnlib.DotNet.ITypeDefOrRef source, dnlib.DotNet.ITypeDefOrRef? parent)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      TypeNamespace = source.Namespace;
-      Name = ResolveName(source);
+      TypeNamespace = parent?.Namespace ?? source.Namespace;
+      Name = ResolveName(source, parent);
     }
 
-    private static string ResolveName(dnlib.DotNet.TypeDef source)
-    {
-      var namespaceCut = source.FullName.Substring(source.Namespace.Length + 1);
+    #region Methods
 
-      if (!source.HasGenericParameters)
+    private static string ResolveName(ITypeDefOrRef source, ITypeDefOrRef? parent)
+    {
+      var namespaceCut = CutNamespace(source, parent != null);
+      if (source is ITypeOrMethodDef type && !type.HasGenericParameters)
         return namespaceCut;
 
-      var genericCut = namespaceCut.Substring(0, namespaceCut.IndexOf('`', StringComparison.InvariantCulture));
+      var genericsIndex = namespaceCut.IndexOf('`', StringComparison.InvariantCulture);
+      if (genericsIndex == -1)
+        return namespaceCut;
+      var genericCut = namespaceCut.Remove(genericsIndex);
 
       return genericCut;
+    } 
+
+    private static string CutNamespace(ITypeDefOrRef source, bool isNested)
+    {
+      if (isNested)
+        return source.FullName.Substring(source.FullName.LastIndexOf('/') + 1);
+
+      return source.Namespace.Length != 0
+        ? source.FullName.Substring(source.Namespace.Length + 1)
+        : source.FullName;
     }
+
+    #endregion
   }
 }

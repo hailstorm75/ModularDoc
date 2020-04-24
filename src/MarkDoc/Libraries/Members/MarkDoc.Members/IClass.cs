@@ -20,11 +20,6 @@ namespace MarkDoc.Members
     Lazy<IClass?> BaseClass { get; }
 
     /// <summary>
-    /// Nested classes
-    /// </summary>
-    IReadOnlyCollection<Lazy<IClass>> NestedClasses { get; }
-
-    /// <summary>
     /// Class constructors
     /// </summary>
     IReadOnlyCollection<IConstructor> Constructors { get; }

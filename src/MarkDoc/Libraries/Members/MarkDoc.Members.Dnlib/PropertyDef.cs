@@ -19,38 +19,90 @@ namespace MarkDoc.Members.Dnlib
     public override bool IsStatic { get; }
 
     /// <inheritdoc />
-    public MemberInheritance Visibility { get; }
+    public MemberInheritance Inheritance { get; }
 
     /// <inheritdoc />
     public Lazy<IType> Type { get; }
 
     /// <inheritdoc />
-    public AccessorType GetAccessor { get; }
+    public override AccessorType Accessor { get; }
 
     /// <inheritdoc />
-    public AccessorType SetAccessor { get; }
+    public AccessorType? GetAccessor { get; }
+
+    /// <inheritdoc />
+    public AccessorType? SetAccessor { get; }
 
     #endregion
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    public PropertyDef(dnlib.DotNet.PropertyDef source)
+    private PropertyDef(dnlib.DotNet.PropertyDef source, dnlib.DotNet.MethodDef[] methods)
       : base(source)
     {
       Name = source.Name;
-      IsStatic = source.SetMethods.Concat(source.GetMethods).First().IsStatic;
+      IsStatic = methods.First().IsStatic;
       Type = new Lazy<IType>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
+      Inheritance = ResolveInheritance(methods);
+      Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
       SetAccessor = ResolveAccessor(source.SetMethod);
     }
 
-    private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef method)
+    #region Methods
+
+    internal static PropertyDef? Initialize(dnlib.DotNet.PropertyDef source)
     {
+      var methods = source.SetMethods.Concat(source.GetMethods).Where(x => !x.IsPrivate).ToArray();
+
+      if (methods.Length == 0)
+        return null;
+      return new PropertyDef(source, methods);
+    }
+
+    private static AccessorType? ResolveAccessor(dnlib.DotNet.MethodDef? method)
+    {
+      if (method == null)
+        return null;
+
       if (method.Access == dnlib.DotNet.MethodAttributes.Public)
         return AccessorType.Public;
-
-      return AccessorType.Protected; // TODO: Add missing condtions
+      if (method.Access == dnlib.DotNet.MethodAttributes.Family)
+        return AccessorType.Protected;
+      return AccessorType.Internal;
     }
+
+    private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef[] methods)
+    {
+      if (methods.Length == 1)
+        return ResolveAccessor(methods[0]) ?? throw new Exception("Resolved accessor was null");
+
+      var accessors = methods.Select(x => ResolveAccessor(x)).ToArray();
+
+      if (accessors.Any(x => x.Equals(AccessorType.Public)))
+        return AccessorType.Public;
+      if (accessors.Any(x => x.Equals(AccessorType.Protected)))
+        return AccessorType.Protected;
+      if (accessors.Any(x => x.Equals(AccessorType.Internal)))
+        return AccessorType.Internal;
+
+      throw new NotSupportedException("Invalid property accessor type");
+    }
+
+    private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef[] methods)
+    {
+      var method = methods.First();
+      if (method.IsVirtual && (method.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0)
+        return MemberInheritance.Override;
+      else if (method.IsVirtual)
+        return MemberInheritance.Virtual;
+      else if (method.IsAbstract)
+        return MemberInheritance.Abstract;
+
+      return MemberInheritance.Normal;
+    } 
+
+    #endregion
   }
 }

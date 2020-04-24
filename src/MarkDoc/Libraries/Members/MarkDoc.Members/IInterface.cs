@@ -20,9 +20,9 @@ namespace MarkDoc.Members
     IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IType>> constraints)> Generics { get; }
 
     /// <summary>
-    /// Collection of nested enums
+    /// Collection of nested types
     /// </summary>
-    IReadOnlyCollection<Lazy<IInterface>> NestedEnums { get; }
+    IReadOnlyCollection<IType> NestedTypes { get; }
     /// <summary>
     /// Collection of events
     /// </summary>

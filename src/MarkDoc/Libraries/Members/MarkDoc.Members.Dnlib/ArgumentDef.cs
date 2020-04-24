@@ -1,6 +1,7 @@
 ﻿using MarkDoc.Members.Enums;
 using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -24,14 +25,18 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public ArgumentDef(dnlib.DotNet.Parameter source)
+    internal ArgumentDef(dnlib.DotNet.Parameter source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
       Name = source.Name;
       Keyword = ResolveKeyword(source);
+      // TODO: Impelement type resolver
+      Type = new Lazy<IType>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
     }
+
+    #region Methods
 
     private static ArgumentType ResolveKeyword(dnlib.DotNet.Parameter source)
     {
@@ -47,6 +52,8 @@ namespace MarkDoc.Members.Dnlib
         return ArgumentType.Optional;
 
       return ArgumentType.Normal;
-    }
+    } 
+
+    #endregion
   }
 }

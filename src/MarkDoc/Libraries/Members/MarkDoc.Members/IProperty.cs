@@ -12,7 +12,7 @@ namespace MarkDoc.Members
     /// <summary>
     /// Property visibility
     /// </summary>
-    MemberInheritance Visibility { get; }
+    MemberInheritance Inheritance { get; }
 
     /// <summary>
     /// Property type
@@ -22,11 +22,11 @@ namespace MarkDoc.Members
     /// <summary>
     /// Property get accessor type
     /// </summary>
-    AccessorType GetAccessor { get; }
+    AccessorType? GetAccessor { get; }
 
     /// <summary>
     /// Property set accessor type
     /// </summary>
-    AccessorType SetAccessor { get; }
+    AccessorType? SetAccessor { get; }
   }
 }

@@ -1,4 +1,6 @@
-﻿namespace MarkDoc.Members
+﻿using System;
+
+namespace MarkDoc.Members
 {
   /// <summary>
   /// Interface for events
@@ -6,6 +8,9 @@
   public interface IEvent
     : IMember
   {
-
+    /// <summary>
+    /// Event type
+    /// </summary>
+    Lazy<IType> Type { get; }
   }
 }

@@ -40,14 +40,14 @@ namespace MarkDoc.Members.Dnlib
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
       Generics = ResolveGenerics(source).ToArray();
-      // TODO: Implement tpye resolver
+      // TODO: Implement type resolver
       Returns = new Lazy<IType?>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
+    #region Methods
+
     private static string ResolveName(dnlib.DotNet.MethodDef source)
-    {
-      return source.Name;
-    }
+      => source.Name;
 
     private static bool ResolveAsync(dnlib.DotNet.MethodDef source)
     {
@@ -70,6 +70,8 @@ namespace MarkDoc.Members.Dnlib
     private static IEnumerable<string> ResolveGenerics(dnlib.DotNet.MethodDef source)
       => !source.HasGenericParameters
          ? Enumerable.Empty<string>()
-         : source.GenericParameters.Select(x => x.Name.String);
+         : source.GenericParameters.Select(x => x.Name.String); 
+
+    #endregion
   }
 }

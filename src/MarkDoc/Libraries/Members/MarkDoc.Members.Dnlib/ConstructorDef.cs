@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using System.Diagnostics;
+using MarkDoc.Members.Enums;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -20,13 +21,18 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public IReadOnlyCollection<IArgument> Arguments { get; }
 
+    /// <inheritdoc />
+    public override AccessorType Accessor { get; }
+
     #endregion
+
+    #region Constructors
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ConstructorDef(dnlib.DotNet.MethodDef source)
-      : this(source, ResolveName(source)) { }
+    internal ConstructorDef(dnlib.DotNet.MethodDef source, bool isNested)
+      : this(source, ResolveName(source, isNested)) { }
 
     /// <summary>
     /// Inherited constructor
@@ -36,18 +42,51 @@ namespace MarkDoc.Members.Dnlib
     {
       Name = name;
       IsStatic = source.IsStatic;
-      Arguments = source.Parameters.Select(x => new ArgumentDef(x)).ToArray();
-    }
+      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(x)).ToArray();
+      Accessor = ResolveAccessor(source);
+    } 
 
-    private static string ResolveName(dnlib.DotNet.MethodDef source)
+    #endregion
+
+    #region Methods
+
+    private static string ResolveName(dnlib.DotNet.MethodDef source, bool isNested)
     {
-      var type = source.DeclaringType;
-      var namespaceCut = type.FullName.Substring(type.Namespace.Length + 1);
+      var namespaceCut = CutNamespace(source, isNested);
 
-      if (!type.HasGenericParameters)
+      if (!source.DeclaringType.HasGenericParameters)
         return namespaceCut;
 
-      return namespaceCut.Remove(namespaceCut.IndexOf('`', StringComparison.InvariantCulture));
+      var genericsIndex = namespaceCut.IndexOf('`', StringComparison.InvariantCulture);
+      if (genericsIndex == -1)
+        return namespaceCut;
+
+      var genericCut = namespaceCut.Remove(genericsIndex);
+
+      return genericCut;
     }
+
+    private static string CutNamespace(dnlib.DotNet.MethodDef source, bool isNested)
+    {
+      var type = source.DeclaringType;
+      if (isNested)
+        return type.FullName.Substring(type.FullName.IndexOf('/', StringComparison.InvariantCulture) + 1);
+
+      return type.Namespace.Length != 0
+        ? source.FullName.Substring(type.Namespace.Length + 1)
+        : source.FullName;
+    }
+
+
+    private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef method)
+    {
+      if (method.Access == dnlib.DotNet.MethodAttributes.Public)
+        return AccessorType.Public;
+      if (method.Access == dnlib.DotNet.MethodAttributes.Family)
+        return AccessorType.Protected;
+      return AccessorType.Internal;
+    } 
+
+    #endregion
   }
 }
