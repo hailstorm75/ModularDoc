@@ -1,5 +1,6 @@
 ﻿using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
 using System;
 using System.Collections.Generic;
@@ -83,7 +84,7 @@ namespace MarkDoc.Members.Dnlib
         GenericParamAttributes.NonVariant => Variance.NonVariant,
         GenericParamAttributes.Covariant => Variance.Covariant,
         GenericParamAttributes.Contravariant => Variance.Contravariant,
-        _ => throw new NotSupportedException("Invalid variance attribute value"),
+        _ => throw new NotSupportedException(Resources.varianceInvalid),
       };
 
     #endregion

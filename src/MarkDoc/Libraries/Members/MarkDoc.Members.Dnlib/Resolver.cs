@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Linq;
+using MarkDoc.Members.Dnlib.Properties;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -37,7 +38,7 @@ namespace MarkDoc.Members.Dnlib
       if (subject.IsEnum)
         return new EnumDef(subject, nestedParent);
 
-      throw new NotSupportedException("Subject not supported");
+      throw new NotSupportedException(Resources.subjectNotSupported);
     }
 
     internal static IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
@@ -65,7 +66,7 @@ namespace MarkDoc.Members.Dnlib
         yield break;
       }
 
-      throw new NotSupportedException("Subject not supported");
+      throw new NotSupportedException(Resources.subjectNotSupported);
     }
 
     private static dnlib.DotNet.TypeDef? ResolveParent(object? parent)

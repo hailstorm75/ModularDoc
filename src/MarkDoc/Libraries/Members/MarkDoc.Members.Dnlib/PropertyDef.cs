@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using System.Diagnostics;
 using System.Linq;
+using MarkDoc.Members.Dnlib.Properties;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -76,7 +77,7 @@ namespace MarkDoc.Members.Dnlib
     private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef[] methods)
     {
       if (methods.Length == 1)
-        return ResolveAccessor(methods[0]) ?? throw new Exception("Resolved accessor was null");
+        return ResolveAccessor(methods[0]) ?? throw new Exception(Resources.accessorNull);
 
       var accessors = methods.Select(x => ResolveAccessor(x)).ToArray();
 
@@ -87,7 +88,7 @@ namespace MarkDoc.Members.Dnlib
       if (accessors.Any(x => x.Equals(AccessorType.Internal)))
         return AccessorType.Internal;
 
-      throw new NotSupportedException("Invalid property accessor type");
+      throw new NotSupportedException(Resources.accessorTypeInvalid);
     }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef[] methods)
