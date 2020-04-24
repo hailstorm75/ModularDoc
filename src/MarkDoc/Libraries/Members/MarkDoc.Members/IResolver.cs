@@ -6,11 +6,9 @@
   public interface IResolver
   {
     /// <summary>
-    /// Resolves a <paramref name="subject"/> to a type
+    /// Resolves <paramref name="assembly"/> types
     /// </summary>
-    /// <param name="subject">Subject to resolve</param>
-    /// <param name="parent">Nested subject parent</param>
-    /// <returns>Resolved subject</returns>
-    IType Resolve(object subject, object? parent);
+    /// <param name="assembly">Path to assembly</param>
+    void Resolve(string assembly);
   }
 }

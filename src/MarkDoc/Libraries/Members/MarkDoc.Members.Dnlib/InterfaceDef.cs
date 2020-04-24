@@ -46,7 +46,7 @@ namespace MarkDoc.Members.Dnlib
       // TODO: Implement type resolver
       InheritedInterfaces = Array.Empty<Lazy<IInterface>>();
       NestedTypes = source.NestedTypes.Where(x => !x.Name.String.StartsWith('<'))
-                                      .Select(x => Resolver.Instance.Resolve(x, source))
+                                      .Select(x => Resolver.Instance.ResolveType(x, source))
                                       .ToArray();
       Generics = source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
                                          .ToDictionary(x => x.Name.String, ResolveParameter);
