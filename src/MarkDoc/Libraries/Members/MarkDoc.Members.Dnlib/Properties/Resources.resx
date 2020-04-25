@@ -123,6 +123,9 @@
   <data name="accessorTypeInvalid" xml:space="preserve">
     <value>Invalid property accessor type</value>
   </data>
+  <data name="resolveAfterMaterializeForbidden" xml:space="preserve">
+    <value>Previously resolved types have been materialized. Cannot resolve more types.</value>
+  </data>
   <data name="subjectNotSupported" xml:space="preserve">
     <value>Subject not supported</value>
   </data>

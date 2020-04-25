@@ -79,6 +79,15 @@ namespace MarkDoc.Members.Dnlib.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previously resolved types have been materialized. Cannot resolve more types..
+        /// </summary>
+        internal static string resolveAfterMaterializeForbidden {
+            get {
+                return ResourceManager.GetString("resolveAfterMaterializeForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subject not supported.
         /// </summary>
         internal static string subjectNotSupported {

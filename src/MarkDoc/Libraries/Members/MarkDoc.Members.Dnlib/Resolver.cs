@@ -81,6 +81,8 @@ namespace MarkDoc.Members.Dnlib
 
     public void Resolve(string assembly)
     {
+      if (Types.IsValueCreated)
+        throw new InvalidOperationException(Resources.resolveAfterMaterializeForbidden);
       if (!File.Exists(assembly))
         throw new FileNotFoundException(assembly);
 
