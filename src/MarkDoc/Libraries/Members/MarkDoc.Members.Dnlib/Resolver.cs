@@ -12,10 +12,18 @@ namespace MarkDoc.Members.Dnlib
   public class Resolver
     : LazySingleton<Resolver>, IResolver
   {
+    #region Fields
+
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
     private readonly LinkedList<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups;
 
+    #endregion
+
+    #region Properties
+
     public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
+
+    #endregion
 
     public Resolver()
     {
@@ -23,9 +31,63 @@ namespace MarkDoc.Members.Dnlib
       Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
+    #region Methods
+
+    public void Resolve(string assembly)
+    {
+      if (Types.IsValueCreated)
+        throw new InvalidOperationException(Resources.resolveAfterMaterializeForbidden);
+      if (!File.Exists(assembly))
+        throw new FileNotFoundException(assembly);
+
+      var module = ModuleDefMD.Load(assembly);
+      var group = module.GetTypes()
+                        .Where(x => !x.FullName.Equals("<Module>", StringComparison.InvariantCultureIgnoreCase))
+                        .GroupBy(x => x.Namespace.String)
+                        .Where(x => !string.IsNullOrEmpty(x.Key)
+                                 && !EXCLUDED_NAMESPACES.Contains(x.Key.Remove(x.Key.IndexOf('.', StringComparison.InvariantCulture))))
+                        .GroupBy(x => x.Key, x => x.Select(t => ResolveType(t)).SelectMany(x => x).ToArray() as IReadOnlyCollection<IType>);
+
+      m_groups.AddLast(group);
+    }
+
+#pragma warning disable CA1822 // Mark members as static
+    public IResType Resolve(dnlib.DotNet.TypeSig source)
+    {
+      if (source == null)
+        throw new ArgumentNullException(nameof(source));
+
+      switch (source.ElementType)
+      {
+        case ElementType.Void:
+          break;
+        case ElementType.Boolean:
+          break;
+        case ElementType.Char:
+          break;
+        case ElementType.String:
+          break;
+        case ElementType.Ptr:
+          break;
+        case ElementType.ValueType:
+          break;
+        case ElementType.Array:
+          break;
+        case ElementType.GenericInst:
+          return new ResGeneric(source);
+        case ElementType.Object:
+          break;
+        default:
+          break;
+      }
+
+      return new ResType(source);
+    }
+#pragma warning restore CA1822 // Mark members as static
+
     private IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
-      => m_groups.SelectMany(x => x)
-                 .ToDictionary(x => x.Key, x => x.SelectMany(y => y).ToArray() as IReadOnlyCollection<IType>);
+  => m_groups.SelectMany(x => x)
+             .ToDictionary(x => x.Key, x => x.SelectMany(y => y).ToArray() as IReadOnlyCollection<IType>);
 
     internal IType ResolveType(dnlib.DotNet.TypeDef subject, dnlib.DotNet.TypeDef? parent = null)
     {
@@ -54,7 +116,7 @@ namespace MarkDoc.Members.Dnlib
       }
       if (subject.IsInterface)
       {
-        var type =  new InterfaceDef(subject, null);
+        var type = new InterfaceDef(subject, null);
         yield return type;
         foreach (var item in type.NestedTypes)
           yield return item;
@@ -79,22 +141,6 @@ namespace MarkDoc.Members.Dnlib
       return type;
     }
 
-    public void Resolve(string assembly)
-    {
-      if (Types.IsValueCreated)
-        throw new InvalidOperationException(Resources.resolveAfterMaterializeForbidden);
-      if (!File.Exists(assembly))
-        throw new FileNotFoundException(assembly);
-
-      var module = ModuleDefMD.Load(assembly);
-      var group = module.GetTypes()
-                        .Where(x => !x.FullName.Equals("<Module>", StringComparison.InvariantCultureIgnoreCase))
-                        .GroupBy(x => x.Namespace.String)
-                        .Where(x => !string.IsNullOrEmpty(x.Key)
-                                 && !EXCLUDED_NAMESPACES.Contains(x.Key.Remove(x.Key.IndexOf('.', StringComparison.InvariantCulture))))
-                        .GroupBy(x => x.Key, x => x.Select(t => ResolveType(t)).SelectMany(x => x).ToArray() as IReadOnlyCollection<IType>);
-
-      m_groups.AddLast(group);
-    }
+    #endregion
   }
 }

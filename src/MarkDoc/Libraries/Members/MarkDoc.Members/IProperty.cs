@@ -17,7 +17,7 @@ namespace MarkDoc.Members
     /// <summary>
     /// Property type
     /// </summary>
-    Lazy<IType> Type { get; }
+    Lazy<IResType> Type { get; }
 
     /// <summary>
     /// Property get accessor type

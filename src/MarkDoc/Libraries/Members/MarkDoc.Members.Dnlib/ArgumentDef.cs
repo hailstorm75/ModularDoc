@@ -15,7 +15,7 @@ namespace MarkDoc.Members.Dnlib
     public ArgumentType Keyword { get; }
 
     /// <inheritdoc />
-    public Lazy<IType> Type { get; }
+    public Lazy<IResType> Type { get; }
 
     /// <inheritdoc />
     public string Name { get; }
@@ -32,11 +32,13 @@ namespace MarkDoc.Members.Dnlib
 
       Name = source.Name;
       Keyword = ResolveKeyword(source);
-      // TODO: Impelement type resolver
-      Type = new Lazy<IType>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
+      Type = new Lazy<IResType>(() => ResolveType(source), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     #region Methods
+
+    private static IResType ResolveType(dnlib.DotNet.Parameter source)
+      => Resolver.Instance.Resolve(source.Type);
 
     private static ArgumentType ResolveKeyword(dnlib.DotNet.Parameter source)
     {

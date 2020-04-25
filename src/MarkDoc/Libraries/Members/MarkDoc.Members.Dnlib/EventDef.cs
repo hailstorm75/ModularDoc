@@ -1,4 +1,5 @@
-﻿using MarkDoc.Members.Enums;
+﻿using dnlib.DotNet;
+using MarkDoc.Members.Enums;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -21,7 +22,7 @@ namespace MarkDoc.Members.Dnlib
     public override AccessorType Accessor { get; } 
 
     /// <inheritdoc />
-    public Lazy<IType> Type { get; }
+    public Lazy<IResType> Type { get; }
 
     #endregion
 
@@ -32,9 +33,11 @@ namespace MarkDoc.Members.Dnlib
     internal EventDef(dnlib.DotNet.EventDef source)
       : base(source)
     {
-      // TODO: Implement the rest
       Name = source.Name.String;
-      Type = new Lazy<IType>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
+      Type = new Lazy<IResType>(() => ResolveType(source), LazyThreadSafetyMode.ExecutionAndPublication);
     }
+
+    private static IResType ResolveType(dnlib.DotNet.EventDef source)
+      => Resolver.Instance.Resolve(source.EventType.ToTypeSig());
   }
 }

@@ -17,7 +17,7 @@ namespace MarkDoc.Members
     /// <summary>
     /// Inherited base class
     /// </summary>
-    Lazy<IClass?> BaseClass { get; }
+    Lazy<IResType?> BaseClass { get; }
 
     /// <summary>
     /// Class constructors

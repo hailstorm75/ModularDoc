@@ -17,7 +17,7 @@ namespace MarkDoc.Members.Dnlib
     public bool IsAbstract { get; }
 
     /// <inheritdoc />
-    public Lazy<IClass?> BaseClass { get; }
+    public Lazy<IResType?> BaseClass { get; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<IConstructor> Constructors { get; }
@@ -30,8 +30,7 @@ namespace MarkDoc.Members.Dnlib
     public ClassDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(source, parent)
     {
-      // TODO: Implement type resolver
-      BaseClass = new Lazy<IClass?>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
+      BaseClass = new Lazy<IResType?>(() =>source.BaseType != null ? Resolver.Instance.Resolve(source.BaseType.ToTypeSig()) : null, LazyThreadSafetyMode.ExecutionAndPublication);
       IsAbstract = source.IsAbstract;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)

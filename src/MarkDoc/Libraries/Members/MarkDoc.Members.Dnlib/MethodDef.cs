@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using dnlib.DotNet;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -24,7 +25,7 @@ namespace MarkDoc.Members.Dnlib
     public IReadOnlyCollection<string> Generics { get; }
 
     /// <inheritdoc />
-    public Lazy<IType?> Returns { get; }
+    public Lazy<IResType?> Returns { get; }
 
     #endregion
 
@@ -40,8 +41,7 @@ namespace MarkDoc.Members.Dnlib
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
       Generics = ResolveGenerics(source).ToArray();
-      // TODO: Implement type resolver
-      Returns = new Lazy<IType?>(() => default, LazyThreadSafetyMode.ExecutionAndPublication);
+      Returns = new Lazy<IResType?>(() => ResolveReturn(source), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     #region Methods
@@ -53,6 +53,13 @@ namespace MarkDoc.Members.Dnlib
     {
       // TODO: Check
       return source.CustomAttributes.Find(nameof(AsyncStateMachineAttribute)) != null;
+    }
+
+    private static IResType? ResolveReturn(dnlib.DotNet.MethodDef source)
+    {
+      if (source.ReturnType.TypeName.Equals("System.Void", StringComparison.InvariantCultureIgnoreCase))
+        return null;
+      return Resolver.Instance.Resolve(source.ReturnType);
     }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)
@@ -70,7 +77,7 @@ namespace MarkDoc.Members.Dnlib
     private static IEnumerable<string> ResolveGenerics(dnlib.DotNet.MethodDef source)
       => !source.HasGenericParameters
          ? Enumerable.Empty<string>()
-         : source.GenericParameters.Select(x => x.Name.String); 
+         : source.GenericParameters.Select(x => x.Name.String);
 
     #endregion
   }

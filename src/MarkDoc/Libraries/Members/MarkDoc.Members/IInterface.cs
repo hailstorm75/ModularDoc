@@ -13,11 +13,11 @@ namespace MarkDoc.Members
     /// <summary>
     /// Collection of inherited interfaces
     /// </summary>
-    IReadOnlyCollection<Lazy<IInterface>> InheritedInterfaces { get; }
+    IReadOnlyCollection<Lazy<IResType>> InheritedInterfaces { get; }
     /// <summary>
     /// Generics name, and their variance and constraints
     /// </summary>
-    IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IType>> constraints)> Generics { get; }
+    IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IResType>> constraints)> Generics { get; }
 
     /// <summary>
     /// Collection of nested types

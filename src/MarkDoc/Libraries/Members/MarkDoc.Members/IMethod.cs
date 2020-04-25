@@ -28,6 +28,6 @@ namespace MarkDoc.Members
     /// <summary>
     /// Method return type
     /// </summary>
-    Lazy<IType?> Returns { get; }
+    Lazy<IResType?> Returns { get; }
   }
 }

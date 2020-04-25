@@ -4,6 +4,7 @@ using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Diagnostics;
 using System.Linq;
 
@@ -16,10 +17,10 @@ namespace MarkDoc.Members.Dnlib
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<Lazy<IInterface>> InheritedInterfaces { get; }
+    public IReadOnlyCollection<Lazy<IResType>> InheritedInterfaces { get; }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IType>> constraints)> Generics { get; }
+    public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IResType>> constraints)> Generics { get; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<IType> NestedTypes { get; }
@@ -44,8 +45,7 @@ namespace MarkDoc.Members.Dnlib
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      // TODO: Implement type resolver
-      InheritedInterfaces = Array.Empty<Lazy<IInterface>>();
+      InheritedInterfaces = ResolveInterfaces(source).ToArray();
       NestedTypes = source.NestedTypes.Where(x => !x.Name.String.StartsWith('<'))
                                       .Select(x => Resolver.Instance.ResolveType(x, source))
                                       .ToArray();
@@ -67,16 +67,21 @@ namespace MarkDoc.Members.Dnlib
 
     #region Methods
 
-    private static (Variance, IReadOnlyCollection<Lazy<IType>>) ResolveParameter(GenericParam parameter)
+    private static IEnumerable<Lazy<IResType>> ResolveInterfaces(dnlib.DotNet.TypeDef source)
+      => source.Interfaces.Select(x => new Lazy<IResType>(() => Resolver.Instance.Resolve(x.Interface.ToTypeSig()), LazyThreadSafetyMode.ExecutionAndPublication));
+
+    private static (Variance, IReadOnlyCollection<Lazy<IResType>>) ResolveParameter(GenericParam parameter)
     {
       var variance = ResolveVariance(parameter.Variance);
 
       if (!parameter.HasGenericParamConstraints)
-        return (variance, Enumerable.Empty<Lazy<IType>>().ToArray());
+        return (variance, Enumerable.Empty<Lazy<IResType>>().ToArray());
 
-      // TODO: Implement lazy resolver
-      return (variance, parameter.GenericParamConstraints.Select(x => new Lazy<IType>(() => default)).ToArray());
+      return (variance, parameter.GenericParamConstraints.Select(x => new Lazy<IResType>(() => ResolveType(x), LazyThreadSafetyMode.ExecutionAndPublication)).ToArray());
     }
+
+    private static IResType ResolveType(GenericParamConstraint x)
+      => Resolver.Instance.Resolve(x.Constraint.ToTypeSig());
 
     private static Variance ResolveVariance(GenericParamAttributes attributes)
       => attributes switch
