@@ -9,9 +9,6 @@ namespace MarkDoc.Members.Dnlib
     #region Properties
 
     /// <inheritdoc />
-    public bool IsObsolete { get; }
-
-    /// <inheritdoc />
     public abstract bool IsStatic { get; }
 
     /// <inheritdoc />

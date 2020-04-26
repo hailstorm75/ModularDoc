@@ -8,11 +8,6 @@ namespace MarkDoc.Members
   public interface IMember
   {
     /// <summary>
-    /// Is member obsolete
-    /// </summary>
-    bool IsObsolete { get; }
-
-    /// <summary>
     /// Is method static
     /// </summary>
     bool IsStatic { get; }
