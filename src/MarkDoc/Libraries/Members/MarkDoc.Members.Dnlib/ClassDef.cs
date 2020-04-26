@@ -30,7 +30,7 @@ namespace MarkDoc.Members.Dnlib
     public ClassDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(source, parent)
     {
-      BaseClass = new Lazy<IResType?>(() =>source.BaseType != null ? Resolver.Instance.Resolve(source.BaseType.ToTypeSig()) : null, LazyThreadSafetyMode.ExecutionAndPublication);
+      BaseClass = new Lazy<IResType?>(() => ResolveBaseClass(source), LazyThreadSafetyMode.ExecutionAndPublication);
       IsAbstract = source.IsAbstract;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
@@ -38,5 +38,10 @@ namespace MarkDoc.Members.Dnlib
                                    .Select(x => new ConstructorDef(x, parent != null))
                                    .ToArray();
     }
+
+    private static IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)
+      => source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false
+          ? Resolver.Instance.Resolve(source.BaseType.ToTypeSig())
+          : null;
   }
 }

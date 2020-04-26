@@ -44,8 +44,7 @@ namespace MarkDoc.Members.Dnlib
       var group = module.GetTypes()
                         .Where(x => !x.FullName.Equals("<Module>", StringComparison.InvariantCultureIgnoreCase))
                         .GroupBy(x => x.Namespace.String)
-                        .Where(x => !string.IsNullOrEmpty(x.Key)
-                                 && !EXCLUDED_NAMESPACES.Contains(x.Key.Remove(x.Key.IndexOf('.', StringComparison.InvariantCulture))))
+                        .Where(x => FilterNamespaces(x.Key))
                         .GroupBy(x => x.Key, x => x.Select(t => ResolveType(t)).SelectMany(x => x).ToArray() as IReadOnlyCollection<IType>);
 
       m_groups.AddLast(group);
@@ -57,33 +56,64 @@ namespace MarkDoc.Members.Dnlib
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      switch (source.ElementType)
+      return source.ElementType switch
       {
-        case ElementType.Void:
-          break;
-        case ElementType.Boolean:
-          break;
-        case ElementType.Char:
-          break;
-        case ElementType.String:
-          break;
-        case ElementType.Ptr:
-          break;
-        case ElementType.ValueType:
-          break;
-        case ElementType.Array:
-          break;
-        case ElementType.GenericInst:
-          return new ResGeneric(source);
-        case ElementType.Object:
-          break;
-        default:
-          break;
-      }
-
-      return new ResType(source);
+        ElementType.Boolean
+          => new ResValueType(source, "bool"),
+        ElementType.Char
+          => new ResValueType(source, "char"),
+        ElementType.String
+          => new ResValueType(source, "string"),
+        var x when x is ElementType.SZArray || x is ElementType.Array
+          => new ResArray(source),
+        var x when (x is ElementType.GenericInst || x is ElementType.MVar) && IsGeneric(source)
+          => IsTuple(source)
+              ? new ResTuple(source)
+              : new ResGeneric(source) as IResType,
+        ElementType.Object
+          => new ResValueType(source, "object"),
+        ElementType.I1
+          => new ResValueType(source, "sbyte"),
+        ElementType.U1
+          => new ResValueType(source, "byte"),
+        ElementType.I2
+          => new ResValueType(source, "short"),
+        ElementType.U2
+          => new ResValueType(source, "ushort"),
+        ElementType.I4
+          => new ResValueType(source, "int"),
+        ElementType.U4
+          => new ResValueType(source, "uint"),
+        ElementType.I8
+          => new ResValueType(source, "long"),
+        ElementType.U8
+          => new ResValueType(source, "ulong"),
+        ElementType.R4
+          => new ResValueType(source, "float"),
+        ElementType.R8
+          => new ResValueType(source, "double"),
+        _ => new ResType(source),
+      };
     }
 #pragma warning restore CA1822 // Mark members as static
+
+    private static bool IsTuple(dnlib.DotNet.TypeSig source)
+    {
+      var name = source.ReflectionName.Remove(source.ReflectionName.IndexOf('`', StringComparison.InvariantCulture));
+      if (name.Equals(nameof(Tuple), StringComparison.InvariantCulture))
+        return true;
+
+      return false;
+    }
+
+    private static bool IsGeneric(dnlib.DotNet.TypeSig source)
+      => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
+
+    private static bool FilterNamespaces(string typeXamespace)
+      => !string.IsNullOrEmpty(typeXamespace)
+          && !EXCLUDED_NAMESPACES.Contains(typeXamespace.Contains('.', StringComparison.InvariantCulture)
+               ? typeXamespace.Remove(typeXamespace.IndexOf('.', StringComparison.InvariantCulture))
+               : typeXamespace);
 
     private IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
   => m_groups.SelectMany(x => x)

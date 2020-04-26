@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay("{Name}")]
+  [DebuggerDisplay("{DisplayName}")]
   public class ResType
     : IResType
   {
@@ -15,14 +15,21 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public string TypeNamespace { get; }
 
+    /// <inheritdoc />
+    public string DisplayName { get; }
+
     #endregion
 
-    public ResType(dnlib.DotNet.IType source)
+    public ResType(dnlib.DotNet.TypeSig source)
+      : this(source, ResolveName(source)) { }
+
+    protected ResType(dnlib.DotNet.TypeSig source, string displayName)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
       Name = ResolveName(source);
+      DisplayName = displayName;
       TypeNamespace = source.Namespace;
     }
 

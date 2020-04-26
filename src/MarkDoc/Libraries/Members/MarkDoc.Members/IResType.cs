@@ -6,6 +6,11 @@
   public interface IResType
   {
     /// <summary>
+    /// Resolved type display name
+    /// </summary>
+    string DisplayName { get; }
+
+    /// <summary>
     /// Resolved type name
     /// </summary>
     string Name { get; }

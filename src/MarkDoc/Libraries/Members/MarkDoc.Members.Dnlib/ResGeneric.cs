@@ -1,7 +1,6 @@
 ﻿using dnlib.DotNet;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
@@ -9,7 +8,11 @@ namespace MarkDoc.Members.Dnlib
   public class ResGeneric
     : ResType, IResGeneric
   {
-    public IReadOnlyCollection<IResType> Generics { get; }
+    #region Properties
+
+    public IReadOnlyCollection<IResType> Generics { get; } 
+
+    #endregion
 
     public ResGeneric(dnlib.DotNet.TypeSig source)
       : base(source)
