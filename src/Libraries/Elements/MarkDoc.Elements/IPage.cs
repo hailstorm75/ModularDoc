@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MarkDoc.Elements.Extensions;
+using System.Collections.Generic;
 
 namespace MarkDoc.Elements
 {
@@ -6,21 +7,7 @@ namespace MarkDoc.Elements
   /// Interface for page elements
   /// </summary>
   public interface IPage
-    : IElement
+    : IElement, IHasContent<IReadOnlyCollection<IElement>>, IHasHeading
   {
-    #region Properties
-
-    /// <summary>
-    /// Page content
-    /// </summary>
-    IList<IElement> Content { get; }
-
-    #endregion
-
-    /// <summary>
-    /// Sets the <see cref="Content"/> of the page
-    /// </summary>
-    /// <param name="elements">Content to set</param>
-    void SetContent(IReadOnlyCollection<IElement> elements);
   }
 }

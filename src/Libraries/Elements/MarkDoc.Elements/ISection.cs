@@ -1,15 +1,13 @@
-﻿namespace MarkDoc.Elements
+﻿using MarkDoc.Elements.Extensions;
+using System.Collections.Generic;
+
+namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for section elements
   /// </summary>
   public interface ISection
-    : IElement
+    : IElement, IHasContent<IReadOnlyCollection<IElement>>, IHasHeading
   {
-    /// <summary>
-    /// Adds <paramref name="element"/> content
-    /// </summary>
-    /// <param name="element">Element to add</param>
-    void Add(IElement element);
   }
 }

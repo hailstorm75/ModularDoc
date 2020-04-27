@@ -1,6 +1,5 @@
-﻿using System;
+﻿using MarkDoc.Elements.Extensions;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MarkDoc.Elements
 {
@@ -8,7 +7,7 @@ namespace MarkDoc.Elements
   /// Interface for the table element
   /// </summary>
   public interface ITable
-    : IElement
+    : IElement, IHasHeading
   {
     #region Properties
 
@@ -20,22 +19,8 @@ namespace MarkDoc.Elements
     /// <summary>
     /// Table rows
     /// </summary>
-    IList<string[]> Rows { get; } 
+    IReadOnlyCollection<IReadOnlyCollection<string>> Rows { get; } 
 
     #endregion
-
-    /// <summary>
-    /// Adds set of new <paramref name="rows"/>
-    /// </summary>
-    /// <param name="rows">Items to add</param>
-    void AddRow(IReadOnlyCollection<string> rows)
-    {
-      if (rows == null)
-        throw new ArgumentNullException(nameof(rows));
-      if (rows.Count > Headings.Count)
-        throw new ArgumentException($"Number of items in {nameof(rows)} is greater than {Headings.Count} count.");
-
-      Rows.Add(rows.ToArray());
-    }
   }
 }

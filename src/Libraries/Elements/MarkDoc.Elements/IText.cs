@@ -4,6 +4,7 @@
   /// Interface for teext elements
   /// </summary>
   public interface IText
+    : IElement
   {
     /// <summary>
     /// Text content
