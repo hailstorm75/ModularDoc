@@ -25,7 +25,7 @@ namespace MarkDoc.Members.Dnlib
     public IReadOnlyCollection<string> Generics { get; }
 
     /// <inheritdoc />
-    public Lazy<IResType?> Returns { get; }
+    public IResType? Returns { get; }
 
     #endregion
 
@@ -41,7 +41,7 @@ namespace MarkDoc.Members.Dnlib
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
       Generics = ResolveGenerics(source).ToArray();
-      Returns = new Lazy<IResType?>(() => ResolveReturn(source), LazyThreadSafetyMode.ExecutionAndPublication);
+      Returns = ResolveReturn(source);
     }
 
     #region Methods

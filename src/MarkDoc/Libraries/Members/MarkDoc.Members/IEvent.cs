@@ -11,6 +11,6 @@ namespace MarkDoc.Members
     /// <summary>
     /// Event type
     /// </summary>
-    Lazy<IResType> Type { get; }
+    IResType Type { get; }
   }
 }

@@ -26,7 +26,6 @@ namespace MarkDoc.Members.Dnlib
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
-
     }
   }
 }

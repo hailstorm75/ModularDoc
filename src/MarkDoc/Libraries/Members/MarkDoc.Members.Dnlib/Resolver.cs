@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
+using System.Collections.Concurrent;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -15,7 +16,7 @@ namespace MarkDoc.Members.Dnlib
     #region Fields
 
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
-    private readonly LinkedList<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups;
+    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups;
 
     #endregion
 
@@ -27,7 +28,7 @@ namespace MarkDoc.Members.Dnlib
 
     public Resolver()
     {
-      m_groups = new LinkedList<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
+      m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
       Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
@@ -47,11 +48,11 @@ namespace MarkDoc.Members.Dnlib
                         .Where(x => FilterNamespaces(x.Key))
                         .GroupBy(x => x.Key, x => x.Select(t => ResolveType(t)).SelectMany(x => x).ToArray() as IReadOnlyCollection<IType>);
 
-      m_groups.AddLast(group);
+      m_groups.Add(group);
     }
 
 #pragma warning disable CA1822 // Mark members as static
-    public IResType Resolve(dnlib.DotNet.TypeSig source)
+    public IResType Resolve(TypeSig source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
@@ -97,7 +98,44 @@ namespace MarkDoc.Members.Dnlib
     }
 #pragma warning restore CA1822 // Mark members as static
 
-    private static bool IsTuple(dnlib.DotNet.TypeSig source)
+    public IType? FindReference(dnlib.DotNet.TypeSig source, IResType type)
+    {
+      bool GenericFilter(IType x)
+      {
+        if (!(source is GenericInstSig genericSig))
+          return false;
+
+        var generics = (x switch
+        {
+          IInterface i
+            => i.Generics.Select(x => x.Key),
+          IMethod m
+            => m.Generics,
+          _
+            => Enumerable.Empty<string>()
+        }).ToArray();
+
+        if (genericSig.GenericArguments.Count != generics.Length)
+          return false;
+
+        for (var i = 0; i < generics.Length; i++)
+          if (genericSig.GenericArguments[i].FullName != generics[i])
+            return false;
+
+        return true;
+      }
+
+      if (source == null)
+        throw new ArgumentNullException(nameof(source));
+
+      if (!Types.Value.ContainsKey(source.Namespace))
+        return null;
+
+      IType? result = Types.Value[source.Namespace].FirstOrDefault(x => x.Name.Equals(type.Name, StringComparison.InvariantCulture) && GenericFilter(x));
+      return result;
+    }
+
+    private static bool IsTuple(TypeSig source)
     {
       var name = source.ReflectionName.Remove(source.ReflectionName.IndexOf('`', StringComparison.InvariantCulture));
       if (name.Equals(nameof(Tuple), StringComparison.InvariantCulture))
@@ -106,7 +144,7 @@ namespace MarkDoc.Members.Dnlib
       return false;
     }
 
-    private static bool IsGeneric(dnlib.DotNet.TypeSig source)
+    private static bool IsGeneric(TypeSig source)
       => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
 
     private static bool FilterNamespaces(string typeXamespace)
@@ -116,25 +154,30 @@ namespace MarkDoc.Members.Dnlib
                : typeXamespace);
 
     private IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
-  => m_groups.SelectMany(x => x)
-             .ToDictionary(x => x.Key, x => x.SelectMany(y => y).ToArray() as IReadOnlyCollection<IType>);
+      => m_groups.SelectMany(x => x)
+                 .ToDictionary(x => x.Key, x => x.SelectMany(y => y).ToArray() as IReadOnlyCollection<IType>);
 
     internal IType ResolveType(dnlib.DotNet.TypeDef subject, dnlib.DotNet.TypeDef? parent = null)
     {
       var nestedParent = ResolveParent(parent);
 
+      if (subject.IsEnum)
+        return new EnumDef(subject, nestedParent);
       if (subject.IsClass)
         return new ClassDef(subject, nestedParent);
       if (subject.IsInterface)
         return new InterfaceDef(subject, nestedParent);
-      if (subject.IsEnum)
-        return new EnumDef(subject, nestedParent);
 
       throw new NotSupportedException(Resources.subjectNotSupported);
     }
 
     internal static IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
     {
+      if (subject.IsEnum)
+      {
+        yield return new EnumDef(subject, null);
+        yield break;
+      }
       if (subject.IsClass)
       {
         var type = new ClassDef(subject, null);
@@ -150,11 +193,6 @@ namespace MarkDoc.Members.Dnlib
         yield return type;
         foreach (var item in type.NestedTypes)
           yield return item;
-        yield break;
-      }
-      if (subject.IsEnum)
-      {
-        yield return new EnumDef(subject, null);
         yield break;
       }
 

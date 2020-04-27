@@ -1,10 +1,14 @@
-﻿namespace MarkDoc.Members
+﻿using System;
+
+namespace MarkDoc.Members
 {
   /// <summary>
   /// Interface for resolved types
   /// </summary>
   public interface IResType
   {
+    #region Properties
+
     /// <summary>
     /// Resolved type display name
     /// </summary>
@@ -19,5 +23,12 @@
     /// Resolved type namespace
     /// </summary>
     string TypeNamespace { get; }
+
+    /// <summary>
+    /// Reference to known type
+    /// </summary>
+    Lazy<IType?> Reference { get; } 
+
+    #endregion
   }
 }

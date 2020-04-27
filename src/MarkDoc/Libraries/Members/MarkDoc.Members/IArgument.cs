@@ -21,6 +21,6 @@ namespace MarkDoc.Members
     /// <summary>
     /// Argument type
     /// </summary>
-    Lazy<IResType> Type { get; }
+    IResType Type { get; }
   }
 }

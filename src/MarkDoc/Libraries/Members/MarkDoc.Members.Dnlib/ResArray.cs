@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -8,20 +9,29 @@ namespace MarkDoc.Members.Dnlib
   {
     #region Properties
 
+    /// <inheritdoc />
     public IResType ArrayType { get; }
 
+    /// <inheritdoc />
     public bool IsJagged { get; }
 
+    /// <inheritdoc />
     public int Dimension { get; }
 
+    /// <inheritdoc />
     public string DisplayName
       => ArrayType.DisplayName;
 
+    /// <inheritdoc />
     public string Name
       => ArrayType.Name;
 
+    /// <inheritdoc />
     public string TypeNamespace
       => ArrayType.TypeNamespace;
+
+    /// <inheritdoc />
+    public Lazy<IType?> Reference { get; }
 
     #endregion
 
@@ -35,6 +45,7 @@ namespace MarkDoc.Members.Dnlib
       var next = ResolveNext(source, IsJagged);
       ArrayType = Resolver.Instance.Resolve(next);
       Dimension = ResolveDimension(source, next);
+      Reference = new Lazy<IType?>(() => Resolver.Instance.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     #region Methods

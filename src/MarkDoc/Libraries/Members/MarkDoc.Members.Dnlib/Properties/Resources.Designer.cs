@@ -79,6 +79,33 @@ namespace MarkDoc.Members.Dnlib.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type is not generic.
+        /// </summary>
+        internal static string notGeneric {
+            get {
+                return ResourceManager.GetString("notGeneric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Member is not a property.
+        /// </summary>
+        internal static string notProperty {
+            get {
+                return ResourceManager.GetString("notProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type is not tuple.
+        /// </summary>
+        internal static string notTuple {
+            get {
+                return ResourceManager.GetString("notTuple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previously resolved types have been materialized. Cannot resolve more types..
         /// </summary>
         internal static string resolveAfterMaterializeForbidden {

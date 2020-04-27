@@ -123,6 +123,15 @@
   <data name="accessorTypeInvalid" xml:space="preserve">
     <value>Invalid property accessor type</value>
   </data>
+  <data name="notGeneric" xml:space="preserve">
+    <value>Type is not generic</value>
+  </data>
+  <data name="notProperty" xml:space="preserve">
+    <value>Member is not a property</value>
+  </data>
+  <data name="notTuple" xml:space="preserve">
+    <value>Type is not tuple</value>
+  </data>
   <data name="resolveAfterMaterializeForbidden" xml:space="preserve">
     <value>Previously resolved types have been materialized. Cannot resolve more types.</value>
   </data>

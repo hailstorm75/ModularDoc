@@ -23,7 +23,7 @@ namespace MarkDoc.Members.Dnlib
     public MemberInheritance Inheritance { get; }
 
     /// <inheritdoc />
-    public Lazy<IResType> Type { get; }
+    public IResType Type { get; }
 
     /// <inheritdoc />
     public override AccessorType Accessor { get; }
@@ -44,7 +44,7 @@ namespace MarkDoc.Members.Dnlib
     {
       Name = source.Name;
       IsStatic = methods.First().IsStatic;
-      Type = new Lazy<IResType>(() => Resolver.Instance.Resolve(ResolveType(source)), LazyThreadSafetyMode.ExecutionAndPublication);
+      Type = Resolver.Instance.Resolve(ResolveType(source));
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
@@ -69,7 +69,7 @@ namespace MarkDoc.Members.Dnlib
       else if (source.SetMethod != null)
         return source.SetMethod.Parameters.First().Type;
 
-      throw new NotSupportedException();
+      throw new NotSupportedException(Resources.notProperty);
     }
 
     private static AccessorType? ResolveAccessor(dnlib.DotNet.MethodDef? method)

@@ -25,7 +25,8 @@ namespace MarkDoc.Members.Dnlib
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      Fields = source.Fields.Select(x => x.Name.String).ToArray();
+      Fields = source.Fields.Where(x => x.ElementType != dnlib.DotNet.ElementType.End)
+                            .Select(x => x.Name.String).ToArray();
     }
   }
 }

@@ -17,10 +17,10 @@ namespace MarkDoc.Members.Dnlib
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<Lazy<IResType>> InheritedInterfaces { get; }
+    public IReadOnlyCollection<IResType> InheritedInterfaces { get; }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<Lazy<IResType>> constraints)> Generics { get; }
+    public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<IType> NestedTypes { get; }
@@ -68,17 +68,17 @@ namespace MarkDoc.Members.Dnlib
 
     #region Methods
 
-    private static IEnumerable<Lazy<IResType>> ResolveInterfaces(dnlib.DotNet.TypeDef source)
-      => source.Interfaces.Select(x => new Lazy<IResType>(() => Resolver.Instance.Resolve(x.Interface.ToTypeSig()), LazyThreadSafetyMode.ExecutionAndPublication));
+    private static IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source)
+      => source.Interfaces.Select(x => Resolver.Instance.Resolve(x.Interface.ToTypeSig()));
 
-    private static (Variance, IReadOnlyCollection<Lazy<IResType>>) ResolveParameter(GenericParam parameter)
+    private static (Variance, IReadOnlyCollection<IResType>) ResolveParameter(GenericParam parameter)
     {
       var variance = ResolveVariance(parameter.Variance);
 
       if (!parameter.HasGenericParamConstraints)
-        return (variance, Enumerable.Empty<Lazy<IResType>>().ToArray());
+        return (variance, Enumerable.Empty<IResType>().ToArray());
 
-      return (variance, parameter.GenericParamConstraints.Select(x => new Lazy<IResType>(() => ResolveType(x), LazyThreadSafetyMode.ExecutionAndPublication)).ToArray());
+      return (variance, parameter.GenericParamConstraints.Select(ResolveType).ToArray());
     }
 
     private static IResType ResolveType(GenericParamConstraint x)

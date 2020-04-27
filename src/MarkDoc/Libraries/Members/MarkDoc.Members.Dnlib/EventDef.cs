@@ -22,7 +22,7 @@ namespace MarkDoc.Members.Dnlib
     public override AccessorType Accessor { get; } 
 
     /// <inheritdoc />
-    public Lazy<IResType> Type { get; }
+    public IResType Type { get; }
 
     #endregion
 
@@ -34,7 +34,7 @@ namespace MarkDoc.Members.Dnlib
       : base(source)
     {
       Name = source.Name.String;
-      Type = new Lazy<IResType>(() => ResolveType(source), LazyThreadSafetyMode.ExecutionAndPublication);
+      Type = ResolveType(source);
     }
 
     private static IResType ResolveType(dnlib.DotNet.EventDef source)

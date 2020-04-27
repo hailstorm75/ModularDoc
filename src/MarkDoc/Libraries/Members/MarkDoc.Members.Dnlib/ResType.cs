@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -18,6 +19,9 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public string DisplayName { get; }
 
+    /// <inheritdoc />
+    public Lazy<IType?> Reference { get; }
+
     #endregion
 
     public ResType(dnlib.DotNet.TypeSig source)
@@ -31,6 +35,7 @@ namespace MarkDoc.Members.Dnlib
       Name = ResolveName(source);
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
+      Reference = new Lazy<IType?>(() => Resolver.Instance.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     protected static string ResolveName(dnlib.DotNet.IType source)

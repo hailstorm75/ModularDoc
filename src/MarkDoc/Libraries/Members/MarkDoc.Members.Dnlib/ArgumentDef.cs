@@ -15,7 +15,7 @@ namespace MarkDoc.Members.Dnlib
     public ArgumentType Keyword { get; }
 
     /// <inheritdoc />
-    public Lazy<IResType> Type { get; }
+    public IResType Type { get; }
 
     /// <inheritdoc />
     public string Name { get; }
@@ -32,7 +32,7 @@ namespace MarkDoc.Members.Dnlib
 
       Name = source.Name;
       Keyword = ResolveKeyword(source);
-      Type = new Lazy<IResType>(() => ResolveType(source), LazyThreadSafetyMode.ExecutionAndPublication);
+      Type = ResolveType(source);
     }
 
     #region Methods
