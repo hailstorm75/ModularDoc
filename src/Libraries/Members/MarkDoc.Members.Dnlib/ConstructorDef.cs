@@ -73,10 +73,9 @@ namespace MarkDoc.Members.Dnlib
         return type.FullName.Substring(type.FullName.IndexOf('/', StringComparison.InvariantCulture) + 1);
 
       return type.Namespace.Length != 0
-        ? source.FullName.Substring(type.Namespace.Length + 1)
-        : source.FullName;
+        ? type.FullName.Substring(type.Namespace.Length + 1)
+        : type.FullName;
     }
-
 
     private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef method)
     {
