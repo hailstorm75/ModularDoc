@@ -9,5 +9,6 @@ namespace MarkDoc.Elements
   public interface IPage
     : IElement, IHasContent<IReadOnlyCollection<IElement>>, IHasHeading
   {
+    public IReadOnlyCollection<IPage> Subpages { get; set; }
   }
 }

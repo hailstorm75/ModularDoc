@@ -28,6 +28,8 @@ namespace MarkDoc.Elements
     /// <summary>
     /// List type
     /// </summary>
-    ListType Type { get; }
+    ListType Type { get; set; }
+
+    string ToString(int indent);
   }
 }

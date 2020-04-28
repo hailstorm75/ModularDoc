@@ -1,14 +1,12 @@
-﻿namespace MarkDoc.Elements
+﻿using MarkDoc.Elements.Extensions;
+
+namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for teext elements
   /// </summary>
   public interface IText
-    : IElement
+    : IElement, IHasContent<string>
   {
-    /// <summary>
-    /// Text content
-    /// </summary>
-    string Content { get; }
   }
 }
