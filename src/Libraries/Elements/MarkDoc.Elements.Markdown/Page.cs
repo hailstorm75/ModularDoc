@@ -30,17 +30,16 @@ namespace MarkDoc.Elements.Markdown
 
     private void PrintTableOfContents(StringBuilder build)
     {
-      IList CreateList(IEnumerable<IElement> elements, int indent)
+      IList CreateList(IEnumerable<IElement> elements)
       {
         var list = m_creator.CreateList();
         list.Content = elements.ToArray();
         list.Type = IList.ListType.Dotted;
-        list.Level = indent;
 
         return list;
       }
 
-      IEnumerable<IElement> GenerateTable(IPage page, int indent)
+      IEnumerable<IElement> GenerateTable(IPage page)
       {
         var text = m_creator.CreateText();
         text.Content = page.Heading;
@@ -48,10 +47,10 @@ namespace MarkDoc.Elements.Markdown
         yield return text;
 
         foreach (var subpage in page.Subpages)
-          yield return CreateList(GenerateTable(subpage, indent + 1), indent);
+          yield return CreateList(GenerateTable(subpage));
       }
 
-      var tableOfContents = CreateList(GenerateTable(this, 0), 0);
+      var tableOfContents = CreateList(GenerateTable(this));
       build.Append(tableOfContents.ToString());
     }
 
