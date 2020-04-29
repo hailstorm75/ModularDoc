@@ -46,7 +46,6 @@ namespace MarkDoc.Elements.Markdown
         text.Content = page.Heading;
 
         yield return text;
-        yield return CreateList(page.Content, indent);
 
         foreach (var subpage in page.Subpages)
           yield return CreateList(GenerateTable(subpage, indent + 1), indent);
