@@ -17,13 +17,13 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    public ResTuple(dnlib.DotNet.TypeSig source)
-      : base(source)
+    internal ResTuple(IResolver resolver, dnlib.DotNet.TypeSig source)
+      : base(resolver, source)
     {
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notTuple);
 
-      Fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", Resolver.Instance.Resolve(x))).ToArray();
+      Fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", Resolver.Resolve(x))).ToArray();
     }
   }
 }

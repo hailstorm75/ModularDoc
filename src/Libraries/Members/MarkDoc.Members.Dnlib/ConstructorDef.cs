@@ -31,18 +31,18 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ConstructorDef(dnlib.DotNet.MethodDef source, bool isNested)
-      : this(source, ResolveName(source, isNested)) { }
+    internal ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, bool isNested)
+      : this(resolver, source, ResolveName(source, isNested)) { }
 
     /// <summary>
     /// Inherited constructor
     /// </summary>
-    protected ConstructorDef(dnlib.DotNet.MethodDef source, string name)
-      : base(source)
+    internal protected ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, string name)
+      : base(resolver, source)
     {
       Name = name;
       IsStatic = source.IsStatic;
-      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(x)).ToArray();
+      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x)).ToArray();
       Accessor = ResolveAccessor(source);
     } 
 

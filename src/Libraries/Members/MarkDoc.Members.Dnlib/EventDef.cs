@@ -30,14 +30,14 @@ namespace MarkDoc.Members.Dnlib
     /// Default constructor
     /// </summary>
     /// <param name="source">Member source</param>
-    internal EventDef(dnlib.DotNet.EventDef source)
-      : base(source)
+    internal EventDef(IResolver resolver, dnlib.DotNet.EventDef source)
+      : base(resolver, source)
     {
       Name = source.Name.String;
       Type = ResolveType(source);
     }
 
-    private static IResType ResolveType(dnlib.DotNet.EventDef source)
-      => Resolver.Instance.Resolve(source.EventType.ToTypeSig());
+    private IResType ResolveType(dnlib.DotNet.EventDef source)
+      => Resolver.Resolve(source.EventType.ToTypeSig());
   }
 }

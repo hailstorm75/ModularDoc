@@ -15,13 +15,13 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    public ResGeneric(dnlib.DotNet.TypeSig source)
-      : base(source)
+    internal ResGeneric(IResolver resolver, dnlib.DotNet.TypeSig source)
+      : base(resolver, source)
     {
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notGeneric);
 
-      Generics = token.GenericArguments.Select(Resolver.Instance.Resolve).ToArray();
+      Generics = token.GenericArguments.Select(Resolver.Resolve).ToArray();
     }
   }
 }

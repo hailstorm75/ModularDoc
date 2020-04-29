@@ -11,12 +11,12 @@ using System.Collections.Concurrent;
 namespace MarkDoc.Members.Dnlib
 {
   public class Resolver
-    : LazySingleton<Resolver>, IResolver
+    : IResolver
   {
     #region Fields
 
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
-    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups;
+    private static readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
 
     #endregion
 
@@ -27,10 +27,7 @@ namespace MarkDoc.Members.Dnlib
     #endregion
 
     public Resolver()
-    {
-      m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
-      Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.ExecutionAndPublication);
-    }
+      => Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.ExecutionAndPublication);
 
     #region Methods
 
@@ -52,53 +49,56 @@ namespace MarkDoc.Members.Dnlib
     }
 
 #pragma warning disable CA1822 // Mark members as static
-    public IResType Resolve(TypeSig source)
+    public IResType Resolve(object source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      return source.ElementType switch
+      if (!(source is TypeSig signature))
+        throw new NotSupportedException(); // TODO: Message
+
+      return signature.ElementType switch
       {
         ElementType.Boolean
-          => new ResValueType(source, "bool"),
+          => new ResValueType(this, signature, "bool"),
         ElementType.Char
-          => new ResValueType(source, "char"),
+          => new ResValueType(this, signature, "char"),
         ElementType.String
-          => new ResValueType(source, "string"),
+          => new ResValueType(this, signature, "string"),
         var x when x is ElementType.SZArray || x is ElementType.Array
-          => new ResArray(source),
-        var x when (x is ElementType.GenericInst || x is ElementType.MVar) && IsGeneric(source)
-          => IsTuple(source)
-              ? new ResTuple(source)
-              : new ResGeneric(source) as IResType,
+          => new ResArray(this, signature),
+        var x when (x is ElementType.GenericInst || x is ElementType.MVar) && IsGeneric(signature)
+          => IsTuple(signature)
+              ? new ResTuple(this, signature)
+              : new ResGeneric(this, signature) as IResType,
         ElementType.Object
-          => new ResValueType(source, "object"),
+          => new ResValueType(this, signature, "object"),
         ElementType.I1
-          => new ResValueType(source, "sbyte"),
+          => new ResValueType(this, signature, "sbyte"),
         ElementType.U1
-          => new ResValueType(source, "byte"),
+          => new ResValueType(this, signature, "byte"),
         ElementType.I2
-          => new ResValueType(source, "short"),
+          => new ResValueType(this, signature, "short"),
         ElementType.U2
-          => new ResValueType(source, "ushort"),
+          => new ResValueType(this, signature, "ushort"),
         ElementType.I4
-          => new ResValueType(source, "int"),
+          => new ResValueType(this, signature, "int"),
         ElementType.U4
-          => new ResValueType(source, "uint"),
+          => new ResValueType(this, signature, "uint"),
         ElementType.I8
-          => new ResValueType(source, "long"),
+          => new ResValueType(this, signature, "long"),
         ElementType.U8
-          => new ResValueType(source, "ulong"),
+          => new ResValueType(this, signature, "ulong"),
         ElementType.R4
-          => new ResValueType(source, "float"),
+          => new ResValueType(this, signature, "float"),
         ElementType.R8
-          => new ResValueType(source, "double"),
-        _ => new ResType(source),
+          => new ResValueType(this, signature, "double"),
+        _ => new ResType(this, signature),
       };
     }
 #pragma warning restore CA1822 // Mark members as static
 
-    public IType? FindReference(dnlib.DotNet.TypeSig source, IResType type)
+    public IType? FindReference(object source, IResType type)
     {
       bool GenericFilter(IType x)
       {
@@ -128,10 +128,13 @@ namespace MarkDoc.Members.Dnlib
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      if (!Types.Value.ContainsKey(source.Namespace))
+      if (!(source is TypeSig signature))
+        throw new NotSupportedException(); // TODO: Message
+
+      if (!Types.Value.ContainsKey(signature.Namespace))
         return null;
 
-      IType? result = Types.Value[source.Namespace].FirstOrDefault(x => x.Name.Equals(type.Name, StringComparison.InvariantCulture) && GenericFilter(x));
+      IType? result = Types.Value[signature.Namespace].FirstOrDefault(x => x.Name.Equals(type.Name, StringComparison.InvariantCulture) && GenericFilter(x));
       return result;
     }
 
@@ -157,30 +160,33 @@ namespace MarkDoc.Members.Dnlib
       => m_groups.SelectMany(x => x)
                  .ToDictionary(x => x.Key, x => x.SelectMany(y => y).ToArray() as IReadOnlyCollection<IType>);
 
-    internal IType ResolveType(dnlib.DotNet.TypeDef subject, dnlib.DotNet.TypeDef? parent = null)
+    public IType ResolveType(object subject, object? parent = null)
     {
+      if (!(subject is dnlib.DotNet.TypeDef subjectSig))
+        throw new NotSupportedException(); // TODO: Message
+
       var nestedParent = ResolveParent(parent);
 
-      if (subject.IsEnum)
-        return new EnumDef(subject, nestedParent);
-      if (subject.IsClass)
-        return new ClassDef(subject, nestedParent);
-      if (subject.IsInterface)
-        return new InterfaceDef(subject, nestedParent);
+      if (subjectSig.IsEnum)
+        return new EnumDef(this, subjectSig, nestedParent);
+      if (subjectSig.IsClass)
+        return new ClassDef(this, subjectSig, nestedParent);
+      if (subjectSig.IsInterface)
+        return new InterfaceDef(this, subjectSig, nestedParent);
 
       throw new NotSupportedException(Resources.subjectNotSupported);
     }
 
-    internal static IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
+    internal IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
     {
       if (subject.IsEnum)
       {
-        yield return new EnumDef(subject, null);
+        yield return new EnumDef(this, subject, null);
         yield break;
       }
       if (subject.IsClass)
       {
-        var type = new ClassDef(subject, null);
+        var type = new ClassDef(this, subject, null);
         yield return type;
         foreach (var item in type.NestedTypes)
           yield return item;
@@ -189,7 +195,7 @@ namespace MarkDoc.Members.Dnlib
       }
       if (subject.IsInterface)
       {
-        var type = new InterfaceDef(subject, null);
+        var type = new InterfaceDef(this, subject, null);
         yield return type;
         foreach (var item in type.NestedTypes)
           yield return item;

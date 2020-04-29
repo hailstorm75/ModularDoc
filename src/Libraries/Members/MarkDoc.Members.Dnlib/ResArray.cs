@@ -9,6 +9,8 @@ namespace MarkDoc.Members.Dnlib
   {
     #region Properties
 
+    private IResolver Resolver { get; }
+
     /// <inheritdoc />
     public IResType ArrayType { get; }
 
@@ -35,17 +37,20 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    public ResArray(dnlib.DotNet.TypeSig source)
+    internal ResArray(IResolver resolver, dnlib.DotNet.TypeSig source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
+      if (resolver == null)
+        throw new ArgumentNullException(nameof(resolver));
 
       IsJagged = source.ElementType == dnlib.DotNet.ElementType.SZArray;
+      Resolver = resolver;
 
       var next = ResolveNext(source, IsJagged);
-      ArrayType = Resolver.Instance.Resolve(next);
+      ArrayType = Resolver.Resolve(next);
       Dimension = ResolveDimension(source, next);
-      Reference = new Lazy<IType?>(() => Resolver.Instance.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
+      Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     #region Methods

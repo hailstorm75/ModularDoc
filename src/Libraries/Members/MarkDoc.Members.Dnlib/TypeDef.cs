@@ -9,6 +9,8 @@ namespace MarkDoc.Members.Dnlib
   {
     #region Properties
 
+    protected IResolver Resolver { get; }
+
     /// <inheritdoc />
     public bool IsStatic { get; }
 
@@ -28,13 +30,14 @@ namespace MarkDoc.Members.Dnlib
     /// </summary>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    protected TypeDef(dnlib.DotNet.ITypeDefOrRef source, dnlib.DotNet.ITypeDefOrRef? parent)
+    internal protected TypeDef(IResolver resolver, dnlib.DotNet.ITypeDefOrRef source, dnlib.DotNet.ITypeDefOrRef? parent)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
       TypeNamespace = parent?.Namespace ?? source.Namespace;
       Name = ResolveName(source, parent);
+      Resolver = resolver;
     }
 
     #region Methods

@@ -4,7 +4,6 @@ using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Diagnostics;
 using System.Linq;
 
@@ -39,15 +38,15 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public InterfaceDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(source, parent)
+    internal InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+      : base(resolver, source, parent)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
       InheritedInterfaces = ResolveInterfaces(source).ToArray();
       NestedTypes = source.NestedTypes.Where(x => !x.Name.String.StartsWith('<'))
-                                      .Select(x => Resolver.Instance.ResolveType(x, source))
+                                      .Select(x => Resolver.ResolveType(x, source))
                                       .ToArray();
       Generics = source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
                                          .ToDictionary(x => x.Name.String, ResolveParameter);
@@ -56,22 +55,22 @@ namespace MarkDoc.Members.Dnlib
                                        && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                                        && !x.IsPrivate
                                        && !x.IsConstructor)
-                              .Select(x => new MethodDef(x))
+                              .Select(x => new MethodDef(resolver, x))
                               .ToArray();
-      Properties = source.Properties.Select(x => PropertyDef.Initialize(x))
+      Properties = source.Properties.Select(x => PropertyDef.Initialize(resolver, x))
                                     .Where(x => x != null)
                                     .Cast<PropertyDef>()
                                     .ToArray();
-      Events = source.Events.Select(x => new EventDef(x))
+      Events = source.Events.Select(x => new EventDef(resolver, x))
                             .ToArray();
     }
 
     #region Methods
 
-    private static IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source)
-      => source.Interfaces.Select(x => Resolver.Instance.Resolve(x.Interface.ToTypeSig()));
+    private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source)
+      => source.Interfaces.Select(x => Resolver.Resolve(x.Interface.ToTypeSig()));
 
-    private static (Variance, IReadOnlyCollection<IResType>) ResolveParameter(GenericParam parameter)
+    private (Variance, IReadOnlyCollection<IResType>) ResolveParameter(GenericParam parameter)
     {
       var variance = ResolveVariance(parameter.Variance);
 
@@ -81,8 +80,8 @@ namespace MarkDoc.Members.Dnlib
       return (variance, parameter.GenericParamConstraints.Select(ResolveType).ToArray());
     }
 
-    private static IResType ResolveType(GenericParamConstraint x)
-      => Resolver.Instance.Resolve(x.Constraint.ToTypeSig());
+    private IResType ResolveType(GenericParamConstraint x)
+      => Resolver.Resolve(x.Constraint.ToTypeSig()) ?? throw new Exception();
 
     private static Variance ResolveVariance(GenericParamAttributes attributes)
       => attributes switch

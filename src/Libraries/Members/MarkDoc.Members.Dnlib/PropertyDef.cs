@@ -39,12 +39,12 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    private PropertyDef(dnlib.DotNet.PropertyDef source, dnlib.DotNet.MethodDef[] methods)
-      : base(source)
+    private PropertyDef(IResolver resolver, dnlib.DotNet.PropertyDef source, dnlib.DotNet.MethodDef[] methods)
+      : base(resolver, source)
     {
       Name = source.Name;
       IsStatic = methods.First().IsStatic;
-      Type = Resolver.Instance.Resolve(ResolveType(source));
+      Type = Resolver.Resolve(ResolveType(source));
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
@@ -53,13 +53,13 @@ namespace MarkDoc.Members.Dnlib
 
     #region Methods
 
-    internal static PropertyDef? Initialize(dnlib.DotNet.PropertyDef source)
+    internal static PropertyDef? Initialize(IResolver resolver, dnlib.DotNet.PropertyDef source)
     {
       var methods = source.SetMethods.Concat(source.GetMethods).Where(x => !x.IsPrivate).ToArray();
 
       if (methods.Length == 0)
         return null;
-      return new PropertyDef(source, methods);
+      return new PropertyDef(resolver, source, methods);
     }
 
     private static dnlib.DotNet.TypeSig ResolveType(dnlib.DotNet.PropertyDef source)

@@ -32,8 +32,8 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal MethodDef(dnlib.DotNet.MethodDef source)
-      : base(source, ResolveName(source))
+    internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
+      : base(resolver, source, ResolveName(source))
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
@@ -55,11 +55,11 @@ namespace MarkDoc.Members.Dnlib
       return source.CustomAttributes.Find(nameof(AsyncStateMachineAttribute)) != null;
     }
 
-    private static IResType? ResolveReturn(dnlib.DotNet.MethodDef source)
+    private IResType? ResolveReturn(dnlib.DotNet.MethodDef source)
     {
       if (source.ReturnType.TypeName.Equals("System.Void", StringComparison.InvariantCultureIgnoreCase))
         return null;
-      return Resolver.Instance.Resolve(source.ReturnType);
+      return Resolver.Resolve(source.ReturnType);
     }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)

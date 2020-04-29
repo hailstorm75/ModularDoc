@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dnlib.DotNet;
+using System;
 using System.Diagnostics;
 using System.Threading;
 
@@ -9,6 +10,8 @@ namespace MarkDoc.Members.Dnlib
     : IResType
   {
     #region Properties
+
+    protected IResolver Resolver { get; }
 
     /// <inheritdoc />
     public string Name { get; }
@@ -24,19 +27,22 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    public ResType(dnlib.DotNet.TypeSig source)
-      : this(source, ResolveName(source)) { }
+    internal ResType(IResolver resolver, dnlib.DotNet.TypeSig source)
+      : this(resolver, source, ResolveName(source)) { }
 
-    protected ResType(dnlib.DotNet.TypeSig source, string displayName)
+    internal protected ResType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
+      Resolver = resolver;
       Name = ResolveName(source);
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
-      Reference = new Lazy<IType?>(() => Resolver.Instance.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
+      Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
     }
+
+    #region Methods
 
     protected static string ResolveName(dnlib.DotNet.IType source)
     {
@@ -49,6 +55,8 @@ namespace MarkDoc.Members.Dnlib
         return name;
 
       return name.Remove(genericsIndex);
-    }
+    } 
+
+    #endregion
   }
 }

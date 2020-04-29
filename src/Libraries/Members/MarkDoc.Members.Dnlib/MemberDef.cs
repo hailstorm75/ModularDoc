@@ -8,6 +8,8 @@ namespace MarkDoc.Members.Dnlib
   {
     #region Properties
 
+    protected IResolver Resolver { get; }
+
     /// <inheritdoc />
     public abstract bool IsStatic { get; }
 
@@ -22,10 +24,12 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    protected MemberDef(dnlib.DotNet.IMemberDef source)
+    internal protected MemberDef(IResolver resolver, dnlib.DotNet.IMemberDef source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
+
+      Resolver = resolver;
     }
   }
 }

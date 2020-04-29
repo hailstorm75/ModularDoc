@@ -19,8 +19,8 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public EnumDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(source, parent)
+    internal EnumDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+      : base(resolver, source, parent)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));

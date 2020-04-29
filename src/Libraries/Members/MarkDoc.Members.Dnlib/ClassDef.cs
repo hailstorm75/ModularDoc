@@ -27,21 +27,24 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public ClassDef(dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(source, parent)
+    internal ClassDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+      : base(resolver, source, parent)
     {
+      if (source == null)
+        throw new ArgumentNullException(nameof(source));
+
       BaseClass = ResolveBaseClass(source);
       IsAbstract = source.IsAbstract;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                                             && x.IsConstructor)
-                                   .Select(x => new ConstructorDef(x, parent != null))
+                                   .Select(x => new ConstructorDef(resolver, x, parent != null))
                                    .ToArray();
     }
 
-    private static IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)
+    private IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)
       => source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false
-          ? Resolver.Instance.Resolve(source.BaseType.ToTypeSig())
+          ? Resolver.Resolve(source.BaseType.ToTypeSig())
           : null;
   }
 }

@@ -1,6 +1,7 @@
 ﻿using MarkDoc.Members.Enums;
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace MarkDoc.Members.Dnlib
@@ -10,6 +11,8 @@ namespace MarkDoc.Members.Dnlib
     : IArgument
   {
     #region Properties
+
+    protected IResolver Resolver { get; }
 
     /// <inheritdoc />
     public ArgumentType Keyword { get; }
@@ -25,11 +28,12 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ArgumentDef(dnlib.DotNet.Parameter source)
+    internal ArgumentDef(IResolver resolver, dnlib.DotNet.Parameter source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
+      Resolver = resolver;
       Name = source.Name;
       Keyword = ResolveKeyword(source);
       Type = ResolveType(source);
@@ -37,8 +41,8 @@ namespace MarkDoc.Members.Dnlib
 
     #region Methods
 
-    private static IResType ResolveType(dnlib.DotNet.Parameter source)
-      => Resolver.Instance.Resolve(source.Type);
+    private IResType ResolveType(dnlib.DotNet.Parameter source)
+      => Resolver.Resolve(source.Type);
 
     private static ArgumentType ResolveKeyword(dnlib.DotNet.Parameter source)
     {
