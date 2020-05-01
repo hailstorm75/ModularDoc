@@ -23,6 +23,9 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public string TypeNamespace { get; }
 
+    /// <inheritdoc />
+    public string RawName { get; }
+
     #endregion
 
     /// <summary>
@@ -38,6 +41,7 @@ namespace MarkDoc.Members.Dnlib
       TypeNamespace = parent?.Namespace ?? source.Namespace;
       Name = ResolveName(source, parent);
       Resolver = resolver;
+      RawName = source.ReflectionFullName.Replace('+', '.');
     }
 
     #region Methods

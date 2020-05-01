@@ -8,6 +8,11 @@ namespace MarkDoc.Members
   public interface IType
   {
     /// <summary>
+    /// Reflection fullname with namespace
+    /// </summary>
+    string RawName { get; }
+
+    /// <summary>
     /// Type name
     /// </summary>
     string Name { get; }
