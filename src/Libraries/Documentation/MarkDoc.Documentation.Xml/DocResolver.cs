@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (System.Xml.Linq.XElement? type, System.Collections.Concurrent.ConcurrentDictionary<string, System.Xml.Linq.XElement>? members)>;
+using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocType? type, System.Collections.Concurrent.ConcurrentDictionary<string, System.Xml.Linq.XElement>? members)>;
 
 namespace MarkDoc.Documentation.Xml
 {
@@ -17,14 +17,8 @@ namespace MarkDoc.Documentation.Xml
     #region Fields
 
     private static readonly Cache m_documentation = new Cache();
-    private readonly ILinker m_linker;
 
     #endregion
-
-    public DocResolver(ILinker linker)
-    {
-      m_linker = linker;
-    }
 
     /// <inheritdoc />
     public async Task Resolve(string path)
@@ -39,27 +33,12 @@ namespace MarkDoc.Documentation.Xml
         if (m_documentation.ContainsKey(key))
         {
           var (type, _) = m_documentation[key];
-          type = element;
+          type = new DocType(element);
         }
         else
         {
-          var toAdd = (element, new ConcurrentDictionary<string, XElement>());
+          var toAdd = (new DocType(element), new ConcurrentDictionary<string, XElement>());
           m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
-        }
-
-        return key;
-      }
-
-      static string CacheMember(string key, string name, XElement element)
-      {
-        if (m_documentation.ContainsKey(key))
-          m_documentation[key].members?.AddOrUpdate(name[(3 + key.Length)..], element, (_, y) => y ?? element);
-        else
-        {
-          var dict = new ConcurrentDictionary<string, XElement>();
-          dict.TryAdd(name[(3 + key.Length)..], element);
-
-          m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
         }
 
         return key;
@@ -71,8 +50,23 @@ namespace MarkDoc.Documentation.Xml
       static bool TypeGrouper(XElement element)
         => RetrieveName(element).First().Equals('T');
 
-      static string MemberCacher(XElement element)
+      static void CacheMember(XElement element)
       {
+        static string CacheMember(string key, string name, XElement element)
+        {
+          if (m_documentation.ContainsKey(key))
+            m_documentation[key].members?.AddOrUpdate(name[(3 + key.Length)..], element, (_, y) => y ?? element);
+          else
+          {
+            var dict = new ConcurrentDictionary<string, XElement>();
+            dict.TryAdd(name[(3 + key.Length)..], element);
+
+            m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
+          }
+
+          return key;
+        }
+
         static int ReverseIndexOf(string value, char search, int from)
         {
           for (int i = from - 1; i >= 0; i--)
@@ -89,10 +83,13 @@ namespace MarkDoc.Documentation.Xml
         {
           var brace = name.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
           if (brace != -1)
-            return CacheMember(name[2..ReverseIndexOf(name, '.', brace)], name, element);
+          {
+            CacheMember(name[2..ReverseIndexOf(name, '.', brace)], name, element);
+            return;
+          }
         }
 
-        return CacheMember(name[2..name.LastIndexOf('.')], name, element);
+        CacheMember(name[2..name.LastIndexOf('.')], name, element);
       }
 
       using var file = File.OpenText(path);
@@ -107,7 +104,7 @@ namespace MarkDoc.Documentation.Xml
             break;
           case false:
             foreach (var item in group)
-              MemberCacher(item);
+              CacheMember(item);
             break;
         }
       }
@@ -123,7 +120,9 @@ namespace MarkDoc.Documentation.Xml
       if (!m_documentation.TryGetValue(type.RawName, out var value))
         return false;
 
-      throw new NotImplementedException();
+      result = value.type;
+
+      return result != null;
     }
   }
 }

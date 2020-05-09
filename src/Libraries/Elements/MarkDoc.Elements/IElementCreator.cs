@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MarkDoc.Elements
+﻿namespace MarkDoc.Elements
 {
   public interface IElementCreator
   {
@@ -11,5 +7,6 @@ namespace MarkDoc.Elements
     ITable CreateTable();
     IPage CreatePage();
     IText CreateText();
+    ILink CreateLink();
   }
 }
