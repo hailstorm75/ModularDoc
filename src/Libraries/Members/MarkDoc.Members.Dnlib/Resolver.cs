@@ -179,6 +179,20 @@ namespace MarkDoc.Members.Dnlib
 
     internal IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
     {
+      static IEnumerable<IType> IterateNested(IInterface type)
+      {
+        if (!type.NestedTypes.Any())
+          yield break;
+
+        foreach (var nested in type.NestedTypes)
+        {
+          yield return nested;
+          if (nested is IInterface nestedType)
+            foreach (var nestedNested in IterateNested(nestedType))
+              yield return nestedNested;
+        }
+      }
+
       if (subject.IsEnum)
       {
         yield return new EnumDef(this, subject, null);
@@ -188,7 +202,7 @@ namespace MarkDoc.Members.Dnlib
       {
         var type = new ClassDef(this, subject, null);
         yield return type;
-        foreach (var item in type.NestedTypes)
+        foreach (var item in IterateNested(type))
           yield return item;
 
         yield break;
@@ -199,6 +213,7 @@ namespace MarkDoc.Members.Dnlib
         yield return type;
         foreach (var item in type.NestedTypes)
           yield return item;
+
         yield break;
       }
 
