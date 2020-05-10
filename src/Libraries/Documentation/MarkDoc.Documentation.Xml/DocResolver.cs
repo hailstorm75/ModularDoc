@@ -55,13 +55,32 @@ namespace MarkDoc.Documentation.Xml
       {
         static string CacheMember(string key, string name, XElement element)
         {
+          static string ProcessName(string key, string name)
+          {
+            var memberNameRaw = name[(3 + key.Length)..];
+            if (name.First().Equals('M'))
+            {
+              if (!memberNameRaw.EndsWith(')'))
+                memberNameRaw += "()";
+              else
+              {
+                var braceIndex = memberNameRaw.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
+                var memberName = memberNameRaw.Remove(braceIndex);
+                var index = memberName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
+                if (index != -1)
+                  memberNameRaw = memberName.Remove(index) + memberNameRaw.Substring(braceIndex);
+              }
+            }
+            return memberNameRaw;
+          }
+
           var toAdd = new DocElement(element);
           if (m_documentation.ContainsKey(key))
-            m_documentation[key].members?.AddOrUpdate(name[(3 + key.Length)..], toAdd, (_, y) => y ?? toAdd);
+            m_documentation[key].members?.AddOrUpdate(ProcessName(key, name), toAdd, (_, y) => y ?? toAdd);
           else
           {
             var dict = new ConcurrentDictionary<string, IDocElement>();
-            dict.TryAdd(name[(3 + key.Length)..], toAdd);
+            dict.TryAdd(ProcessName(key, name), toAdd);
 
             m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
           }

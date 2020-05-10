@@ -16,13 +16,32 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    internal ResGeneric(IResolver resolver, dnlib.DotNet.TypeSig source)
-      : base(resolver, source)
+    internal ResGeneric(IResolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics)
+      : base(resolver, source, ResolveName(source), ResolveRawName(source, generics))
     {
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notGeneric);
 
-      Generics = token.GenericArguments.Select(Resolver.Resolve).ToReadOnlyCollection();
+      Generics = token.GenericArguments.Select(x => Resolver.Resolve(x, default)).ToReadOnlyCollection();
+    }
+
+    private static string ResolveRawName(TypeSig source, IReadOnlyDictionary<string, string>? generics)
+    {
+      string ResolveGenerics(string type)
+      {
+        if (generics != null && generics.TryGetValue(type, out var generic))
+          return generic;
+        return type;
+      }
+
+      if (!(source is GenericInstSig token))
+        throw new NotSupportedException(Resources.notGeneric);
+
+      var index = source.FullName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
+      var name = source.FullName.Remove(index);
+
+      var result = $"{name}{{{string.Join(",",token.GenericArguments.Select(x => ResolveGenerics(x.TypeName)))}}}";
+      return result;
     }
   }
 }

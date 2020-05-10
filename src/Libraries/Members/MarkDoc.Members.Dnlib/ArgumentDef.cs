@@ -1,8 +1,8 @@
-﻿using MarkDoc.Members.Enums;
+﻿using dnlib.DotNet;
+using MarkDoc.Members.Enums;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -28,23 +28,25 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ArgumentDef(IResolver resolver, dnlib.DotNet.Parameter source)
+    internal ArgumentDef(IResolver resolver, dnlib.DotNet.Parameter source, IReadOnlyDictionary<string, string> generics)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
+      if (generics == null)
+        throw new ArgumentNullException(nameof(generics));
 
       Resolver = resolver;
       Name = source.Name;
       Keyword = ResolveKeyword(source);
-      Type = ResolveType(source);
+      Type = ResolveType(source, generics);
     }
 
     #region Methods
 
-    private IResType ResolveType(dnlib.DotNet.Parameter source)
-      => Resolver.Resolve(source.Type);
+    private IResType ResolveType(Parameter source, IReadOnlyDictionary<string, string> generics)
+      => Resolver.Resolve(source.Type, generics);
 
-    private static ArgumentType ResolveKeyword(dnlib.DotNet.Parameter source)
+    private static ArgumentType ResolveKeyword(Parameter source)
     {
       var def = source.ParamDef;
 

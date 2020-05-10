@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using MarkDoc.Members.Enums;
 using MarkDoc.Helpers;
+using dnlib.DotNet;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -43,16 +44,31 @@ namespace MarkDoc.Members.Dnlib
     internal protected ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, string name)
       : base(resolver, source)
     {
+      var outerArgs = GetGenericArgumeents(source.DeclaringType).DistinctBy(x => x.Name).Select((x, i) => new { Type = x.Name, Name = $"`{i}" });
+      var thisArgs = source.GenericParameters.Select((x, i) => new { Type = x.Name, Name = $"``{i}" });
+      var generics = outerArgs.Concat(thisArgs).ToDictionary(x => x.Type.String, x => x.Name);
+
       Name = name;
       IsStatic = source.IsStatic;
-      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x)).ToReadOnlyCollection();
+      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x, generics)).ToReadOnlyCollection();
       RawName = $"{Name}({string.Join(",", Arguments.Select(x => x.Type.Name))})";
       Accessor = ResolveAccessor(source);
-    } 
+    }
 
     #endregion
 
     #region Methods
+
+    private IEnumerable<GenericParam> GetGenericArgumeents(dnlib.DotNet.TypeDef? type)
+    {
+      if (type == null)
+        yield break;
+
+      foreach (var parameter in GetGenericArgumeents(type.DeclaringType))
+        yield return parameter;
+      foreach (var parameter in type.GenericParameters)
+        yield return parameter;
+    }
 
     private static string ResolveName(dnlib.DotNet.MethodDef source, bool isNested)
     {
@@ -88,7 +104,7 @@ namespace MarkDoc.Members.Dnlib
       if (method.Access == dnlib.DotNet.MethodAttributes.Family)
         return AccessorType.Protected;
       return AccessorType.Internal;
-    } 
+    }
 
     #endregion
   }

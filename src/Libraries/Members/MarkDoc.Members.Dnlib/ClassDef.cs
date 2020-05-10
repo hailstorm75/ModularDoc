@@ -45,7 +45,7 @@ namespace MarkDoc.Members.Dnlib
 
     private IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)
       => source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false
-          ? Resolver.Resolve(source.BaseType.ToTypeSig())
+          ? Resolver.Resolve(source.BaseType.ToTypeSig(), default)
           : null;
   }
 }

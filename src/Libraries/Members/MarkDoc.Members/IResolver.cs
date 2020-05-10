@@ -16,7 +16,7 @@ namespace MarkDoc.Members
     /// <param name="assembly">Path to assembly</param>
     void Resolve(string assembly);
 
-    IResType Resolve(object source);
+    IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null);
 
     IType? FindReference(object source, IResType type);
 

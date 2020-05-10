@@ -27,16 +27,16 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    internal ResType(IResolver resolver, dnlib.DotNet.TypeSig source)
-      : this(resolver, source, ResolveName(source)) { }
+    internal ResType(IResolver resolver, TypeSig source)
+      : this(resolver, source, ResolveName(source), source.FullName) { }
 
-    internal protected ResType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName)
+    internal protected ResType(IResolver resolver, TypeSig source, string displayName, string rawNamee)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
       Resolver = resolver;
-      Name = source.FullName;
+      Name = rawNamee;
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);

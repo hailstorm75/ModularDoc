@@ -49,7 +49,7 @@ namespace MarkDoc.Members.Dnlib
     }
 
 #pragma warning disable CA1822 // Mark members as static
-    public IResType Resolve(object source)
+    public IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
@@ -70,7 +70,9 @@ namespace MarkDoc.Members.Dnlib
         var x when (x is ElementType.GenericInst || x is ElementType.MVar) && IsGeneric(signature)
           => IsTuple(signature)
               ? new ResTuple(this, signature)
-              : new ResGeneric(this, signature) as IResType,
+              : new ResGeneric(this, signature, generics) as IResType,
+        ElementType.MVar
+          => new ResGenericValueType(this, signature, generics),
         ElementType.Object
           => new ResValueType(this, signature, "object"),
         ElementType.I1
@@ -211,7 +213,7 @@ namespace MarkDoc.Members.Dnlib
       {
         var type = new InterfaceDef(this, subject, null);
         yield return type;
-        foreach (var item in type.NestedTypes)
+        foreach (var item in IterateNested(type))
           yield return item;
 
         yield break;
