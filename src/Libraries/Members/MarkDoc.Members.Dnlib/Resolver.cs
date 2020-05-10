@@ -42,8 +42,8 @@ namespace MarkDoc.Members.Dnlib
       var group = module.GetTypes()
                         .Where(x => !x.FullName.Equals("<Module>", StringComparison.InvariantCultureIgnoreCase))
                         .GroupBy(x => x.Namespace.String)
-                        .Where(x => FilterNamespaces(x.Key))
-                        .GroupBy(x => x.Key, x => x.Select(t => ResolveType(t)).SelectMany(x => x).ToArray() as IReadOnlyCollection<IType>);
+                        .Where(x => FilterNamespaces(Linq.GroupKey(x)))
+                        .GroupBy(Linq.GroupKey, x => x.Select(t => ResolveType(t)).SelectMany(Linq.XtoX).ToReadOnlyCollection());
 
       m_groups.Add(group);
     }
@@ -157,8 +157,8 @@ namespace MarkDoc.Members.Dnlib
                : typeXamespace);
 
     private IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
-      => m_groups.SelectMany(x => x)
-                 .ToDictionary(x => x.Key, x => x.SelectMany(y => y).ToArray() as IReadOnlyCollection<IType>);
+      => m_groups.SelectMany(Linq.XtoX)
+                 .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
 
     public IType ResolveType(object subject, object? parent = null)
     {

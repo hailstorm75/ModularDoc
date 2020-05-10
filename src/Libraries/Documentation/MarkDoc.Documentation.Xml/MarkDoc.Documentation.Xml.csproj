@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
     <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
     <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj" />
     <ProjectReference Include="..\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />

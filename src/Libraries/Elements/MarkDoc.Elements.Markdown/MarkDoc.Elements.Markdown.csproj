@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
     <ProjectReference Include="..\MarkDoc.Elements\MarkDoc.Elements.csproj" />
   </ItemGroup>
 

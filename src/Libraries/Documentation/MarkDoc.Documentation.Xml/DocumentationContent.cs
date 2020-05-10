@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkDoc.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -28,7 +29,7 @@ namespace MarkDoc.Documentation.Xml
       Tags = ResolveTags(source.Elements())
         .Where(x => x.Type != TagType.InvalidTag)
         .GroupBy(x => x.Type)
-        .ToDictionary(x => x.Key, x => x.Select(y => y).ToArray() as IReadOnlyCollection<ITag>);
+        .ToDictionary(Linq.GroupKey, x => x.GroupValues().ToReadOnlyCollection());
     }
 
     private static IEnumerable<ITag> ResolveTags(IEnumerable<XElement> source)

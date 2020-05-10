@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using System.Diagnostics;
 using MarkDoc.Members.Enums;
+using MarkDoc.Helpers;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -42,7 +43,7 @@ namespace MarkDoc.Members.Dnlib
     {
       Name = name;
       IsStatic = source.IsStatic;
-      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x)).ToArray();
+      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x)).ToReadOnlyCollection();
       Accessor = ResolveAccessor(source);
     } 
 

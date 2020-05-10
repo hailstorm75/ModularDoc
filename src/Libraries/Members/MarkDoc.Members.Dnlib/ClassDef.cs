@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 using System.Linq;
+using MarkDoc.Helpers;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -39,7 +40,7 @@ namespace MarkDoc.Members.Dnlib
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                                             && x.IsConstructor)
                                    .Select(x => new ConstructorDef(resolver, x, parent != null))
-                                   .ToArray();
+                                   .ToReadOnlyCollection();
     }
 
     private IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkDoc.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace MarkDoc.Members.Dnlib
         throw new ArgumentNullException(nameof(source));
 
       Fields = source.Fields.Where(x => x.ElementType != dnlib.DotNet.ElementType.End)
-                            .Select(x => x.Name.String).ToArray();
+                            .Select(x => x.Name.String).ToReadOnlyCollection();
     }
   }
 }

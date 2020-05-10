@@ -1,4 +1,5 @@
 ﻿using MarkDoc.Documentation.Tags;
+using MarkDoc.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +32,10 @@ namespace MarkDoc.Documentation.Xml
         switch (tag.Key)
         {
           case "ITEM":
-            ResolveRows(ref rows, tag.Select(x => x));
+            ResolveRows(ref rows, tag.Select(Linq.XtoX));
             break;
           case "LISTHEADER":
-            ResolveHeadings(ref headings, tag.Select(x => x));
+            ResolveHeadings(ref headings, tag.Select(Linq.XtoX));
             break;
           default:
             continue;
@@ -70,7 +71,7 @@ namespace MarkDoc.Documentation.Xml
           .OfType<XElement>()
           .Select(x => x.FirstNode)
           .Select(ContentResolver.Resolve)
-          .OfType<IContent>()
+          .SelectMany(Linq.XtoX)
           .First());
     }
 
@@ -81,8 +82,8 @@ namespace MarkDoc.Documentation.Xml
           .OfType<XElement>()
           .Select(x => x.FirstNode)
           .Select(ContentResolver.Resolve)
-          .OfType<IContent>()
-          .ToArray());
+          .SelectMany(Linq.XtoX)
+          .ToReadOnlyCollection());
     } 
 
     #endregion

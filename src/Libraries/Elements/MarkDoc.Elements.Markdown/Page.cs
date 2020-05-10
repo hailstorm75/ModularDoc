@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MarkDoc.Helpers;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +34,7 @@ namespace MarkDoc.Elements.Markdown
       IList CreateList(IEnumerable<IElement> elements)
       {
         var list = m_creator.CreateList();
-        list.Content = elements.ToArray();
+        list.Content = elements.ToReadOnlyCollection();
         list.Type = IList.ListType.Dotted;
 
         return list;

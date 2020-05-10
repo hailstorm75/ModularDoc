@@ -1,20 +1,31 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 using MarkDoc.Documentation.Tags;
 
 namespace MarkDoc.Documentation.Xml
 {
   internal static class ContentResolver
   {
-    public static IContent? Resolve(XNode node)
+    public static IEnumerable<IContent> Resolve(XNode node)
       => node switch
       {
-        XText element => new TextTag(element),
+        XText element => new[] { new TextTag(element) },
         XElement element => element.Name.LocalName.ToUpperInvariant() switch
         {
-          "LIST" => new ListTag(element),
-          _ => new InnerTag(element)
+          "LIST" => new[] { new ListTag(element) },
+          _ => ResolveInnerTag(element)
         },
-        _ => null
+        _ => Enumerable.Empty<IContent>()
       };
+
+    private static IEnumerable<IContent> ResolveInnerTag(XElement element)
+    {
+      var result = new InnerTag(element);
+      if (result.Type == IInnerTag.InnerTagType.InvalidTag)
+        return result.Content;
+      else
+        return new[] { result };
+    }
   }
 }

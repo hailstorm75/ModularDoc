@@ -6,6 +6,7 @@ using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using dnlib.DotNet;
+using MarkDoc.Helpers;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -40,7 +41,7 @@ namespace MarkDoc.Members.Dnlib
 
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
-      Generics = ResolveGenerics(source).ToArray();
+      Generics = ResolveGenerics(source).ToReadOnlyCollection();
       Returns = ResolveReturn(source);
     }
 

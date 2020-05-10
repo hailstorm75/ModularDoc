@@ -1,4 +1,5 @@
 ﻿using MarkDoc.Documentation.Tags;
+using MarkDoc.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,8 @@ namespace MarkDoc.Documentation.Xml
       Reference = ResolveReference(Type, node);
       Content = node.Nodes()
         .Select(ContentResolver.Resolve)
-        .Where(x => x != null)
-        .Cast<IContent>()
-        .ToArray();
+        .SelectMany(Linq.XtoX)
+        .ToReadOnlyCollection();
     }
 
     #region Methods

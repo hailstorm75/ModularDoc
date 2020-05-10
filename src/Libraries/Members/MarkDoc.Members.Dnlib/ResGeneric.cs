@@ -1,4 +1,5 @@
 ﻿using dnlib.DotNet;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Dnlib.Properties;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace MarkDoc.Members.Dnlib
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notGeneric);
 
-      Generics = token.GenericArguments.Select(Resolver.Resolve).ToArray();
+      Generics = token.GenericArguments.Select(Resolver.Resolve).ToReadOnlyCollection();
     }
   }
 }

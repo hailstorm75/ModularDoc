@@ -1,4 +1,5 @@
 ﻿using dnlib.DotNet;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Dnlib.Properties;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace MarkDoc.Members.Dnlib
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notTuple);
 
-      Fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", Resolver.Resolve(x))).ToArray();
+      Fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", Resolver.Resolve(x))).ToReadOnlyCollection();
     }
   }
 }

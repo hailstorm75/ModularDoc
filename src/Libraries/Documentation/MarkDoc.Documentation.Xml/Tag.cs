@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using MarkDoc.Documentation.Tags;
+using MarkDoc.Helpers;
 using static MarkDoc.Documentation.ITag;
 
 namespace MarkDoc.Documentation.Xml
@@ -64,9 +65,8 @@ namespace MarkDoc.Documentation.Xml
       Reference = ResolveReference(Type, source);
       Content = source.Nodes()
         .Select(ContentResolver.Resolve)
-        .Where(x => x != null)
-        .Cast<IContent>()
-        .ToArray();
+        .SelectMany(Linq.XtoX)
+        .ToReadOnlyCollection();
     }
   }
 }

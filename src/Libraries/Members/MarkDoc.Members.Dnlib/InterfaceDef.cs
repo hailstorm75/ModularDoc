@@ -44,10 +44,10 @@ namespace MarkDoc.Members.Dnlib
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
-      InheritedInterfaces = ResolveInterfaces(source).ToArray();
+      InheritedInterfaces = ResolveInterfaces(source).ToReadOnlyCollection();
       NestedTypes = source.NestedTypes.Where(x => !x.Name.String.StartsWith('<'))
                                       .Select(x => Resolver.ResolveType(x, source))
-                                      .ToArray();
+                                      .ToReadOnlyCollection();
       Generics = source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
                                          .ToDictionary(x => x.Name.String, ResolveParameter);
 
@@ -56,13 +56,12 @@ namespace MarkDoc.Members.Dnlib
                                        && !x.IsPrivate
                                        && !x.IsConstructor)
                               .Select(x => new MethodDef(resolver, x))
-                              .ToArray();
+                              .ToReadOnlyCollection();
       Properties = source.Properties.Select(x => PropertyDef.Initialize(resolver, x))
-                                    .Where(x => x != null)
-                                    .Cast<PropertyDef>()
-                                    .ToArray();
+                                    .WhereNotNull()
+                                    .ToReadOnlyCollection();
       Events = source.Events.Select(x => new EventDef(resolver, x))
-                            .ToArray();
+                            .ToReadOnlyCollection();
     }
 
     #region Methods
@@ -77,7 +76,7 @@ namespace MarkDoc.Members.Dnlib
       if (!parameter.HasGenericParamConstraints)
         return (variance, Enumerable.Empty<IResType>().ToArray());
 
-      return (variance, parameter.GenericParamConstraints.Select(ResolveType).ToArray());
+      return (variance, parameter.GenericParamConstraints.Select(ResolveType).ToReadOnlyCollection());
     }
 
     private IResType ResolveType(GenericParamConstraint x)
