@@ -25,6 +25,8 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public override AccessorType Accessor { get; }
 
+    public override string RawName { get; }
+
     #endregion
 
     #region Constructors
@@ -44,6 +46,7 @@ namespace MarkDoc.Members.Dnlib
       Name = name;
       IsStatic = source.IsStatic;
       Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x)).ToReadOnlyCollection();
+      RawName = $"{Name}({string.Join(",", Arguments.Select(x => x.Type.Name))})";
       Accessor = ResolveAccessor(source);
     } 
 

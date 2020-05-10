@@ -3,8 +3,8 @@ using System.Xml.Linq;
 
 namespace MarkDoc.Documentation.Xml
 {
-  public class DocType
-    : IDocType
+  public class DocElement
+    : IDocElement
   {
     #region Properties
 
@@ -13,7 +13,7 @@ namespace MarkDoc.Documentation.Xml
 
     #endregion
 
-    public DocType(XElement source)
+    public DocElement(XElement source)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));

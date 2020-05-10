@@ -2,12 +2,13 @@
 using MarkDoc.Members;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocType? type, System.Collections.Concurrent.ConcurrentDictionary<string, System.Xml.Linq.XElement>? members)>;
+using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type, System.Collections.Concurrent.ConcurrentDictionary<string, MarkDoc.Documentation.IDocElement>? members)>;
 
 namespace MarkDoc.Documentation.Xml
 {
@@ -33,11 +34,11 @@ namespace MarkDoc.Documentation.Xml
         if (m_documentation.ContainsKey(key))
         {
           var (type, _) = m_documentation[key];
-          type = new DocType(element);
+          type = new DocElement(element);
         }
         else
         {
-          var toAdd = (new DocType(element), new ConcurrentDictionary<string, XElement>());
+          var toAdd = (new DocElement(element), new ConcurrentDictionary<string, IDocElement>());
           m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
         }
 
@@ -54,12 +55,13 @@ namespace MarkDoc.Documentation.Xml
       {
         static string CacheMember(string key, string name, XElement element)
         {
+          var toAdd = new DocElement(element);
           if (m_documentation.ContainsKey(key))
-            m_documentation[key].members?.AddOrUpdate(name[(3 + key.Length)..], element, (_, y) => y ?? element);
+            m_documentation[key].members?.AddOrUpdate(name[(3 + key.Length)..], toAdd, (_, y) => y ?? toAdd);
           else
           {
-            var dict = new ConcurrentDictionary<string, XElement>();
-            dict.TryAdd(name[(3 + key.Length)..], element);
+            var dict = new ConcurrentDictionary<string, IDocElement>();
+            dict.TryAdd(name[(3 + key.Length)..], toAdd);
 
             m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
           }
@@ -111,18 +113,20 @@ namespace MarkDoc.Documentation.Xml
     }
 
     /// <inheritdoc />
-    public bool TryFindType(IType type, out IDocType? result)
+    public bool TryFindType(IType type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocElement>? resultMembers)
     {
       if (type == null)
         throw new ArgumentNullException(nameof(type));
 
-      result = null;
+      resultType = null;
+      resultMembers = null;
       if (!m_documentation.TryGetValue(type.RawName, out var value))
         return false;
 
-      result = value.type;
+      resultType = value.type;
+      resultMembers = value.members;
 
-      return result != null;
+      return resultType != null;
     }
   }
 }

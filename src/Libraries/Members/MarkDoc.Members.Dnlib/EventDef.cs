@@ -24,6 +24,8 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public IResType Type { get; }
 
+    public override string RawName { get; } = string.Empty;
+
     #endregion
 
     /// <summary>

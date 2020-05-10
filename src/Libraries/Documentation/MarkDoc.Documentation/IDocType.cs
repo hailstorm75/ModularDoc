@@ -2,7 +2,7 @@
 
 namespace MarkDoc.Documentation
 {
-  public interface IDocType
+  public interface IDocElement
   {
     IDocumentation Documentation { get; }
   }

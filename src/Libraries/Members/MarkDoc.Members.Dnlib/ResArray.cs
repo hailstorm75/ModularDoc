@@ -26,7 +26,14 @@ namespace MarkDoc.Members.Dnlib
 
     /// <inheritdoc />
     public string Name
-      => ArrayType.Name;
+    {
+      get
+      {
+        if (IsJagged)
+          return ArrayType.Name + string.Join(string.Empty, Enumerable.Repeat("[]", Dimension));
+        return ArrayType.Name + $"[{string.Concat(Enumerable.Repeat(",", Dimension - 1))}]";
+      }
+    }
 
     /// <inheritdoc />
     public string TypeNamespace

@@ -18,6 +18,11 @@ namespace MarkDoc.Members
     string Name { get; }
 
     /// <summary>
+    /// Raw member name
+    /// </summary>
+    string RawName { get; }
+
+    /// <summary>
     /// Member accessor
     /// </summary>
     AccessorType Accessor { get; }

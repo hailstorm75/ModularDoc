@@ -36,7 +36,7 @@ namespace MarkDoc.Members.Dnlib
         throw new ArgumentNullException(nameof(source));
 
       Resolver = resolver;
-      Name = ResolveName(source);
+      Name = source.FullName;
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);

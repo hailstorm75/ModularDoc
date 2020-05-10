@@ -34,6 +34,8 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public AccessorType? SetAccessor { get; }
 
+    public override string RawName { get; }
+
     #endregion
 
     /// <summary>
@@ -43,6 +45,7 @@ namespace MarkDoc.Members.Dnlib
       : base(resolver, source)
     {
       Name = source.Name;
+      RawName = $"P:{source.FullName}";
       IsStatic = methods.First().IsStatic;
       Type = Resolver.Resolve(ResolveType(source));
       Inheritance = ResolveInheritance(methods);

@@ -19,6 +19,8 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public abstract AccessorType Accessor { get; }
 
+    public abstract string RawName { get; }
+
     #endregion
 
     /// <summary>
