@@ -60,7 +60,7 @@ namespace MarkDoc.Members.Dnlib
     {
       if (source.ReturnType.TypeName.Equals("System.Void", StringComparison.InvariantCultureIgnoreCase))
         return null;
-      return Resolver.Resolve(source.ReturnType);
+      return Resolver.Resolve(source.ReturnType, source.ResolveMethodGenerics());
     }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)

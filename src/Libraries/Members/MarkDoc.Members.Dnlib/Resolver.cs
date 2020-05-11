@@ -66,12 +66,12 @@ namespace MarkDoc.Members.Dnlib
         ElementType.String
           => new ResValueType(this, signature, "string"),
         var x when x is ElementType.SZArray || x is ElementType.Array
-          => new ResArray(this, signature),
-        var x when (x is ElementType.GenericInst || x is ElementType.MVar) && IsGeneric(signature)
+          => new ResArray(this, signature, generics),
+        var x when (x is ElementType.GenericInst) && IsGeneric(signature)
           => IsTuple(signature)
               ? new ResTuple(this, signature)
               : new ResGeneric(this, signature, generics) as IResType,
-        ElementType.MVar
+        var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics),
         ElementType.Object
           => new ResValueType(this, signature, "object"),

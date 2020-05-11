@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -44,7 +45,7 @@ namespace MarkDoc.Members.Dnlib
 
     #endregion
 
-    internal ResArray(IResolver resolver, dnlib.DotNet.TypeSig source)
+    internal ResArray(IResolver resolver, dnlib.DotNet.TypeSig source, IReadOnlyDictionary<string, string>? generics)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
@@ -55,7 +56,7 @@ namespace MarkDoc.Members.Dnlib
       Resolver = resolver;
 
       var next = ResolveNext(source, IsJagged);
-      ArrayType = Resolver.Resolve(next);
+      ArrayType = Resolver.Resolve(next, generics);
       Dimension = ResolveDimension(source, next);
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
     }

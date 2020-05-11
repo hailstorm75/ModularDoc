@@ -1,6 +1,8 @@
 ﻿using dnlib.DotNet;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 namespace MarkDoc.Members.Dnlib
@@ -28,7 +30,7 @@ namespace MarkDoc.Members.Dnlib
     #endregion
 
     internal ResType(IResolver resolver, TypeSig source)
-      : this(resolver, source, ResolveName(source), source.FullName) { }
+      : this(resolver, source, ResolveName(source), ResolveRawName(source)) { }
 
     internal protected ResType(IResolver resolver, TypeSig source, string displayName, string rawNamee)
     {
@@ -43,6 +45,41 @@ namespace MarkDoc.Members.Dnlib
     }
 
     #region Methods
+
+    private static string ResolveRawName(TypeSig source)
+    {
+      static IEnumerable<string> RetrieveNested(ITypeDefOrRef source)
+      {
+        static string SolveGenerics(string value)
+        {
+          var index = value.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
+          if (index == -1)
+            return value;
+
+          var name = value.Remove(index);
+          if (!int.TryParse(value.Substring(index + 1), out var number))
+            return name;
+          return $"{name}{{{string.Join(",", Enumerable.Repeat('`', number).Select((x,i) => $"{x}{i}"))}}}";
+        }
+
+        if (source == null)
+          yield break;
+        var type = RetrieveNested(source.ScopeType.DeclaringType);
+        foreach (var item in type)
+          yield return item;
+
+        if (source.ScopeType.DeclaringType == null)
+          yield return source.Namespace;
+
+        yield return SolveGenerics(source.Name);
+      }
+
+      if (!source.FullName.Contains('/', StringComparison.InvariantCultureIgnoreCase))
+        return source.FullName;
+
+      var result = $"{string.Join(".", RetrieveNested(source.ScopeType))}";
+      return result;
+    }
 
     protected static string ResolveName(dnlib.DotNet.IType source)
     {

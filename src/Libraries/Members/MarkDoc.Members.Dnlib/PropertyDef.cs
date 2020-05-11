@@ -4,6 +4,9 @@ using System.Threading;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
+using System.Collections.Generic;
+using dnlib.DotNet;
+using MarkDoc.Helpers;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -44,10 +47,11 @@ namespace MarkDoc.Members.Dnlib
     private PropertyDef(IResolver resolver, dnlib.DotNet.PropertyDef source, dnlib.DotNet.MethodDef[] methods)
       : base(resolver, source)
     {
+      var generics = source.ResolvePropertyGenerics(methods);
       Name = source.Name;
       RawName = $"P:{source.FullName}";
       IsStatic = methods.First().IsStatic;
-      Type = Resolver.Resolve(ResolveType(source));
+      Type = Resolver.Resolve(ResolveType(source), generics);
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);

@@ -33,7 +33,6 @@ namespace MarkDoc.Members.Dnlib
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
-
       BaseClass = ResolveBaseClass(source);
       IsAbstract = source.IsAbstract;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
@@ -45,7 +44,7 @@ namespace MarkDoc.Members.Dnlib
 
     private IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)
       => source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false
-          ? Resolver.Resolve(source.BaseType.ToTypeSig(), default)
+          ? Resolver.Resolve(source.BaseType.ToTypeSig(), source.ResolveTypeGenerics())
           : null;
   }
 }
