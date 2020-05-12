@@ -54,6 +54,7 @@ namespace MarkDoc.Members.Dnlib
 
       Methods = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                        && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                                       && !x.Access.HasFlag(MethodAttributes.Assembly)
                                        && !x.IsPrivate
                                        && !x.IsConstructor)
                               .Select(x => new MethodDef(resolver, x))
