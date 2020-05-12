@@ -18,6 +18,7 @@ namespace MarkDoc.Members.Dnlib
 
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
     private static readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
+    private static readonly ConcurrentDictionary<string, IResType> m_resCache = new ConcurrentDictionary<string, IResType>();
 
     #endregion
 
@@ -58,7 +59,10 @@ namespace MarkDoc.Members.Dnlib
       if (!(source is TypeSig signature))
         throw new NotSupportedException(); // TODO: Message
 
-      return signature.ElementType switch
+      if (m_resCache.TryGetValue(signature.FullName, out var resolution))
+        return resolution;
+
+      var result = signature.ElementType switch
       {
         ElementType.Boolean
           => new ResValueType(this, signature, "bool"),
@@ -98,6 +102,10 @@ namespace MarkDoc.Members.Dnlib
           => new ResValueType(this, signature, "double"),
         _ => new ResType(this, signature),
       };
+
+      m_resCache.AddOrUpdate(signature.FullName, result, (x, y) => result);
+
+      return result;
     }
 #pragma warning restore CA1822 // Mark members as static
 
