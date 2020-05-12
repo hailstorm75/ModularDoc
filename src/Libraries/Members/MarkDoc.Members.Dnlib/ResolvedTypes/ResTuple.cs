@@ -1,11 +1,11 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Helpers;
-using MarkDoc.Members.Dnlib.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using dnlib.DotNet;
+using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Properties;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   public class ResTuple
     : ResType, IResTuple

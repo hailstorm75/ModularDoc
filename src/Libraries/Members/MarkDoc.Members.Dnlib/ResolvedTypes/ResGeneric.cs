@@ -1,11 +1,11 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Helpers;
-using MarkDoc.Members.Dnlib.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using dnlib.DotNet;
+using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Properties;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   public class ResGeneric
     : ResType, IResGeneric
@@ -27,7 +27,7 @@ namespace MarkDoc.Members.Dnlib
 
     private static string ResolveRawName(IResolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics)
     {
-      string ResolveGenerics(string type)
+      static string ResolveGenerics(string type, IReadOnlyDictionary<string, string>? generics)
       {
         if (generics != null && generics.TryGetValue(type, out var generic))
           return generic;
@@ -40,7 +40,7 @@ namespace MarkDoc.Members.Dnlib
       var index = source.FullName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
       var name = source.FullName.Remove(index);
 
-      var result = $"{name}{{{string.Join(",",token.GenericArguments.Select(x => ResolveGenerics(resolver.Resolve(x, generics).Name)))}}}";
+      var result = $"{name}{{{string.Join(",",token.GenericArguments.Select(x => ResolveGenerics(resolver.Resolve(x, generics).Name, generics)))}}}";
       return result;
     }
   }

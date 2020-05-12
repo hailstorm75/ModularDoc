@@ -1,11 +1,11 @@
-﻿using dnlib.DotNet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using dnlib.DotNet;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   [DebuggerDisplay("{DisplayName}")]
   public class ResType
@@ -32,7 +32,7 @@ namespace MarkDoc.Members.Dnlib
     internal ResType(IResolver resolver, TypeSig source)
       : this(resolver, source, ResolveName(source), ResolveRawName(source)) { }
 
-    internal protected ResType(IResolver resolver, TypeSig source, string displayName, string rawNamee)
+    protected ResType(IResolver resolver, TypeSig source, string displayName, string rawNamee)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));

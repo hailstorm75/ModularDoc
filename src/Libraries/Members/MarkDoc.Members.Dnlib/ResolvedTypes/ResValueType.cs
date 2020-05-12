@@ -1,4 +1,4 @@
-﻿namespace MarkDoc.Members.Dnlib
+﻿namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   public class ResValueType
     : ResType
@@ -8,7 +8,7 @@
     {
     }
 
-    internal protected ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName, string rawName)
+    protected ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName, string rawName)
       : base(resolver, source, displayName, rawName)
     {
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   public class ResArray
     : IResArray, IResType

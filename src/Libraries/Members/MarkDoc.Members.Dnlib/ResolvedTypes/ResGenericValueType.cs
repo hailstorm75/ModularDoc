@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   public class ResGenericValueType
     : ResValueType
