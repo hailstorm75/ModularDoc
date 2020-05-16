@@ -145,7 +145,7 @@ namespace MarkDoc.Members.Dnlib
       if (!Types.Value.ContainsKey(signature.Namespace))
         return null;
 
-      IType? result = Types.Value[signature.Namespace].FirstOrDefault(x => x.Name.Equals(type.Name, StringComparison.InvariantCulture) && GenericFilter(x));
+      IType? result = Types.Value[signature.Namespace].FirstOrDefault(x => x.RawName.Equals(type.Name, StringComparison.InvariantCulture));
       return result;
     }
 
