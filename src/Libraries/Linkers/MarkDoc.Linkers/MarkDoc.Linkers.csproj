@@ -23,4 +23,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj" />
+  </ItemGroup>
+
 </Project>

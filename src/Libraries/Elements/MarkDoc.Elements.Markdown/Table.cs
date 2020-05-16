@@ -24,10 +24,10 @@ namespace MarkDoc.Elements.Markdown
     public int Level { get; set; } = 0;
 
     /// <inheritdoc />
-    public IReadOnlyCollection<string> Headings { get; set; } = Enumerable.Empty<string>().ToArray();
+    public IReadOnlyCollection<IText> Headings { get; set; } = Enumerable.Empty<IText>().ToArray();
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IReadOnlyCollection<string>> Content { get; set; } = Enumerable.Empty<IReadOnlyCollection<string>>().ToArray();
+    public IReadOnlyCollection<IReadOnlyCollection<IElement>> Content { get; set; } = Enumerable.Empty<IReadOnlyCollection<IElement>>().ToArray();
 
     #endregion
 

@@ -16,8 +16,9 @@ namespace MarkDoc.Documentation.Xml
     public IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> Tags { get; }
 
     /// <inheritdoc />
-    public bool HasInheritDoc
-      => Tags.ContainsKey(TagType.Inheritdoc);
+    public bool HasInheritDoc { get; }
+
+    public string InheritDocRef { get; }
 
     #endregion
 
@@ -30,6 +31,9 @@ namespace MarkDoc.Documentation.Xml
         .Where(x => x.Type != TagType.InvalidTag)
         .GroupBy(x => x.Type)
         .ToDictionary(Linq.GroupKey, x => x.GroupValues().ToReadOnlyCollection());
+
+      HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var tags);
+      InheritDocRef = tags?.First()?.Reference ?? string.Empty;
     }
 
     private static IEnumerable<ITag> ResolveTags(IEnumerable<XElement> source)

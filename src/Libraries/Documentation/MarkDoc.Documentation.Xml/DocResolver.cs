@@ -137,9 +137,16 @@ namespace MarkDoc.Documentation.Xml
       if (type == null)
         throw new ArgumentNullException(nameof(type));
 
+      return TryFindType(type.RawName, out resultType, out resultMembers);
+    }
+
+    /// <inheritdoc />
+    public bool TryFindType(string type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocElement>? resultMembers)
+    {
       resultType = null;
       resultMembers = null;
-      if (!m_documentation.TryGetValue(type.RawName, out var value))
+
+      if (!m_documentation.TryGetValue(type, out var value))
         return false;
 
       resultType = value.type;

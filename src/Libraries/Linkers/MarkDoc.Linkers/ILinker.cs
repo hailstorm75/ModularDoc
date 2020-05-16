@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkDoc.Members;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,5 +7,6 @@ namespace MarkDoc.Linkers
 {
   public interface ILinker
   {
+    string CreateLink(IResType type);
   }
 }

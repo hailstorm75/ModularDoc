@@ -8,5 +8,15 @@ namespace MarkDoc.Elements
   public interface IText
     : IElement, IHasContent<string>
   {
+    public enum TextStyle
+    {
+      Normal,
+      Italic,
+      Bold,
+      CodeInline,
+      Code
+    }
+
+    TextStyle Style { get; set; }
   }
 }

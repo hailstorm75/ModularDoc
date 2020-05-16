@@ -7,8 +7,8 @@ namespace MarkDoc.Elements
   /// Interface for the table element
   /// </summary>
   public interface ITable
-    : IElement, IHasContent<IReadOnlyCollection<IReadOnlyCollection<string>>>, IHasHeading
+    : IElement, IHasContent<IReadOnlyCollection<IReadOnlyCollection<IElement>>>, IHasHeading
   {
-    IReadOnlyCollection<string> Headings { get; set; }
+    IReadOnlyCollection<IText> Headings { get; set; }
   }
 }

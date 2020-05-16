@@ -14,5 +14,10 @@ namespace MarkDoc.Documentation
     /// Contains the <c>inheritdoc</c> tag
     /// </summary>
     bool HasInheritDoc { get; }
+
+    /// <summary>
+    /// InheritDoc reference
+    /// </summary>
+    string InheritDocRef { get; }
   }
 }

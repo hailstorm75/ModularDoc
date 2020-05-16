@@ -6,7 +6,7 @@
     #region Properties
 
     /// <inheritdoc />
-    public string Content { get; set; } = string.Empty;
+    public IText Content { get; set; }
 
     /// <inheritdoc />
     public string Reference { get; set; } = string.Empty; 

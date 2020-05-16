@@ -3,7 +3,7 @@
 namespace MarkDoc.Elements
 {
   public interface ILink
-    : IElement, IHasContent<string>
+    : IElement, IHasContent<IText>
   {
     string Reference { get; set; }
   }

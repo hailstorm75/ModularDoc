@@ -42,8 +42,7 @@ namespace MarkDoc.Elements.Markdown
 
       IEnumerable<IElement> GenerateTable(IPage page)
       {
-        var text = m_creator.CreateText();
-        text.Content = page.Heading;
+        var text = m_creator.CreateText(page.Heading);
 
         yield return text;
 

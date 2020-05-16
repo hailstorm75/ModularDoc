@@ -6,7 +6,7 @@
     ISection CreateSection();
     ITable CreateTable();
     IPage CreatePage();
-    IText CreateText();
-    ILink CreateLink();
+    IText CreateText(string content, IText.TextStyle style = IText.TextStyle.Normal);
+    ILink CreateLink(IText content, string reference = "");
   }
 }

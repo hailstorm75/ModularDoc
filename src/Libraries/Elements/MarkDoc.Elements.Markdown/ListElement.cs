@@ -25,7 +25,7 @@ namespace MarkDoc.Elements.Markdown
 
     /// <inheritdoc />
     public override string ToString()
-      => ToString(0);
+      => ToString(1);
 
     public string ToString(int indent)
     {
