@@ -12,6 +12,26 @@ namespace MarkDoc.Documentation.Xml
   public class DocElement
     : IDocElement
   {
+    #region Fields
+
+    private static readonly HashSet<TagType> SINGLE = new HashSet<TagType>
+    {
+      TagType.Summary,
+      TagType.Value,
+      TagType.Remarks,
+      TagType.Returns,
+      TagType.Example
+    };
+    private static readonly HashSet<TagType> MULTIPLE = new HashSet<TagType>
+    {
+      TagType.Exception,
+      TagType.Param,
+      TagType.Typeparam,
+      TagType.Seealso,
+    }; 
+
+    #endregion
+
     #region Properties
 
     /// <inheritdoc />
@@ -42,13 +62,43 @@ namespace MarkDoc.Documentation.Xml
 
       void Process(Dictionary<string, Dictionary<TagType, List<ITag>>> cache, IInterface type, string[] names)
       {
-        foreach (var name in names)
+        void CacheTags(IEnumerable<string> names, IReadOnlyDictionary<string, IDocMember> members)
         {
-          var except = new HashSet<TagType>(cache[name].Select(x => x.Key));
-          var tags = memberDocs[name].Documentation.Tags.Where(x => x.Key != TagType.Inheritdoc && !except.Contains(x.Key));
-          foreach (var tag in tags)
-            cache[name].Add(tag.Key, tag.Value.ToList());
+
+          foreach (var name in names)
+          {
+            if (!members.TryGetValue(name, out var member))
+              continue;
+
+            var cachedTags = cache[name];
+            var except = new HashSet<TagType>(cachedTags.Select(x => x.Key).Where(x => SINGLE.Contains(x)));
+
+            bool Filter(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
+              => tag.Key != TagType.Inheritdoc && !except.Contains(tag.Key);
+
+            (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
+            {
+              if (!MULTIPLE.Contains(tag.Key) || !cachedTags.TryGetValue(tag.Key, out var existing))
+                return (tag.Key, tag.Value);
+
+              var filter = new HashSet<string>(existing.Select(x => x.Reference));
+              var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
+
+              return (tag.Key, toAdd);
+            }
+
+            var tags = member.Documentation.Tags.Where(Filter).Select(Process);
+            foreach (var tag in tags)
+            {
+              if (cachedTags.ContainsKey(tag.key))
+                cachedTags[tag.key].AddRange(tag.tags);
+              else
+                cachedTags.Add(tag.key, tag.tags.ToList());
+            }
+          }
         }
+
+        CacheTags(names, memberDocs);
 
         var baseClass = (type is IClass classDef && classDef.BaseClass?.Reference.Value != null)
           ? new[] { classDef.BaseClass.Reference.Value }
@@ -66,18 +116,7 @@ namespace MarkDoc.Documentation.Xml
           if (!docResolver.TryFindType(source.Value, out var sourceType) || sourceType == null)
             continue;
 
-          var members = sourceType.Members.Value;
-          foreach (var name in names)
-          {
-            if (!members.TryGetValue(name, out var member))
-              continue;
-
-            var documentation = member.Documentation;
-            var except = new HashSet<TagType>(cache[name].Select(x => x.Key));
-            var tags = documentation.Tags.Where(x => x.Key != TagType.Inheritdoc && !except.Contains(x.Key));
-            foreach (var tag in tags)
-              cache[name].Add(tag.Key, tag.Value.ToList());
-          }
+          CacheTags(names, sourceType.Members.Value);
         }
       }
 
