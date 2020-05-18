@@ -64,7 +64,6 @@ namespace MarkDoc.Documentation.Xml
       {
         void CacheTags(IEnumerable<string> names, IReadOnlyDictionary<string, IDocMember> members)
         {
-
           foreach (var name in names)
           {
             if (!members.TryGetValue(name, out var member))
@@ -125,7 +124,7 @@ namespace MarkDoc.Documentation.Xml
       {
         if (item.Key && typeResolver.TryFindType(Name, out var type) && type is IInterface interfaceDef)
         {
-          var temps = new Dictionary<string, Dictionary<TagType, List<ITag>>>(item.ToDictionary(x => x.Key, x => new Dictionary<TagType, List<ITag>>()));
+          var temps = item.ToDictionary(x => x.Key, x => new Dictionary<TagType, List<ITag>>());
           Process(temps, interfaceDef, temps.Select(x => x.Key).ToArray());
 
           // Cache collected documentation
