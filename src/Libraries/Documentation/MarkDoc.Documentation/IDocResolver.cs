@@ -12,8 +12,6 @@ namespace MarkDoc.Documentation
     /// <param name="path">Path to documentation</param>
     Task Resolve(string path);
 
-    bool TryFindType(IType type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocElement>? resultMembers);
-
-    bool TryFindType(string rawName, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocElement>? resultMembers);
+    bool TryFindType(IType type, out IDocElement? resultType);
   }
 }

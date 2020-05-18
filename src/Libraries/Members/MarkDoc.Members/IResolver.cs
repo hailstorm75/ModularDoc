@@ -21,5 +21,7 @@ namespace MarkDoc.Members
     IType? FindReference(object source, IResType type);
 
     IType ResolveType(object subject, object? parent = null);
+
+    bool TryFindType(string fullname, out IType? result);
   }
 }

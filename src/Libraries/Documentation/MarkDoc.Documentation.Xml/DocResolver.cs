@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type, System.Collections.Concurrent.ConcurrentDictionary<string, MarkDoc.Documentation.IDocElement>? members)>;
+using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type, System.Collections.Concurrent.ConcurrentDictionary<string, MarkDoc.Documentation.IDocMember>? members)>;
 
 namespace MarkDoc.Documentation.Xml
 {
@@ -18,8 +18,14 @@ namespace MarkDoc.Documentation.Xml
     #region Fields
 
     private static readonly Cache m_documentation = new Cache();
+    private readonly IResolver m_typeResolver;
 
     #endregion
+
+    public DocResolver(IResolver typeResolver)
+    {
+      m_typeResolver = typeResolver;
+    }
 
     /// <inheritdoc />
     public async Task Resolve(string path)
@@ -29,16 +35,16 @@ namespace MarkDoc.Documentation.Xml
         where B : class
         => (existing.a ?? toAdd.a, existing.b ?? toAdd.b);
 
-      static string CacheType(string key, XElement element)
+      string CacheType(string key, XElement element)
       {
         if (m_documentation.ContainsKey(key))
         {
           var (type, _) = m_documentation[key];
-          type = new DocElement(element);
+          type = new DocElement(key, element, this, m_typeResolver);
         }
         else
         {
-          var toAdd = (new DocElement(element), new ConcurrentDictionary<string, IDocElement>());
+          var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
           m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
         }
 
@@ -74,12 +80,12 @@ namespace MarkDoc.Documentation.Xml
             return memberNameRaw;
           }
 
-          var toAdd = new DocElement(element);
+          var toAdd = new DocMember(ProcessName(key, name), key[0], element);
           if (m_documentation.ContainsKey(key))
-            m_documentation[key].members?.AddOrUpdate(ProcessName(key, name), toAdd, (_, y) => y ?? toAdd);
+            m_documentation[key].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
           else
           {
-            var dict = new ConcurrentDictionary<string, IDocElement>();
+            var dict = new ConcurrentDictionary<string, IDocMember>();
             dict.TryAdd(ProcessName(key, name), toAdd);
 
             m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
@@ -132,16 +138,15 @@ namespace MarkDoc.Documentation.Xml
     }
 
     /// <inheritdoc />
-    public bool TryFindType(IType type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocElement>? resultMembers)
+    public bool TryFindType(IType type, out IDocElement? resultType)
     {
       if (type == null)
         throw new ArgumentNullException(nameof(type));
 
-      return TryFindType(type.RawName, out resultType, out resultMembers);
+      return TryFindType(type.RawName, out resultType, out var _);
     }
 
-    /// <inheritdoc />
-    public bool TryFindType(string type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocElement>? resultMembers)
+    internal bool TryFindType(string type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
     {
       resultType = null;
       resultMembers = null;

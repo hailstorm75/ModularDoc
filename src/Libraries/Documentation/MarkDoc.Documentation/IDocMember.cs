@@ -9,6 +9,7 @@
       Field = 'F'
     }
 
+    string Name { get; }
     MemberType Type { get; }
     IDocumentation Documentation { get; }
   }

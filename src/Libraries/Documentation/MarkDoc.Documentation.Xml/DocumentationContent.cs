@@ -36,6 +36,16 @@ namespace MarkDoc.Documentation.Xml
       InheritDocRef = tags?.First()?.Reference ?? string.Empty;
     }
 
+    public DocumentationContent(IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> tags)
+    {
+      if (tags == null)
+        throw new ArgumentNullException(nameof(tags));
+
+      Tags = tags;
+      HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var t);
+      InheritDocRef = t?.First()?.Reference ?? string.Empty;
+    }
+
     private static IEnumerable<ITag> ResolveTags(IEnumerable<XElement> source)
     {
       foreach (var node in source)

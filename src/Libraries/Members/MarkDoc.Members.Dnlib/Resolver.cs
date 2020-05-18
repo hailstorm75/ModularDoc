@@ -111,31 +111,6 @@ namespace MarkDoc.Members.Dnlib
 
     public IType? FindReference(object source, IResType type)
     {
-      bool GenericFilter(IType x)
-      {
-        if (!(source is GenericInstSig genericSig))
-          return false;
-
-        var generics = (x switch
-        {
-          IInterface i
-            => i.Generics.Select(x => x.Key),
-          IMethod m
-            => m.Generics,
-          _
-            => Enumerable.Empty<string>()
-        }).ToArray();
-
-        if (genericSig.GenericArguments.Count != generics.Length)
-          return false;
-
-        for (var i = 0; i < generics.Length; i++)
-          if (genericSig.GenericArguments[i].FullName != generics[i])
-            return false;
-
-        return true;
-      }
-
       if (source == null)
         throw new ArgumentNullException(nameof(source));
 
@@ -239,6 +214,28 @@ namespace MarkDoc.Members.Dnlib
         throw new InvalidOperationException($"Argument type of {parent} is not {nameof(dnlib.DotNet.TypeDef)}.");
 
       return type;
+    }
+
+    public bool TryFindType(string fullname, out IType? result)
+    {
+      if (fullname == null)
+        throw new ArgumentNullException(nameof(fullname));
+
+      result = null;
+
+      var genericIndex = fullname.LastIndexOf('`');
+      if (genericIndex != -1)
+        fullname = fullname.Remove(genericIndex);
+
+      var index = fullname.LastIndexOf('.');
+      if (index == -1)
+        return false;
+
+      var namespaceCut = fullname.Remove(index);
+      var types = Types.Value[namespaceCut];
+      result = types.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
+
+      return result != null;
     }
 
     #endregion
