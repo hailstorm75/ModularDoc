@@ -1,5 +1,6 @@
 ﻿using MarkDoc.Members.Enums;
 using System;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members
 {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using MarkDoc.Documentation.Tags;
 
-namespace MarkDoc.Documentation
+namespace MarkDoc.Documentation.Tags
 {
   /// <summary>
   /// Interface for documentation tags

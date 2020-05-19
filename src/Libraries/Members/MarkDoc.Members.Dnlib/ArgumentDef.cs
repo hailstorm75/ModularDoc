@@ -3,6 +3,7 @@ using MarkDoc.Members.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {

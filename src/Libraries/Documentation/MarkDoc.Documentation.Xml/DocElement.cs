@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Threading;
 using System.Linq;
+using MarkDoc.Documentation.Tags;
 using MarkDoc.Members;
 using MarkDoc.Helpers;
-using static MarkDoc.Documentation.ITag;
+using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml
 {

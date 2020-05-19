@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {

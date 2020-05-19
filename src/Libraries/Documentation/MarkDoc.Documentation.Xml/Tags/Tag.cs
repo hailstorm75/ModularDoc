@@ -4,9 +4,9 @@ using System.Linq;
 using System.Xml.Linq;
 using MarkDoc.Documentation.Tags;
 using MarkDoc.Helpers;
-using static MarkDoc.Documentation.ITag;
+using static MarkDoc.Documentation.Tags.ITag;
 
-namespace MarkDoc.Documentation.Xml
+namespace MarkDoc.Documentation.Xml.Tags
 {
   public class Tag
     : ITag

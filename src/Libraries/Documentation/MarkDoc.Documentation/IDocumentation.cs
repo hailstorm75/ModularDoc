@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using static MarkDoc.Documentation.ITag;
+using MarkDoc.Documentation.Tags;
+using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation
 {

@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using static MarkDoc.Documentation.ITag;
+using MarkDoc.Documentation.Tags;
+using MarkDoc.Documentation.Xml.Tags;
+using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml
 {

@@ -8,6 +8,7 @@ using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
 using System.Collections.Concurrent;
 using MarkDoc.Members.Dnlib.ResolvedTypes;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {

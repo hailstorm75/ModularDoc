@@ -1,4 +1,5 @@
 ﻿using System;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members
 {

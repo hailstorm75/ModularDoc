@@ -1,9 +1,9 @@
-﻿using MarkDoc.Documentation.Tags;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Xml.Linq;
+using MarkDoc.Documentation.Tags;
 
-namespace MarkDoc.Documentation.Xml
+namespace MarkDoc.Documentation.Xml.Tags
 {
   [DebuggerDisplay("{Content}")]
   public class TextTag

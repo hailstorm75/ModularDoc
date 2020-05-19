@@ -1,4 +1,4 @@
-﻿namespace MarkDoc.Members
+﻿namespace MarkDoc.Members.ResolvedTypes
 {
   /// <summary>
   /// Interface for resolved arrays

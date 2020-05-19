@@ -1,11 +1,11 @@
-﻿using MarkDoc.Documentation.Tags;
-using MarkDoc.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using MarkDoc.Documentation.Tags;
+using MarkDoc.Helpers;
 
-namespace MarkDoc.Documentation.Xml
+namespace MarkDoc.Documentation.Xml.Tags
 {
   public class InnerTag
     : IInnerTag

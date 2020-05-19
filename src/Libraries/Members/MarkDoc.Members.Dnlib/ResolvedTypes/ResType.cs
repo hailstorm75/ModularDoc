@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using dnlib.DotNet;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {

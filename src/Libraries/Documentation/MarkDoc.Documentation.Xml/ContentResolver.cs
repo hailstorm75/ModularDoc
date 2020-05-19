@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 using MarkDoc.Documentation.Tags;
+using MarkDoc.Documentation.Xml.Tags;
 
 namespace MarkDoc.Documentation.Xml
 {
