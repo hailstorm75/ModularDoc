@@ -12,10 +12,13 @@ namespace MarkDoc.Documentation.Xml.Tags
   {
     #region Properties
 
+    /// <inheritdoc />
     public IInnerTag.InnerTagType Type { get; }
 
+    /// <inheritdoc />
     public string Reference { get; }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IContent> Content { get; }
 
     #endregion

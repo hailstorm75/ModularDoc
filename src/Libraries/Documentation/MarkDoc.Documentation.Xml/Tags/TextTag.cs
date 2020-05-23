@@ -9,6 +9,7 @@ namespace MarkDoc.Documentation.Xml.Tags
   public class TextTag
     : ITextTag
   {
+    /// <inheritdoc />
     public string Content { get; }
 
     public TextTag(XText text)

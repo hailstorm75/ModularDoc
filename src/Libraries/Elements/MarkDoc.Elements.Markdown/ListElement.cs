@@ -19,6 +19,7 @@ namespace MarkDoc.Elements.Markdown
     /// <inheritdoc />
     public int Level { get; set; } = 0;
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IElement> Content { get; set; } = Enumerable.Empty<IElement>().ToArray();
 
     #endregion

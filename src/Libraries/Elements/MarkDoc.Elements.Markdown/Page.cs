@@ -12,8 +12,10 @@ namespace MarkDoc.Elements.Markdown
 
     #region Properties
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IElement> Content { get; set; } = Enumerable.Empty<IElement>().ToArray();
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IPage> Subpages { get; set; } = Enumerable.Empty<IPage>().ToArray();
 
     /// <inheritdoc />

@@ -20,6 +20,7 @@ namespace MarkDoc.Documentation.Xml
     /// <inheritdoc />
     public bool HasInheritDoc { get; }
 
+    /// <inheritdoc />
     public string InheritDocRef { get; }
 
     #endregion

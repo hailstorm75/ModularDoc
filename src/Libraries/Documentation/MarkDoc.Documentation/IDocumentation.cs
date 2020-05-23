@@ -4,6 +4,9 @@ using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation
 {
+  /// <summary>
+  /// Interface for documentation containers
+  /// </summary>
   public interface IDocumentation
   {
     /// <summary>

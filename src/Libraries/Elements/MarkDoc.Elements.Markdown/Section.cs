@@ -21,6 +21,7 @@ namespace MarkDoc.Elements.Markdown
 
     #endregion
 
+    /// <inheritdoc />
     public override string ToString()
     {
       var result = new StringBuilder();

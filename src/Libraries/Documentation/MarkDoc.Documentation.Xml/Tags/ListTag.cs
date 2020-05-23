@@ -12,10 +12,13 @@ namespace MarkDoc.Documentation.Xml.Tags
   {
     #region Properties
 
+    /// <inheritdoc />
     public IListTag.ListType Type { get; }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IContent> Headings { get; }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; } 
 
     #endregion

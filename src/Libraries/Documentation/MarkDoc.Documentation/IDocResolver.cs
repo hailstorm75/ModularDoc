@@ -1,9 +1,11 @@
 ﻿using MarkDoc.Members;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarkDoc.Documentation
 {
+  /// <summary>
+  /// Interface for documentation resolvers
+  /// </summary>
   public interface IDocResolver
   {
     /// <summary>
@@ -12,6 +14,12 @@ namespace MarkDoc.Documentation
     /// <param name="path">Path to documentation</param>
     Task Resolve(string path);
 
+    /// <summary>
+    /// Tries to find a given <paramref name="type"/>
+    /// </summary>
+    /// <param name="type">Type to find</param>
+    /// <param name="resultType">Search result</param>
+    /// <returns>True if found</returns>
     bool TryFindType(IType type, out IDocElement? resultType);
   }
 }

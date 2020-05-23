@@ -17,8 +17,12 @@ namespace MarkDoc.Documentation.Tags
       InvalidTag,
     }
 
+    #region Properties
+
     InnerTagType Type { get; }
     string Reference { get; }
-    IReadOnlyCollection<IContent> Content { get; }
+    IReadOnlyCollection<IContent> Content { get; } 
+
+    #endregion
   }
 }

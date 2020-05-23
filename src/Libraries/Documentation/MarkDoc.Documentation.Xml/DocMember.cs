@@ -9,10 +9,13 @@ namespace MarkDoc.Documentation.Xml
   {
     #region Properties
 
+    /// <inheritdoc />
     public string Name { get; }
 
+    /// <inheritdoc />
     public MemberType Type { get; }
 
+    /// <inheritdoc />
     public IDocumentation Documentation { get; } 
 
     #endregion

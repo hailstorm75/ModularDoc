@@ -146,7 +146,7 @@ namespace MarkDoc.Documentation.Xml
       return TryFindType(type.RawName, out resultType, out var _);
     }
 
-    internal bool TryFindType(string type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
+    internal static bool TryFindType(string type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
     {
       resultType = null;
       resultMembers = null;
