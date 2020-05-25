@@ -6,6 +6,10 @@ using System.Reflection;
 
 namespace MarkDoc.Helpers
 {
+  /// <summary>
+  /// Equality comparer helper class
+  /// </summary>
+  /// <typeparam name="T">Types to compare</typeparam>
   public class EqualityComparerEx<T>
     : IEqualityComparer<T>
   {
@@ -34,6 +38,7 @@ namespace MarkDoc.Helpers
       m_properties = extractions;
     }
 
+    /// <inheritdoc />
     public bool Equals(T x, T y)
     {
       if (ReferenceEquals(x, y))
@@ -51,6 +56,7 @@ namespace MarkDoc.Helpers
       return true;
     }
 
+    /// <inheritdoc />
     public int GetHashCode(T obj)
     {
       if (obj == null)
@@ -60,7 +66,7 @@ namespace MarkDoc.Helpers
       return Combine(hashes);
     }
 
-    static int Combine(int[] hashes)
+    private static int Combine(int[] hashes)
     {
       int result = 0;
       foreach (var hash in hashes)

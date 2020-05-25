@@ -6,6 +6,12 @@ namespace MarkDoc.Helpers
 {
   public static class Linq
   {
+    /// <summary>
+    /// Passes the element forward
+    /// </summary>
+    /// <param name="input">Input to process</param>
+    /// <typeparam name="T">Input collection items type</typeparam>
+    /// <returns>Item</returns>
     public static T XtoX<T>(T input)
       => input;
 
@@ -28,7 +34,13 @@ namespace MarkDoc.Helpers
           yield return element;
     }
 
-
+    /// <summary>
+    /// Get the key of the <paramrem name="grouping"/>
+    /// </summary>
+    /// <param name="grouping">Grouping to process</param>
+    /// <typeparam name="TKey">Type of the key</typeparam>
+    /// <typeparam name="TValue">Type of the value</typeparam>
+    /// <returns>Key of the group</returns>
     public static TKey GroupKey<TKey, TValue>(IGrouping<TKey, TValue> grouping)
     {
       if (grouping == null)
@@ -36,6 +48,13 @@ namespace MarkDoc.Helpers
       return grouping.Key;
     }
 
+    /// <summary>
+    /// Get the values of the <paramrem name="grouping"/>
+    /// </summary>
+    /// <param name="grouping">Grouping to process</param>
+    /// <typeparam name="TKey">Type of the key</typeparam>
+    /// <typeparam name="TValue">Type of the value</typeparam>
+    /// <returns>Values of the group</returns>
     public static IEnumerable<TValue> GroupValues<TKey, TValue>(this IGrouping<TKey, TValue> grouping)
     {
       if (grouping == null)
@@ -43,6 +62,13 @@ namespace MarkDoc.Helpers
       return grouping.Select(XtoX);
     }
 
+    /// <summary>
+    /// Get the values of the <paramrem name="grouping"/> and flattens them
+    /// </summary>
+    /// <param name="grouping">Grouping to process</param>
+    /// <typeparam name="TKey">Type of the key</typeparam>
+    /// <typeparam name="TValue">Type of the value</typeparam>
+    /// <returns>Values of the group</returns>
     public static IEnumerable<TValue> GroupValuesOfValues<TKey, TValue>(this IGrouping<TKey, IEnumerable<TValue>> grouping)
     {
       if (grouping == null)
@@ -50,9 +76,21 @@ namespace MarkDoc.Helpers
       return grouping.SelectMany(XtoX);
     }
 
+    /// <summary>
+    /// Create a read only collection from the <paramref name="input"/>
+    /// </summary>
+    /// <param name="input">Input to process</param>
+    /// <typeparam name="T">Input collection items type</typeparam>
+    /// <returns>Read only collection</returns>
     public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> input)
       => new LinkedList<T>(input);
 
+    /// <summary>
+    /// Filters out null types
+    /// </summary>
+    /// <param name="input">Input to process</param>
+    /// <typeparam name="T">Input collection items type</typeparam>
+    /// <returns>Filtered enumeration</returns>
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> input)
       where T : class
       => input.Where(x => x != null).Cast<T>();

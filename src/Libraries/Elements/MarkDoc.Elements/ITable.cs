@@ -9,6 +9,10 @@ namespace MarkDoc.Elements
   public interface ITable
     : IElement, IHasContent<IReadOnlyCollection<IReadOnlyCollection<IElement>>>, IHasHeading
   {
+    /// <summary>
+    /// Table headers
+    /// </summary>
+    /// <value>Collection of header names</value>
     IReadOnlyCollection<IText> Headings { get; set; }
   }
 }

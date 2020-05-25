@@ -28,6 +28,7 @@ namespace MarkDoc.Elements.Markdown
     public override string ToString()
       => ToString(1);
 
+    /// <inheritdoc />
     public string ToString(int indent)
     {
       var result = new StringBuilder();

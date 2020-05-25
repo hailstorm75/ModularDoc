@@ -18,7 +18,6 @@ namespace MarkDoc.Elements
       /// List items will be numbered
       /// </summary>
       Numbered,
-
       /// <summary>
       /// List items will be dotted
       /// </summary>
@@ -30,6 +29,11 @@ namespace MarkDoc.Elements
     /// </summary>
     ListType Type { get; set; }
 
+    /// <summary>
+    /// Prints element to a string
+    /// </summary>
+    /// <param name="indent">List indentation level</param>
+    /// <returns>Converted list</returns>
     string ToString(int indent);
   }
 }
