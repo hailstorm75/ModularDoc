@@ -60,7 +60,7 @@ namespace MarkDoc.Documentation.Xml
 
     private IReadOnlyDictionary<string, IDocMember> RetrieveMembers(DocResolver docResolver, IResolver typeResolver)
     {
-      if (!docResolver.TryFindType(Name, out var _, out var memberDocs) || memberDocs == null)
+      if (!DocResolver.TryFindType(Name, out var _, out var memberDocs) || memberDocs == null)
         return new Dictionary<string, IDocMember>();
 
       var result = new Dictionary<string, IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>>>(memberDocs.Count);
