@@ -121,7 +121,7 @@ namespace MarkDoc.Members.Dnlib
       if (!Types.Value.ContainsKey(signature.Namespace))
         return null;
 
-      IType? result = Types.Value[signature.Namespace].FirstOrDefault(x => x.RawName.Equals(type.Name, StringComparison.InvariantCulture));
+      IType? result = Types.Value[signature.Namespace].FirstOrDefault(x => x.RawName.Equals(type.RawName, StringComparison.InvariantCulture));
       return result;
     }
 
@@ -224,9 +224,9 @@ namespace MarkDoc.Members.Dnlib
 
       result = null;
 
-      var genericIndex = fullname.LastIndexOf('`');
-      if (genericIndex != -1)
-        fullname = fullname.Remove(genericIndex);
+      //var genericIndex = fullname.LastIndexOf('`');
+      //if (genericIndex != -1)
+      //  fullname = fullname.Remove(genericIndex);
 
       var index = fullname.LastIndexOf('.');
       if (index == -1)

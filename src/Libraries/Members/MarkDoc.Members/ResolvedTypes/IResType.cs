@@ -15,9 +15,14 @@ namespace MarkDoc.Members.ResolvedTypes
     string DisplayName { get; }
 
     /// <summary>
-    /// Resolved type name
+    /// Resolved type name for documentation
     /// </summary>
-    string Name { get; }
+    string DocumentationName { get; }
+
+    /// <summary>
+    /// Resolved type raw name
+    /// </summary>
+    string RawName { get; }
 
     /// <summary>
     /// Resolved type namespace

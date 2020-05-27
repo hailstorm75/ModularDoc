@@ -83,7 +83,31 @@ namespace MarkDoc.Helpers
     /// <typeparam name="T">Input collection items type</typeparam>
     /// <returns>Read only collection</returns>
     public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> input)
+      => input.ToLinkedList();
+
+    /// <summary>
+    /// Create a linked list from the <paramref name="input"/>
+    /// </summary>
+    /// <param name="input">Input to process</param>
+    /// <typeparam name="T">Input collection items type</typeparam>
+    /// <returns>Linked list</returns>
+    public static LinkedList<T> ToLinkedList<T>(this IEnumerable<T> input)
       => new LinkedList<T>(input);
+
+    /// <summary>
+    /// Adds a range of nodes to the end of the <see cref="LinkedList{T}"/>
+    /// </summary>
+    /// <typeparam name="T">Type of the nudes</typeparam>
+    /// <param name="subject">List to add items to</param>
+    /// <param name="input">Items to add</param>
+    public static void AddRange<T>(this LinkedList<T> subject, IEnumerable<T> input)
+    {
+      if (subject == null)
+        throw new ArgumentNullException(nameof(subject));
+
+      foreach (var item in input ?? Enumerable.Empty<T>())
+        subject.AddLast(item);
+    }
 
     /// <summary>
     /// Filters out null types

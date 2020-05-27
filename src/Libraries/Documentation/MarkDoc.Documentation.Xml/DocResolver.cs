@@ -143,21 +143,34 @@ namespace MarkDoc.Documentation.Xml
       if (type == null)
         throw new ArgumentNullException(nameof(type));
 
-      return TryFindType(type.RawName, out resultType, out var _);
+      resultType = null;
+
+      if (!m_documentation.TryGetValue(type.RawName, out var value))
+        return false;
+
+      if (value.type == null)
+      {
+        var doc = new DocElement(type.RawName, this, m_typeResolver);
+        m_documentation.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));
+
+        resultType = doc;
+      }
+      else
+        resultType = value.type;
+
+      return resultType != null;
     }
 
-    internal static bool TryFindType(string type, out IDocElement? resultType, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
+    internal static bool TryFindMembers(string type, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
     {
-      resultType = null;
       resultMembers = null;
 
       if (!m_documentation.TryGetValue(type, out var value))
         return false;
 
-      resultType = value.type;
       resultMembers = value.members;
 
-      return resultType != null;
+      return resultMembers != null;
     }
   }
 }

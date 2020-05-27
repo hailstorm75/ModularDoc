@@ -56,6 +56,7 @@ namespace MarkDoc.Generator
       {
         static (bool hasOverloads, IMethod method) IsolateOverloads(IGrouping<string, IMethod> input)
         {
+          // Bug: Identify as overloads only if equally named members are on the same access level
           var items = input.Take(2).ToArray();
 
           return (items.Length == 1, items.First());

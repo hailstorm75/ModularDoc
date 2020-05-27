@@ -17,13 +17,16 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     protected IResolver Resolver { get; }
 
     /// <inheritdoc />
-    public string Name { get; }
+    public string DisplayName { get; }
+
+    /// <inheritdoc />
+    public string DocumentationName { get; }
+
+    /// <inheritdoc />
+    public string RawName { get; }
 
     /// <inheritdoc />
     public string TypeNamespace { get; }
-
-    /// <inheritdoc />
-    public string DisplayName { get; }
 
     /// <inheritdoc />
     public Lazy<IType?> Reference { get; }
@@ -31,15 +34,18 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     #endregion
 
     internal ResType(IResolver resolver, TypeSig source)
-      : this(resolver, source, ResolveName(source), ResolveRawName(source)) { }
+      : this(resolver, source, ResolveName(source), ResolveDocName(source), source.FullName) { }
 
-    protected ResType(IResolver resolver, TypeSig source, string displayName, string rawNamee)
+    protected ResType(IResolver resolver, TypeSig source, string displayName, string docName, string rawName)
     {
       if (source == null)
         throw new ArgumentNullException(nameof(source));
+      if (rawName == null)
+        throw new ArgumentNullException(nameof(rawName));
 
       Resolver = resolver;
-      Name = rawNamee;
+      DocumentationName = docName;
+      RawName = ProcessRawName(rawName);
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
@@ -47,7 +53,15 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     #region Methods
 
-    private static string ResolveRawName(TypeSig source)
+    private static string ProcessRawName(string name)
+    {
+      var index = name.LastIndexOf('<');
+      if (index == -1)
+        return name;
+      return name.Remove(index);
+    }
+
+    private static string ResolveDocName(TypeSig source)
     {
       static IEnumerable<string> RetrieveNested(ITypeDefOrRef source)
       {

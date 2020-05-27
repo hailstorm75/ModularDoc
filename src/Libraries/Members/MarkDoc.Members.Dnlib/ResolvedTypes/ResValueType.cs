@@ -1,4 +1,6 @@
-﻿namespace MarkDoc.Members.Dnlib.ResolvedTypes
+﻿using System;
+
+namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
   public class ResValueType
     : ResType
@@ -8,8 +10,8 @@
     {
     }
 
-    protected ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName, string rawName)
-      : base(resolver, source, displayName, rawName)
+    protected ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName, string docName)
+      : base(resolver, source, displayName, docName, source?.FullName ?? throw new ArgumentNullException(nameof(source)))
     {
     }
   }

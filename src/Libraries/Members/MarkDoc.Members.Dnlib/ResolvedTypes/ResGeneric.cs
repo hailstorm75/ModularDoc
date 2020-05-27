@@ -18,7 +18,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     #endregion
 
     internal ResGeneric(IResolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics)
-      : base(resolver, source, ResolveName(source), ResolveRawName(resolver, source, generics))
+      : base(resolver, source, ResolveName(source), ResolveRawName(resolver, source, generics), source.FullName)
     {
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notGeneric);
@@ -41,7 +41,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       var index = source.FullName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
       var name = source.FullName.Remove(index);
 
-      var result = $"{name}{{{string.Join(",",token.GenericArguments.Select(x => ResolveGenerics(resolver.Resolve(x, generics).Name, generics)))}}}";
+      var result = $"{name}{{{string.Join(",",token.GenericArguments.Select(x => ResolveGenerics(resolver.Resolve(x, generics).DocumentationName, generics)))}}}";
       return result;
     }
   }

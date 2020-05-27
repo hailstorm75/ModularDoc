@@ -29,7 +29,7 @@ namespace MarkDoc.Documentation.Xml
       TagType.Param,
       TagType.Typeparam,
       TagType.Seealso,
-    }; 
+    };
 
     #endregion
 
@@ -56,11 +56,18 @@ namespace MarkDoc.Documentation.Xml
       Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
+    internal DocElement(string name, DocResolver docResolver, IResolver typeResolver)
+    {
+      Name = name;
+      Documentation = new DocumentationContent(new Dictionary<TagType, IReadOnlyCollection<ITag>>());
+      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.ExecutionAndPublication);
+    }
+
     #region Methods
 
     private IReadOnlyDictionary<string, IDocMember> RetrieveMembers(DocResolver docResolver, IResolver typeResolver)
     {
-      if (!DocResolver.TryFindType(Name, out var _, out var memberDocs) || memberDocs == null)
+      if (!DocResolver.TryFindMembers(Name, out var memberDocs) || memberDocs == null)
         return new Dictionary<string, IDocMember>();
 
       var result = new Dictionary<string, IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>>>(memberDocs.Count);
@@ -68,7 +75,7 @@ namespace MarkDoc.Documentation.Xml
       {
         if (item.Key && typeResolver.TryFindType(Name, out var type) && type is IInterface interfaceDef)
         {
-          var temps = item.ToDictionary(x => x.Key, x => new Dictionary<TagType, List<ITag>>());
+          var temps = item.ToDictionary(x => x.Key, x => new Dictionary<TagType, LinkedList<ITag>>());
           ProcessInheritDoc(temps, interfaceDef, temps.Select(x => x.Key).ToArray(), memberDocs, docResolver);
 
           // Cache collected documentation
@@ -93,7 +100,7 @@ namespace MarkDoc.Documentation.Xml
       return ProcessCache(result).ToDictionary(x => x.Name);
     }
 
-    private static void ProcessInheritDoc(IReadOnlyDictionary<string, Dictionary<TagType, List<ITag>>> cache, IInterface type, string[] names, IReadOnlyDictionary<string, IDocMember> memberDocs, IDocResolver docResolver)
+    private static void ProcessInheritDoc(IReadOnlyDictionary<string, Dictionary<TagType, LinkedList<ITag>>> cache, IInterface type, string[] names, IReadOnlyDictionary<string, IDocMember> memberDocs, IDocResolver docResolver)
     {
       void CacheTags(IEnumerable<string> names, IReadOnlyDictionary<string, IDocMember> members)
       {
@@ -123,7 +130,7 @@ namespace MarkDoc.Documentation.Xml
             if (cachedTags.ContainsKey(key))
               cachedTags[key].AddRange(enumerable);
             else
-              cachedTags.Add(key, enumerable.ToList());
+              cachedTags.Add(key, enumerable.ToLinkedList());
           }
         }
       }
@@ -131,7 +138,7 @@ namespace MarkDoc.Documentation.Xml
       CacheTags(names, memberDocs);
 
       var baseClass = (type is IClass classDef && classDef.BaseClass?.Reference.Value != null)
-        ? new[] {classDef.BaseClass.Reference.Value}
+        ? new[] { classDef.BaseClass.Reference.Value }
         : Enumerable.Empty<IType>();
 
       var sources = type.InheritedInterfaces.Select(x => x.Reference.Value)
@@ -140,11 +147,27 @@ namespace MarkDoc.Documentation.Xml
         .OfType<IInterface>()
         .ToDictionary(x => x.RawName);
 
+      static string ProcessReferences(KeyValuePair<string, IDocMember> input)
+      {
+        // TODO: Test
+        var key = input.Value.Documentation.InheritDocRef[2..];
+        if (key.EndsWith(input.Key, StringComparison.InvariantCulture))
+          key = key.Remove(key.LastIndexOf('.'));
+
+        return key;
+      }
+
+
+      var withReferencesTable = memberDocs
+        .Where(x => x.Value.Documentation.HasInheritDoc && !string.IsNullOrEmpty(x.Value.Documentation.InheritDocRef))
+        .ToLookup(ProcessReferences, x => x.Key);
+      var withReferences = withReferencesTable.SelectMany(Linq.GroupValues).ToReadOnlyCollection();
+
       foreach (var source in sources)
       {
         if (!docResolver.TryFindType(source.Value, out var sourceType) || sourceType == null) continue;
 
-        CacheTags(names, sourceType.Members.Value);
+        CacheTags(names.Except(withReferences.Except(withReferencesTable[source.Key])), sourceType.Members.Value);
       }
     }
 

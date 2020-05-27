@@ -27,13 +27,13 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       => ArrayType.DisplayName;
 
     /// <inheritdoc />
-    public string Name
+    public string DocumentationName
     {
       get
       {
         if (IsJagged)
-          return ArrayType.Name + string.Join(string.Empty, Enumerable.Repeat("[]", Dimension));
-        return ArrayType.Name + $"[{string.Concat(Enumerable.Repeat(",", Dimension - 1))}]";
+          return ArrayType.DocumentationName + string.Join(string.Empty, Enumerable.Repeat("[]", Dimension));
+        return ArrayType.DocumentationName + $"[{string.Concat(Enumerable.Repeat(",", Dimension - 1))}]";
       }
     }
 
@@ -44,6 +44,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <inheritdoc />
     public Lazy<IType?> Reference { get; }
 
+    /// <inheritdoc />
+    public string RawName { get; }
+
     #endregion
 
     internal ResArray(IResolver resolver, dnlib.DotNet.TypeSig source, IReadOnlyDictionary<string, string>? generics)
@@ -53,6 +56,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       if (resolver == null)
         throw new ArgumentNullException(nameof(resolver));
 
+      RawName = source.FullName;
       IsJagged = source.ElementType == dnlib.DotNet.ElementType.SZArray;
       Resolver = resolver;
 
