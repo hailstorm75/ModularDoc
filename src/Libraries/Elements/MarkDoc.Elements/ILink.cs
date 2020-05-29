@@ -12,6 +12,6 @@ namespace MarkDoc.Elements
     /// Link reference
     /// </summary>
     /// <value>String containing a URI</value>
-    string Reference { get; set; }
+    string Reference { get; }
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using static MarkDoc.Elements.IText;
 
 namespace MarkDoc.Elements.Markdown
 {
@@ -8,12 +9,18 @@ namespace MarkDoc.Elements.Markdown
     #region Properties
 
     /// <inheritdoc />
-    public string Content { get; set; } = string.Empty;
+    public string Content { get; }
 
     /// <inheritdoc />
-    public IText.TextStyle Style { get; set; } = IText.TextStyle.Normal; 
+    public TextStyle Style { get; }
 
     #endregion
+
+    public TextElement(string content, TextStyle style = TextStyle.Normal)
+    {
+      Content = content;
+      Style = style;
+    }
 
     /// <inheritdoc />
     public override string ToString()

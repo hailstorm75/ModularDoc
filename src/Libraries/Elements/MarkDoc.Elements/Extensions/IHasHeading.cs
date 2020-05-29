@@ -8,10 +8,10 @@
     /// <summary>
     /// Heading text
     /// </summary>
-    string Heading { get; set; }
+    string Heading { get; }
     /// <summary>
     /// Heading level
     /// </summary>
-    int Level { get; set; }
+    int Level { get; }
   }
 }

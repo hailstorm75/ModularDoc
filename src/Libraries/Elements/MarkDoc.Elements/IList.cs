@@ -27,7 +27,7 @@ namespace MarkDoc.Elements
     /// <summary>
     /// List type
     /// </summary>
-    ListType Type { get; set; }
+    ListType Type { get; }
 
     /// <summary>
     /// Prints element to a string

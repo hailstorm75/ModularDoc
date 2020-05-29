@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MarkDoc.Helpers;
 
 namespace MarkDoc.Elements.Markdown
 {
@@ -11,15 +12,22 @@ namespace MarkDoc.Elements.Markdown
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IElement> Content { get; set; } = Array.Empty<IElement>();
+    public IReadOnlyCollection<IElement> Content { get; }
 
     /// <inheritdoc />
-    public string Heading { get; set; } = string.Empty;
+    public string Heading { get; }
 
     /// <inheritdoc />
-    public int Level { get; set; } = 0;
+    public int Level { get; }
 
     #endregion
+
+    public Section(IEnumerable<IElement>? content = default, string heading = "", int level = 0)
+    {
+      Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
+      Heading = heading;
+      Level = Level;
+    }
 
     /// <inheritdoc />
     public override string ToString()

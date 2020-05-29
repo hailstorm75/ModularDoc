@@ -13,6 +13,6 @@ namespace MarkDoc.Elements
     /// Pages within this given page
     /// </summary>
     /// <value>Collection of sub pages</value>
-    public IReadOnlyCollection<IPage> Subpages { get; set; }
+    public IReadOnlyCollection<IPage> Subpages { get; }
   }
 }

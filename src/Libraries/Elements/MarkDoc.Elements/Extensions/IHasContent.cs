@@ -9,6 +9,6 @@
     /// <summary>
     /// Element content
     /// </summary>
-    T Content { get; set; }  
+    T Content { get; }
   }
 }

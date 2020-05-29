@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static MarkDoc.Elements.IList;
 
 namespace MarkDoc.Elements.Markdown
 {
@@ -13,34 +14,32 @@ namespace MarkDoc.Elements.Markdown
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IElement> Content { get; set; } = Enumerable.Empty<IElement>().ToArray();
+    public IReadOnlyCollection<IElement> Content { get; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IPage> Subpages { get; set; } = Enumerable.Empty<IPage>().ToArray();
+    public IReadOnlyCollection<IPage> Subpages { get; }
 
     /// <inheritdoc />
-    public string Heading { get; set; } = string.Empty;
+    public string Heading { get; }
 
     /// <inheritdoc />
-    public int Level { get; set; } = 0;
+    public int Level { get; }
 
     #endregion
 
-    public Page(IElementCreator creator)
+    public Page(IElementCreator creator, IEnumerable<IElement>? content = default, IEnumerable<IPage>? subpages = default, string heading = "", int level = 0)
     {
       m_creator = creator;
+      Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
+      Subpages = (subpages ?? Enumerable.Empty<IPage>()).ToReadOnlyCollection();
+      Heading = heading;
+      Level = level;
     }
 
     private void PrintTableOfContents(StringBuilder build)
     {
       IList CreateList(IEnumerable<IElement> elements)
-      {
-        var list = m_creator.CreateList();
-        list.Content = elements.ToReadOnlyCollection();
-        list.Type = IList.ListType.Dotted;
-
-        return list;
-      }
+        => m_creator.CreateList(elements, ListType.Dotted);
 
       IEnumerable<IElement> GenerateTable(IPage page)
       {

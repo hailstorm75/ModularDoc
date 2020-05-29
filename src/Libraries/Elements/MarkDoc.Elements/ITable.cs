@@ -13,6 +13,6 @@ namespace MarkDoc.Elements
     /// Table headers
     /// </summary>
     /// <value>Collection of header names</value>
-    IReadOnlyCollection<IText> Headings { get; set; }
+    IReadOnlyCollection<IText> Headings { get; }
   }
 }

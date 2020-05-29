@@ -39,6 +39,6 @@ namespace MarkDoc.Elements
     /// Text element style
     /// </summary>
     /// <seealso cref="TextStyle"/>
-    TextStyle Style { get; set; }
+    TextStyle Style { get; }
   }
 }

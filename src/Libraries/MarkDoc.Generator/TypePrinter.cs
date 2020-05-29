@@ -36,12 +36,8 @@ namespace MarkDoc.Generator
       if (type == null)
         throw new ArgumentNullException(nameof(type));
 
-      var page = m_creator.CreatePage();
-      page.Heading = type.Name;
-      page.Level = 0;
-
       var memberSection = PrintMemberTables(type);
-      page.Content = memberSection.ToReadOnlyCollection();
+      var page = m_creator.CreatePage(content: memberSection, heading: type.Name);
 
       return page;
     }
@@ -108,24 +104,21 @@ namespace MarkDoc.Generator
           return new[] { returns, method };
         }
 
-        var table = m_creator.CreateTable();
         var grouped = methods.GroupBy(x => x.Name)
                              .OrderBy(Linq.GroupKey)
                              .Select(IsolateOverloads)
-                             .Select(CreateRow)
-                             .ToReadOnlyCollection();
-        table.Headings = new[] { m_creator.CreateText("Returns"), m_creator.CreateText("Name") };
-        table.Content = grouped;
+                             .Select(CreateRow);
+        var table = m_creator.CreateTable(content: grouped, headings: new[] { m_creator.CreateText("Returns"), m_creator.CreateText("Name") });
 
         return table;
       }
 
-      IElement CreatePropertySection(IEnumerable<IProperty> properties, bool isStatis, AccessorType access)
-      {
-        var table = m_creator.CreateTable();
+      // IElement CreatePropertySection(IEnumerable<IProperty> properties, bool isStatis, AccessorType access)
+      // {
+      //   var table = m_creator.CreateTable();
 
-        return table;
-      }
+      //   return table;
+      // }
 
       static IEnumerable<IElement> ProcessMembers<T>(Func<IEnumerable<T>, bool, AccessorType, IElement> processor, IEnumerable<IGrouping<bool, IEnumerable<IGrouping<AccessorType, T>>>> members)
         where T : IMember
@@ -136,9 +129,9 @@ namespace MarkDoc.Generator
       }
 
       var methods = ProcessMembers(CreateMethodSection, GroupMembers(type.Methods));
-      var properties = ProcessMembers(CreatePropertySection, GroupMembers(type.Properties));
+      //var properties = ProcessMembers(CreatePropertySection, GroupMembers(type.Properties));
 
-      return methods.Concat(properties);
+      return methods;//.Concat(properties);
     }
 
     private IEnumerable<ITag> FindTag(IType type, ITag.TagType tag)

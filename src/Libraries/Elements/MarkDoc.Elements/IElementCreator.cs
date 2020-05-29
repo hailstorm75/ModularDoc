@@ -1,4 +1,7 @@
-﻿namespace MarkDoc.Elements
+﻿using System.Collections.Generic;
+using static MarkDoc.Elements.IList;
+
+namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for <see cref="IElement"/> creators
@@ -9,22 +12,22 @@
     /// Creates a new <see cref="IList"/> instance
     /// </summary>
     /// <returns>Created instance</returns>
-    IList CreateList();
+    IList CreateList(IEnumerable<IElement> elements, ListType type, string heading = "", int level = 0);
     /// <summary>
     /// Creates a new <see cref="ISection"/> instance
     /// </summary>
     /// <returns>Created instance</returns>
-    ISection CreateSection();
+    ISection CreateSection(IEnumerable<IElement> content, string heading, int level);
     /// <summary>
     /// Creates a new <see cref="ITable"/> instance
     /// </summary>
     /// <returns>Created instance</returns>
-    ITable CreateTable();
+    ITable CreateTable(IEnumerable<IReadOnlyCollection<IElement>> content, IEnumerable<IText> headings, string heading = "", int level = 0);
     /// <summary>
     /// Creates a new <see cref="IPage"/> instance
     /// </summary>
     /// <returns>Created instance</returns>
-    IPage CreatePage();
+    IPage CreatePage(IEnumerable<IPage>? subpages = default, IEnumerable<IElement>? content = default, string heading = "", int level = 0);
     /// <summary>
     /// Creates a new <see cref="IText"/> instance
     /// </summary>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MarkDoc.Helpers;
+using static MarkDoc.Elements.IList;
 
 namespace MarkDoc.Elements.Markdown
 {
@@ -11,18 +13,26 @@ namespace MarkDoc.Elements.Markdown
     #region Properties
 
     /// <inheritdoc />
-    public IList.ListType Type { get; set; }
+    public ListType Type { get; }
 
     /// <inheritdoc />
-    public string Heading { get; set; } = string.Empty;
+    public string Heading { get; }
 
     /// <inheritdoc />
-    public int Level { get; set; } = 0;
+    public int Level { get; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IElement> Content { get; set; } = Enumerable.Empty<IElement>().ToArray();
+    public IReadOnlyCollection<IElement> Content { get; }
 
     #endregion
+
+    public ListElement(IEnumerable<IElement>? content = default, ListType type = ListType.Dotted, string heading = "", int level = 0)
+    {
+      Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
+      Type = type;
+      Heading = heading;
+      Level = level;
+    }
 
     /// <inheritdoc />
     public override string ToString()
