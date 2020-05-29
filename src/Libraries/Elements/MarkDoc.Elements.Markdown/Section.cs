@@ -26,7 +26,7 @@ namespace MarkDoc.Elements.Markdown
     {
       Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
       Heading = heading;
-      Level = Level;
+      Level = level;
     }
 
     /// <inheritdoc />
