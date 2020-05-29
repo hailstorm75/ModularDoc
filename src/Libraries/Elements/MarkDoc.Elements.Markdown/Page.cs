@@ -27,11 +27,11 @@ namespace MarkDoc.Elements.Markdown
 
     #endregion
 
-    public Page(IElementCreator creator, IEnumerable<IElement>? content = default, IEnumerable<IPage>? subpages = default, string heading = "", int level = 0)
+    public Page(IElementCreator creator, IEnumerable<IElement> content, IEnumerable<IPage> subpages, string heading = "", int level = 0)
     {
       m_creator = creator;
-      Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
-      Subpages = (subpages ?? Enumerable.Empty<IPage>()).ToReadOnlyCollection();
+      Content = content.ToReadOnlyCollection();
+      Subpages = subpages.ToReadOnlyCollection();
       Heading = heading;
       Level = level;
     }

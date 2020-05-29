@@ -32,10 +32,10 @@ namespace MarkDoc.Elements.Markdown
 
     #endregion
 
-    public Table(IEnumerable<IText>? headings = default, IEnumerable<IReadOnlyCollection<IElement>>? content = default, string heading = "", int level = 0)
+    public Table(IEnumerable<IText> headings, IEnumerable<IReadOnlyCollection<IElement>> content, string heading = "", int level = 0)
     {
-      Headings = (headings ?? Enumerable.Empty<IText>()).ToReadOnlyCollection();
-      Content = (content ?? Enumerable.Empty<IReadOnlyCollection<IElement>>()).ToReadOnlyCollection();
+      Headings = headings.ToReadOnlyCollection();
+      Content = content.ToReadOnlyCollection();
       Heading = heading;
       Level = level;
     }

@@ -17,7 +17,7 @@ namespace MarkDoc.Elements
     /// Creates a new <see cref="ISection"/> instance
     /// </summary>
     /// <returns>Created instance</returns>
-    ISection CreateSection(IEnumerable<IElement> content, string heading, int level);
+    ISection CreateSection(IEnumerable<IElement> content, string heading = "", int level = 0);
     /// <summary>
     /// Creates a new <see cref="ITable"/> instance
     /// </summary>

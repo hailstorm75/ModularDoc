@@ -26,9 +26,9 @@ namespace MarkDoc.Elements.Markdown
 
     #endregion
 
-    public ListElement(IEnumerable<IElement>? content = default, ListType type = ListType.Dotted, string heading = "", int level = 0)
+    public ListElement(IEnumerable<IElement> content, ListType type = ListType.Dotted, string heading = "", int level = 0)
     {
-      Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
+      Content = content.ToReadOnlyCollection();
       Type = type;
       Heading = heading;
       Level = level;

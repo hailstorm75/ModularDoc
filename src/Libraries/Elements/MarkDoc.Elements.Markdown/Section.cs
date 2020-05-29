@@ -22,9 +22,9 @@ namespace MarkDoc.Elements.Markdown
 
     #endregion
 
-    public Section(IEnumerable<IElement>? content = default, string heading = "", int level = 0)
+    public Section(IEnumerable<IElement> content, string heading = "", int level = 0)
     {
-      Content = (content ?? Enumerable.Empty<IElement>()).ToReadOnlyCollection();
+      Content = content.ToReadOnlyCollection();
       Heading = heading;
       Level = level;
     }
