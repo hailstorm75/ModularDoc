@@ -224,11 +224,12 @@ namespace MarkDoc.Members.Dnlib
 
       result = null;
 
-      //var genericIndex = fullname.LastIndexOf('`');
-      //if (genericIndex != -1)
-      //  fullname = fullname.Remove(genericIndex);
+      var genericIndex = fullname.LastIndexOf('`');
+      var tmp = fullname;
+      if (genericIndex != -1)
+        tmp = fullname.Remove(genericIndex);
 
-      var index = fullname.LastIndexOf('.');
+      var index = tmp.LastIndexOf('.');
       if (index == -1)
         return false;
 
