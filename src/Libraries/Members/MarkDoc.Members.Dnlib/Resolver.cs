@@ -30,7 +30,7 @@ namespace MarkDoc.Members.Dnlib
     #endregion
 
     public Resolver()
-      => Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.ExecutionAndPublication);
+      => Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.PublicationOnly);
 
     #region Methods
 

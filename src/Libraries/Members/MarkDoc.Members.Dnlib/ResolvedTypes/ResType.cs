@@ -48,7 +48,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       RawName = ProcessRawName(rawName);
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
-      Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
+      Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #region Methods

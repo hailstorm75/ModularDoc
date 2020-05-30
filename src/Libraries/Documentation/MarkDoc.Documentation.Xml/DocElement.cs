@@ -53,14 +53,14 @@ namespace MarkDoc.Documentation.Xml
 
       Name = name;
       Documentation = new DocumentationContent(source);
-      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.ExecutionAndPublication);
+      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.PublicationOnly);
     }
 
     internal DocElement(string name, DocResolver docResolver, IResolver typeResolver)
     {
       Name = name;
       Documentation = new DocumentationContent(new Dictionary<TagType, IReadOnlyCollection<ITag>>());
-      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.ExecutionAndPublication);
+      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #region Methods

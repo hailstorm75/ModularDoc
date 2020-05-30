@@ -63,7 +63,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       var next = ResolveNext(source, IsJagged);
       ArrayType = Resolver.Resolve(next, generics);
       Dimension = ResolveDimension(source, next);
-      Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.ExecutionAndPublication);
+      Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #region Methods
