@@ -6,7 +6,7 @@ namespace MarkDoc.Elements
   /// Interface for text elements
   /// </summary>
   public interface IText
-    : IElement, IHasContent<string>
+    : ITextContent, IHasContent<string>
   {
     /// <summary>
     /// Text styles

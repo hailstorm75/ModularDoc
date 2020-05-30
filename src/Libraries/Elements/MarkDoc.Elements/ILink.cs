@@ -6,7 +6,7 @@ namespace MarkDoc.Elements
   /// Interface for link elements
   /// </summary>
   public interface ILink
-    : IElement, IHasContent<IText>
+    : ITextContent, IHasContent<IText>
   {
     /// <summary>
     /// Link reference

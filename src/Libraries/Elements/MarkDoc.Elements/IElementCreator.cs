@@ -41,6 +41,13 @@ namespace MarkDoc.Elements
     /// <param name="content">Wrapped text</param>
     /// <param name="reference">Link reference</param>
     /// <returns>Created instance</returns>
-    ILink CreateLink(IText content, string reference = "");
+    ILink CreateLink(IText content, string reference);
+    /// <summary>
+    /// Joins text <paramref name="content"/> into a single <see cref="ITextContent"/> separated by a <paramref name="delimiter"/>
+    /// </summary>
+    /// <param name="content">Content to join</param>
+    /// <param name="delimiter">Content delimiter</param>
+    /// <returns>Joint content</returns>
+    ITextContent JoinTextContent(IEnumerable<ITextContent> content, string delimiter);
   }
 }
