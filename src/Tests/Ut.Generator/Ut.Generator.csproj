@@ -18,10 +18,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="5.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
+    <ProjectReference Include="..\..\Libraries\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
+    <ProjectReference Include="..\..\Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />
+    <ProjectReference Include="..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
+    <ProjectReference Include="..\..\Libraries\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj" />
+    <ProjectReference Include="..\..\Libraries\Members\MarkDoc.Members\MarkDoc.Members.csproj" />
   </ItemGroup>
 
 </Project>
