@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Documentation\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
-    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
-    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
-    <ProjectReference Include="..\Libraries\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\Documentation\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
+    <ProjectReference Include="..\..\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
+    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
   </ItemGroup>
 
 </Project>
