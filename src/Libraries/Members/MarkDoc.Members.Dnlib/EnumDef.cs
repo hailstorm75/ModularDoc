@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(EnumDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(EnumDef) + (": {" + nameof(Name) + "}"))]
   public class EnumDef
     : TypeDef, IEnum
   {
@@ -23,7 +23,7 @@ namespace MarkDoc.Members.Dnlib
     internal EnumDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(resolver, source, parent)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       Fields = source.Fields.Where(x => x.ElementType != dnlib.DotNet.ElementType.End)

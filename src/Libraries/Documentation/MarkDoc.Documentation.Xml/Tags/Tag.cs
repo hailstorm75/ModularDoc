@@ -58,7 +58,7 @@ namespace MarkDoc.Documentation.Xml.Tags
         }
       }
 
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       Type = ResolveType(source);

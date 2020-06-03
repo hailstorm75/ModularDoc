@@ -1,17 +1,13 @@
 ﻿using MarkDoc.Members.Enums;
 using System;
-using System.Threading;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
-using System.Collections.Generic;
-using dnlib.DotNet;
-using MarkDoc.Helpers;
 using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(PropertyDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(PropertyDef) + (": {" + nameof(Name) + "}"))]
   public class PropertyDef
     : MemberDef, IProperty
   {
@@ -82,7 +78,7 @@ namespace MarkDoc.Members.Dnlib
 
     private static AccessorType? ResolveAccessor(dnlib.DotNet.MethodDef? method)
     {
-      if (method == null)
+      if (method is null)
         return null;
 
       if (method.Access == dnlib.DotNet.MethodAttributes.Public)
@@ -97,7 +93,7 @@ namespace MarkDoc.Members.Dnlib
       if (methods.Length == 1)
         return ResolveAccessor(methods[0]) ?? throw new Exception(Resources.accessorNull);
 
-      var accessors = methods.Select(x => ResolveAccessor(x)).ToArray();
+      var accessors = methods.Select(ResolveAccessor).ToArray();
 
       if (accessors.Any(x => x.Equals(AccessorType.Public)))
         return AccessorType.Public;

@@ -10,7 +10,7 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(InterfaceDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(InterfaceDef) + (": {" + nameof(Name) + "}"))]
   public class InterfaceDef
     : TypeDef, IInterface
   {
@@ -42,7 +42,7 @@ namespace MarkDoc.Members.Dnlib
     internal InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(resolver, source, parent)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       var generics = source.ResolveTypeGenerics();

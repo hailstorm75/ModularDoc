@@ -4,6 +4,6 @@
     : IElement
   {
     /// <inheritdoc />
-    public abstract new string ToString();
+    public new abstract string ToString();
   }
 }

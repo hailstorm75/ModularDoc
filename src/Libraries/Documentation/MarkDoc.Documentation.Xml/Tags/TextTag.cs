@@ -5,7 +5,7 @@ using MarkDoc.Documentation.Tags;
 
 namespace MarkDoc.Documentation.Xml.Tags
 {
-  [DebuggerDisplay("{Content}")]
+  [DebuggerDisplay("{" + nameof(Content) + "}")]
   public class TextTag
     : ITextTag
   {
@@ -14,7 +14,7 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     public TextTag(XText text)
     {
-      if (text == null)
+      if (text is null)
         throw new ArgumentNullException(nameof(text));
 
       Content = text.Value.Trim() ?? string.Empty;

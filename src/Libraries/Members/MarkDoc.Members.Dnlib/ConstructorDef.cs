@@ -4,11 +4,10 @@ using System;
 using System.Diagnostics;
 using MarkDoc.Members.Enums;
 using MarkDoc.Helpers;
-using dnlib.DotNet;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(ConstructorDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(ConstructorDef) + (": {" + nameof(Name) + "}"))]
   public class ConstructorDef
     : MemberDef, IConstructor
   {
@@ -41,7 +40,7 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Inherited constructor
     /// </summary>
-    internal protected ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, string name)
+    protected ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, string name)
       : base(resolver, source)
     {
       var generics = source.ResolveMethodGenerics();

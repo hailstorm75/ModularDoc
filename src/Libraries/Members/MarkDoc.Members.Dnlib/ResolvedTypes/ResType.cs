@@ -8,7 +8,7 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
-  [DebuggerDisplay("{DisplayName}")]
+  [DebuggerDisplay("{" + nameof(DisplayName) + "}")]
   public class ResType
     : IResType
   {
@@ -38,9 +38,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     protected ResType(IResolver resolver, TypeSig source, string displayName, string docName, string rawName)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
-      if (rawName == null)
+      if (rawName is null)
         throw new ArgumentNullException(nameof(rawName));
 
       Resolver = resolver;
@@ -77,13 +77,13 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
           return $"{name}{{{string.Join(",", Enumerable.Repeat('`', number).Select((x,i) => $"{x}{i}"))}}}";
         }
 
-        if (source == null)
+        if (source is null)
           yield break;
         var type = RetrieveNested(source.ScopeType.DeclaringType);
         foreach (var item in type)
           yield return item;
 
-        if (source.ScopeType.DeclaringType == null)
+        if (source.ScopeType.DeclaringType is null)
           yield return source.Namespace;
 
         yield return SolveGenerics(source.Name);
@@ -98,7 +98,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     protected static string ResolveName(dnlib.DotNet.IType source)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       var name = source.Name.String;

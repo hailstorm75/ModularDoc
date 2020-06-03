@@ -25,7 +25,7 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     public ListTag(XElement node)
     {
-      if (node == null)
+      if (node is null)
         throw new ArgumentNullException(nameof(node));
 
       var rows = new LinkedList<IReadOnlyCollection<IContent>>();

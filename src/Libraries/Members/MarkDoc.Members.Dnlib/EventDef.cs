@@ -1,13 +1,11 @@
 ﻿using dnlib.DotNet;
 using MarkDoc.Members.Enums;
-using System;
 using System.Diagnostics;
-using System.Threading;
 using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(EventDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(EventDef) + (": {" + nameof(Name) + "}"))]
   public class EventDef
     : MemberDef, IEvent
   {
@@ -32,10 +30,13 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
+    /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Member source</param>
     internal EventDef(IResolver resolver, dnlib.DotNet.EventDef source)
       : base(resolver, source)
     {
+      // TODO: Assign accessor and static
+
       Name = source.Name.String;
       Type = ResolveType(source);
     }

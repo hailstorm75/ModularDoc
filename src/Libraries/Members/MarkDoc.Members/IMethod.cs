@@ -1,5 +1,4 @@
 ﻿using MarkDoc.Members.Enums;
-using System;
 using System.Collections.Generic;
 using MarkDoc.Members.ResolvedTypes;
 

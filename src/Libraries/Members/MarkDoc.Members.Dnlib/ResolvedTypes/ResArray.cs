@@ -51,9 +51,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     internal ResArray(IResolver resolver, dnlib.DotNet.TypeSig source, IReadOnlyDictionary<string, string>? generics)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
-      if (resolver == null)
+      if (resolver is null)
         throw new ArgumentNullException(nameof(resolver));
 
       RawName = source.FullName;

@@ -22,7 +22,7 @@ namespace MarkDoc.Documentation.Xml
 
     public DocMember(string name, char typeKey, XElement source)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       Name = name;

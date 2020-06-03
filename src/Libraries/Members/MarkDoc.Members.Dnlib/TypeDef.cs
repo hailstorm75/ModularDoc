@@ -12,9 +12,6 @@ namespace MarkDoc.Members.Dnlib
     protected IResolver Resolver { get; }
 
     /// <inheritdoc />
-    public bool IsStatic { get; }
-
-    /// <inheritdoc />
     public string Name { get; }
 
     /// <inheritdoc />
@@ -31,12 +28,15 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
+    /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    internal protected TypeDef(IResolver resolver, dnlib.DotNet.ITypeDefOrRef source, dnlib.DotNet.ITypeDefOrRef? parent)
+    protected internal TypeDef(IResolver resolver, ITypeDefOrRef source, ITypeDefOrRef? parent)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
+
+      // TODO: Assign accessor
 
       TypeNamespace = parent?.Namespace ?? source.Namespace;
       Name = ResolveName(source, parent);

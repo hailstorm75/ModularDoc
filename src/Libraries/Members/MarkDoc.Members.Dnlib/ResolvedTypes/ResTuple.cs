@@ -19,11 +19,13 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     #endregion
 
-    internal ResTuple(IResolver resolver, dnlib.DotNet.TypeSig source)
+    internal ResTuple(IResolver resolver, TypeSig source)
       : base(resolver, source)
     {
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notTuple);
+
+      // TODO: Assign is value tuple
 
       Fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", Resolver.Resolve(x))).ToReadOnlyCollection();
     }

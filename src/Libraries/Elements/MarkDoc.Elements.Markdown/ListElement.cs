@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 using MarkDoc.Helpers;
 using static MarkDoc.Elements.IList;
@@ -55,10 +53,10 @@ namespace MarkDoc.Elements.Markdown
         result.Append($"{new string(' ', indent * 2 - 1)}");
         switch (Type)
         {
-          case IList.ListType.Numbered:
+          case ListType.Numbered:
             result.Append($"{++index}. ");
             break;
-          case IList.ListType.Dotted:
+          case ListType.Dotted:
             result.Append("- ");
             break;
         }

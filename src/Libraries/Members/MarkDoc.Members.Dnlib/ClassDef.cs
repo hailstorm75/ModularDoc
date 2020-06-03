@@ -1,7 +1,6 @@
 ﻿using dnlib.DotNet;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Helpers;
@@ -9,7 +8,7 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(ClassDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(ClassDef) + (": {" + nameof(Name) + "}"))]
   public class ClassDef
     : InterfaceDef, IClass
   {
@@ -32,7 +31,7 @@ namespace MarkDoc.Members.Dnlib
     internal ClassDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(resolver, source, parent)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
       BaseClass = ResolveBaseClass(source);
       IsAbstract = source.IsAbstract;

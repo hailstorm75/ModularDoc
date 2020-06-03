@@ -7,7 +7,7 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(ArgumentDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(ArgumentDef) + (": {" + nameof(Name) + "}"))]
   public class ArgumentDef
     : IArgument
   {
@@ -29,11 +29,11 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ArgumentDef(IResolver resolver, dnlib.DotNet.Parameter source, IReadOnlyDictionary<string, string> generics)
+    internal ArgumentDef(IResolver resolver, Parameter source, IReadOnlyDictionary<string, string> generics)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
-      if (generics == null)
+      if (generics is null)
         throw new ArgumentNullException(nameof(generics));
 
       Resolver = resolver;

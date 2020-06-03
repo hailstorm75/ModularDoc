@@ -20,7 +20,7 @@ namespace MarkDoc.Helpers
     private readonly PropertyInfo[] m_properties;
     private EqualityComparerEx(Expression<Func<T, object>>[] properties)
     {
-      if (properties == null)
+      if (properties is null)
         throw new ArgumentNullException(nameof(properties));
 
       if (properties.Length == 0)
@@ -44,22 +44,16 @@ namespace MarkDoc.Helpers
       if (ReferenceEquals(x, y))
         return true;
 
-      if (x == null || y == null)
+      if (x is null || y is null)
         return false;
 
-      for (int i = 0; i < m_properties.Length; i++)
-      {
-        var property = m_properties[i];
-        if (!Equals(property.GetValue(x), property.GetValue(y)))
-          return false;
-      }
-      return true;
+      return m_properties.All(property => Equals(property.GetValue(x), property.GetValue(y)));
     }
 
     /// <inheritdoc />
     public int GetHashCode(T obj)
     {
-      if (obj == null)
+      if (obj is null)
         return 0;
 
       var hashes = m_properties.Select(pi => pi.GetValue(obj)?.GetHashCode() ?? 0).ToArray();

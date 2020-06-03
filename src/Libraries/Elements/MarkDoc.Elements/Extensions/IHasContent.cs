@@ -4,7 +4,7 @@
   /// Interface for elements which have content
   /// </summary>
   /// <typeparam name="T">Content type</typeparam>
-  public interface IHasContent<T>
+  public interface IHasContent<out T>
   {
     /// <summary>
     /// Element content

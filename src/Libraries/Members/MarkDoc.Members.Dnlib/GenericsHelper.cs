@@ -11,14 +11,14 @@ namespace MarkDoc.Members.Dnlib
     public static IReadOnlyDictionary<string, string> ResolveMethodGenerics(this dnlib.DotNet.MethodDef source)
     {
       static IEnumerable<(string type, string name)> ResolveParentTypeGenerics(dnlib.DotNet.MethodDef source)
-        => GetGenericArgumeents(source.DeclaringType)
+        => GetGenericArguments(source.DeclaringType)
           .DistinctBy(x => x.Name)
           .Select((x, i) => (x.Name.String, $"`{i}"));
 
       static IEnumerable<(string type, string name)> ResolveTypeGenerics(dnlib.DotNet.MethodDef source)
         => source.GenericParameters.Select((x, i) => (x.Name.String, $"``{i}"));
 
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       var outerArgs = ResolveParentTypeGenerics(source);
@@ -28,10 +28,10 @@ namespace MarkDoc.Members.Dnlib
 
     public static IReadOnlyDictionary<string, string> ResolvePropertyGenerics(this dnlib.DotNet.PropertyDef source, IReadOnlyCollection<dnlib.DotNet.MethodDef> methods)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
-      var outerArgs = GetGenericArgumeents(source.DeclaringType)
+      var outerArgs = GetGenericArguments(source.DeclaringType)
         .DistinctBy(x => x.Name)
         .Select((x, i) => new { Type = x.Name, Name = $"`{i}" });
       var thisArgs = methods.Select(x => x.GenericParameters)
@@ -43,21 +43,21 @@ namespace MarkDoc.Members.Dnlib
 
     public static IReadOnlyDictionary<string, string> ResolveTypeGenerics(this dnlib.DotNet.TypeDef source)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
-      return GetGenericArgumeents(source.DeclaringType)
+      return GetGenericArguments(source.DeclaringType)
         .DistinctBy(x => x.Name)
         .Select((x, i) => new { Type = x.Name, Name = $"`{i}" })
         .ToDictionary(x => x.Type.String, x => x.Name);
     }
 
-    private static IEnumerable<GenericParam> GetGenericArgumeents(dnlib.DotNet.TypeDef? type)
+    private static IEnumerable<GenericParam> GetGenericArguments(dnlib.DotNet.TypeDef? type)
     {
-      if (type == null)
+      if (type is null)
         yield break;
 
-      foreach (var parameter in GetGenericArgumeents(type.DeclaringType))
+      foreach (var parameter in GetGenericArguments(type.DeclaringType))
         yield return parameter;
       foreach (var parameter in type.GenericParameters)
         yield return parameter;

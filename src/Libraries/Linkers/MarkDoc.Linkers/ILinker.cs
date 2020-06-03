@@ -1,8 +1,4 @@
-﻿using MarkDoc.Members;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using MarkDoc.Members.ResolvedTypes;
+﻿using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Linkers
 {

@@ -1,5 +1,4 @@
-﻿using MarkDoc.Linkers;
-using MarkDoc.Members;
+﻿using MarkDoc.Members;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -35,7 +34,7 @@ namespace MarkDoc.Documentation.Xml
         where B : class
         => (existing.a ?? toAdd.a, existing.b ?? toAdd.b);
 
-      string CacheType(string key, XElement element)
+      void CacheType(string key, XElement element)
       {
         if (m_documentation.ContainsKey(key))
         {
@@ -47,8 +46,6 @@ namespace MarkDoc.Documentation.Xml
           var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
           m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
         }
-
-        return key;
       }
 
       static string RetrieveName(XElement element)
@@ -59,7 +56,7 @@ namespace MarkDoc.Documentation.Xml
 
       static void CacheMember(XElement element)
       {
-        static string CacheMember(string key, string name, XElement element)
+        static void Cache(string key, string name, XElement element)
         {
           static string ProcessName(string key, string name)
           {
@@ -90,17 +87,13 @@ namespace MarkDoc.Documentation.Xml
 
             m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
           }
-
-          return key;
         }
 
         static int ReverseIndexOf(string value, char search, int from)
         {
-          for (int i = from - 1; i >= 0; i--)
-          {
+          for (var i = from - 1; i >= 0; i--)
             if (value[i].Equals(search))
               return i;
-          }
 
           return -1;
         }
@@ -111,12 +104,12 @@ namespace MarkDoc.Documentation.Xml
           var brace = name.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
           if (brace != -1)
           {
-            CacheMember(name[2..ReverseIndexOf(name, '.', brace)], name, element);
+            Cache(name[2..ReverseIndexOf(name, '.', brace)], name, element);
             return;
           }
         }
 
-        CacheMember(name[2..name.LastIndexOf('.')], name, element);
+        Cache(name[2..name.LastIndexOf('.')], name, element);
       }
 
       using var file = File.OpenText(path);
@@ -140,7 +133,7 @@ namespace MarkDoc.Documentation.Xml
     /// <inheritdoc />
     public bool TryFindType(IType type, out IDocElement? resultType)
     {
-      if (type == null)
+      if (type is null)
         throw new ArgumentNullException(nameof(type));
 
       resultType = null;
@@ -148,7 +141,7 @@ namespace MarkDoc.Documentation.Xml
       if (!m_documentation.TryGetValue(type.RawName, out var value))
         return false;
 
-      if (value.type == null)
+      if (value.type is null)
       {
         var doc = new DocElement(type.RawName, this, m_typeResolver);
         m_documentation.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));

@@ -10,7 +10,7 @@ namespace MarkDoc.Elements
     : IElement, IHasContent<IReadOnlyCollection<IElement>>, IHasHeading
   {
     /// <summary>
-    /// Possilbe list types
+    /// Possible list types
     /// </summary>
     public enum ListType
     {

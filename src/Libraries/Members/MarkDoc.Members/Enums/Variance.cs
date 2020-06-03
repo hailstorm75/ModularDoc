@@ -14,7 +14,7 @@
     /// </summary>
     Covariant,
     /// <summary>
-    /// Contravariance
+    /// Contra variance
     /// </summary>
     Contravariant,
   }

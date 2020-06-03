@@ -27,7 +27,7 @@ namespace MarkDoc.Documentation.Xml
 
     public DocumentationContent(XElement source)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       Tags = ResolveTags(source.Elements())
@@ -41,7 +41,7 @@ namespace MarkDoc.Documentation.Xml
 
     public DocumentationContent(IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> tags)
     {
-      if (tags == null)
+      if (tags is null)
         throw new ArgumentNullException(nameof(tags));
 
       Tags = tags;

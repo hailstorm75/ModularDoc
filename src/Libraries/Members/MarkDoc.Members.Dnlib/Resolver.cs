@@ -54,7 +54,7 @@ namespace MarkDoc.Members.Dnlib
 #pragma warning disable CA1822 // Mark members as static
     public IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       if (!(source is TypeSig signature))
@@ -112,7 +112,7 @@ namespace MarkDoc.Members.Dnlib
 
     public IType? FindReference(object source, IResType type)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       if (!(source is TypeSig signature))
@@ -137,11 +137,11 @@ namespace MarkDoc.Members.Dnlib
     private static bool IsGeneric(TypeSig source)
       => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
 
-    private static bool FilterNamespaces(string typeXamespace)
-      => !string.IsNullOrEmpty(typeXamespace)
-          && !EXCLUDED_NAMESPACES.Contains(typeXamespace.Contains('.', StringComparison.InvariantCulture)
-               ? typeXamespace.Remove(typeXamespace.IndexOf('.', StringComparison.InvariantCulture))
-               : typeXamespace);
+    private static bool FilterNamespaces(string typeNamespace)
+      => !string.IsNullOrEmpty(typeNamespace)
+          && !EXCLUDED_NAMESPACES.Contains(typeNamespace.Contains('.', StringComparison.InvariantCulture)
+               ? typeNamespace.Remove(typeNamespace.IndexOf('.', StringComparison.InvariantCulture))
+               : typeNamespace);
 
     private IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
       => m_groups.SelectMany(Linq.XtoX)
@@ -164,7 +164,7 @@ namespace MarkDoc.Members.Dnlib
       throw new NotSupportedException(Resources.subjectNotSupported);
     }
 
-    internal IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
+    private IEnumerable<IType> ResolveType(dnlib.DotNet.TypeDef subject)
     {
       static IEnumerable<IType> IterateNested(IInterface type)
       {
@@ -209,7 +209,7 @@ namespace MarkDoc.Members.Dnlib
 
     private static dnlib.DotNet.TypeDef? ResolveParent(object? parent)
     {
-      if (parent == null)
+      if (parent is null)
         return null;
       if (!(parent is dnlib.DotNet.TypeDef type))
         throw new InvalidOperationException($"Argument type of {parent} is not {nameof(dnlib.DotNet.TypeDef)}.");
@@ -219,7 +219,7 @@ namespace MarkDoc.Members.Dnlib
 
     public bool TryFindType(string fullname, out IType? result)
     {
-      if (fullname == null)
+      if (fullname is null)
         throw new ArgumentNullException(nameof(fullname));
 
       result = null;

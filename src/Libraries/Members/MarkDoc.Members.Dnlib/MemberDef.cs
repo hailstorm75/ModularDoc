@@ -26,9 +26,9 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal protected MemberDef(IResolver resolver, dnlib.DotNet.IMemberDef source)
+    protected internal MemberDef(IResolver resolver, dnlib.DotNet.IMemberDef source)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       Resolver = resolver;

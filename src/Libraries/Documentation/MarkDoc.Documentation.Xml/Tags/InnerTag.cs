@@ -25,7 +25,7 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     public InnerTag(XElement node)
     {
-      if (node == null)
+      if (node is null)
         throw new ArgumentNullException(nameof(node));
 
       Type = ResolveType(node);
@@ -60,10 +60,6 @@ namespace MarkDoc.Documentation.Xml.Tags
         case IInnerTag.InnerTagType.See:
         case IInnerTag.InnerTagType.SeeAlso:
           return source.Attributes().FirstOrDefault(x => x.Name.LocalName.Equals("cref", StringComparison.InvariantCultureIgnoreCase))?.Value ?? string.Empty;
-        case IInnerTag.InnerTagType.Para:
-        case IInnerTag.InnerTagType.InvalidTag:
-        case IInnerTag.InnerTagType.Code:
-        case IInnerTag.InnerTagType.CodeSingle:
         default:
           return string.Empty;
       }

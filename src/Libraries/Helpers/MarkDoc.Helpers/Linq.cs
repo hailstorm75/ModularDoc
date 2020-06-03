@@ -25,7 +25,7 @@ namespace MarkDoc.Helpers
     /// <returns>An System.Collections.Generic.IEnumerable`1 that contains distinct elements from the source sequence.</returns>
     public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       var seenKeys = new HashSet<TKey>();
@@ -43,7 +43,7 @@ namespace MarkDoc.Helpers
     /// <returns>Key of the group</returns>
     public static TKey GroupKey<TKey, TValue>(IGrouping<TKey, TValue> grouping)
     {
-      if (grouping == null)
+      if (grouping is null)
         throw new ArgumentNullException(nameof(grouping));
       return grouping.Key;
     }
@@ -57,7 +57,7 @@ namespace MarkDoc.Helpers
     /// <returns>Values of the group</returns>
     public static IEnumerable<TValue> GroupValues<TKey, TValue>(this IGrouping<TKey, TValue> grouping)
     {
-      if (grouping == null)
+      if (grouping is null)
         throw new ArgumentNullException(nameof(grouping));
       return grouping.Select(XtoX);
     }
@@ -71,7 +71,7 @@ namespace MarkDoc.Helpers
     /// <returns>Values of the group</returns>
     public static IEnumerable<TValue> GroupValuesOfValues<TKey, TValue>(this IGrouping<TKey, IEnumerable<TValue>> grouping)
     {
-      if (grouping == null)
+      if (grouping is null)
         throw new ArgumentNullException(nameof(grouping));
       return grouping.SelectMany(XtoX);
     }
@@ -102,7 +102,7 @@ namespace MarkDoc.Helpers
     /// <param name="input">Items to add</param>
     public static void AddRange<T>(this LinkedList<T> subject, IEnumerable<T> input)
     {
-      if (subject == null)
+      if (subject is null)
         throw new ArgumentNullException(nameof(subject));
 
       foreach (var item in input ?? Enumerable.Empty<T>())

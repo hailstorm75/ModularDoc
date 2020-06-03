@@ -13,10 +13,10 @@
 
     #endregion
 
-    public Link(IText content, string refernce)
+    public Link(IText content, string reference)
     {
       Content = content;
-      Reference = refernce;
+      Reference = reference;
     }
 
     public override string ToString()

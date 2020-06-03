@@ -2,16 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using dnlib.DotNet;
 using MarkDoc.Helpers;
 using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib
 {
-  [DebuggerDisplay(nameof(MethodDef) + ": {Name}")]
+  [DebuggerDisplay(nameof(MethodDef) + (": {" + nameof(Name) + "}"))]
   public class MethodDef
     : ConstructorDef, IMethod
   {
@@ -37,7 +35,7 @@ namespace MarkDoc.Members.Dnlib
     internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
       : base(resolver, source, ResolveName(source))
     {
-      if (source == null)
+      if (source is null)
         throw new ArgumentNullException(nameof(source));
 
       IsAsync = ResolveAsync(source);
@@ -68,9 +66,9 @@ namespace MarkDoc.Members.Dnlib
     {
       if (source.IsVirtual && (source.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0)
         return MemberInheritance.Override;
-      else if (source.IsVirtual)
+      if (source.IsVirtual)
         return MemberInheritance.Virtual;
-      else if (source.IsAbstract)
+      if (source.IsAbstract)
         return MemberInheritance.Abstract;
 
       return MemberInheritance.Normal;
