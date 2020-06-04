@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Generator.Basic
 
+open System;
 open MarkDoc.Generator;
 open MarkDoc.Members;
 open MarkDoc.Members.Enums;
@@ -9,17 +10,17 @@ open MarkDoc.Linkers;
 open MarkDoc.Helpers
 open MarkDoc.Documentation.Tags
 open System.Collections.Generic
+open Helpers
 
 type TypePrinter(creator, resolver, linker) = 
   let m_creator  : IElementCreator = creator
   let m_resolver : IDocResolver    = resolver
   let m_linker   : ILinker         = linker
 
-  let toElement x = x :> IElement 
   let textNormal x = m_creator.CreateText(x, IText.TextStyle.Normal)
-  let textBold x = m_creator.CreateText(x, IText.TextStyle.Bold)
+  let textBold   x = m_creator.CreateText(x, IText.TextStyle.Bold)
   let textItalic x = m_creator.CreateText(x, IText.TextStyle.Italic)
-  let textCode x = m_creator.CreateText(x, IText.TextStyle.Code)
+  let textCode   x = m_creator.CreateText(x, IText.TextStyle.Code)
   let textInline x = m_creator.CreateText(x, IText.TextStyle.CodeInline)
 
   let summaryShort (x : ITag) =
@@ -55,8 +56,8 @@ type TypePrinter(creator, resolver, linker) =
     let content = x.Content
                   |> Seq.take getCount
                   |> Seq.map processContent
-                  |> Seq.filter(fun x -> x <> None)
-                  |> Seq.map(fun x -> x.Value)
+                  |> Seq.filter Option.isSome
+                  |> Seq.map Option.get
     m_creator.JoinTextContent(content, " ")
 
   let memberNameSummary(name : ITextContent, summary : Option<ITag>) =
@@ -77,22 +78,21 @@ type TypePrinter(creator, resolver, linker) =
         if not (memberDoc.Documentation.Tags.TryGetValue(tag, &result)) then
           Seq.empty
         else
-          result |> Seq.map(fun x -> x)
+          result :> seq<ITag>
 
   let printMemberTables(input : IInterface) =
     let createHeadings headings =
-      headings
-      |> Seq.map textNormal
+      headings |> Seq.map textNormal
+    let sectionHeading isStatic accessor section =
+      seq [ accessorStr accessor; staticStr isStatic; section ]
+      |> partial String.Join " "
 
-    let groupMembers (members : seq<'M> when 'M :> IMember) =
-      let byStatic(x : 'M) =
-        not x.IsStatic
-      let byAccessor (x : bool * seq<'M>) =
-        (fst x, snd x |> Seq.groupBy(fun y -> y.Accessor))
-
+    let createContent (members : seq<'M> when 'M :> IMember, newRow) =
       members
-      |> Seq.groupBy byStatic
-      |> Seq.map byAccessor
+      |> Seq.groupBy (fun x-> x.Name)
+      |> Seq.sortBy fst
+      |> Seq.collect snd
+      |> Seq.map newRow
 
     let createMethodSection(isStatic, accessor, methods : seq<IMethod>) =
       let methodsArray = methods |> Seq.toArray
@@ -105,7 +105,7 @@ type TypePrinter(creator, resolver, linker) =
             content :> ITextContent
           else
             let link = m_linker.CreateLink method.Returns
-            if System.String.IsNullOrEmpty link then
+            if String.IsNullOrEmpty link then
               content :> ITextContent
             else
               m_creator.CreateLink(content, link) :> ITextContent
@@ -117,7 +117,7 @@ type TypePrinter(creator, resolver, linker) =
             |> Seq.skip 1
             |> Seq.isEmpty
 
-          let signature = method.Name + "(" + (if hasOverloads then "..." else "()") + ")"
+          let signature = method.Name + "(" + (if hasOverloads then "..." else (methodArguments method)) + ")"
           let signatureText = textInline signature
           memberNameSummary(signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
@@ -125,20 +125,16 @@ type TypePrinter(creator, resolver, linker) =
         |> Seq.map toElement
         |> Linq.ToReadOnlyCollection
 
-      let grouped = methodsArray
-                    |> Seq.groupBy(fun x -> x.Name)
-                    |> Seq.sortBy fst
-                    |> Seq.collect snd
-                    |> Seq.map createRow 
+      let grouped = createContent(methodsArray, createRow)
 
-      m_creator.CreateTable(grouped, [ "Returns"; "Name" ] |> createHeadings, "TODO", 3)
+      m_creator.CreateTable(grouped, [ "Returns"; "Name" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
 
     let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
       let createRow(property : IProperty) =
         let processType =
           let content = textInline property.Type.DisplayName
           let link = m_linker.CreateLink(property.Type)
-          if (System.String.IsNullOrEmpty link) then
+          if (String.IsNullOrEmpty link) then
             content :> ITextContent
           else
             m_creator.CreateLink(content, link) :> ITextContent
@@ -165,32 +161,23 @@ type TypePrinter(creator, resolver, linker) =
         |> Seq.map toElement
         |> Linq.ToReadOnlyCollection
 
-      let grouped = properties
-                    |> Seq.groupBy(fun x -> x.Name)
-                    |> Seq.sortBy fst
-                    |> Seq.collect snd
-                    |> Seq.map createRow
+      let grouped = createContent(properties, createRow)
 
-      m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, "TODO", 3)
+      m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
 
-    let processMembers (item) =
-      let flatten item =
-        let a = fst item
-        snd item
-        |> Seq.map(fun x -> (a, fst x, snd x))
+    let processMembers item =
       item
       |> Seq.map flatten
-      |> Seq.collect(fun x -> x)
+      |> Seq.collect id
 
-    let methods = input.Methods
-                  |> groupMembers
-                  |> processMembers
-                  |> Seq.map (createMethodSection >> toElement)
+    let createTable x f =
+      x
+      |> groupMembers
+      |> processMembers
+      |> Seq.map (f >> toElement)
 
-    let properties = input.Properties
-                     |> groupMembers
-                     |> processMembers
-                     |> Seq.map (createPropertySection >> toElement)
+    let methods = createTable input.Methods createMethodSection
+    let properties = createTable input.Properties createPropertySection
 
     seq [
       m_creator.CreateSection(methods, "Methods", 2) :> IElement;
@@ -200,7 +187,7 @@ type TypePrinter(creator, resolver, linker) =
   interface ITypePrinter with
     member __.Print(input : IInterface) = 
       if (isNull input) then
-        raise (System.ArgumentNullException("input"))
+        raise (ArgumentNullException("input"))
       else
         let memberSection = printMemberTables input
         m_creator.CreatePage(null, memberSection, input.Name)
