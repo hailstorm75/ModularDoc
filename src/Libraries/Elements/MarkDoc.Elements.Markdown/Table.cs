@@ -51,7 +51,7 @@ namespace MarkDoc.Elements.Markdown
       foreach (var heading in Headings)
       {
         count++;
-        result.Append(" ").Append(heading).Append(" ").Append(DEL_VERTICAL);
+        result.Append(" ").Append(heading.ToString()).Append(" ").Append(DEL_VERTICAL);
       }
 
       // Horizontal line
@@ -72,7 +72,7 @@ namespace MarkDoc.Elements.Markdown
         foreach (var item in row.Take(count))
         {
           colCount++;
-          result.Append(" ").Append(item).Append(" ").Append(DEL_VERTICAL);
+          result.Append(" ").Append(item.ToString()).Append(" ").Append(DEL_VERTICAL);
         }
 
         if (count > colCount)

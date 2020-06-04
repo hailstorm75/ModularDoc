@@ -46,7 +46,7 @@ namespace MarkDoc.Elements.Markdown
       {
         if (item is IList list)
         {
-          result.Append($"{list.ToString(indent + 1)}");
+          result.Append(list.ToString(indent + 1));
           continue;
         }
 
@@ -61,7 +61,7 @@ namespace MarkDoc.Elements.Markdown
             break;
         }
 
-        result.Append($"{item}\n");
+        result.Append(item.ToString()).AppendLine();
       }
 
       return result.ToString();

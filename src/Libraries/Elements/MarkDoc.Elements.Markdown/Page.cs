@@ -1,4 +1,5 @@
-﻿using MarkDoc.Helpers;
+﻿using System;
+using MarkDoc.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,9 @@ namespace MarkDoc.Elements.Markdown
           yield return CreateList(GenerateTable(subpage));
       }
 
+      if (!Subpages.Any())
+        return;
+
       var tableOfContents = CreateList(GenerateTable(this));
       build.Append(tableOfContents.ToString());
     }
@@ -59,9 +63,13 @@ namespace MarkDoc.Elements.Markdown
     public override string ToString()
     {
       var result = new StringBuilder();
+
+      if (!string.IsNullOrEmpty(Heading))
+        result.Append($"# {Heading}").AppendLine();
+
       PrintTableOfContents(result);
 
-      result.AppendJoin(string.Empty, Content.Select(x => x.ToString()));
+      result.AppendJoin(Environment.NewLine, Content.Select(x => x.ToString()));
 
       return result.ToString();
     }

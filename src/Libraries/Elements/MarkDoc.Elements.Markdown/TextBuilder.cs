@@ -1,5 +1,6 @@
 ﻿using MarkDoc.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MarkDoc.Elements.Markdown
 {
@@ -21,5 +22,8 @@ namespace MarkDoc.Elements.Markdown
       Content = content.ToReadOnlyCollection();
       Delimiter = delimiter;
     }
+
+    public override string ToString()
+      => string.Join(Delimiter, Content.Select(x => x.ToString()));
   }
 }
