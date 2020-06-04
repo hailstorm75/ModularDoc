@@ -12,7 +12,7 @@ open MarkDoc.Documentation.Tags
 open System.Collections.Generic
 open Helpers
 
-type TypePrinter(creator, resolver, linker) = 
+type TypePrinter(creator, resolver, linker) =
   let m_creator  : IElementCreator = creator
   let m_resolver : IDocResolver    = resolver
   let m_linker   : ILinker         = linker
@@ -24,7 +24,7 @@ type TypePrinter(creator, resolver, linker) =
   let textInline x = m_creator.CreateText(x, IText.TextStyle.CodeInline)
 
   let summaryShort (x : ITag) =
-    let getCount = 
+    let getCount =
       let isInvalid (item : IContent) =
         match item with
         | :? IListTag -> true
@@ -40,12 +40,16 @@ type TypePrinter(creator, resolver, linker) =
       | None -> x.Content.Count
       | Some x -> x
 
-    let processContent (item : IContent) = 
+    let processContent (item : IContent) =
+      let getInline (tag : IInnerTag) =
+        let code = tag.Content |> Seq.find(fun x -> x :? ITextTag)
+        (code :?> ITextTag).Content
+
       match item with
       | :? ITextTag as text -> Some(textNormal text.Content :> ITextContent)
       | :? IInnerTag as inner ->
         match inner.Type with
-        //| IInnerTag.InnerTagType.CodeSingle -> textInline inner.Content |> Seq.exactlyOne
+        | IInnerTag.InnerTagType.CodeSingle -> Some(getInline inner |> textInline :> ITextContent)
         | IInnerTag.InnerTagType.ParamRef
         | IInnerTag.InnerTagType.TypeRef -> Some(textInline inner.Reference :> ITextContent)
         | IInnerTag.InnerTagType.See
@@ -65,7 +69,7 @@ type TypePrinter(creator, resolver, linker) =
     | None -> name
     | Some x -> m_creator.JoinTextContent(seq [ name; summaryShort x ], "<br>")
 
-  let findTag(input : IType, mem : IMember, tag : ITag.TagType) = 
+  let findTag(input : IType, mem : IMember, tag : ITag.TagType) =
     let mutable typeDoc : IDocElement = null
     if not (m_resolver.TryFindType(input, &typeDoc)) then
       Seq.empty
@@ -78,7 +82,7 @@ type TypePrinter(creator, resolver, linker) =
         if not (memberDoc.Documentation.Tags.TryGetValue(tag, &result)) then
           Seq.empty
         else
-          result :> seq<ITag>
+          result |> Seq.cast
 
   let printMemberTables(input : IInterface) =
     let createHeadings headings =
@@ -110,7 +114,7 @@ type TypePrinter(creator, resolver, linker) =
             else
               m_creator.CreateLink(content, link) :> ITextContent
 
-        let processMethod = 
+        let processMethod =
           let hasOverloads =
             methodsArray
             |> Seq.where(fun x -> x.Name = method.Name)
@@ -139,17 +143,17 @@ type TypePrinter(creator, resolver, linker) =
           else
             m_creator.CreateLink(content, link) :> ITextContent
 
-        let processName = 
+        let processName =
           let name = textInline property.Name :> ITextContent
           memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
-        let processMethods = 
-          let getter = 
+        let processMethods =
+          let getter =
             if property.GetAccessor.HasValue then
               seq [ textInline "get" :> ITextContent ]
             else
               Seq.empty
-          let setter = 
+          let setter =
             if property.SetAccessor.HasValue then
               seq [ textInline "set" :> ITextContent ]
             else
@@ -185,7 +189,7 @@ type TypePrinter(creator, resolver, linker) =
     ]
 
   interface ITypePrinter with
-    member __.Print(input : IInterface) = 
+    member __.Print(input : IInterface) =
       if (isNull input) then
         raise (ArgumentNullException("input"))
       else
