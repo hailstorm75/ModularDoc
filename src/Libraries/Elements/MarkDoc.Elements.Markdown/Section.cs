@@ -32,6 +32,10 @@ namespace MarkDoc.Elements.Markdown
     public override string ToString()
     {
       var result = new StringBuilder();
+
+      if (!string.IsNullOrEmpty(Heading))
+        result.AppendLine(Heading.ToHeading(Level));
+
       foreach (var element in Content.Take(Content.Count - 1))
         result.AppendLine(element.ToString()).AppendLine();
       result.AppendLine(Content.Last().ToString());

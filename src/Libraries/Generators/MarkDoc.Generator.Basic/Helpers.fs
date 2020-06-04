@@ -32,6 +32,7 @@ module internal Helpers =
   let methodArguments (item : IMethod) =
     let argument (arg : IArgument) =
       seq [ argumeentTypeStr arg; arg.Type.DisplayName; arg.Name ]
+      |> Seq.filter (String.IsNullOrEmpty >> not)
       |> partial String.Join " "
 
     item.Arguments

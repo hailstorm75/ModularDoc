@@ -167,7 +167,7 @@ type TypePrinter(creator, resolver, linker) =
 
       let grouped = createContent(properties, createRow)
 
-      m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
+      m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
 
     let processMembers item =
       item
@@ -193,5 +193,5 @@ type TypePrinter(creator, resolver, linker) =
       if (isNull input) then
         raise (ArgumentNullException("input"))
       else
-        let memberSection = printMemberTables input
-        m_creator.CreatePage(null, memberSection, input.Name)
+        let memberSection = m_creator.CreateSection(printMemberTables input, "Members",  1)
+        m_creator.CreatePage(null, [ memberSection ], input.Name)

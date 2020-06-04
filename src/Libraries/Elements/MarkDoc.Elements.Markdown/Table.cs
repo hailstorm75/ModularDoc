@@ -46,6 +46,9 @@ namespace MarkDoc.Elements.Markdown
       var result = new StringBuilder();
       var count = 0;
 
+      if (!string.IsNullOrEmpty(Heading))
+        result.AppendLine(Heading.ToHeading(Level));
+
       // Column headers
       result.Append(DEL_VERTICAL);
       foreach (var heading in Headings)

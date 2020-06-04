@@ -40,6 +40,10 @@ namespace MarkDoc.Elements.Markdown
     public string ToString(int indent)
     {
       var result = new StringBuilder();
+
+      if (!string.IsNullOrEmpty(Heading))
+        result.AppendLine(Heading.ToHeading(Level));
+
       var index = 0;
 
       foreach (var item in Content)
