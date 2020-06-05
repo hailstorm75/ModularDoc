@@ -26,6 +26,11 @@ namespace MarkDoc.Members
     bool IsAsync { get; }
 
     /// <summary>
+    /// Determines whether the method is an operator
+    /// </summary>
+    bool IsOperator { get; }
+
+    /// <summary>
     /// Method return type
     /// </summary>
     IResType? Returns { get; }

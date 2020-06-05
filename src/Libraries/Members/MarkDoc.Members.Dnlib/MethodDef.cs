@@ -27,17 +27,21 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public IResType? Returns { get; }
 
+    /// <inheritdoc />
+    public bool IsOperator { get; }
+
     #endregion
 
     /// <summary>
     /// Default constructor
     /// </summary>
     internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
-      : base(resolver, source, ResolveName(source))
+      : base(resolver, source, ResolveName(source, out var isOperator))
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
 
+      IsOperator = isOperator;
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
       Generics = ResolveGenerics(source).ToReadOnlyCollection();
@@ -46,8 +50,63 @@ namespace MarkDoc.Members.Dnlib
 
     #region Methods
 
-    private static string ResolveName(dnlib.DotNet.MethodDef source)
-      => source.Name;
+    private static string ResolveOperator(string name, out bool isOperator)
+    {
+      isOperator = true;
+
+      string Pass(ref bool isOperator)
+      {
+        isOperator = false;
+        return name;
+      }
+
+      return name.ToUpperInvariant() switch
+      {
+        "OP_IMPLICIT" => "",
+        "OP_EXPLICIT" => "",
+        "OP_ADDITION" => "+",
+        "OP_SUBTRACTION" => "-",
+        "OP_MULTIPLY" => "*",
+        "OP_DIVISION" => "/",
+        "OP_MODULUS" => "%",
+        "OP_EXCLUSIVEOR" => "^",
+        "OP_BITWISEAND" => "&",
+        "OP_BITWISEOR" => "|",
+        "OP_LOGICALAND" => "&&",
+        "OP_LOGICALOR" => "||",
+        "OP_LOGICALNOT" => "!",
+        "OP_ASSIGN" => "=",
+        "OP_LEFTSHIFT" => "<<",
+        "OP_RIGHTSHIFT" => ">>",
+        "OP_SIGNEDRIGHTSHIFT" => "",
+        "OP_UNSIGNEDRIGHTSHIFT" => "",
+        "OP_EQUALITY" => "==",
+        "OP_GREATERTHAN" => ">",
+        "OP_LESSTHAN" => "<",
+        "OP_INEQUALITY" => "!=",
+        "OP_GREATERTHANOREQUAL" => ">=",
+        "OP_LESSTHANOREQUAL" => "<=",
+        "OP_MULTIPLICATIONASSIGNMENT" => "*=",
+        "OP_SUBTRACTIONASSIGNMENT" => "-=",
+        "OP_EXCLUSIVEORASSIGNMENT" => "^=",
+        "OP_LEFTSHIFTASSIGNMENT" => "<<=",
+        "OP_MODULUSASSIGNMENT" => "%=",
+        "OP_ADDITIONASSIGNMENT" => "+=",
+        "OP_BITWISEANDASSIGNMENT" => "&=",
+        "OP_BITWISEORASSIGNMENT" => "|=",
+        "OP_COMMA" => ",",
+        "OP_DIVISIONASSIGNMENT" => "/=",
+        "OP_DECREMENT" => "--",
+        "OP_INCREMENT" => "++",
+        "OP_UNARYNEGATION" => "-",
+        "OP_UNARYPLUS" => "+",
+        "OP_ONESCOMPLEMENT" => "~",
+        _ => Pass(ref isOperator)
+      };
+    }
+
+    private static string ResolveName(dnlib.DotNet.MethodDef source, out bool isOperator)
+      => ResolveOperator(source.Name, out isOperator);
 
     private static bool ResolveAsync(dnlib.DotNet.MethodDef source)
     {
