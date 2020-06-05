@@ -20,6 +20,7 @@ namespace MarkDoc.Members.Dnlib
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
     private static readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
     private static readonly ConcurrentDictionary<string, IResType> m_resCache = new ConcurrentDictionary<string, IResType>();
+    private readonly Lazy<TrieNamespace> m_namespaces;
 
     #endregion
 
@@ -30,7 +31,10 @@ namespace MarkDoc.Members.Dnlib
     #endregion
 
     public Resolver()
-      => Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.PublicationOnly);
+    {
+      Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.PublicationOnly);
+      m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys), LazyThreadSafetyMode.PublicationOnly);
+    }
 
     #region Methods
 
@@ -234,7 +238,11 @@ namespace MarkDoc.Members.Dnlib
         return false;
 
       var namespaceCut = fullname.Remove(index);
-      var types = Types.Value[namespaceCut];
+
+      if (!m_namespaces.Value.TryFindKnownNamespace(namespaceCut, out var ns))
+        return false;
+
+      var types = Types.Value[ns];
       result = types.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
 
       return result != null;
