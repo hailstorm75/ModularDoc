@@ -35,7 +35,7 @@ The parts above are represented as interfaces and thus allow creating decoupled 
 
 # Roadmap
 
-The project is the early stages of development.
+The project is in its early stages of development.
 
 | Stage | Status   | Milestone | Description |
 | ----- | -------- | --------- | ----------- |
