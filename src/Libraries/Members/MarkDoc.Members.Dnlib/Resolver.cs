@@ -18,8 +18,8 @@ namespace MarkDoc.Members.Dnlib
     #region Fields
 
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
-    private static readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
-    private static readonly ConcurrentDictionary<string, IResType> m_resCache = new ConcurrentDictionary<string, IResType>();
+    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
+    private readonly ConcurrentDictionary<string, IResType> m_resCache = new ConcurrentDictionary<string, IResType>();
     private readonly Lazy<TrieNamespace> m_namespaces;
 
     #endregion
@@ -228,18 +228,18 @@ namespace MarkDoc.Members.Dnlib
 
       result = null;
 
-      var genericIndex = fullname.LastIndexOf('`');
-      var tmp = fullname;
-      if (genericIndex != -1)
-        tmp = fullname.Remove(genericIndex);
+      //var genericIndex = fullname.LastIndexOf('`');
+      //var tmp = fullname;
+      //if (genericIndex != -1)
+      //  tmp = fullname.Remove(genericIndex);
 
-      var index = tmp.LastIndexOf('.');
-      if (index == -1)
-        return false;
+      //var index = tmp.LastIndexOf('.');
+      //if (index == -1)
+      //  return false;
 
-      var namespaceCut = fullname.Remove(index);
+      //var namespaceCut = fullname.Remove(index);
 
-      if (!m_namespaces.Value.TryFindKnownNamespace(namespaceCut, out var ns))
+      if (!m_namespaces.Value.TryFindKnownNamespace(fullname, out var ns))
         return false;
 
       var types = Types.Value[ns];
