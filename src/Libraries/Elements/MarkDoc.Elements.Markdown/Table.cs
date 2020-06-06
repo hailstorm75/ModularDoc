@@ -75,7 +75,7 @@ namespace MarkDoc.Elements.Markdown
         foreach (var item in row.Take(count))
         {
           colCount++;
-          result.Append(" ").Append(item.ToString()).Append(" ").Append(DEL_VERTICAL);
+          result.Append(" ").Append(item.ToString().ReplaceNewline()).Append(" ").Append(DEL_VERTICAL);
         }
 
         if (count > colCount)

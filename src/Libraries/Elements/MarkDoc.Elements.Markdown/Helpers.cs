@@ -4,12 +4,20 @@ namespace MarkDoc.Elements.Markdown
 {
   internal static class Helpers
   {
-    private static readonly Regex m_regex = new Regex("<|>");
-    private static readonly MatchEvaluator eval =
+    private static readonly Regex m_regexBraces = new Regex("<|>");
+    private static readonly MatchEvaluator m_evalBraces =
       match => match.Value switch
       {
         "<" => "&lt;",
         ">" => "&gt;",
+        _ => match.Value
+      };
+    private static readonly Regex m_regexNewlines = new Regex("\r\n|\n");
+    private static readonly MatchEvaluator m_evalNewlines =
+      match => match.Value switch
+      {
+        "\r\n" => "<br>",
+        "\n" => "<br>",
         _ => match.Value
       };
 
@@ -17,6 +25,9 @@ namespace MarkDoc.Elements.Markdown
       => $"{new string('#', level + 1)} {heading}";
 
     public static string CleanInvalid(this string text)
-      => m_regex.Replace(text, eval);
+      => m_regexBraces.Replace(text, m_evalBraces);
+
+    public static string ReplaceNewline(this string text)
+      => m_regexNewlines.Replace(text, m_evalNewlines);
   }
 }

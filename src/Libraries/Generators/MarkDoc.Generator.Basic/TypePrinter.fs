@@ -23,6 +23,9 @@ type TypePrinter(creator, resolver, linker) =
   let textCode   x = m_creator.CreateText(x, IText.TextStyle.Code)
   let textInline x = m_creator.CreateText(x, IText.TextStyle.CodeInline)
 
+  let createHeadings headings =
+    headings |> Seq.map textNormal
+
   let rec processContent (item : IContent) =
     let getInlineText (tag : IInnerTag) =
       tag.Content
@@ -39,13 +42,18 @@ type TypePrinter(creator, resolver, linker) =
     | :? ITextTag as text -> Some(textNormal text.Content |> toElement)
     | :? IInnerTag as inner ->
       match inner.Type with
-      | IInnerTag.InnerTagType.CodeSingle -> Some(getInlineText inner |> Seq.exactlyOne |> textInline |> toElement)
-      | IInnerTag.InnerTagType.Code -> Some(getInlineText inner |> Seq.exactlyOne |> textCode |> toElement)
+      | IInnerTag.InnerTagType.CodeSingle
+        -> Some(getInlineText inner |> Seq.exactlyOne |> textInline |> toElement)
+      | IInnerTag.InnerTagType.Code
+        -> Some(getInlineText inner |> Seq.exactlyOne |> textCode |> toElement)
       | IInnerTag.InnerTagType.ParamRef
-      | IInnerTag.InnerTagType.TypeRef -> Some(textInline inner.Reference |> toElement)
+      | IInnerTag.InnerTagType.TypeRef
+        -> Some(textInline inner.Reference |> toElement)
       | IInnerTag.InnerTagType.See
-      | IInnerTag.InnerTagType.SeeAlso -> Some(textBold inner.Reference |> toElement) // TODO: Create link
-      | IInnerTag.InnerTagType.Para -> Some(textNormal Environment.NewLine |> toElement)
+      | IInnerTag.InnerTagType.SeeAlso
+        -> Some(textBold inner.Reference |> toElement) // TODO: Create link
+      | IInnerTag.InnerTagType.Para
+        -> Some(textNormal Environment.NewLine |> toElement)
       | _ -> None
     | :? IListTag as list ->
       match list.Type with
@@ -62,7 +70,10 @@ type TypePrinter(creator, resolver, linker) =
       | _ ->
         let content = list.Rows
                       |> Seq.collect id
-                      |> processColumn
+                      |> Seq.map processContent
+                      |> Seq.filter Option.isSome
+                      |> Seq.map Option.get
+
         Some(m_creator.CreateList(content, listType list.Type) |> toElement)
     | _ -> None
 
@@ -73,7 +84,6 @@ type TypePrinter(creator, resolver, linker) =
         | :? IListTag -> true
         | :? IInnerTag as tag ->
           match tag.Type with
-          | IInnerTag.InnerTagType.Para
           | IInnerTag.InnerTagType.Code
           | IInnerTag.InnerTagType.InvalidTag -> true
           | _ -> false
@@ -85,10 +95,11 @@ type TypePrinter(creator, resolver, linker) =
 
     let count = getCount
     let readMore = if (count <> x.Content.Count) then Some(textNormal "..." |> toElement) else None
-    let content = x.Content
-                  |> Seq.take count
-                  |> Seq.map processContent
-                  |> Seq.append(seq [readMore])
+    let processed = x.Content
+                    |> Seq.take count
+                    |> Seq.map processContent
+    let content = seq [readMore]
+                  |> Seq.append processed
                   |> Seq.filter Option.isSome
                   |> Seq.map Option.get
                   |> Seq.filter(fun x -> x :? ITextContent)
@@ -97,15 +108,35 @@ type TypePrinter(creator, resolver, linker) =
     m_creator.JoinTextContent(content, " ")
 
   let tagFull (x : ITag) =
-    x.Content
-    |> Seq.map processContent
-    |> Seq.filter Option.isSome
-    |> Seq.map Option.get
+    let content = x.Content
+                  |> Seq.map processContent
+                  |> Seq.filter Option.isSome
+                  |> Seq.map Option.get
+
+    let list = new LinkedList<ITextContent>()
+    let result = seq [
+      for item in content do
+      if (item :? ITextContent) then
+        list.AddLast (item :?> ITextContent) |> ignore
+      elif (list.Count = 0) then
+        yield item
+      else
+        let joined = m_creator.JoinTextContent(list, " ") |> toElement
+        list.Clear()
+
+        yield joined
+        yield item
+    ]
+
+    if (Seq.isEmpty result) then
+      list |> Seq.map toElement
+    else
+      result
     
   let memberNameSummary(name : ITextContent, summary : Option<ITag>) =
     match summary with
     | None -> name
-    | Some x -> m_creator.JoinTextContent(seq [ name; tagShort x ], "<br>")
+    | Some x -> m_creator.JoinTextContent(seq [ name; tagShort x ], Environment.NewLine)
 
   let findTypeTag(input : IType, tag : ITag.TagType) =
     let mutable typeDoc : IDocElement = null
@@ -116,7 +147,7 @@ type TypePrinter(creator, resolver, linker) =
       if not (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
         Seq.empty
       else
-        result |> Seq.cast
+        result :> seq<ITag>
 
   let findTag(input : IType, mem : IMember, tag : ITag.TagType) =
     let mutable typeDoc : IDocElement = null
@@ -136,12 +167,10 @@ type TypePrinter(creator, resolver, linker) =
   let printIntroduction(input : IType) =
     match findTypeTag(input, ITag.TagType.Summary) |> Seq.tryExactlyOne with
     | None -> None
-    | Some x -> Some(seq [x |> tagShort :> IElement])
+    | Some x -> Some(seq [ x |> tagShort :> IElement])
 
   let printMemberTables(input : IType) =
     let processInterface(input : IInterface) =
-      let createHeadings headings =
-        headings |> Seq.map textNormal
       let sectionHeading isStatic accessor section =
         seq [ accessorStr accessor; staticStr isStatic; section ]
         |> partial String.Join " "
@@ -253,18 +282,52 @@ type TypePrinter(creator, resolver, linker) =
       if Option.isNone tag then
         None
       else
-        Some(tag |> Option.get |> tagFull)
+        tag |> Option.get |> tagFull |> Some
 
-    let singles =
+    //let seeAlso = m_creator.CreateList(multiple ITag.TagType.Seealso, "See also", 2) |> toElement
+
+    let typeParams = 
+      let getTypeParams = 
+        let generics = (input :?> IInterface).Generics
+        let processTag (x : ITag) =
+          let getConstraints (x : ITag) =
+            if generics.ContainsKey(x.Reference) then
+              let types = generics.[x.Reference].ToTuple() |> snd
+                          |> Seq.map(fun x-> textInline x.DisplayName :> ITextContent)
+              m_creator.JoinTextContent(types, Environment.NewLine) |> Some
+            else
+              None
+
+          let constraints = getConstraints x
+          if (Option.isSome constraints) then
+            seq [ textInline x.Reference |> toElement; tagShort x |> toElement; constraints |> Option.get |> toElement ]
+          else
+            seq [ textInline x.Reference |> toElement; tagShort x |> toElement; ]
+
+        if input :? IInterface then
+          findTypeTag(input, ITag.TagType.Typeparam)
+          |> Seq.map (processTag >> Linq.ToReadOnlyCollection)
+          |> Some
+        else
+          None
+
+      let ts = getTypeParams
+      if (Option.isSome ts) then
+        seq [ m_creator.CreateTable(ts |> Option.get, seq [ "Type"; "Description"; "Constraints" ] |> createHeadings) |> toElement ] |> Some
+      else
+        None
+
+    let sections =
       seq [
         (single ITag.TagType.Summary, "Summary");
         (single ITag.TagType.Remarks, "Remarks");
-        (single ITag.TagType.Example, "Example")
+        (single ITag.TagType.Example, "Example");
+        (typeParams, "Generic types")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
 
-    Some(singles)
+    Some(sections)
 
   let printContent (input : IType) =
     let createSection(x : seq<IElement>, y : string)=
