@@ -65,7 +65,7 @@ namespace MarkDoc.Elements.Markdown
       var result = new StringBuilder();
 
       if (!string.IsNullOrEmpty(Heading))
-        result.Append(Heading.ToHeading(Level)).AppendLine();
+        result.Append(Heading.CleanInvalid().ToHeading(Level)).AppendLine();
 
       PrintTableOfContents(result);
 

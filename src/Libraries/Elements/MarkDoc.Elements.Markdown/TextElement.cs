@@ -23,22 +23,22 @@ namespace MarkDoc.Elements.Markdown
       Style = style;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="IElement" />
     public override string ToString()
       => Style switch
       {
         IText.TextStyle.Normal
-          => Content,
+          => Content.CleanInvalid(),
         IText.TextStyle.CodeInline
           => $"`{Content}`",
         IText.TextStyle.Code
           => $"```csharp{Environment.NewLine}{Content}{Environment.NewLine}```",
         IText.TextStyle.Italic
-          => Content.Any(x => x.Equals('*'))
+          => Content.CleanInvalid().Any(x => x.Equals('*'))
             ? $"_{Content}_"
             : $"*{Content}*",
         IText.TextStyle.Bold
-          => Content.Any(x => x.Equals('*'))
+          => Content.CleanInvalid().Any(x => x.Equals('*'))
             ? $"__{Content}__"
             : $"**{Content}**",
         _ => throw new Exception() // TODO: Specify exception message
