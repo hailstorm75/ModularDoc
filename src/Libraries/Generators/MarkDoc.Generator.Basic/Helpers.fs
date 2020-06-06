@@ -3,12 +3,19 @@ open MarkDoc.Members.Enums
 open MarkDoc.Members
 open MarkDoc.Elements
 open System
+open MarkDoc.Documentation.Tags
 
 module internal Helpers =
 
   let partial f x y = f(x , y)
 
   let toElement x = x :> IElement 
+
+  let listType (t : IListTag.ListType) =
+    match t with
+    | IListTag.ListType.Bullet -> IList.ListType.Dotted
+    | IListTag.ListType.Number -> IList.ListType.Numbered
+    | _ -> raise (Exception()) // TODO: Message
 
   let argumeentTypeStr (arg : IArgument) =
     match arg.Keyword with
@@ -21,6 +28,12 @@ module internal Helpers =
     match x with
     | true -> "Static"
     | false -> ""
+
+  let varianceStr (x : Variance) =
+    match x with
+    | Variance.Contravariant -> "in"
+    | Variance.Covariant -> "out"
+    | _ -> ""
 
   let accessorStr (accessor : AccessorType) =
     match accessor with

@@ -23,7 +23,50 @@ type TypePrinter(creator, resolver, linker) =
   let textCode   x = m_creator.CreateText(x, IText.TextStyle.Code)
   let textInline x = m_creator.CreateText(x, IText.TextStyle.CodeInline)
 
-  let summaryShort (x : ITag) =
+  let rec processContent (item : IContent) =
+    let getInlineText (tag : IInnerTag) =
+      tag.Content
+      |> Seq.where(fun x -> x :? ITextTag)
+      |> Seq.map (fun x -> (x :?> ITextTag).Content)
+
+    let processColumn(column : seq<IContent>) =
+      column
+      |> Seq.map processContent
+      |> Seq.filter Option.isSome
+      |> Seq.map (Option.get >> toElement)
+
+    match item with
+    | :? ITextTag as text -> Some(textNormal text.Content |> toElement)
+    | :? IInnerTag as inner ->
+      match inner.Type with
+      | IInnerTag.InnerTagType.CodeSingle -> Some(getInlineText inner |> Seq.exactlyOne |> textInline |> toElement)
+      | IInnerTag.InnerTagType.Code -> Some(getInlineText inner |> Seq.exactlyOne |> textCode |> toElement)
+      | IInnerTag.InnerTagType.ParamRef
+      | IInnerTag.InnerTagType.TypeRef -> Some(textInline inner.Reference |> toElement)
+      | IInnerTag.InnerTagType.See
+      | IInnerTag.InnerTagType.SeeAlso -> Some(textBold inner.Reference |> toElement) // TODO: Create link
+      | IInnerTag.InnerTagType.Para -> Some(textNormal Environment.NewLine |> toElement)
+      | _ -> None
+    | :? IListTag as list ->
+      match list.Type with
+      | IListTag.ListType.Table ->
+        let content = list.Rows
+                      |> Seq.map (processColumn >> Linq.ToReadOnlyCollection)
+        let headings = list.Headings
+                       |> Seq.map processContent
+                       |> Seq.filter Option.isSome
+                       |> Seq.map Option.get
+                       |> Seq.filter(fun x-> x :? IText)
+                       |> Seq.map(fun x -> x :?> IText)
+        Some(m_creator.CreateTable(content, headings) |> toElement)
+      | _ ->
+        let content = list.Rows
+                      |> Seq.collect id
+                      |> processColumn
+        Some(m_creator.CreateList(content, listType list.Type) |> toElement)
+    | _ -> None
+
+  let tagShort (x : ITag) =
     let getCount =
       let isInvalid (item : IContent) =
         match item with
@@ -40,34 +83,40 @@ type TypePrinter(creator, resolver, linker) =
       | None -> x.Content.Count
       | Some x -> x
 
-    let processContent (item : IContent) =
-      let getInline (tag : IInnerTag) =
-        let code = tag.Content |> Seq.find(fun x -> x :? ITextTag)
-        (code :?> ITextTag).Content
-
-      match item with
-      | :? ITextTag as text -> Some(textNormal text.Content :> ITextContent)
-      | :? IInnerTag as inner ->
-        match inner.Type with
-        | IInnerTag.InnerTagType.CodeSingle -> Some(getInline inner |> textInline :> ITextContent)
-        | IInnerTag.InnerTagType.ParamRef
-        | IInnerTag.InnerTagType.TypeRef -> Some(textInline inner.Reference :> ITextContent)
-        | IInnerTag.InnerTagType.See
-        | IInnerTag.InnerTagType.SeeAlso -> Some(textBold inner.Reference :> ITextContent) // TODO: Create link
-        | _ -> None
-      | _ -> None
-
+    let count = getCount
+    let readMore = if (count <> x.Content.Count) then Some(textNormal "..." |> toElement) else None
     let content = x.Content
-                  |> Seq.take getCount
+                  |> Seq.take count
                   |> Seq.map processContent
+                  |> Seq.append(seq [readMore])
                   |> Seq.filter Option.isSome
                   |> Seq.map Option.get
+                  |> Seq.filter(fun x -> x :? ITextContent)
+                  |> Seq.map(fun x -> x :?> ITextContent)
+
     m_creator.JoinTextContent(content, " ")
 
+  let tagFull (x : ITag) =
+    x.Content
+    |> Seq.map processContent
+    |> Seq.filter Option.isSome
+    |> Seq.map Option.get
+    
   let memberNameSummary(name : ITextContent, summary : Option<ITag>) =
     match summary with
     | None -> name
-    | Some x -> m_creator.JoinTextContent(seq [ name; summaryShort x ], "<br>")
+    | Some x -> m_creator.JoinTextContent(seq [ name; tagShort x ], "<br>")
+
+  let findTypeTag(input : IType, tag : ITag.TagType) =
+    let mutable typeDoc : IDocElement = null
+    if not (m_resolver.TryFindType(input, &typeDoc)) then
+      Seq.empty
+    else
+      let mutable result : IReadOnlyCollection<ITag> = null
+      if not (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
+        Seq.empty
+      else
+        result |> Seq.cast
 
   let findTag(input : IType, mem : IMember, tag : ITag.TagType) =
     let mutable typeDoc : IDocElement = null
@@ -84,114 +133,181 @@ type TypePrinter(creator, resolver, linker) =
         else
           result |> Seq.cast
 
-  let printMemberTables(input : IInterface) =
-    let createHeadings headings =
-      headings |> Seq.map textNormal
-    let sectionHeading isStatic accessor section =
-      seq [ accessorStr accessor; staticStr isStatic; section ]
-      |> partial String.Join " "
+  let printIntroduction(input : IType) =
+    match findTypeTag(input, ITag.TagType.Summary) |> Seq.tryExactlyOne with
+    | None -> None
+    | Some x -> Some(seq [x |> tagShort :> IElement])
 
-    let createContent (members : seq<'M> when 'M :> IMember, newRow) =
-      members
-      |> Seq.groupBy (fun x-> x.Name)
-      |> Seq.sortBy fst
-      |> Seq.collect snd
-      |> Seq.map newRow
+  let printMemberTables(input : IType) =
+    let processInterface(input : IInterface) =
+      let createHeadings headings =
+        headings |> Seq.map textNormal
+      let sectionHeading isStatic accessor section =
+        seq [ accessorStr accessor; staticStr isStatic; section ]
+        |> partial String.Join " "
 
-    let createMethodSection(isStatic, accessor, methods : seq<IMethod>) =
-      let methodsArray = methods |> Seq.toArray
+      let createContent (members : seq<'M> when 'M :> IMember, newRow) =
+        members
+        |> Seq.groupBy (fun x-> x.Name)
+        |> Seq.sortBy fst
+        |> Seq.collect snd
+        |> Seq.map newRow
 
-      let createRow(method : IMethod) =
-        let processReturn =
-          let name = if isNull method.Returns then "void" else method.Returns.DisplayName
-          let content = textInline name
-          if isNull method.Returns then
-            content :> ITextContent
-          else
-            let link = m_linker.CreateLink method.Returns
-            if String.IsNullOrEmpty link then
+      let createMethodSection(isStatic, accessor, methods : seq<IMethod>) =
+        let methodsArray = methods |> Seq.toArray
+
+        let createRow(method : IMethod) =
+          let processReturn =
+            let name = if isNull method.Returns then "void" else method.Returns.DisplayName
+            let content = textInline name
+            if isNull method.Returns then
+              content :> ITextContent
+            else
+              let link = m_linker.CreateLink method.Returns
+              if String.IsNullOrEmpty link then
+                content :> ITextContent
+              else
+                m_creator.CreateLink(content, link) :> ITextContent
+
+          let processMethod =
+            let hasOverloads =
+              methodsArray
+              |> Seq.where(fun x -> x.Name = method.Name)
+              |> Seq.skip 1
+              |> Seq.isEmpty
+
+            let signature = method.Name + "(" + (if hasOverloads then "..." else (methodArguments method)) + ")"
+            let signatureText = textInline signature
+            memberNameSummary(signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+
+          seq [ processReturn; processMethod ]
+          |> Seq.map toElement
+          |> Linq.ToReadOnlyCollection
+
+        let grouped = createContent(methodsArray, createRow)
+
+        m_creator.CreateTable(grouped, [ "Returns"; "Name" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
+
+      let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
+        let createRow(property : IProperty) =
+          let processType =
+            let content = textInline property.Type.DisplayName
+            let link = m_linker.CreateLink(property.Type)
+            if (String.IsNullOrEmpty link) then
               content :> ITextContent
             else
               m_creator.CreateLink(content, link) :> ITextContent
 
-        let processMethod =
-          let hasOverloads =
-            methodsArray
-            |> Seq.where(fun x -> x.Name = method.Name)
-            |> Seq.skip 1
-            |> Seq.isEmpty
+          let processName =
+            let name = textInline property.Name :> ITextContent
+            memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
-          let signature = method.Name + "(" + (if hasOverloads then "..." else (methodArguments method)) + ")"
-          let signatureText = textInline signature
-          memberNameSummary(signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+          let processMethods =
+            let getter =
+              if property.GetAccessor.HasValue then
+                seq [ textInline "get" :> ITextContent ]
+              else
+                Seq.empty
+            let setter =
+              if property.SetAccessor.HasValue then
+                seq [ textInline "set" :> ITextContent ]
+              else
+                Seq.empty
 
-        seq [ processReturn; processMethod ]
-        |> Seq.map toElement
-        |> Linq.ToReadOnlyCollection
+            m_creator.JoinTextContent(Seq.append getter setter, " ")
 
-      let grouped = createContent(methodsArray, createRow)
+          seq [ processType; processName; processMethods ]
+          |> Seq.map toElement
+          |> Linq.ToReadOnlyCollection
 
-      m_creator.CreateTable(grouped, [ "Returns"; "Name" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
+        let grouped = createContent(properties, createRow)
 
-    let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
-      let createRow(property : IProperty) =
-        let processType =
-          let content = textInline property.Type.DisplayName
-          let link = m_linker.CreateLink(property.Type)
-          if (String.IsNullOrEmpty link) then
-            content :> ITextContent
-          else
-            m_creator.CreateLink(content, link) :> ITextContent
+        m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
 
-        let processName =
-          let name = textInline property.Name :> ITextContent
-          memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+      let processMembers item =
+        item
+        |> Seq.map flatten
+        |> Seq.collect id
 
-        let processMethods =
-          let getter =
-            if property.GetAccessor.HasValue then
-              seq [ textInline "get" :> ITextContent ]
-            else
-              Seq.empty
-          let setter =
-            if property.SetAccessor.HasValue then
-              seq [ textInline "set" :> ITextContent ]
-            else
-              Seq.empty
+      let createTable x f =
+        x
+        |> groupMembers
+        |> processMembers
+        |> Seq.map (f >> toElement)
 
-          m_creator.JoinTextContent(Seq.append getter setter, " ")
+      let methods = createTable input.Methods createMethodSection
+      let properties = createTable input.Properties createPropertySection
 
-        seq [ processType; processName; processMethods ]
-        |> Seq.map toElement
-        |> Linq.ToReadOnlyCollection
+      seq [
+        m_creator.CreateSection(methods, "Methods", 2) :> IElement;
+        m_creator.CreateSection(properties, "Properties", 2) :> IElement;
+      ]
 
-      let grouped = createContent(properties, createRow)
+    match input with
+    | :? IInterface as x -> Some(processInterface x)
+    | _ -> None
 
-      m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
+  let printDetailed(input : IType) =
+    let single x =
+      let tag = findTypeTag(input, x) |> Seq.tryExactlyOne
+      if Option.isNone tag then
+        None
+      else
+        Some(tag |> Option.get |> tagFull)
 
-    let processMembers item =
-      item
-      |> Seq.map flatten
-      |> Seq.collect id
+    let singles =
+      seq [
+        (single ITag.TagType.Summary, "Summary");
+        (single ITag.TagType.Remarks, "Remarks");
+        (single ITag.TagType.Example, "Example")
+      ]
+      |> Seq.filter (fst >> Option.isSome)
+      |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
 
-    let createTable x f =
-      x
-      |> groupMembers
-      |> processMembers
-      |> Seq.map (f >> toElement)
+    Some(singles)
 
-    let methods = createTable input.Methods createMethodSection
-    let properties = createTable input.Properties createPropertySection
+  let printContent (input : IType) =
+    let createSection(x : seq<IElement>, y : string)=
+      m_creator.CreateSection(x, y, 1)
 
     seq [
-      m_creator.CreateSection(methods, "Methods", 2) :> IElement;
-      m_creator.CreateSection(properties, "Properties", 2) :> IElement;
+      (printIntroduction input, "Description");
+      (printMemberTables input, "Members");
+      (printDetailed input, "Detailed description")
     ]
+    |> Seq.filter (fst >> Option.isSome)
+    |> Seq.map (fun x -> (x |> fst |> Option.get, x |> snd))
+    |> Seq.map (createSection >> toElement)
+
+  let getTypeName (input : IType) =
+    let joinGenerics (i : seq<string>) =
+      let generics = i |> partial String.Join ", "
+      "<" + generics + ">"
+    let processInterface (input : IInterface) =
+      let generics =
+        input.Generics
+        |> Seq.map (fun x -> (x.Value.ToTuple() |> fst |> varianceStr) + " " + x.Key)
+      if not (Seq.isEmpty generics) then
+        input.Name + joinGenerics generics
+      else
+        input.Name
+    let processClass (input : IClass) =
+      let generics =
+        input.Generics
+        |> Seq.map (fun x -> x.Key)
+      if not (Seq.isEmpty generics) then
+        input.Name + joinGenerics generics
+      else
+        input.Name
+
+    match input with
+    | :? IClass as x -> processClass x
+    | :? IInterface as x -> processInterface x
+    | _ -> input.Name
 
   interface ITypePrinter with
-    member __.Print(input : IInterface) =
+    member __.Print(input : IType) =
       if (isNull input) then
         raise (ArgumentNullException("input"))
       else
-        let memberSection = m_creator.CreateSection(printMemberTables input, "Members",  1)
-        m_creator.CreatePage(null, [ memberSection ], input.Name)
+        m_creator.CreatePage(null, printContent input, getTypeName input)
