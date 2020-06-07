@@ -1,15 +1,16 @@
 ﻿namespace MarkDoc.Generator.Basic
 
-open System;
-open MarkDoc.Generator;
-open MarkDoc.Members;
-open MarkDoc.Elements;
-open MarkDoc.Documentation;
-open MarkDoc.Linkers;
+open System
+open MarkDoc.Generator
+open MarkDoc.Members
+open MarkDoc.Elements
+open MarkDoc.Documentation
+open MarkDoc.Linkers
 open MarkDoc.Helpers
 open MarkDoc.Documentation.Tags
 open System.Collections.Generic
 open Helpers
+open MarkDoc.Members.ResolvedTypes
 
 type TypePrinter(creator, resolver, linker) =
   let m_creator  : IElementCreator = creator
@@ -24,6 +25,30 @@ type TypePrinter(creator, resolver, linker) =
 
   let createHeadings headings =
     headings |> Seq.map textNormal
+
+  let processResType (item : IResType) =
+    let tryLink (item : IResType) =
+      let link = m_linker.CreateLink(item)
+      if not (String.IsNullOrEmpty link) then
+        m_creator.CreateLink(textInline item.DisplayName, link) :> ITextContent
+      else
+        textInline item.DisplayName :> ITextContent
+
+    // TODO: Generic arrays?
+    match item with
+    | :? IResGeneric as generic ->
+      let generics = generic.Generics
+                     |> Seq.map tryLink
+      let content = seq [ tryLink generic; textInline "<" :> ITextContent; m_creator.JoinTextContent(generics, ", "); textInline ">" :> ITextContent ]
+      m_creator.JoinTextContent(content, "")
+    | _ -> tryLink item
+
+  let methodArguments (item : IMethod) =
+    let argument (arg : IArgument) =
+      let args = seq [ arg |> (argumentTypeStr >> textNormal) :> ITextContent; processResType arg.Type; textNormal arg.Name :> ITextContent ]
+      m_creator.JoinTextContent(args, " ")
+
+    m_creator.JoinTextContent(item.Arguments |> Seq.map argument, ", ")
 
   let rec processContent (item : IContent) =
     let getInlineText (tag : IInnerTag) =
@@ -200,8 +225,8 @@ type TypePrinter(creator, resolver, linker) =
               |> Seq.skip 1
               |> Seq.isEmpty
 
-            let signature = method.Name + "(" + (if hasOverloads then "..." else (methodArguments method)) + ")"
-            let signatureText = textInline signature
+            let signature = seq [ textInline method.Name :> ITextContent; textNormal "(" :> ITextContent;  (if hasOverloads then textInline "..." :> ITextContent else (methodArguments method)); textNormal ")" :> ITextContent; ]
+            let signatureText = m_creator.JoinTextContent(signature, "")
             memberNameSummary(signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
           seq [ processReturn; processMethod ]
@@ -282,7 +307,7 @@ type TypePrinter(creator, resolver, linker) =
     let inheritance =
       let getInterfaces (x : 'M when 'M :> IInterface) =
         x.InheritedInterfaces
-        |> Seq.map(fun x -> textInline x.DisplayName |> toElement)
+        |> Seq.map (processResType >> toElement)
 
       let createList l = 
         if (Seq.isEmpty l) then
@@ -292,7 +317,7 @@ type TypePrinter(creator, resolver, linker) =
 
       match input with
       | :? IClass as x ->
-        let baseType = if (isNull x.BaseClass) then None else x.BaseClass.DisplayName |> textInline |> toElement |> Some
+        let baseType = if (isNull x.BaseClass) then None else x.BaseClass |> processResType |> toElement |> Some
         let interfaces = getInterfaces x
         seq [ baseType ]
         |> whereSome
@@ -308,8 +333,9 @@ type TypePrinter(creator, resolver, linker) =
         let processTag (x : ITag) =
           let getConstraints (x : ITag) =
             if generics.ContainsKey(x.Reference) then
-              let types = generics.[x.Reference].ToTuple() |> snd
-                          |> Seq.map(fun x-> textInline x.DisplayName :> ITextContent)
+              let types = generics.[x.Reference].ToTuple()
+                          |> snd
+                          |> Seq.map processResType
               m_creator.JoinTextContent(types, Environment.NewLine) |> Some
             else
               None

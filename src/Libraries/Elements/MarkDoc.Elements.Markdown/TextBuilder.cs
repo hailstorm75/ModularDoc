@@ -24,6 +24,6 @@ namespace MarkDoc.Elements.Markdown
     }
 
     public override string ToString()
-      => string.Join(Delimiter, Content.Select(x => x.ToString()));
+      => string.Join(Delimiter, Content.Select(x => x.ToString()).Where(x => !string.IsNullOrEmpty(x)));
   }
 }

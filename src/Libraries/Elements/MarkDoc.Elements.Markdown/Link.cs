@@ -20,6 +20,6 @@
     }
 
     public override string ToString()
-      => $"[{Content}]({Reference})";
+      => $"[{Content.ToString()}]({Reference})";
   }
 }

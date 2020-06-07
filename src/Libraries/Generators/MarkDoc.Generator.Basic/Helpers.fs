@@ -22,7 +22,7 @@ module internal Helpers =
     | IListTag.ListType.Number -> IList.ListType.Numbered
     | _ -> raise (Exception()) // TODO: Message
 
-  let argumeentTypeStr (arg : IArgument) =
+  let argumentTypeStr (arg : IArgument) =
     match arg.Keyword with
     | ArgumentType.In -> "in"
     | ArgumentType.Out -> "out"
@@ -46,16 +46,6 @@ module internal Helpers =
     | AccessorType.Protected -> "Protected"
     | AccessorType.Internal -> "Internal"
     | _ -> ""
-
-  let methodArguments (item : IMethod) =
-    let argument (arg : IArgument) =
-      seq [ argumeentTypeStr arg; arg.Type.DisplayName; arg.Name ]
-      |> Seq.filter (String.IsNullOrEmpty >> not)
-      |> partial String.Join " "
-
-    item.Arguments
-    |> Seq.map argument
-    |> partial String.Join ", "
 
   let groupMembers (members : seq<'M> when 'M :> IMember) =
     let byStatic(x : 'M) = not x.IsStatic

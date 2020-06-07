@@ -25,7 +25,11 @@ namespace MarkDoc.Elements.Markdown
 
     /// <inheritdoc cref="IElement" />
     public override string ToString()
-      => Style switch
+    {
+      if (string.IsNullOrEmpty(Content))
+        return string.Empty;
+
+      return Style switch
       {
         IText.TextStyle.Normal
           => Content.CleanInvalid(),
@@ -43,5 +47,6 @@ namespace MarkDoc.Elements.Markdown
             : $"**{Content}**",
         _ => throw new Exception() // TODO: Specify exception message
       };
+    }
   }
 }
