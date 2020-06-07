@@ -220,6 +220,7 @@ type TypePrinter(creator, resolver, linker) =
               |> Seq.where(fun x -> x.Name = method.Name)
               |> Seq.skip 1
               |> Seq.isEmpty
+              |> not
 
             let signature = seq [ textInline method.Name :> ITextContent; textNormal "(" :> ITextContent;  (if hasOverloads then textInline "..." :> ITextContent else (methodArguments method)); textNormal ")" :> ITextContent; ]
             let signatureText = m_creator.JoinTextContent(signature, "")
@@ -229,7 +230,7 @@ type TypePrinter(creator, resolver, linker) =
           |> Seq.map toElement
           |> Linq.ToReadOnlyCollection
 
-        let grouped = createContent(methodsArray, createRow)
+        let grouped = createContent(methodsArray |> Seq.distinctBy(fun x -> x.Name), createRow)
 
         if (Seq.isEmpty methods) then
           None
