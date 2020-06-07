@@ -159,30 +159,26 @@ type TypePrinter(creator, resolver, linker) =
     | Some x -> m_creator.JoinTextContent(seq [ name; tagShort x ], Environment.NewLine)
 
   let findTypeTag(input : IType, tag : ITag.TagType) =
-    let mutable typeDoc : IDocElement = null
-    if not (m_resolver.TryFindType(input, &typeDoc)) then
-      Seq.empty
-    else
-      let mutable result : IReadOnlyCollection<ITag> = null
-      if not (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
-        Seq.empty
-      else
-        result :> seq<ITag>
+    seq [
+      let mutable typeDoc : IDocElement = null
+      if (m_resolver.TryFindType(input, &typeDoc)) then
+        let mutable result : IReadOnlyCollection<ITag> = null
+        if (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
+          result
+    ]
+    |> Seq.collect id
 
   let findTag(input : IType, mem : IMember, tag : ITag.TagType) =
-    let mutable typeDoc : IDocElement = null
-    if not (m_resolver.TryFindType(input, &typeDoc)) then
-      Seq.empty
-    else
-      let mutable memberDoc : IDocMember = null
-      if not (typeDoc.Members.Value.TryGetValue(mem.RawName, &memberDoc)) then
-        Seq.empty
-      else
-        let mutable result : IReadOnlyCollection<ITag> = null
-        if not (memberDoc.Documentation.Tags.TryGetValue(tag, &result)) then
-          Seq.empty
-        else
-          result |> Seq.cast
+    seq [
+      let mutable typeDoc : IDocElement = null
+      if (m_resolver.TryFindType(input, &typeDoc)) then
+        let mutable memberDoc : IDocMember = null
+        if (typeDoc.Members.Value.TryGetValue(mem.RawName, &memberDoc)) then
+          let mutable result : IReadOnlyCollection<ITag> = null
+          if (memberDoc.Documentation.Tags.TryGetValue(tag, &result)) then
+            result
+    ]
+    |> Seq.collect id
 
   let printIntroduction(input : IType) =
     match findTypeTag(input, ITag.TagType.Summary) |> Seq.tryExactlyOne with
@@ -355,11 +351,24 @@ type TypePrinter(creator, resolver, linker) =
             else
               None
 
+          let getName (x : ITag) =
+            let result = seq [
+              yield textInline x.Reference :> ITextContent 
+              if (generics.ContainsKey(x.Reference)) then
+                let variance = generics.[x.Reference].ToTuple() |> fst
+                if (variance <> Enums.Variance.NonVariant) then
+                  yield variance |> varianceStr |> textInline :> ITextContent
+            ]
+            m_creator.JoinTextContent(result, " ") |> toElement
+
           let constraints = getConstraints x
-          if (Option.isSome constraints) then
-            seq [ textInline x.Reference |> toElement; tagShort x |> toElement; constraints |> Option.get |> toElement ]
-          else
-            seq [ textInline x.Reference |> toElement; tagShort x |> toElement; ]
+          seq [
+            yield getName x
+            yield tagShort x |> toElement
+
+            if (Option.isSome constraints) then
+              yield constraints |> Option.get |> toElement
+          ]
 
         if input :? IInterface then
           findTypeTag(input, ITag.TagType.Typeparam)
@@ -369,7 +378,7 @@ type TypePrinter(creator, resolver, linker) =
           None
 
       let ts = getTypeParams
-      if (Option.isSome ts) then
+      if (Option.isSome ts && ts |> (Option.get >> Seq.isEmpty >> not)) then
         seq [ m_creator.CreateTable(ts |> Option.get, seq [ "Type"; "Description"; "Constraints" ] |> createHeadings) |> toElement ] |> Some
       else
         None
@@ -389,7 +398,7 @@ type TypePrinter(creator, resolver, linker) =
     Some(sections)
 
   let printContent (input : IType) =
-    let createSection(x : seq<IElement>, y : string)=
+    let createSection(x : seq<IElement>, y : string) =
       m_creator.CreateSection(x, y, 1)
 
     seq [
