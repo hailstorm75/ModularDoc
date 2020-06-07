@@ -235,7 +235,12 @@ type TypePrinter(creator, resolver, linker) =
 
         let grouped = createContent(methodsArray, createRow)
 
-        m_creator.CreateTable(grouped, [ "Returns"; "Name" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
+        if (Seq.isEmpty methods) then
+          None
+        else
+          m_creator.CreateTable(grouped, [ "Returns"; "Name" ] |> createHeadings, sectionHeading isStatic accessor "methods", 3)
+          :> IElement
+          |> Some
 
       let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
         let createRow(property : IProperty) =
@@ -271,7 +276,12 @@ type TypePrinter(creator, resolver, linker) =
 
         let grouped = createContent(properties, createRow)
 
-        m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
+        if (Seq.isEmpty properties) then
+          None
+        else
+          m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
+          :> IElement
+          |> Some
 
       let processMembers item =
         item
@@ -282,18 +292,23 @@ type TypePrinter(creator, resolver, linker) =
         x
         |> groupMembers
         |> processMembers
-        |> Seq.map (f >> toElement)
-
-      let methods = createTable input.Methods createMethodSection
-      let properties = createTable input.Properties createPropertySection
+        |> Seq.map f
+        |> Seq.filter Option.isSome
 
       seq [
-        m_creator.CreateSection(methods, "Methods", 2) :> IElement;
-        m_creator.CreateSection(properties, "Properties", 2) :> IElement;
+        (createTable input.Methods createMethodSection, "Methods");
+        (createTable input.Properties createPropertySection, "Prroperties")
       ]
+      |> Seq.filter (fst >> Seq.isEmpty >> not)
+      |> Seq.map(fun x -> m_creator.CreateSection(x |> fst |> Seq.map Option.get, snd x, 2) |> toElement)
 
     match input with
-    | :? IInterface as x -> Some(processInterface x)
+    | :? IInterface as x ->
+      let result = processInterface x
+      if (Seq.isEmpty result) then
+        None
+      else
+        Some(result)
     | _ -> None
 
   let printDetailed(input : IType) =
