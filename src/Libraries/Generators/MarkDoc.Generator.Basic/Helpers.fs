@@ -11,6 +11,11 @@ module internal Helpers =
 
   let toElement x = x :> IElement 
 
+  let whereSome x =
+    x
+    |> Seq.filter Option.isSome
+    |> Seq.map Option.get
+
   let listType (t : IListTag.ListType) =
     match t with
     | IListTag.ListType.Bullet -> IList.ListType.Dotted

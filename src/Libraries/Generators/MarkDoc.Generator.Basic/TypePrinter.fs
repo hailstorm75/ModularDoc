@@ -3,7 +3,6 @@
 open System;
 open MarkDoc.Generator;
 open MarkDoc.Members;
-open MarkDoc.Members.Enums;
 open MarkDoc.Elements;
 open MarkDoc.Documentation;
 open MarkDoc.Linkers;
@@ -35,8 +34,8 @@ type TypePrinter(creator, resolver, linker) =
     let processColumn(column : seq<IContent>) =
       column
       |> Seq.map processContent
-      |> Seq.filter Option.isSome
-      |> Seq.map (Option.get >> toElement)
+      |> whereSome
+      |> Seq.map toElement
 
     match item with
     | :? ITextTag as text -> Some(textNormal text.Content |> toElement)
@@ -62,8 +61,7 @@ type TypePrinter(creator, resolver, linker) =
                       |> Seq.map (processColumn >> Linq.ToReadOnlyCollection)
         let headings = list.Headings
                        |> Seq.map processContent
-                       |> Seq.filter Option.isSome
-                       |> Seq.map Option.get
+                       |> whereSome
                        |> Seq.filter(fun x-> x :? IText)
                        |> Seq.map(fun x -> x :?> IText)
         Some(m_creator.CreateTable(content, headings) |> toElement)
@@ -71,8 +69,7 @@ type TypePrinter(creator, resolver, linker) =
         let content = list.Rows
                       |> Seq.collect id
                       |> Seq.map processContent
-                      |> Seq.filter Option.isSome
-                      |> Seq.map Option.get
+                      |> whereSome
 
         Some(m_creator.CreateList(content, listType list.Type) |> toElement)
     | _ -> None
@@ -100,8 +97,7 @@ type TypePrinter(creator, resolver, linker) =
                     |> Seq.map processContent
     let content = seq [readMore]
                   |> Seq.append processed
-                  |> Seq.filter Option.isSome
-                  |> Seq.map Option.get
+                  |> whereSome
                   |> Seq.filter(fun x -> x :? ITextContent)
                   |> Seq.map(fun x -> x :?> ITextContent)
 
@@ -110,8 +106,7 @@ type TypePrinter(creator, resolver, linker) =
   let tagFull (x : ITag) =
     let content = x.Content
                   |> Seq.map processContent
-                  |> Seq.filter Option.isSome
-                  |> Seq.map Option.get
+                  |> whereSome
 
     let list = new LinkedList<ITextContent>()
     let result = seq [
@@ -284,6 +279,29 @@ type TypePrinter(creator, resolver, linker) =
       else
         tag |> Option.get |> tagFull |> Some
 
+    let inheritance =
+      let getInterfaces (x : 'M when 'M :> IInterface) =
+        x.InheritedInterfaces
+        |> Seq.map(fun x -> textInline x.DisplayName |> toElement)
+
+      let createList l = 
+        if (Seq.isEmpty l) then
+          None
+        else
+          seq [ m_creator.CreateList(l, IList.ListType.Dotted) |> toElement ] |> Some
+
+      match input with
+      | :? IClass as x ->
+        let baseType = if (isNull x.BaseClass) then None else x.BaseClass.DisplayName |> textInline |> toElement |> Some
+        let interfaces = getInterfaces x
+        seq [ baseType ]
+        |> whereSome
+        |> Seq.append interfaces
+        |> createList
+      | :? IInterface as x ->
+        x |> (getInterfaces >> createList)
+      | _ -> None
+
     let typeParams = 
       let getTypeParams = 
         let generics = (input :?> IInterface).Generics
@@ -321,6 +339,7 @@ type TypePrinter(creator, resolver, linker) =
         (single ITag.TagType.Remarks, "Remarks");
         (single ITag.TagType.Example, "Example");
         (typeParams, "Generic types");
+        (inheritance, "Inheritance");
         (single ITag.TagType.Seealso, "See also")
       ]
       |> Seq.filter (fst >> Option.isSome)
@@ -335,7 +354,7 @@ type TypePrinter(creator, resolver, linker) =
     seq [
       (printIntroduction input, "Description");
       (printMemberTables input, "Members");
-      (printDetailed input, "Detailed description")
+      (printDetailed input, "Details")
     ]
     |> Seq.filter (fst >> Option.isSome)
     |> Seq.map (fun x -> (x |> fst |> Option.get, x |> snd))
