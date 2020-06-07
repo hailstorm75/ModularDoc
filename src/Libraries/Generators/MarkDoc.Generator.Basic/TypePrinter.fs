@@ -297,7 +297,7 @@ type TypePrinter(creator, resolver, linker) =
 
       seq [
         (createTable input.Methods createMethodSection, "Methods");
-        (createTable input.Properties createPropertySection, "Prroperties")
+        (createTable input.Properties createPropertySection, "Properties")
       ]
       |> Seq.filter (fst >> Seq.isEmpty >> not)
       |> Seq.map(fun x -> m_creator.CreateSection(x |> fst |> Seq.map Option.get, snd x, 2) |> toElement)
