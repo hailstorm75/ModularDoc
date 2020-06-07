@@ -284,8 +284,6 @@ type TypePrinter(creator, resolver, linker) =
       else
         tag |> Option.get |> tagFull |> Some
 
-    //let seeAlso = m_creator.CreateList(multiple ITag.TagType.Seealso, "See also", 2) |> toElement
-
     let typeParams = 
       let getTypeParams = 
         let generics = (input :?> IInterface).Generics
@@ -322,7 +320,8 @@ type TypePrinter(creator, resolver, linker) =
         (single ITag.TagType.Summary, "Summary");
         (single ITag.TagType.Remarks, "Remarks");
         (single ITag.TagType.Example, "Example");
-        (typeParams, "Generic types")
+        (typeParams, "Generic types");
+        (single ITag.TagType.Seealso, "See also")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
