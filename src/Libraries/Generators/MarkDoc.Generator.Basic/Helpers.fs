@@ -48,7 +48,7 @@ module internal Helpers =
     | _ -> ""
 
   let groupMembers (members : seq<'M> when 'M :> IMember) =
-    let byStatic(x : 'M) = not x.IsStatic
+    let byStatic(x : 'M) = x.IsStatic
     let byAccessor (x : bool * seq<'M>) = (fst x, snd x |> Seq.groupBy(fun y -> y.Accessor))
 
     members
