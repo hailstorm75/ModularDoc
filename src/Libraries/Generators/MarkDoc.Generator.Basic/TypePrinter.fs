@@ -26,6 +26,32 @@ type TypePrinter(creator, resolver, linker) =
   let createHeadings headings =
     headings |> Seq.map textNormal
 
+  let getTypeName (input : IType) =
+    let joinGenerics (i : seq<string>) =
+      let generics = i |> partial String.Join ", "
+      "<" + generics + ">"
+    let processInterface (input : IInterface) =
+      let generics =
+        input.Generics
+        |> Seq.map (fun x -> (x.Value.ToTuple() |> fst |> varianceStr) + " " + x.Key)
+      if not (Seq.isEmpty generics) then
+        input.Name + joinGenerics generics
+      else
+        input.Name
+    let processClass (input : IClass) =
+      let generics =
+        input.Generics
+        |> Seq.map (fun x -> x.Key)
+      if not (Seq.isEmpty generics) then
+        input.Name + joinGenerics generics
+      else
+        input.Name
+
+    match input with
+    | :? IClass as x -> processClass x
+    | :? IInterface as x -> processInterface x
+    | _ -> input.Name
+
   let processResType (item : IResType) =
     let tryLink (item : IResType) =
       let link = m_linker.CreateLink(item)
@@ -241,14 +267,6 @@ type TypePrinter(creator, resolver, linker) =
 
       let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
         let createRow(property : IProperty) =
-          let processType =
-            let content = textInline property.Type.DisplayName
-            let link = m_linker.CreateLink(property.Type)
-            if (String.IsNullOrEmpty link) then
-              content :> ITextContent
-            else
-              m_creator.CreateLink(content, link) :> ITextContent
-
           let processName =
             let name = textInline property.Name :> ITextContent
             memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
@@ -267,7 +285,7 @@ type TypePrinter(creator, resolver, linker) =
 
             m_creator.JoinTextContent(Seq.append getter setter, " ")
 
-          seq [ processType; processName; processMethods ]
+          seq [ processResType property.Type; processName; processMethods ]
           |> Seq.map toElement
           |> Linq.ToReadOnlyCollection
 
@@ -410,32 +428,6 @@ type TypePrinter(creator, resolver, linker) =
     |> Seq.filter (fst >> Option.isSome)
     |> Seq.map (fun x -> (x |> fst |> Option.get, x |> snd))
     |> Seq.map (createSection >> toElement)
-
-  let getTypeName (input : IType) =
-    let joinGenerics (i : seq<string>) =
-      let generics = i |> partial String.Join ", "
-      "<" + generics + ">"
-    let processInterface (input : IInterface) =
-      let generics =
-        input.Generics
-        |> Seq.map (fun x -> (x.Value.ToTuple() |> fst |> varianceStr) + " " + x.Key)
-      if not (Seq.isEmpty generics) then
-        input.Name + joinGenerics generics
-      else
-        input.Name
-    let processClass (input : IClass) =
-      let generics =
-        input.Generics
-        |> Seq.map (fun x -> x.Key)
-      if not (Seq.isEmpty generics) then
-        input.Name + joinGenerics generics
-      else
-        input.Name
-
-    match input with
-    | :? IClass as x -> processClass x
-    | :? IInterface as x -> processInterface x
-    | _ -> input.Name
 
   interface ITypePrinter with
     member __.Print(input : IType) =
