@@ -224,6 +224,39 @@ type TypePrinter(creator, resolver, linker) =
         |> Seq.collect snd
         |> Seq.map newRow
 
+      let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
+        let createRow(property : IProperty) =
+          let processName =
+            let name = textInline property.Name :> ITextContent
+            memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+
+          let processMethods =
+            let getter =
+              if property.GetAccessor.HasValue then
+                seq [ textInline "get" :> ITextContent ]
+              else
+                Seq.empty
+            let setter =
+              if property.SetAccessor.HasValue then
+                seq [ textInline "set" :> ITextContent ]
+              else
+                Seq.empty
+
+            m_creator.JoinTextContent(Seq.append getter setter, " ")
+
+          seq [ processResType property.Type; processName; processMethods ]
+          |> Seq.map toElement
+          |> Linq.ToReadOnlyCollection
+
+        let grouped = createContent(properties, createRow)
+
+        if (Seq.isEmpty properties) then
+          None
+        else
+          m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
+          :> IElement
+          |> Some
+
       let createMethodSection(isStatic, accessor, methods : seq<IMethod>) =
         let methodsArray = methods |> Seq.toArray
 
@@ -265,39 +298,6 @@ type TypePrinter(creator, resolver, linker) =
           :> IElement
           |> Some
 
-      let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
-        let createRow(property : IProperty) =
-          let processName =
-            let name = textInline property.Name :> ITextContent
-            memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
-
-          let processMethods =
-            let getter =
-              if property.GetAccessor.HasValue then
-                seq [ textInline "get" :> ITextContent ]
-              else
-                Seq.empty
-            let setter =
-              if property.SetAccessor.HasValue then
-                seq [ textInline "set" :> ITextContent ]
-              else
-                Seq.empty
-
-            m_creator.JoinTextContent(Seq.append getter setter, " ")
-
-          seq [ processResType property.Type; processName; processMethods ]
-          |> Seq.map toElement
-          |> Linq.ToReadOnlyCollection
-
-        let grouped = createContent(properties, createRow)
-
-        if (Seq.isEmpty properties) then
-          None
-        else
-          m_creator.CreateTable(grouped, [ "Type"; "Name"; "Methods" ] |> createHeadings, sectionHeading isStatic accessor "properties", 3)
-          :> IElement
-          |> Some
-
       let processMembers item =
         item
         |> Seq.map flatten
@@ -311,8 +311,8 @@ type TypePrinter(creator, resolver, linker) =
         |> Seq.filter Option.isSome
 
       seq [
+        (createTable input.Properties createPropertySection, "Properties");
         (createTable input.Methods createMethodSection, "Methods");
-        (createTable input.Properties createPropertySection, "Properties")
       ]
       |> Seq.filter (fst >> Seq.isEmpty >> not)
       |> Seq.map(fun x -> m_creator.CreateSection(x |> fst |> Seq.map Option.get, snd x, 2) |> toElement)
@@ -333,6 +333,43 @@ type TypePrinter(creator, resolver, linker) =
         None
       else
         tag |> Option.get |> tagFull |> Some
+
+    let nested =
+      let getNested (x : IInterface) =
+        x.NestedTypes
+
+      let groupByType (x : IType) =
+        match x with
+        | :? IClass
+          -> "c" |> Some
+        | :? IInterface
+          -> "i" |> Some
+        | :? IEnum
+          -> "e" |> Some
+        | _ -> None
+
+      let processGroup (x : string option * seq<IType>) =
+        let createTable (heading : string, group : seq<IType>) =
+          m_creator.CreateList(group |> Seq.map (getTypeName >> textInline >> toElement), IList.ListType.Dotted, heading, 3)
+          |> toElement
+          |> Some
+
+        match x |> (fst >> Option.get) with
+        | "c" -> createTable("Classes", snd x)
+        | "i" -> createTable("Interfaces", snd x)
+        | "e" -> createTable("Enums", snd x)
+        | _ -> None
+        
+      match input with
+      | :? IInterface as x ->
+           x
+           |> getNested
+           |> Seq.groupBy groupByType
+           |> Seq.filter (fst >> Option.isSome)
+           |> Seq.map processGroup
+           |> whereSome
+           |> Some
+      | _ -> None
 
     let inheritance =
       let getInterfaces (x : 'M when 'M :> IInterface) =
@@ -409,6 +446,7 @@ type TypePrinter(creator, resolver, linker) =
         (single ITag.TagType.Example, "Example");
         (typeParams, "Generic types");
         (inheritance, "Inheritance");
+        (nested, "Nested types")
         (single ITag.TagType.Seealso, "See also")
       ]
       |> Seq.filter (fst >> Option.isSome)
