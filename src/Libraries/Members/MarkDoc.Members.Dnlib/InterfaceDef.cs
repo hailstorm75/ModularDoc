@@ -12,59 +12,28 @@ namespace MarkDoc.Members.Dnlib
 {
   [DebuggerDisplay(nameof(InterfaceDef) + (": {" + nameof(Name) + "}"))]
   public class InterfaceDef
-    : TypeDef, IInterface
+    : StructDef, IInterface
   {
     #region Properties
 
     /// <inheritdoc />
     public IReadOnlyCollection<IResType> InheritedInterfaces { get; }
 
-    /// <inheritdoc />
-    public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IType> NestedTypes { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IEvent> Events { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IMethod> Methods { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IProperty> Properties { get; }
-
     #endregion
 
     /// <summary>
     /// Default constructor
     /// </summary>
+    /// <param name="resolver">Type resolver instance</param>
+    /// <param name="source">Type source</param>
+    /// <param name="parent">Nested type parent</param>
     internal InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(resolver, source, parent)
+      : base(resolver, source, parent, ResolveGenerics(resolver, source, parent, out var generics))
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
 
-      var generics = source.ResolveTypeGenerics();
       InheritedInterfaces = ResolveInterfaces(source, generics).ToReadOnlyCollection();
-      NestedTypes = source.NestedTypes.Where(x => !x.Name.String.StartsWith('<'))
-                                      .Select(x => Resolver.ResolveType(x, source))
-                                      .ToReadOnlyCollection();
-      Generics = source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
-                                         .ToDictionary(x => x.Name.String, x => ResolveParameter(x, generics));
-
-      Methods = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
-                                       && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                                       && !x.Access.HasFlag(MethodAttributes.Assembly)
-                                       && !x.IsPrivate
-                                       && !x.IsConstructor)
-                              .Select(x => new MethodDef(resolver, x))
-                              .ToReadOnlyCollection();
-      Properties = source.Properties.Select(x => PropertyDef.Initialize(resolver, x))
-                                    .WhereNotNull()
-                                    .ToReadOnlyCollection();
-      Events = source.Events.Select(x => new EventDef(resolver, x))
-                            .ToReadOnlyCollection();
     }
 
     #region Methods
@@ -72,27 +41,35 @@ namespace MarkDoc.Members.Dnlib
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(x => Resolver.Resolve(x.Interface.ToTypeSig(), outerArgs));
 
-    private (Variance, IReadOnlyCollection<IResType>) ResolveParameter(GenericParam parameter, IReadOnlyDictionary<string, string> generics)
+    private static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, out IReadOnlyDictionary<string, string> generics)
     {
-      var variance = ResolveVariance(parameter.Variance);
+      IResType ResolveType(GenericParamConstraint x, IReadOnlyDictionary<string, string> generics)
+        => resolver.Resolve(x.Constraint.ToTypeSig(), generics) ?? throw new Exception();
 
-      if (!parameter.HasGenericParamConstraints)
-        return (variance, Enumerable.Empty<IResType>().ToArray());
-
-      return (variance, parameter.GenericParamConstraints.Select(x => ResolveType(x, generics)).ToReadOnlyCollection());
-    }
-
-    private IResType ResolveType(GenericParamConstraint x, IReadOnlyDictionary<string, string> generics)
-      => Resolver.Resolve(x.Constraint.ToTypeSig(), generics) ?? throw new Exception();
-
-    private static Variance ResolveVariance(GenericParamAttributes attributes)
-      => attributes switch
+      (Variance, IReadOnlyCollection<IResType>) ResolveParameter(GenericParam parameter, IReadOnlyDictionary<string, string> generics)
       {
-        GenericParamAttributes.NonVariant => Variance.NonVariant,
-        GenericParamAttributes.Covariant => Variance.Covariant,
-        GenericParamAttributes.Contravariant => Variance.Contravariant,
-        _ => throw new NotSupportedException(Resources.varianceInvalid),
-      };
+        var variance = ResolveVariance(parameter.Variance);
+
+        if (!parameter.HasGenericParamConstraints)
+          return (variance, Enumerable.Empty<IResType>().ToArray());
+
+        return (variance, parameter.GenericParamConstraints.Select(x => ResolveType(x, generics)).ToReadOnlyCollection());
+      }
+
+      static Variance ResolveVariance(GenericParamAttributes attributes)
+        => attributes switch
+        {
+          GenericParamAttributes.NonVariant => Variance.NonVariant,
+          GenericParamAttributes.Covariant => Variance.Covariant,
+          GenericParamAttributes.Contravariant => Variance.Contravariant,
+          _ => throw new NotSupportedException(Resources.varianceInvalid),
+        };
+
+      var result = source.ResolveTypeGenerics();
+      generics = result;
+      return source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
+                                     .ToDictionary(x => x.Name.String, x => ResolveParameter(x, result));
+    }
 
     #endregion
   }
