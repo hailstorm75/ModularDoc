@@ -31,17 +31,17 @@ namespace MarkDoc.Elements.Markdown
 
       return Style switch
       {
-        IText.TextStyle.Normal
+        TextStyle.Normal
           => Content.CleanInvalid(),
-        IText.TextStyle.CodeInline
+        TextStyle.CodeInline
           => $"`{Content}`",
-        IText.TextStyle.Code
+        TextStyle.Code
           => $"```csharp{Environment.NewLine}{Content}{Environment.NewLine}```",
-        IText.TextStyle.Italic
+        TextStyle.Italic
           => Content.CleanInvalid().Any(x => x.Equals('*'))
             ? $"_{Content}_"
             : $"*{Content}*",
-        IText.TextStyle.Bold
+        TextStyle.Bold
           => Content.CleanInvalid().Any(x => x.Equals('*'))
             ? $"__{Content}__"
             : $"**{Content}**",

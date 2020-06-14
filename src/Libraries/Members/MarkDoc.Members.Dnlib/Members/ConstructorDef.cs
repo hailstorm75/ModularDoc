@@ -49,7 +49,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = name;
       IsStatic = source.IsStatic;
       Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x, generics)).ToReadOnlyCollection();
-      RawName = $"{(source.IsConstructor ? "#ctor" : Name)}({string.Join(",", Arguments.Select(x => x.Type.DocumentationName))})";
+      RawName = $"{(source.IsConstructor ? "#ctor" : name)}({string.Join(",", Arguments.Select(x => x.Type.DocumentationName))})";
       Accessor = ResolveAccessor(source);
     }
 

@@ -17,7 +17,7 @@ namespace MarkDoc.Documentation.Xml
   {
     #region Fields
 
-    private static readonly Cache m_documentation = new Cache();
+    private static readonly Cache DOCUMENTATION = new Cache();
     private readonly IResolver m_typeResolver;
 
     #endregion
@@ -30,23 +30,15 @@ namespace MarkDoc.Documentation.Xml
     /// <inheritdoc />
     public async Task Resolve(string path)
     {
-      static (A?, B?) Update<A, B>((A? a, B? b) existing, (A? a, B? b) toAdd)
-        where A : class
-        where B : class
+      static (TA?, TB?) Update<TA, TB>((TA? a, TB? b) existing, (TA? a, TB? b) toAdd)
+        where TA : class
+        where TB : class
         => (existing.a ?? toAdd.a, existing.b ?? toAdd.b);
 
       void CacheType(string key, XElement element)
       {
-        if (m_documentation.ContainsKey(key))
-        {
-          var (type, _) = m_documentation[key];
-          type = new DocElement(key, element, this, m_typeResolver);
-        }
-        else
-        {
-          var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
-          m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
-        }
+        var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
+        DOCUMENTATION.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
       }
 
       static string RetrieveName(XElement element)
@@ -79,14 +71,14 @@ namespace MarkDoc.Documentation.Xml
           }
 
           var toAdd = new DocMember(ProcessName(key, name), key[0], element);
-          if (m_documentation.ContainsKey(key))
-            m_documentation[key].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
+          if (DOCUMENTATION.ContainsKey(key))
+            DOCUMENTATION[key].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
           else
           {
             var dict = new ConcurrentDictionary<string, IDocMember>();
             dict.TryAdd(ProcessName(key, name), toAdd);
 
-            m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
+            DOCUMENTATION.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
           }
         }
 
@@ -139,13 +131,13 @@ namespace MarkDoc.Documentation.Xml
 
       resultType = null;
 
-      if (!m_documentation.TryGetValue(type.RawName, out var value))
+      if (!DOCUMENTATION.TryGetValue(type.RawName, out var value))
         return false;
 
       if (value.type is null)
       {
         var doc = new DocElement(type.RawName, this, m_typeResolver);
-        m_documentation.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));
+        DOCUMENTATION.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));
 
         resultType = doc;
       }
@@ -159,7 +151,7 @@ namespace MarkDoc.Documentation.Xml
     {
       resultMembers = null;
 
-      if (!m_documentation.TryGetValue(type, out var value))
+      if (!DOCUMENTATION.TryGetValue(type, out var value))
         return false;
 
       resultMembers = value.members;

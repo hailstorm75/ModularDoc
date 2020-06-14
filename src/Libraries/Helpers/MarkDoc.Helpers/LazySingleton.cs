@@ -15,17 +15,17 @@ namespace MarkDoc.Helpers
     /// <summary>
     /// Interlocked maximum initialized number
     /// </summary>
-    private const int m_maxInitializedCount = 1;
+    private const int MAX_INITIALIZED_COUNT = 1;
 
     /// <summary>
     /// Lazily creates instance
     /// </summary>
-    private static readonly Lazy<T> m_lazyInstance = new Lazy<T>(() => new T(), LazyThreadSafetyMode.PublicationOnly);
+    private static readonly Lazy<T> LAZY_INSTANCE = new Lazy<T>(() => new T(), LazyThreadSafetyMode.PublicationOnly);
 
     /// <summary>
     /// Current initialized count number
     /// </summary>
-    private int m_currentInitializedCount = 0;
+    private int m_currentInitializedCount;
 
     #endregion
 
@@ -36,7 +36,7 @@ namespace MarkDoc.Helpers
     /// Lazy instance
     /// </summary>
     public static T Instance
-      => m_lazyInstance.Value;
+      => LAZY_INSTANCE.Value;
 #pragma warning restore CA1000 // Do not declare static members on generic types
 
     #endregion
@@ -48,7 +48,7 @@ namespace MarkDoc.Helpers
 
     private void Initialization()
     {
-      if (m_maxInitializedCount == Interlocked.Add(ref m_currentInitializedCount, m_maxInitializedCount))
+      if (MAX_INITIALIZED_COUNT == Interlocked.Add(ref m_currentInitializedCount, MAX_INITIALIZED_COUNT))
         InitialInConstructor();
     }
 

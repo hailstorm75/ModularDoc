@@ -51,10 +51,9 @@ namespace MarkDoc.Members.Dnlib.Types
       {
         var variance = ResolveVariance(parameter.Variance);
 
-        if (!parameter.HasGenericParamConstraints)
-          return (variance, Enumerable.Empty<IResType>().ToArray());
-
-        return (variance, parameter.GenericParamConstraints.Select(x => ResolveType(x, generics)).ToReadOnlyCollection());
+        return !parameter.HasGenericParamConstraints
+          ? (variance, Enumerable.Empty<IResType>().ToArray())
+          : (variance, parameter.GenericParamConstraints.Select(x => ResolveType(x, generics)).ToReadOnlyCollection());
       }
 
       static Variance ResolveVariance(GenericParamAttributes attributes)
@@ -68,6 +67,7 @@ namespace MarkDoc.Members.Dnlib.Types
 
       var result = source.ResolveTypeGenerics();
       generics = result;
+
       return source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
                                      .ToDictionary(x => x.Name.String, x => ResolveParameter(x, result));
     }

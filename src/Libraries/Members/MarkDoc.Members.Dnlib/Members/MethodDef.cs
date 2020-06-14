@@ -55,9 +55,9 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       isOperator = true;
 
-      string Pass(ref bool isOperator)
+      string Pass(ref bool @operator)
       {
-        isOperator = false;
+        @operator = false;
         return name;
       }
 

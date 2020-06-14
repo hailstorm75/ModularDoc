@@ -142,7 +142,8 @@ namespace MarkDoc.Documentation.Xml
         ? new[] { classDef.BaseClass.Reference.Value }
         : Enumerable.Empty<IType>();
 
-      var sources = type.InheritedInterfaces.Select(x => x.Reference.Value)
+      var sources = type.InheritedInterfaces
+        .Select(x => x.Reference.Value)
         .WhereNotNull()
         .Concat(baseClass)
         .OfType<IInterface>()
@@ -162,13 +163,15 @@ namespace MarkDoc.Documentation.Xml
       var withReferencesTable = memberDocs
         .Where(x => x.Value.Documentation.HasInheritDoc && !string.IsNullOrEmpty(x.Value.Documentation.InheritDocRef))
         .ToLookup(ProcessReferences, x => x.Key);
-      var withReferences = withReferencesTable.SelectMany(Linq.GroupValues).ToReadOnlyCollection();
+      var withReferences = withReferencesTable
+        .SelectMany(Linq.GroupValues)
+        .ToReadOnlyCollection();
 
-      foreach (var source in sources)
+      foreach (var (key, value) in sources)
       {
-        if (!docResolver.TryFindType(source.Value, out var sourceType) || sourceType is null) continue;
+        if (!docResolver.TryFindType(value, out var sourceType) || sourceType is null) continue;
 
-        CacheTags(names.Except(withReferences.Except(withReferencesTable[source.Key])), sourceType.Members.Value);
+        CacheTags(names.Except(withReferences.Except(withReferencesTable[key])), sourceType.Members.Value);
       }
     }
 

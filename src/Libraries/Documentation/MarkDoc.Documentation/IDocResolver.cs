@@ -1,5 +1,4 @@
-﻿using MarkDoc.Members;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MarkDoc.Members.Types;
 
 namespace MarkDoc.Documentation

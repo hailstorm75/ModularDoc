@@ -117,6 +117,6 @@ namespace MarkDoc.Helpers
     /// <returns>Filtered enumeration</returns>
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> input)
       where T : class
-      => input.Where(x => x != null).Cast<T>();
+      => input.Where(x => x != null)!;
   }
 }

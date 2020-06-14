@@ -8,14 +8,14 @@ namespace MarkDoc.Members.Dnlib
 {
   public static class GenericsHelper
   {
-    public static IReadOnlyDictionary<string, string> ResolveMethodGenerics(this dnlib.DotNet.MethodDef source)
+    public static IReadOnlyDictionary<string, string> ResolveMethodGenerics(this MethodDef source)
     {
-      static IEnumerable<(string type, string name)> ResolveParentTypeGenerics(dnlib.DotNet.MethodDef source)
+      static IEnumerable<(string type, string name)> ResolveParentTypeGenerics(MethodDef source)
         => GetGenericArguments(source.DeclaringType)
-          .DistinctBy(x => x.Name)
-          .Select((x, i) => (x.Name.String, $"`{i}"));
+            .DistinctBy(x => x.Name)
+            .Select((x, i) => (x.Name.String, $"`{i}"));
 
-      static IEnumerable<(string type, string name)> ResolveTypeGenerics(dnlib.DotNet.MethodDef source)
+      static IEnumerable<(string type, string name)> ResolveTypeGenerics(MethodDef source)
         => source.GenericParameters.Select((x, i) => (x.Name.String, $"``{i}"));
 
       if (source is null)
@@ -23,10 +23,11 @@ namespace MarkDoc.Members.Dnlib
 
       var outerArgs = ResolveParentTypeGenerics(source);
       var thisArgs = ResolveTypeGenerics(source);
+
       return outerArgs.Concat(thisArgs).ToDictionary(x => x.type, x => x.name);
     }
 
-    public static IReadOnlyDictionary<string, string> ResolvePropertyGenerics(this dnlib.DotNet.PropertyDef source, IReadOnlyCollection<dnlib.DotNet.MethodDef> methods)
+    public static IReadOnlyDictionary<string, string> ResolvePropertyGenerics(this PropertyDef source, IReadOnlyCollection<MethodDef> methods)
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
@@ -41,7 +42,7 @@ namespace MarkDoc.Members.Dnlib
       return outerArgs.Concat(thisArgs).ToDictionary(x => x.Type.String, x => x.Name);
     }
 
-    public static IReadOnlyDictionary<string, string> ResolveTypeGenerics(this dnlib.DotNet.TypeDef source)
+    public static IReadOnlyDictionary<string, string> ResolveTypeGenerics(this TypeDef source)
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
@@ -52,7 +53,7 @@ namespace MarkDoc.Members.Dnlib
         .ToDictionary(x => x.Type.String, x => x.Name);
     }
 
-    private static IEnumerable<GenericParam> GetGenericArguments(dnlib.DotNet.TypeDef? type)
+    private static IEnumerable<GenericParam> GetGenericArguments(TypeDef? type)
     {
       if (type is null)
         yield break;
