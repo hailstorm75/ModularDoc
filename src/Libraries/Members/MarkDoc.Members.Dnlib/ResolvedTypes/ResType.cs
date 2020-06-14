@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using dnlib.DotNet;
 using MarkDoc.Members.ResolvedTypes;
+using IType = MarkDoc.Members.Types.IType;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {

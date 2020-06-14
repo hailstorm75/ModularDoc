@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Types
 {
   /// <summary>
   /// Interface for enums 

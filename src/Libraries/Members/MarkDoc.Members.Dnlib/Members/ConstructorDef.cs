@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using MarkDoc.Members.Enums;
+using System.Linq;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Members
 {
   [DebuggerDisplay(nameof(ConstructorDef) + (": {" + nameof(Name) + "}"))]
   public class ConstructorDef

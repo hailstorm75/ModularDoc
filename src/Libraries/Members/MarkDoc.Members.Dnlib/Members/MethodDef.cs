@@ -1,13 +1,14 @@
-﻿using MarkDoc.Members.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Members
 {
   [DebuggerDisplay(nameof(MethodDef) + (": {" + nameof(Name) + "}"))]
   public class MethodDef

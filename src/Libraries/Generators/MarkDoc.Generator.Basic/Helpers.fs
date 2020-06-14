@@ -1,9 +1,9 @@
 namespace MarkDoc.Generator.Basic
 open MarkDoc.Members.Enums
-open MarkDoc.Members
 open MarkDoc.Elements
 open System
 open MarkDoc.Documentation.Tags
+open MarkDoc.Members.Members
 
 module internal Helpers =
 

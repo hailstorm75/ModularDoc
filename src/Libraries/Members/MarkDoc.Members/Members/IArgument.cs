@@ -1,7 +1,7 @@
 ﻿using MarkDoc.Members.Enums;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Members
 {
   /// <summary>
   /// Interface for <see cref="IMethod"/> arguments

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MarkDoc.Members.ResolvedTypes;
+using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members
 {

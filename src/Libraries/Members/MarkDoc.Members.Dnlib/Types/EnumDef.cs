@@ -1,10 +1,11 @@
-﻿using MarkDoc.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using MarkDoc.Helpers;
+using MarkDoc.Members.Types;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Types
 {
   [DebuggerDisplay(nameof(EnumDef) + (": {" + nameof(Name) + "}"))]
   public class EnumDef

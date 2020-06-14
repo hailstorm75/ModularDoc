@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using MarkDoc.Members.ResolvedTypes;
+using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {

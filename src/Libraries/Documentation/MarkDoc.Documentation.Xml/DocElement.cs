@@ -6,6 +6,7 @@ using System.Linq;
 using MarkDoc.Documentation.Tags;
 using MarkDoc.Members;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Types;
 using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml

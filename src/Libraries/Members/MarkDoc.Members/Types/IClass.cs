@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Types
 {
   /// <summary>
   /// Interface for classes

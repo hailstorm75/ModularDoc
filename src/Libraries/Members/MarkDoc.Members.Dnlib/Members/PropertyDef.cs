@@ -1,11 +1,12 @@
-﻿using MarkDoc.Members.Enums;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Members
 {
   [DebuggerDisplay(nameof(PropertyDef) + (": {" + nameof(Name) + "}"))]
   public class PropertyDef

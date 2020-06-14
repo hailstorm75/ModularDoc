@@ -1,7 +1,8 @@
-﻿using MarkDoc.Members.Enums;
-using System;
+﻿using System;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Members
 {
   public abstract class MemberDef
     : IMember

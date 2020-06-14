@@ -1,8 +1,9 @@
-﻿using MarkDoc.Members.Enums;
+﻿using System.Collections.Generic;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
-using System.Collections.Generic;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Types
 {
   /// <summary>
   /// Interface for struct types

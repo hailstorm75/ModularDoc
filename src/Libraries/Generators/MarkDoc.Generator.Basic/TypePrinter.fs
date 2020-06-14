@@ -11,6 +11,8 @@ open MarkDoc.Documentation.Tags
 open System.Collections.Generic
 open Helpers
 open MarkDoc.Members.ResolvedTypes
+open MarkDoc.Members.Types
+open MarkDoc.Members.Members
 
 type TypePrinter(creator, resolver, linker) =
   let m_creator  : IElementCreator = creator

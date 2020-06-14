@@ -1,6 +1,6 @@
 ﻿using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Members
 {
   /// <summary>
   /// Interface for events

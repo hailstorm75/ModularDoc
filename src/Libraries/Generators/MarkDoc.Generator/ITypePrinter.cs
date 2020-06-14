@@ -1,5 +1,6 @@
 ﻿using MarkDoc.Elements;
 using MarkDoc.Members;
+using MarkDoc.Members.Types;
 
 namespace MarkDoc.Generator
 {

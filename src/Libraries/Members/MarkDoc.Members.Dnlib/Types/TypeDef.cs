@@ -1,8 +1,9 @@
-﻿using dnlib.DotNet;
+﻿using System;
+using dnlib.DotNet;
 using MarkDoc.Members.Enums;
-using System;
+using IType = MarkDoc.Members.Types.IType;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Types
 {
   public abstract class TypeDef
     : IType

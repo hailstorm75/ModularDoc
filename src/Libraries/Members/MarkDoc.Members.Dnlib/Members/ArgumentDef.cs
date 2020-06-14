@@ -1,11 +1,12 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Members.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using dnlib.DotNet;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Members
 {
   [DebuggerDisplay(nameof(ArgumentDef) + (": {" + nameof(Name) + "}"))]
   public class ArgumentDef

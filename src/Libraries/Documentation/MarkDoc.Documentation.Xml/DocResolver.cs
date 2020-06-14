@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using MarkDoc.Members.Types;
 using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type, System.Collections.Concurrent.ConcurrentDictionary<string, MarkDoc.Documentation.IDocMember>? members)>;
 
 namespace MarkDoc.Documentation.Xml

@@ -1,13 +1,20 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Helpers;
-using MarkDoc.Members.Enums;
-using MarkDoc.Members.ResolvedTypes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using dnlib.DotNet;
+using MarkDoc.Helpers;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
+using MarkDoc.Members.ResolvedTypes;
+using MarkDoc.Members.Types;
+using EventDef = MarkDoc.Members.Dnlib.Members.EventDef;
+using IMethod = MarkDoc.Members.Members.IMethod;
+using IType = MarkDoc.Members.Types.IType;
+using MethodDef = MarkDoc.Members.Dnlib.Members.MethodDef;
+using PropertyDef = MarkDoc.Members.Dnlib.Members.PropertyDef;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Types
 {
   [DebuggerDisplay(nameof(StructDef) + ": {" + nameof(Name) + "}")]
   public class StructDef

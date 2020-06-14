@@ -1,14 +1,15 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Helpers;
-using MarkDoc.Members.Dnlib.Properties;
-using MarkDoc.Members.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using dnlib.DotNet;
+using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Properties;
+using MarkDoc.Members.Enums;
 using MarkDoc.Members.ResolvedTypes;
+using MarkDoc.Members.Types;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Types
 {
   [DebuggerDisplay(nameof(InterfaceDef) + (": {" + nameof(Name) + "}"))]
   public class InterfaceDef

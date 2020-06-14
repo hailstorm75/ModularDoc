@@ -1,6 +1,6 @@
 ﻿using MarkDoc.Members.Enums;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Members
 {
   /// <summary>
   /// Interface for type members

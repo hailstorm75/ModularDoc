@@ -1,8 +1,8 @@
-﻿using MarkDoc.Members.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MarkDoc.Members.Enums;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members
+namespace MarkDoc.Members.Members
 {
   /// <summary>
   /// Interface for methods

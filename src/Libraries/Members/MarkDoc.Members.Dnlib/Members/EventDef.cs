@@ -1,9 +1,10 @@
-﻿using dnlib.DotNet;
+﻿using System.Diagnostics;
+using dnlib.DotNet;
 using MarkDoc.Members.Enums;
-using System.Diagnostics;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Members
 {
   [DebuggerDisplay(nameof(EventDef) + (": {" + nameof(Name) + "}"))]
   public class EventDef
