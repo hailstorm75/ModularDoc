@@ -11,10 +11,22 @@
     <OutputPath>..\..\..\..\bin\Release\Libraries\Generators</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Documentation\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
-    <ProjectReference Include="..\..\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
-    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
-    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\Documentation\MarkDoc.Documentation\MarkDoc.Documentation.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />

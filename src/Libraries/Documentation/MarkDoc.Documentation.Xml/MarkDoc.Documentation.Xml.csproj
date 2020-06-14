@@ -24,10 +24,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
-    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
-    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj" />
-    <ProjectReference Include="..\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\MarkDoc.Documentation\MarkDoc.Documentation.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
