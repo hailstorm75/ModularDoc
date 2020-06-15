@@ -40,7 +40,7 @@ type TypePrinter(creator, resolver, linker) =
         input.Name + joinGenerics generics
       else
         input.Name
-    let processClass (input : IClass) =
+    let processStruct (input : 'M when 'M :> IStruct) =
       let generics =
         input.Generics
         |> Seq.map (fun x -> x.Key)
@@ -50,8 +50,9 @@ type TypePrinter(creator, resolver, linker) =
         input.Name
 
     match input with
-    | :? IClass as x -> processClass x
+    | :? IClass as x -> processStruct x
     | :? IInterface as x -> processInterface x
+    | :? IStruct as x -> processStruct x
     | _ -> input.Name
 
   let processResType (item : IResType) =
@@ -214,7 +215,7 @@ type TypePrinter(creator, resolver, linker) =
     | Some x -> Some(seq [ x |> tagShort :> IElement])
 
   let printMemberTables(input : IType) =
-    let processInterface(input : IInterface) =
+    let processStruct(input : IStruct) =
       let sectionHeading isStatic accessor section =
         seq [ accessorStr accessor; staticStr isStatic; section ]
         |> partial String.Join " "
@@ -320,8 +321,8 @@ type TypePrinter(creator, resolver, linker) =
       |> Seq.map(fun x -> m_creator.CreateSection(x |> fst |> Seq.map Option.get, snd x, 2) |> toElement)
 
     match input with
-    | :? IInterface as x ->
-      let result = processInterface x
+    | :? IStruct as x ->
+      let result = processStruct x
       if (Seq.isEmpty result) then
         None
       else
@@ -337,7 +338,7 @@ type TypePrinter(creator, resolver, linker) =
         tag |> Option.get |> tagFull |> Some
 
     let nested =
-      let getNested (x : IInterface) =
+      let getNested (x : IStruct) =
         x.NestedTypes
 
       let groupByType (x : IType) =
@@ -346,6 +347,8 @@ type TypePrinter(creator, resolver, linker) =
           -> "c" |> Some
         | :? IInterface
           -> "i" |> Some
+        | :? IStruct
+          -> "s" |> Some
         | :? IEnum
           -> "e" |> Some
         | _ -> None
@@ -359,11 +362,12 @@ type TypePrinter(creator, resolver, linker) =
         match x |> (fst >> Option.get) with
         | "c" -> createTable("Classes", snd x)
         | "i" -> createTable("Interfaces", snd x)
+        | "s" -> createTable("Structures", snd x)
         | "e" -> createTable("Enums", snd x)
         | _ -> None
         
       match input with
-      | :? IInterface as x ->
+      | :? IStruct as x ->
            x
            |> getNested
            |> Seq.groupBy groupByType
@@ -398,7 +402,7 @@ type TypePrinter(creator, resolver, linker) =
 
     let typeParams = 
       let getTypeParams = 
-        let generics = (input :?> IInterface).Generics
+        let generics = (input :?> IStruct).Generics
         let processTag (x : ITag) =
           let getConstraints (x : ITag) =
             if generics.ContainsKey(x.Reference) then
@@ -428,7 +432,7 @@ type TypePrinter(creator, resolver, linker) =
               yield constraints |> Option.get |> toElement
           ]
 
-        if input :? IInterface then
+        if input :? IStruct then
           findTypeTag(input, ITag.TagType.Typeparam)
           |> Seq.map (processTag >> Linq.ToReadOnlyCollection)
           |> Some
