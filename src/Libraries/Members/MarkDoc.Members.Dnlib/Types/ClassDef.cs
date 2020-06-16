@@ -26,6 +26,12 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <inheritdoc />
     public IReadOnlyCollection<IConstructor> Constructors { get; }
 
+    /// <inheritdoc />
+    public bool IsStatic { get; }
+
+    /// <inheritdoc />
+    public bool IsSealed { get; }
+
     #endregion
 
     /// <summary>
@@ -37,12 +43,23 @@ namespace MarkDoc.Members.Dnlib.Types
       if (source is null)
         throw new ArgumentNullException(nameof(source));
       BaseClass = ResolveBaseClass(source);
-      IsAbstract = source.IsAbstract;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                                             && x.IsConstructor)
                                    .Select(x => new ConstructorDef(resolver, x, parent != null))
                                    .ToReadOnlyCollection();
+
+      IsStatic = source.IsSealed && source.IsAbstract;
+      if (IsStatic)
+      {
+        IsSealed = false;
+        IsAbstract = false;
+      }
+      else
+      {
+        IsSealed = source.IsSealed;
+        IsAbstract = source.IsAbstract;
+      }
     }
 
     private IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)

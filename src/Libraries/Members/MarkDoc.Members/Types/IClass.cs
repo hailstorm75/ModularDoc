@@ -11,6 +11,16 @@ namespace MarkDoc.Members.Types
     : IInterface
   {
     /// <summary>
+    /// Determines whether this class is static
+    /// </summary>
+    bool IsStatic { get; }
+
+    /// <summary>
+    /// Determines whether this class is sealed
+    /// </summary>
+    bool IsSealed { get; }
+
+    /// <summary>
     /// Determines whether this class is abstract
     /// </summary>
     bool IsAbstract { get; }
