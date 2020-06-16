@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Members;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
@@ -24,6 +25,9 @@ namespace MarkDoc.Members.Dnlib.Types
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<IDelegate> Delegates { get; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<IType> NestedTypes { get; }
@@ -64,7 +68,10 @@ namespace MarkDoc.Members.Dnlib.Types
         throw new ArgumentNullException(nameof(source));
 
       Generics = generics;
-      NestedTypes = source.NestedTypes.Where(x => !x.Name.String.StartsWith('<'))
+      Delegates = source.NestedTypes.Where(x => x.IsDelegate)
+                                    .Select(x => new DelegateDef(resolver, x))
+                                    .ToReadOnlyCollection();
+      NestedTypes = source.NestedTypes.Where(x => !x.IsDelegate && !x.Name.String.StartsWith('<'))
                                       .Select(x => Resolver.ResolveType(x, source))
                                       .ToReadOnlyCollection();
       Methods = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)

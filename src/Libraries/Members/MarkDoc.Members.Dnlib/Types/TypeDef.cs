@@ -32,13 +32,12 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    protected internal TypeDef(IResolver resolver, ITypeDefOrRef source, ITypeDefOrRef? parent)
+    protected internal TypeDef(IResolver resolver, dnlib.DotNet.TypeDef source, ITypeDefOrRef? parent)
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
 
-      // TODO: Assign accessor
-
+      Accessor = ResolveAccessor(source);
       TypeNamespace = parent?.Namespace ?? source.Namespace;
       Name = ResolveName(source, parent);
       Resolver = resolver;
@@ -46,6 +45,15 @@ namespace MarkDoc.Members.Dnlib.Types
     }
 
     #region Methods
+
+    private static AccessorType ResolveAccessor(dnlib.DotNet.TypeDef @delegate)
+    {
+      if (@delegate.Visibility == TypeAttributes.Public)
+        return AccessorType.Public;
+      if (@delegate.Visibility == TypeAttributes.NestedFamily)
+        return AccessorType.Protected;
+      return AccessorType.Internal;
+    }
 
     private static string ResolveName(ITypeDefOrRef source, ITypeDefOrRef? parent)
     {

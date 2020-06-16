@@ -16,6 +16,10 @@ namespace MarkDoc.Members.Types
     /// </summary>
     IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
     /// <summary>
+    /// Collection of delegates
+    /// </summary>
+    IReadOnlyCollection<IDelegate> Delegates { get; }
+    /// <summary>
     /// Collection of nested types
     /// </summary>
     IReadOnlyCollection<IType> NestedTypes { get; }
