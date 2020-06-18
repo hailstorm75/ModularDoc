@@ -15,18 +15,17 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     public IReadOnlyCollection<(string, IResType)> Fields { get; }
 
-    public bool IsValueTuple { get; } 
+    public bool IsValueTuple { get; }
 
     #endregion
 
-    internal ResTuple(IResolver resolver, TypeSig source)
+    internal ResTuple(IResolver resolver, TypeSig source, bool isValueTuple)
       : base(resolver, source)
     {
       if (!(source is GenericInstSig token))
         throw new NotSupportedException(Resources.notTuple);
 
-      // TODO: Assign is value tuple
-
+      IsValueTuple = isValueTuple;
       Fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", Resolver.Resolve(x))).ToReadOnlyCollection();
     }
   }

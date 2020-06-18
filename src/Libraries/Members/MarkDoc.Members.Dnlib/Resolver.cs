@@ -81,8 +81,8 @@ namespace MarkDoc.Members.Dnlib
         var x when x is ElementType.SZArray || x is ElementType.Array
           => new ResArray(this, signature, generics),
         var x when (x is ElementType.GenericInst) && IsGeneric(signature)
-          => IsTuple(signature)
-              ? new ResTuple(this, signature)
+          => IsTuple(signature, out var valueTuple)
+              ? new ResTuple(this, signature, valueTuple)
               : new ResGeneric(this, signature, generics) as IResType,
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics),
@@ -132,11 +132,18 @@ namespace MarkDoc.Members.Dnlib
       return result;
     }
 
-    private static bool IsTuple(TypeSig source)
+    private static bool IsTuple(TypeSig source, out bool isValueTuple)
     {
+      isValueTuple = false;
       var name = source.ReflectionName.Remove(source.ReflectionName.IndexOf('`', StringComparison.InvariantCulture));
       if (name.Equals(nameof(Tuple), StringComparison.InvariantCulture))
         return true;
+
+      if (name.Equals(nameof(ValueTuple), StringComparison.InvariantCulture))
+      {
+        isValueTuple = true;
+        return true;
+      }
 
       return false;
     }
