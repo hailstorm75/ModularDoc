@@ -12,6 +12,8 @@ namespace MarkDoc.Members.Dnlib.Members
   public class ConstructorDef
     : MemberDef, IConstructor
   {
+    private static readonly char[] GENERIC_CHAR = { '`' };
+
     #region Properties
 
     /// <inheritdoc />
@@ -59,29 +61,30 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static string ResolveName(dnlib.DotNet.MethodDef source, bool isNested)
     {
-      var namespaceCut = CutNamespace(source, isNested);
+      ReadOnlySpan<char> CutNamespace()
+      {
+        var type = source.DeclaringType;
+        var fullname = type.FullName.AsSpan();
+        if (isNested)
+          return fullname.Slice(type.FullName.LastIndexOf('/') + 1);
+
+        return type.Namespace.Length != 0
+          ? fullname.Slice(type.Namespace.Length + 1)
+          : fullname;
+      }
+
+      var namespaceCut = CutNamespace();
 
       if (!source.DeclaringType.HasGenericParameters)
-        return namespaceCut;
+        return namespaceCut.ToString();
 
-      var genericsIndex = namespaceCut.IndexOf('`', StringComparison.InvariantCulture);
+      var genericsIndex = namespaceCut.IndexOf(GENERIC_CHAR.AsSpan(), StringComparison.InvariantCulture);
       if (genericsIndex == -1)
-        return namespaceCut;
+        return namespaceCut.ToString();
 
-      var genericCut = namespaceCut.Remove(genericsIndex);
+      var genericCut = namespaceCut.Slice(0, genericsIndex);
 
-      return genericCut;
-    }
-
-    private static string CutNamespace(dnlib.DotNet.MethodDef source, bool isNested)
-    {
-      var type = source.DeclaringType;
-      if (isNested)
-        return type.FullName.Substring(type.FullName.IndexOf('/', StringComparison.InvariantCulture) + 1);
-
-      return type.Namespace.Length != 0
-        ? type.FullName.Substring(type.Namespace.Length + 1)
-        : type.FullName;
+      return genericCut.ToString();
     }
 
     private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef method)

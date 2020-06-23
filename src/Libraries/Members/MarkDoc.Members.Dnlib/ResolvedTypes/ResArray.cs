@@ -85,14 +85,24 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     private int ResolveDimension(dnlib.DotNet.TypeSig source, dnlib.DotNet.TypeSig next)
     {
+      static int Count(ReadOnlySpan<char> span, char find)
+      {
+        var i = 0;
+        foreach (var c in span)
+          if (c.Equals(find))
+            ++i;
+
+        return i;
+      }
+
       var thisType = source.FullName;
       var nextType = next.FullName;
 
-      var name = thisType.Substring(nextType.Length);
-      if (IsJagged)
-        return name.Count(x => x == '[');
-      else
-        return name.Count(x => x == ',') + 1;
+      var name = thisType.AsSpan(nextType.Length);
+
+      return IsJagged
+        ? Count(name, '[')
+        : Count(name, ',') + 1;
     }
 
     #endregion

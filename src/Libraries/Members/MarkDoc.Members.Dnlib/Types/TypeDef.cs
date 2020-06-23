@@ -8,7 +8,7 @@ namespace MarkDoc.Members.Dnlib.Types
   public abstract class TypeDef
     : IType
   {
-    private static readonly char[] GENERIC_CHAR = new[] { '`' };
+    private static readonly char[] GENERIC_CHAR = { '`' };
 
     #region Properties
 
