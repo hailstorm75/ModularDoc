@@ -103,9 +103,9 @@ namespace MarkDoc.Documentation.Xml
 
     private static void ProcessInheritDoc(IReadOnlyDictionary<string, Dictionary<TagType, LinkedList<ITag>>> cache, IInterface type, string[] names, IReadOnlyDictionary<string, IDocMember> memberDocs, IDocResolver docResolver)
     {
-      void CacheTags(IEnumerable<string> names, IReadOnlyDictionary<string, IDocMember> members)
+      void CacheTags(IEnumerable<string> keys, IReadOnlyDictionary<string, IDocMember> members)
       {
-        foreach (var name in names)
+        foreach (var name in keys)
         {
           if (!members.TryGetValue(name, out var member)) continue;
 

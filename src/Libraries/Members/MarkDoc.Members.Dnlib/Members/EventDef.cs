@@ -36,10 +36,11 @@ namespace MarkDoc.Members.Dnlib.Members
     internal EventDef(IResolver resolver, dnlib.DotNet.EventDef source)
       : base(resolver, source)
     {
-      // TODO: Assign accessor and static
+      // TODO: Assign accessor
 
       Name = source.Name.String;
       Type = ResolveType(source);
+      IsStatic = source.InvokeMethod.IsStatic;
     }
 
     private IResType ResolveType(dnlib.DotNet.EventDef source)
