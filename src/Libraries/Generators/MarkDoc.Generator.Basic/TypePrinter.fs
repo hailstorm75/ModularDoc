@@ -40,7 +40,7 @@ type TypePrinter(creator, resolver, linker) =
         input.Name + joinGenerics generics
       else
         input.Name
-    let processStruct (input : 'M when 'M :> IStruct) =
+    let processStruct (input : 'M when 'M :> IInterface) =
       let generics =
         input.Generics
         |> Seq.map (fun x -> x.Key)
@@ -51,8 +51,8 @@ type TypePrinter(creator, resolver, linker) =
 
     match input with
     | :? IClass as x -> processStruct x
-    | :? IInterface as x -> processInterface x
     | :? IStruct as x -> processStruct x
+    | :? IInterface as x -> processInterface x
     | _ -> input.Name
 
   let processResType (item : IResType) =

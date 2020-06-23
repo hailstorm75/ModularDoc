@@ -4,45 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
-using MarkDoc.Members.Dnlib.Members;
 using MarkDoc.Members.Enums;
-using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
-using EventDef = MarkDoc.Members.Dnlib.Members.EventDef;
-using IMethod = MarkDoc.Members.Members.IMethod;
-using IType = MarkDoc.Members.Types.IType;
-using MethodDef = MarkDoc.Members.Dnlib.Members.MethodDef;
-using PropertyDef = MarkDoc.Members.Dnlib.Members.PropertyDef;
 
 namespace MarkDoc.Members.Dnlib.Types
 {
   [DebuggerDisplay(nameof(StructDef) + ": {" + nameof(Name) + "}")]
   public class StructDef
-    : TypeDef, IStruct
+    : InterfaceDef, IStruct
   {
-    #region Properties
-
-    /// <inheritdoc />
-    public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IDelegate> Delegates { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IType> NestedTypes { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IEvent> Events { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IMethod> Methods { get; }
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IProperty> Properties { get; }
-
-    #endregion
-
     #region Constructors
 
     /// <summary>
@@ -52,41 +23,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
     internal StructDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : this(resolver, source, parent, ResolveGenerics(resolver, source, parent)) { }
-
-    /// <summary>
-    /// Inherited constructor
-    /// </summary>
-    /// <param name="resolver">Type resolver instance</param>
-    /// <param name="source">Type source</param>
-    /// <param name="parent">Nested type parent</param>
-    /// <param name="generics">Generic types to initialize with</param>
-    protected StructDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> generics)
-      : base(resolver, source, parent)
-    {
-      if (source is null)
-        throw new ArgumentNullException(nameof(source));
-
-      Generics = generics;
-      Delegates = source.NestedTypes.Where(x => x.IsDelegate)
-                                    .Select(x => new DelegateDef(resolver, x))
-                                    .ToReadOnlyCollection();
-      NestedTypes = source.NestedTypes.Where(x => !x.IsDelegate && !x.Name.String.StartsWith('<'))
-                                      .Select(x => Resolver.ResolveType(x, source))
-                                      .ToReadOnlyCollection();
-      Methods = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
-                                       && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                                       && !x.Access.HasFlag(MethodAttributes.Assembly)
-                                       && !x.IsPrivate
-                                       && !x.IsConstructor)
-                              .Select(x => new MethodDef(resolver, x))
-                              .ToReadOnlyCollection();
-      Properties = source.Properties.Select(x => PropertyDef.Initialize(resolver, x))
-                                    .WhereNotNull()
-                                    .ToReadOnlyCollection();
-      Events = source.Events.Select(x => new EventDef(resolver, x))
-                            .ToReadOnlyCollection();
-    }
+      : base(resolver, source, parent, ResolveGenerics(resolver, source, parent)) { }
 
     #endregion
 
