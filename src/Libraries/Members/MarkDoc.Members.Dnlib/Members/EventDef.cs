@@ -40,7 +40,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
       Name = source.Name.String;
       Type = ResolveType(source);
-      IsStatic = source.InvokeMethod.IsStatic;
+      //IsStatic = source.InvokeMethod.IsStatic;
     }
 
     private IResType ResolveType(dnlib.DotNet.EventDef source)
