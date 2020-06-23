@@ -23,10 +23,9 @@ namespace MarkDoc.Documentation.Xml
     private static IEnumerable<IContent> ResolveInnerTag(XElement element)
     {
       var result = new InnerTag(element);
-      if (result.Type == IInnerTag.InnerTagType.InvalidTag)
-        return result.Content;
-      else
-        return new[] { result };
+      return result.Type == IInnerTag.InnerTagType.InvalidTag
+        ? result.Content
+        : new[] { result };
     }
   }
 }

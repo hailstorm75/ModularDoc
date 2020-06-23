@@ -41,18 +41,12 @@ namespace MarkDoc.Documentation.Xml
 
     public DocumentationContent(IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> tags)
     {
-      if (tags is null)
-        throw new ArgumentNullException(nameof(tags));
-
-      Tags = tags;
+      Tags = tags ?? throw new ArgumentNullException(nameof(tags));
       HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var t);
       InheritDocRef = t?.First()?.Reference ?? string.Empty;
     }
 
     private static IEnumerable<ITag> ResolveTags(IEnumerable<XElement> source)
-    {
-      foreach (var node in source)
-        yield return new Tag(node);
-    }
+      => source.Select(node => new Tag(node));
   }
 }
