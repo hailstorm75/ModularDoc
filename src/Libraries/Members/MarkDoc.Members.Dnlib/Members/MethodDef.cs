@@ -117,7 +117,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private IResType? ResolveReturn(dnlib.DotNet.MethodDef source)
     {
-      if (source.ReturnType.TypeName.Equals("System.Void", StringComparison.InvariantCultureIgnoreCase))
+      if (source.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase))
         return null;
       return Resolver.Resolve(source.ReturnType, source.ResolveMethodGenerics());
     }
