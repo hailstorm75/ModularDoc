@@ -8,6 +8,8 @@ namespace MarkDoc.Members.Dnlib.Types
   public abstract class TypeDef
     : IType
   {
+    private static readonly char[] GENERIC_CHAR = new[] { '`' };
+
     #region Properties
 
     protected IResolver Resolver { get; }
@@ -55,28 +57,30 @@ namespace MarkDoc.Members.Dnlib.Types
       return AccessorType.Internal;
     }
 
-    private static string ResolveName(ITypeDefOrRef source, ITypeDefOrRef? parent)
+    private static string ResolveName(dnlib.DotNet.IType source, IIsTypeOrMethod? parent)
     {
-      var namespaceCut = CutNamespace(source, parent != null);
+      ReadOnlySpan<char> CutNamespace(ReadOnlySpan<char> s, bool isNested)
+      {
+        if (isNested)
+          return s.Slice(source.FullName.LastIndexOf('/') + 1);
+
+        return source.Namespace.Length != 0
+          ? s.Slice(source.Namespace.Length + 1)
+          : s;
+      }
+
+      var fullName = source.FullName.AsSpan();
+
+      var namespaceCut = CutNamespace(fullName, parent != null);
       if (source is ITypeOrMethodDef type && !type.HasGenericParameters)
-        return namespaceCut;
+        return namespaceCut.ToString();
 
-      var genericsIndex = namespaceCut.IndexOf('`', StringComparison.InvariantCulture);
+      var genericsIndex = namespaceCut.IndexOf(new ReadOnlySpan<char>(GENERIC_CHAR), StringComparison.InvariantCulture);
       if (genericsIndex == -1)
-        return namespaceCut;
-      var genericCut = namespaceCut.Remove(genericsIndex);
+        return namespaceCut.ToString();
+      var genericCut = namespaceCut.Slice(0, genericsIndex);
 
-      return genericCut;
-    } 
-
-    private static string CutNamespace(ITypeDefOrRef source, bool isNested)
-    {
-      if (isNested)
-        return source.FullName.Substring(source.FullName.LastIndexOf('/') + 1);
-
-      return source.Namespace.Length != 0
-        ? source.FullName.Substring(source.Namespace.Length + 1)
-        : source.FullName;
+      return genericCut.ToString();
     }
 
     #endregion
