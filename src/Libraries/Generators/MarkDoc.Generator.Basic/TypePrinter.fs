@@ -68,16 +68,40 @@ type TypePrinter(creator, resolver, linker) =
     | :? IResGeneric as generic ->
       let generics = generic.Generics
                      |> Seq.map tryLink
-      let content = seq [ tryLink generic; textInline "<" :> ITextContent; m_creator.JoinTextContent(generics, ", "); textInline ">" :> ITextContent ]
+      let content = seq [ tryLink generic; textNormal "<" :> ITextContent; m_creator.JoinTextContent(generics, ", "); textNormal ">" :> ITextContent ]
       m_creator.JoinTextContent(content, "")
     | _ -> tryLink item
 
-  let methodArguments (item : IMethod) =
+  let processResType2(item : IResType) =
+    let tryLink (item : IResType) =
+      item.DisplayName
+
+    // TODO: Generic arrays?
+    match item with
+    | :? IResGeneric as generic ->
+      let generics = generic.Generics
+                     |> Seq.map tryLink
+      let content = seq [ tryLink generic; "<"; String.Join(", ", generics); ">" ]
+      String.Join("", content)
+    | _ -> tryLink item
+
+  // TODO: Refactor
+  let methodArguments (item : IConstructor) =
     let argument (arg : IArgument) =
       let args = seq [ arg |> (argumentTypeStr >> textNormal) :> ITextContent; processResType arg.Type; textNormal arg.Name :> ITextContent ]
       m_creator.JoinTextContent(args, " ")
 
     m_creator.JoinTextContent(item.Arguments |> Seq.map argument, ", ")
+
+  // TODO: Refactor
+  let methodArguments2(item : IConstructor) =
+    let argument (arg : IArgument) =
+      let args =
+        seq [ arg |> argumentTypeStr; processResType2 arg.Type; arg.Name ]
+        |> Seq.filter (String.IsNullOrEmpty >> not)
+      String.Join(" ", args)
+
+    String.Join(", ", item.Arguments |> Seq.map argument)
 
   let rec processContent (item : IContent) =
     let getInlineText (tag : IInnerTag) =
@@ -370,7 +394,7 @@ type TypePrinter(creator, resolver, linker) =
            |> Seq.filter (fst >> Option.isSome)
            |> Seq.map processGroup
            |> whereSome
-           |> Some
+           |> emptyToNone
       | _ -> None
 
     let inheritance =
@@ -398,7 +422,7 @@ type TypePrinter(creator, resolver, linker) =
 
     let typeParams =
       let getTypeParams =
-        let generics = (input :?> IStruct).Generics
+        let generics = (input :?> IInterface).Generics
         let processTag (x : ITag) =
           let getConstraints (x : ITag) =
             if generics.ContainsKey(x.Reference) then
@@ -441,6 +465,51 @@ type TypePrinter(creator, resolver, linker) =
       else
         None
 
+    let constructors =
+      let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
+        let processCtor (ctor : IConstructor) =
+          let single (tags : ITag option) =
+            match tags with
+            | Some -> tags |> Option.get |> tagFull |> Some
+            | None -> None
+
+          let toLower(x : string) =
+            x.ToLower()
+          let signature =
+            (ctor.Accessor |> accessorStr |> toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments2 ctor) + ")"
+            |> textCode
+            |> toElement
+          let summary = findTag(input, ctor, ITag.TagType.Summary)
+                        |> Seq.tryExactlyOne
+                        |> single
+          let remarks = findTag(input, ctor, ITag.TagType.Remarks)
+                        |> Seq.tryExactlyOne
+                        |> single
+          let example = findTag(input, ctor, ITag.TagType.Example)
+                        |> Seq.tryExactlyOne
+                        |> single
+
+          let content =
+            seq [
+              (summary, "Summary")
+              (remarks, "Remarks")
+              (example, "Example")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          let joined = seq [ signature ]
+                       |> Seq.append content
+
+          m_creator.CreateSection(joined, ctor.Name, 3) |> toElement
+
+        ctors
+        |> Seq.map processCtor
+
+      match input with
+      | :? IClass as x -> x.Constructors |> processCtors |> emptyToNone
+      | _ -> None
+
     let sections =
       seq [
         (single ITag.TagType.Summary, "Summary");
@@ -450,11 +519,12 @@ type TypePrinter(creator, resolver, linker) =
         (inheritance, "Inheritance");
         (nested, "Nested types")
         (single ITag.TagType.Seealso, "See also")
+        (constructors, "Constructors")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
 
-    Some(sections)
+    sections |> emptyToNone
 
   let printContent (input : IType) =
     let createSection(x : seq<IElement>, y : string) =
