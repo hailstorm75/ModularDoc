@@ -215,7 +215,7 @@ type TypePrinter(creator, resolver, linker) =
     | Some x -> Some(seq [ x |> tagShort :> IElement])
 
   let printMemberTables(input : IType) =
-    let processStruct(input : IStruct) =
+    let processStruct(input : IInterface) =
       let sectionHeading isStatic accessor section =
         seq [ accessorStr accessor; staticStr isStatic; section ]
         |> partial String.Join " "
@@ -321,7 +321,7 @@ type TypePrinter(creator, resolver, linker) =
       |> Seq.map(fun x -> m_creator.CreateSection(x |> fst |> Seq.map Option.get, snd x, 2) |> toElement)
 
     match input with
-    | :? IStruct as x ->
+    | :? IInterface as x ->
       let result = processStruct x
       if (Seq.isEmpty result) then
         None
