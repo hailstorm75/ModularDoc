@@ -11,6 +11,12 @@ module internal Helpers =
 
   let toElement x = x :> IElement 
 
+  let emptyToNone (a : seq<'a>) =
+    if (Seq.isEmpty a) then
+      None
+    else
+      Some(a)
+
   let whereSome x =
     x
     |> Seq.filter Option.isSome

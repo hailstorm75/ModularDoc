@@ -321,13 +321,9 @@ type TypePrinter(creator, resolver, linker) =
       |> Seq.map(fun x -> m_creator.CreateSection(x |> fst |> Seq.map Option.get, snd x, 2) |> toElement)
 
     match input with
-    | :? IInterface as x ->
-      let result = processStruct x
-      if (Seq.isEmpty result) then
-        None
-      else
-        Some(result)
-    | _ -> None
+    | :? IInterface as x -> processStruct x
+    | _ -> Seq.empty
+    |> emptyToNone
 
   let printDetailed(input : IType) =
     let single x =
