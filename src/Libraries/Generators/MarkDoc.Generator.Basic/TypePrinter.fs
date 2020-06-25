@@ -181,7 +181,7 @@ type TypePrinter(creator, resolver, linker) =
       list |> Seq.map toElement
     else
       result
-    
+
   let memberNameSummary(name : ITextContent, summary : Option<ITag>) =
     match summary with
     | None -> name
@@ -345,10 +345,10 @@ type TypePrinter(creator, resolver, linker) =
         match x with
         | :? IClass
           -> "c" |> Some
-        | :? IInterface
-          -> "i" |> Some
         | :? IStruct
           -> "s" |> Some
+        | :? IInterface
+          -> "i" |> Some
         | :? IEnum
           -> "e" |> Some
         | _ -> None
@@ -365,7 +365,7 @@ type TypePrinter(creator, resolver, linker) =
         | "s" -> createTable("Structures", snd x)
         | "e" -> createTable("Enums", snd x)
         | _ -> None
-        
+
       match input with
       | :? IStruct as x ->
            x
@@ -382,7 +382,7 @@ type TypePrinter(creator, resolver, linker) =
         x.InheritedInterfaces
         |> Seq.map (processResType >> toElement)
 
-      let createList l = 
+      let createList l =
         if (Seq.isEmpty l) then
           None
         else
@@ -400,8 +400,8 @@ type TypePrinter(creator, resolver, linker) =
         x |> (getInterfaces >> createList)
       | _ -> None
 
-    let typeParams = 
-      let getTypeParams = 
+    let typeParams =
+      let getTypeParams =
         let generics = (input :?> IStruct).Generics
         let processTag (x : ITag) =
           let getConstraints (x : ITag) =
@@ -415,7 +415,7 @@ type TypePrinter(creator, resolver, linker) =
 
           let getName (x : ITag) =
             let result = seq [
-              yield textInline x.Reference :> ITextContent 
+              yield textInline x.Reference :> ITextContent
               if (generics.ContainsKey(x.Reference)) then
                 let variance = generics.[x.Reference].ToTuple() |> fst
                 if (variance <> Enums.Variance.NonVariant) then
