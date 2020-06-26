@@ -1,18 +1,18 @@
 ﻿namespace MarkDoc.Generator.Basic
 
 open System
-open MarkDoc.Generator
+open Helpers
+open MarkDoc.Documentation.Tags
+open MarkDoc.Members.ResolvedTypes
+open MarkDoc.Members.Members
+open MarkDoc.Members.Types
 open MarkDoc.Members
-open MarkDoc.Elements
 open MarkDoc.Documentation
+open MarkDoc.Generator
+open MarkDoc.Elements
 open MarkDoc.Linkers
 open MarkDoc.Helpers
-open MarkDoc.Documentation.Tags
 open System.Collections.Generic
-open Helpers
-open MarkDoc.Members.ResolvedTypes
-open MarkDoc.Members.Types
-open MarkDoc.Members.Members
 
 type TypePrinter(creator, resolver, linker) =
   let m_creator  : IElementCreator = creator
@@ -467,12 +467,17 @@ type TypePrinter(creator, resolver, linker) =
 
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
-        let processCtor (ctor : IConstructor) =
+        let processCtor (i : int, ctor : IConstructor) =
           let single (tags : ITag option) =
             match tags with
             | Some -> tags |> Option.get |> tagFull |> Some
             | None -> None
 
+          let overloads =
+            if ctors.Count > 1 then
+              String.Format(" [{0}/{1}]", i + 1, ctors.Count)
+            else
+              ""
           let toLower(x : string) =
             x.ToLower()
           let signature =
@@ -501,10 +506,10 @@ type TypePrinter(creator, resolver, linker) =
           let joined = seq [ signature ]
                        |> Seq.append content
 
-          m_creator.CreateSection(joined, ctor.Name, 3) |> toElement
+          m_creator.CreateSection(joined, ctor.Name + overloads, 3) |> toElement
 
         ctors
-        |> Seq.map processCtor
+        |> Seq.mapi (fun x y -> processCtor(x, y))
 
       match input with
       | :? IClass as x -> x.Constructors |> processCtors |> emptyToNone
