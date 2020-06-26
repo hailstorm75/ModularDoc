@@ -465,13 +465,36 @@ type TypePrinter(creator, resolver, linker) =
       else
         None
 
+    let getSingleTag (m : IMember, t : ITag.TagType) =
+      let single (tags : ITag option) =
+        match tags with
+        | Some -> tags |> Option.get |> tagFull |> Some
+        | None -> None
+      findTag(input, m, t)
+      |> Seq.tryExactlyOne
+      |> single
+
+    let getExceptions (m : IMember) =
+      let exceptions = findTag(input, m, ITag.TagType.Exception)
+                       |> Seq.map (fun x -> seq [ x.Reference |> textNormal |> toElement; x |> tagShort |> toElement ] |> Linq.ToReadOnlyCollection)
+
+      if Seq.isEmpty exceptions then
+        None
+      else
+        seq [ m_creator.CreateTable(exceptions, seq [ "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
+
+    let getSeeAlso (m : IMember) =
+      let seeAlsos = findTag(input, m, ITag.TagType.Seealso)
+                     |> Seq.map (tagShort >> toElement)
+
+      if Seq.isEmpty seeAlsos then
+        None
+      else
+        seq [ m_creator.CreateList(seeAlsos, IList.ListType.Dotted) |> toElement ] |> Some
+
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
         let processCtor (i : int, ctor : IConstructor) =
-          let single (tags : ITag option) =
-            match tags with
-            | Some -> tags |> Option.get |> tagFull |> Some
-            | None -> None
 
           let overloads =
             if ctors.Count > 1 then
@@ -484,21 +507,14 @@ type TypePrinter(creator, resolver, linker) =
             (ctor.Accessor |> accessorStr |> toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments2 ctor) + ")"
             |> textCode
             |> toElement
-          let summary = findTag(input, ctor, ITag.TagType.Summary)
-                        |> Seq.tryExactlyOne
-                        |> single
-          let remarks = findTag(input, ctor, ITag.TagType.Remarks)
-                        |> Seq.tryExactlyOne
-                        |> single
-          let example = findTag(input, ctor, ITag.TagType.Example)
-                        |> Seq.tryExactlyOne
-                        |> single
 
           let content =
             seq [
-              (summary, "Summary")
-              (remarks, "Remarks")
-              (example, "Example")
+              (getSingleTag(ctor, ITag.TagType.Summary), "Summary")
+              (getSingleTag(ctor, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(ctor, ITag.TagType.Example), "Example")
+              (getExceptions ctor, "Example")
+              (getSeeAlso ctor, "See also")
             ]
             |> Seq.filter (fst >> Option.isSome)
             |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
