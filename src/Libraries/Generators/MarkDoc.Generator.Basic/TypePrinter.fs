@@ -355,7 +355,7 @@ type TypePrinter(creator, resolver, linker) =
       if Option.isNone tag then
         None
       else
-        tag |> Option.get |> tagFull |> Some
+        tag |> Option.get |> tagFull |> emptyToNone
 
     let nested =
       let getNested (x : IStruct) =
@@ -492,6 +492,14 @@ type TypePrinter(creator, resolver, linker) =
       else
         seq [ m_creator.CreateList(seeAlsos, IList.ListType.Dotted) |> toElement ] |> Some
 
+    let getArguments(c : IConstructor) = 
+      let arguments = findTag(input, c, ITag.TagType.Param)
+                      |> Seq.map (fun x -> seq [ x.Reference |> textNormal |> toElement; x |> tagShort |> toElement ] |> Linq.ToReadOnlyCollection)
+      if (Seq.isEmpty c.Arguments || Seq.isEmpty arguments) then
+        None
+      else
+        seq [ m_creator.CreateTable(arguments, seq [ "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
+
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
         let processCtor (i : int, ctor : IConstructor) =
@@ -513,14 +521,15 @@ type TypePrinter(creator, resolver, linker) =
               (getSingleTag(ctor, ITag.TagType.Summary), "Summary")
               (getSingleTag(ctor, ITag.TagType.Remarks), "Remarks")
               (getSingleTag(ctor, ITag.TagType.Example), "Example")
-              (getExceptions ctor, "Example")
+              (getExceptions ctor, "Exceptions")
+              (getArguments ctor, "Arguments")
               (getSeeAlso ctor, "See also")
             ]
             |> Seq.filter (fst >> Option.isSome)
             |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
 
-          let joined = seq [ signature ]
-                       |> Seq.append content
+          let joined = content
+                       |> Seq.append (seq [ signature ])
 
           m_creator.CreateSection(joined, ctor.Name + overloads, 3) |> toElement
 
