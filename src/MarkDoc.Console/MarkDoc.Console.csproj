@@ -27,6 +27,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NBench" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
+    <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
+    <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements\MarkDoc.Elements.csproj" />
+    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />
+    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\Libraries\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ namespace MarkDoc.Documentation.Xml
   {
     #region Fields
 
-    private static readonly Cache DOCUMENTATION = new Cache();
+    private readonly Cache DOCUMENTATION = new Cache();
     private readonly IResolver m_typeResolver;
 
     #endregion
@@ -47,11 +47,11 @@ namespace MarkDoc.Documentation.Xml
       static bool TypeGrouper(XElement element)
         => RetrieveName(element).First().Equals('T');
 
-      static void CacheMember(XElement element)
+      void CacheMember(XElement element)
       {
-        static void Cache(string key, string name, XElement element)
+        void Cache(string key, string name, XElement element)
         {
-          static string ProcessName(string key, string name)
+          string ProcessName(string key, string name)
           {
             var memberNameRaw = name[(3 + key.Length)..];
             if (name.First().Equals('M'))
@@ -147,7 +147,7 @@ namespace MarkDoc.Documentation.Xml
       return resultType != null;
     }
 
-    internal static bool TryFindMembers(string type, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
+    internal bool TryFindMembers(string type, out IReadOnlyDictionary<string, IDocMember>? resultMembers)
     {
       resultMembers = null;
 
