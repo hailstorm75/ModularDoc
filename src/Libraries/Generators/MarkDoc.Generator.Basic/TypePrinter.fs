@@ -422,8 +422,8 @@ type TypePrinter(creator, resolver, linker) =
 
     let typeParams =
       let getTypeParams =
-        let generics = (input :?> IInterface).Generics
         let processTag (x : ITag) =
+          let generics = (input :?> IInterface).Generics
           let getConstraints (x : ITag) =
             if generics.ContainsKey(x.Reference) then
               let types = generics.[x.Reference].ToTuple()
@@ -452,7 +452,7 @@ type TypePrinter(creator, resolver, linker) =
               yield constraints |> Option.get |> toElement
           ]
 
-        if input :? IStruct then
+        if input :? IInterface then
           findTypeTag(input, ITag.TagType.Typeparam)
           |> Seq.map (processTag >> Linq.ToReadOnlyCollection)
           |> Some
