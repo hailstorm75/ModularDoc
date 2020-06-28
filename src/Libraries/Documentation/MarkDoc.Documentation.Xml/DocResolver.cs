@@ -17,7 +17,7 @@ namespace MarkDoc.Documentation.Xml
   {
     #region Fields
 
-    private readonly Cache DOCUMENTATION = new Cache();
+    private readonly Cache m_documentation = new Cache();
     private readonly IResolver m_typeResolver;
 
     #endregion
@@ -38,7 +38,7 @@ namespace MarkDoc.Documentation.Xml
       void CacheType(string key, XElement element)
       {
         var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
-        DOCUMENTATION.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
+        m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
       }
 
       static string RetrieveName(XElement element)
@@ -49,9 +49,11 @@ namespace MarkDoc.Documentation.Xml
 
       void CacheMember(XElement element)
       {
-        void Cache(string key, string name, XElement element)
+        var name = RetrieveName(element);
+
+        void Cache(string key)
         {
-          string ProcessName(string key, string name)
+          string ProcessName()
           {
             var memberNameRaw = name[(3 + key.Length)..];
             if (name.First().Equals('M'))
@@ -70,15 +72,15 @@ namespace MarkDoc.Documentation.Xml
             return memberNameRaw;
           }
 
-          var toAdd = new DocMember(ProcessName(key, name), key[0], element);
-          if (DOCUMENTATION.ContainsKey(key))
-            DOCUMENTATION[key].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
+          var toAdd = new DocMember(ProcessName(), key[0], element);
+          if (m_documentation.ContainsKey(key))
+            m_documentation[key].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
           else
           {
             var dict = new ConcurrentDictionary<string, IDocMember>();
-            dict.TryAdd(ProcessName(key, name), toAdd);
+            dict.TryAdd(ProcessName(), toAdd);
 
-            DOCUMENTATION.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
+            m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
           }
         }
 
@@ -91,18 +93,17 @@ namespace MarkDoc.Documentation.Xml
           return -1;
         }
 
-        var name = RetrieveName(element);
         if (name[0].Equals('M'))
         {
           var brace = name.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
           if (brace != -1)
           {
-            Cache(name[2..ReverseIndexOf(name, '.', brace)], name, element);
+            Cache(name[2..ReverseIndexOf(name, '.', brace)]);
             return;
           }
         }
 
-        Cache(name[2..name.LastIndexOf('.')], name, element);
+        Cache(name[2..name.LastIndexOf('.')]);
       }
 
       using var file = File.OpenText(path);
@@ -131,13 +132,13 @@ namespace MarkDoc.Documentation.Xml
 
       resultType = null;
 
-      if (!DOCUMENTATION.TryGetValue(type.RawName, out var value))
+      if (!m_documentation.TryGetValue(type.RawName, out var value))
         return false;
 
       if (value.type is null)
       {
         var doc = new DocElement(type.RawName, this, m_typeResolver);
-        DOCUMENTATION.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));
+        m_documentation.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));
 
         resultType = doc;
       }
@@ -151,7 +152,7 @@ namespace MarkDoc.Documentation.Xml
     {
       resultMembers = null;
 
-      if (!DOCUMENTATION.TryGetValue(type, out var value))
+      if (!m_documentation.TryGetValue(type, out var value))
         return false;
 
       resultMembers = value.members;
