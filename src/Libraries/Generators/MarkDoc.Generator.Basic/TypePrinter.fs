@@ -482,7 +482,6 @@ type TypePrinter(creator, resolver, linker) =
         None
       else
         seq [ m_creator.CreateTable(exceptions, seq [ "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
-
     let getSeeAlso (m : IMember) =
       let seeAlsos = findTag(input, m, ITag.TagType.Seealso)
                      |> Seq.map (tagShort >> toElement)
@@ -491,7 +490,6 @@ type TypePrinter(creator, resolver, linker) =
         None
       else
         seq [ m_creator.CreateList(seeAlsos, IList.ListType.Dotted) |> toElement ] |> Some
-
     let getArguments(c : IConstructor) = 
       let argumentDocs = findTag(input, c, ITag.TagType.Param)
                          |> Seq.map (fun x -> x.Reference, x |> tagShort |> toElement)
@@ -522,18 +520,14 @@ type TypePrinter(creator, resolver, linker) =
         None
       else
         seq [ m_creator.CreateTable(arguments, seq [ "Type"; "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
-
+    let overloads (members : 'a IReadOnlyCollection, i : int) =
+      if members.Count > 1 then
+        String.Format(" [{0}/{1}]", i + 1, members.Count)
+      else
+        ""
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
         let processCtor (i : int, ctor : IConstructor) =
-
-          let overloads =
-            if ctors.Count > 1 then
-              String.Format(" [{0}/{1}]", i + 1, ctors.Count)
-            else
-              ""
-          let toLower(x : string) =
-            x.ToLower()
           let signature =
             (ctor.Accessor |> accessorStr |> toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments2 ctor) + ")"
             |> textCode
@@ -554,13 +548,56 @@ type TypePrinter(creator, resolver, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
-          m_creator.CreateSection(joined, ctor.Name + overloads, 3) |> toElement
+          m_creator.CreateSection(joined, ctor.Name + overloads(ctors, i), 3) |> toElement
 
         ctors
         |> Seq.mapi (fun x y -> processCtor(x, y))
 
       match input with
       | :? IClass as x -> x.Constructors |> processCtors |> emptyToNone
+      | _ -> None
+
+    let methods = 
+      let processMethods (methods : IMethod IReadOnlyCollection) =
+        let processMethod (i : int, method : IMethod) =
+          let signature =
+            let getGenerics = 
+              if Seq.isEmpty method.Generics then
+                ""
+              else
+                String.Format("<{0}>", String.Join(", ", method.Generics))
+
+            String.Format("{0}{1} {2}{3}({4})",
+              (method.Accessor |> accessorStr |> toLower),
+              (if method.IsStatic then " static " else " "),
+              (if isNull method.Returns then "void" else method.Returns.DisplayName),
+              method.Name,
+              getGenerics,
+              (methodArguments2 method))
+            |> textCode
+            |> toElement
+          let content =
+            seq [
+              (getArguments method, "Arguments")
+              (getSingleTag(method, ITag.TagType.Summary), "Summary")
+              (getSingleTag(method, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(method, ITag.TagType.Example), "Example")
+              (getExceptions method, "Exceptions")
+              (getSeeAlso method, "See also")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          let joined = content
+                       |> Seq.append (seq [ signature ])
+
+          m_creator.CreateSection(joined, method.Name + overloads(methods, i), 3) |> toElement
+
+        methods
+        |> Seq.mapi (fun x y -> processMethod(x, y))
+
+      match input with
+      | :? IInterface as x -> x.Methods |> processMethods |> emptyToNone
       | _ -> None
 
     let sections =
@@ -573,6 +610,7 @@ type TypePrinter(creator, resolver, linker) =
         (nested, "Nested types")
         (single ITag.TagType.Seealso, "See also")
         (constructors, "Constructors")
+        (methods, "Methods")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)

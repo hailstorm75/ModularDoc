@@ -17,6 +17,9 @@ module internal Helpers =
     else
       Some(a)
 
+  let toLower(x : string) =
+    x.ToLower()
+
   let whereSome x =
     x
     |> Seq.filter Option.isSome
