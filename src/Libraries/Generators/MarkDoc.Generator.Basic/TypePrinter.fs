@@ -493,12 +493,35 @@ type TypePrinter(creator, resolver, linker) =
         seq [ m_creator.CreateList(seeAlsos, IList.ListType.Dotted) |> toElement ] |> Some
 
     let getArguments(c : IConstructor) = 
-      let arguments = findTag(input, c, ITag.TagType.Param)
-                      |> Seq.map (fun x -> seq [ x.Reference |> textNormal |> toElement; x |> tagShort |> toElement ] |> Linq.ToReadOnlyCollection)
+      let argumentDocs = findTag(input, c, ITag.TagType.Param)
+                         |> Seq.map (fun x -> x.Reference, x |> tagShort |> toElement)
+                         |> dict
+
+      let processArguments (x : IArgument) =
+        let getDescription =
+          let mutable value : IElement = null
+          seq [ if argumentDocs.TryGetValue(x.Name, &value) then yield value ]
+
+        let argType = 
+          let argType =seq [
+            let argType = x |> argumentTypeStr
+            if not (String.IsNullOrEmpty argType) then
+              yield argType |> textInline :> ITextContent
+          ]
+
+          m_creator.JoinTextContent(seq [ x.Type |> processResType ] |> Seq.append argType, " ")
+
+        let typeName = seq [ argType |> toElement; x.Name |> textNormal |> toElement ]
+        getDescription
+        |> Seq.append typeName
+        |> Linq.ToReadOnlyCollection
+
+      let arguments = c.Arguments
+                      |> Seq.map processArguments
       if (Seq.isEmpty c.Arguments || Seq.isEmpty arguments) then
         None
       else
-        seq [ m_creator.CreateTable(arguments, seq [ "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
+        seq [ m_creator.CreateTable(arguments, seq [ "Type"; "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
 
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
@@ -518,11 +541,11 @@ type TypePrinter(creator, resolver, linker) =
 
           let content =
             seq [
+              (getArguments ctor, "Arguments")
               (getSingleTag(ctor, ITag.TagType.Summary), "Summary")
               (getSingleTag(ctor, ITag.TagType.Remarks), "Remarks")
               (getSingleTag(ctor, ITag.TagType.Example), "Example")
               (getExceptions ctor, "Exceptions")
-              (getArguments ctor, "Arguments")
               (getSeeAlso ctor, "See also")
             ]
             |> Seq.filter (fst >> Option.isSome)
