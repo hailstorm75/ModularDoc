@@ -15,7 +15,10 @@ The generated structure is inspired by the one outputted by Doxygen. If you do n
 
 ## Running it
 
-As of writing this ReadMe, there is no user-friendly way of running this project. However, you can try to play around with the assembled test in **Tests/Ut.Generator/BenchmarkTest.cs**.
+As of writing this ReadMe, there is no user-friendly way of running this project. However, you can play around with the benchmark test in the console application.
+
+To do so, supply the paths to your dll's and exe's (how and where? You can figure it out, I trust you. 😁), place a breakpoint and run the console app.
+
 Run it at your own risk, the code is meant to serve for development purposes.
 
 ## Technical description
