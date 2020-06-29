@@ -468,7 +468,7 @@ type TypePrinter(creator, resolver, linker) =
     let getSingleTag (m : IMember, t : ITag.TagType) =
       let single (tags : ITag option) =
         match tags with
-        | Some -> tags |> Option.get |> tagFull |> Some
+        | Some -> tags |> Option.get |> tagFull |> emptyToNone
         | None -> None
       findTag(input, m, t)
       |> Seq.tryExactlyOne
@@ -520,13 +520,13 @@ type TypePrinter(creator, resolver, linker) =
         None
       else
         seq [ m_creator.CreateTable(arguments, seq [ "Type"; "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
-    let overloads (members : 'a IReadOnlyCollection, i : int) =
-      if members.Count > 1 then
-        String.Format(" [{0}/{1}]", i + 1, members.Count)
-      else
-        ""
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
+        let overloads (members : 'a IReadOnlyCollection, i : int) =
+          if members.Count > 1 then
+            String.Format(" [{0}/{1}]", i + 1, members.Count)
+          else
+            ""
         let processCtor (i : int, ctor : IConstructor) =
           let signature =
             (ctor.Accessor |> accessorStr |> toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments2 ctor) + ")"
@@ -559,7 +559,19 @@ type TypePrinter(creator, resolver, linker) =
 
     let methods = 
       let processMethods (methods : IMethod IReadOnlyCollection) =
-        let processMethod (i : int, method : IMethod) =
+        let overloads =
+          methods
+          |> Seq.groupBy (fun x -> x.Name)
+          |> Seq.map (fun x -> (fst x, snd x |> Seq.mapi (fun x y -> (y.RawName, x)) |> dict))
+          |> dict
+        let processMethod (method : IMethod) =
+          let getOverloads = 
+            let ov = overloads.[method.Name]
+            if ov.Count > 1 then
+              String.Format(" [{0}/{1}]", ov.[method.RawName] + 1, ov.Count)
+            else
+              ""
+
           let signature =
             let getGenerics = 
               if Seq.isEmpty method.Generics then
@@ -567,9 +579,9 @@ type TypePrinter(creator, resolver, linker) =
               else
                 String.Format("<{0}>", String.Join(", ", method.Generics))
 
-            String.Format("{0}{1} {2}{3}({4})",
+            String.Format("{0}{1} {2} {3}{4}({5})",
               (method.Accessor |> accessorStr |> toLower),
-              (if method.IsStatic then " static " else " "),
+              (if method.IsStatic then " static" else ""),
               (if isNull method.Returns then "void" else method.Returns.DisplayName),
               method.Name,
               getGenerics,
@@ -591,10 +603,10 @@ type TypePrinter(creator, resolver, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
-          m_creator.CreateSection(joined, method.Name + overloads(methods, i), 3) |> toElement
+          m_creator.CreateSection(joined, method.Name + getOverloads, 3) |> toElement
 
         methods
-        |> Seq.mapi (fun x y -> processMethod(x, y))
+        |> Seq.map processMethod
 
       match input with
       | :? IInterface as x -> x.Methods |> processMethods |> emptyToNone
