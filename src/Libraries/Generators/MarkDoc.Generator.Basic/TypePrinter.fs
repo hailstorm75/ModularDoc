@@ -189,20 +189,20 @@ type TypePrinter(creator, resolver, linker) =
     let list = new LinkedList<ITextContent>()
     let result = seq [
       for item in content do
-      if (item :? ITextContent) then
-        list.AddLast (item :?> ITextContent) |> ignore
-      elif (list.Count = 0) then
-        yield item
-      else
-        let joined = m_creator.JoinTextContent(list, " ") |> toElement
-        list.Clear()
+        if (item :? ITextContent) then
+          list.AddLast (item :?> ITextContent) |> ignore
+        elif (list.Count = 0) then
+          yield item
+        else
+          let joined = m_creator.JoinTextContent(list, " ") |> toElement
+          list.Clear()
 
-        yield joined
-        yield item
+          yield joined
+          yield item
     ]
 
     if (Seq.isEmpty result) then
-      list |> Seq.map toElement
+      seq [ m_creator.JoinTextContent(list, " ") |> toElement ]
     else
       result
 
@@ -579,9 +579,10 @@ type TypePrinter(creator, resolver, linker) =
               else
                 String.Format("<{0}>", String.Join(", ", method.Generics))
 
-            String.Format("{0}{1} {2} {3}{4}({5})",
+            String.Format("{0}{1} {2}{3} {4}{5}({6})",
               (method.Accessor |> accessorStr |> toLower),
               (if method.IsStatic then " static" else ""),
+              (if method.IsAsync then "async " else ""),
               (if isNull method.Returns then "void" else method.Returns.DisplayName),
               method.Name,
               getGenerics,
