@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/hailstorm75/markdoc.core/badge)](https://www.codefactor.io/repository/github/hailstorm75/markdoc.core)
+
 # MarkDoc.Core
 Markdown documentation generator for .NET libraries written in C# 8 and lower.
 
