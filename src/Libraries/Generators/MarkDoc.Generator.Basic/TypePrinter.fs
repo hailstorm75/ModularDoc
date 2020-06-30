@@ -189,7 +189,7 @@ type TypePrinter(creator, resolver, linker) =
     let list = new LinkedList<ITextContent>()
     let result = seq [
       for item in content do
-        if (item :? ITextContent) then
+        if (item :? ITextContent && (not (item :? IText) || (item :?> IText).Style <> IText.TextStyle.Code)) then
           list.AddLast (item :?> ITextContent) |> ignore
         elif (list.Count = 0) then
           yield item

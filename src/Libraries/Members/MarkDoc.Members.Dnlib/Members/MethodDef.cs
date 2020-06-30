@@ -110,10 +110,7 @@ namespace MarkDoc.Members.Dnlib.Members
       => ResolveOperator(source.Name, out isOperator);
 
     private static bool ResolveAsync(dnlib.DotNet.MethodDef source)
-    {
-      // TODO: Does not work
-      return source.CustomAttributes.Find(nameof(AsyncStateMachineAttribute)) != null;
-    }
+      => source.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name.String.Equals(nameof(AsyncStateMachineAttribute), StringComparison.InvariantCulture)) != null;
 
     private IResType? ResolveReturn(dnlib.DotNet.MethodDef source)
     {
