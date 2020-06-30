@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
 using MarkDoc.Members.Dnlib.Members;
@@ -44,6 +45,9 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <inheritdoc />
     public IReadOnlyCollection<IProperty> Properties { get; }
 
+    /// <inheritdoc />
+    public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypes { get; }
+
     #endregion
 
     /// <summary>
@@ -53,9 +57,9 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
     internal InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : this(resolver, source, parent, ResolveGenerics(resolver, source, parent)) { }
+      : this(resolver, source, parent, ResolveGenerics(resolver, source, parent), Enumerable.Empty<IResType>()) { }
 
-    protected InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics)
+    protected InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics, IEnumerable<IResType> inheritedTypes)
       : base(resolver, source, parent)
     {
       if (source is null)
@@ -81,14 +85,41 @@ namespace MarkDoc.Members.Dnlib.Types
                                     .ToReadOnlyCollection();
       Events = source.Events.Select(x => new EventDef(resolver, x))
                             .ToReadOnlyCollection();
+      InheritedTypes = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #region Methods
 
+    protected IReadOnlyDictionary<IMember, IInterface> ResolveInheritedMembers(IEnumerable<IResType> inheritedTypes)
+    {
+      IEnumerable<(IMember member, IInterface type)> XXX(IInterface type)
+      {
+        var methods = type.Methods.Union(Methods).Select(x => (x as IMember, type));
+        var properties = type.Properties.Union(Properties).Select(x => (x as IMember, type));
+        var events = type.Events.Union(Events).Select(x => (x as IMember, type));
+        var delegates = type.Delegates.Union(Delegates).Select(x => (x as IMember, type));
+
+        return methods
+          .Concat(properties)
+          .Concat(events)
+          .Concat(delegates)
+          .Where(x => !type.InheritedTypes.Value.ContainsKey(x.Item1))
+          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
+      }
+
+      return inheritedTypes
+        .Where(x => x.Reference.Value != null)
+        .Select(x => x.Reference.Value)
+        .OfType<IInterface>()
+        .Select(XXX)
+        .SelectMany(Linq.XtoX)
+        .ToDictionary(x => x.member, x => x.type);
+    }
+
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(x => Resolver.Resolve(x.Interface.ToTypeSig(), outerArgs));
 
-    private static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {
       IResType ResolveType(GenericParamConstraint x, IReadOnlyDictionary<string, string> generics)
         => resolver.Resolve(x.Constraint.ToTypeSig(), generics) ?? throw new Exception();

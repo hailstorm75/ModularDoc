@@ -520,6 +520,19 @@ type TypePrinter(creator, resolver, linker) =
         None
       else
         seq [ m_creator.CreateTable(arguments, seq [ "Type"; "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
+
+    let getInheritedFrom(m : IMember) = 
+      let getInheritance(x : IInterface) =
+        let mutable result : IInterface = null
+        if x.InheritedTypes.Value.TryGetValue(m, &result) then
+          Some(seq [ getTypeName result |> textNormal |> toElement ])
+        else
+          None
+
+      match input with
+      | :? IInterface as i -> getInheritance i
+      | _ -> None
+
     let constructors =
       let processCtors (ctors : IReadOnlyCollection<IConstructor>) =
         let overloads (members : 'a IReadOnlyCollection, i : int) =
@@ -596,6 +609,7 @@ type TypePrinter(creator, resolver, linker) =
               (getSingleTag(method, ITag.TagType.Remarks), "Remarks")
               (getSingleTag(method, ITag.TagType.Example), "Example")
               (getExceptions method, "Exceptions")
+              (getInheritedFrom method, "Inherited from")
               (getSeeAlso method, "See also")
             ]
             |> Seq.filter (fst >> Option.isSome)

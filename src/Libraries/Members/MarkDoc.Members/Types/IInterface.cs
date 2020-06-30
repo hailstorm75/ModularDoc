@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
@@ -39,5 +40,9 @@ namespace MarkDoc.Members.Types
     /// Collection of properties
     /// </summary>
     IReadOnlyCollection<IProperty> Properties { get; }
+    /// <summary>
+    /// Members inherited from derived types
+    /// </summary>
+    Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypes { get; }
   }
 }

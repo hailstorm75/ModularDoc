@@ -38,11 +38,11 @@ namespace MarkDoc.Members.Dnlib.Types
     /// Default constructor
     /// </summary>
     internal ClassDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(resolver, source, parent)
+      : base(resolver, source, parent, ResolveGenerics(resolver, source, parent), ResolveBaseClass(source, resolver, out var baseType))
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
-      BaseClass = ResolveBaseClass(source);
+      BaseClass = baseType;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                                             && x.IsConstructor)
@@ -62,9 +62,15 @@ namespace MarkDoc.Members.Dnlib.Types
       }
     }
 
-    private IResType? ResolveBaseClass(dnlib.DotNet.TypeDef source)
-      => source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false
-          ? Resolver.Resolve(source.BaseType.ToTypeSig(), source.ResolveTypeGenerics())
-          : null;
+    private static IEnumerable<IResType> ResolveBaseClass(dnlib.DotNet.TypeDef source, IResolver resolver, out IResType? result)
+    {
+      result = source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false
+               ? resolver.Resolve(source.BaseType.ToTypeSig(), source.ResolveTypeGenerics())
+               : null;
+
+      return result == null
+        ? Enumerable.Empty<IResType>()
+        : new[] { result };
+    }
   }
 }

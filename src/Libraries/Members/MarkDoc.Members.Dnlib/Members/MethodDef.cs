@@ -111,7 +111,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static bool ResolveAsync(dnlib.DotNet.MethodDef source)
     {
-      // TODO: Check
+      // TODO: Does not work
       return source.CustomAttributes.Find(nameof(AsyncStateMachineAttribute)) != null;
     }
 
