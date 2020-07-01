@@ -627,6 +627,41 @@ type TypePrinter(creator, resolver, linker) =
       | :? IInterface as x -> x.Methods |> processMethods |> emptyToNone
       | _ -> None
 
+    let events = 
+      let processEvents (events : IEvent IReadOnlyCollection) =
+        let processEvent (event : IEvent) =
+          let signature =
+            String.Format("{0}{1} {2} {3}",
+              (event.Accessor |> accessorStr |> toLower),
+              (if event.IsStatic then " static" else ""),
+              event.Type.DisplayName,
+              event.Name)
+            |> textCode
+            |> toElement
+          let content =
+            seq [
+              (getSingleTag(event, ITag.TagType.Summary), "Summary")
+              (getSingleTag(event, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(event, ITag.TagType.Example), "Example")
+              (getExceptions event, "Exceptions")
+              (getInheritedFrom event, "Inherited from")
+              (getSeeAlso event, "See also")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          let joined = content
+                       |> Seq.append (seq [ signature ])
+
+          m_creator.CreateSection(joined, event.Name, 3) |> toElement
+
+        events
+        |> Seq.map processEvent
+
+      match input with
+      | :? IInterface as x -> x.Events |> processEvents |> emptyToNone
+      | _ -> None
+
     let sections =
       seq [
         (single ITag.TagType.Summary, "Summary");
@@ -638,6 +673,7 @@ type TypePrinter(creator, resolver, linker) =
         (single ITag.TagType.Seealso, "See also")
         (constructors, "Constructors")
         (methods, "Methods")
+        (events, "Events")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
