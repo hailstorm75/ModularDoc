@@ -23,11 +23,11 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
     internal StructDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(resolver, source, parent, ResolveGenerics(resolver, source, parent), Enumerable.Empty<IResType>()) { }
+      : base(resolver, source, parent, ResolveGenericStructs(resolver, source, parent), Enumerable.Empty<IResType>()) { }
 
     #endregion
 
-    private static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    private static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenericStructs(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {
       IResType ResolveType(GenericParamConstraint x, IReadOnlyDictionary<string, string> generics)
         => resolver.Resolve(x.Constraint.ToTypeSig(), generics) ?? throw new Exception();
