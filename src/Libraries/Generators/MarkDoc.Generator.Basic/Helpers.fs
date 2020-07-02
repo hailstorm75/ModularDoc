@@ -25,6 +25,14 @@ module internal Helpers =
     |> Seq.filter Option.isSome
     |> Seq.map Option.get
 
+  let processMethods (property : IProperty) =
+    seq [
+      if property.GetAccessor.HasValue then
+        yield "get" 
+      if property.SetAccessor.HasValue then
+        yield "set" 
+    ]
+
   let listType (t : IListTag.ListType) =
     match t with
     | IListTag.ListType.Bullet -> IList.ListType.Dotted
