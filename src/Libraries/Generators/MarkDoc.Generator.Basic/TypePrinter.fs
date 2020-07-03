@@ -266,21 +266,7 @@ type TypePrinter(creator, resolver, linker) =
             let name = textInline property.Name :> ITextContent
             memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
-          let processMethods =
-            let getter =
-              if property.GetAccessor.HasValue then
-                seq [ textInline "get" :> ITextContent ]
-              else
-                Seq.empty
-            let setter =
-              if property.SetAccessor.HasValue then
-                seq [ textInline "set" :> ITextContent ]
-              else
-                Seq.empty
-
-            m_creator.JoinTextContent(Seq.append getter setter, " ")
-
-          seq [ processResType property.Type; processName; processMethods ]
+          seq [ processResType property.Type; processName; m_creator.JoinTextContent(processMethods property |> Seq.map (fun x -> textInline x :> ITextContent), " ") ]
           |> Seq.map toElement
           |> Linq.ToReadOnlyCollection
 
@@ -636,6 +622,77 @@ type TypePrinter(creator, resolver, linker) =
       | :? IInterface as x -> x.Methods |> processMethods |> emptyToNone
       | _ -> None
 
+    let properties = 
+      let processProperties (properties : IProperty IReadOnlyCollection) =
+        let processProperty (property : IProperty) =
+          let signature =
+            String.Format("{0}{1} {2} {3} {{ {4} }}",
+              (property.Accessor |> accessorStr |> toLower),
+              (if property.IsStatic then " static" else ""),
+              property.Type.DisplayName,
+              property.Name,
+              String.Join("; ", processMethods property))
+            |> textCode
+            |> toElement
+          let content =
+            seq [
+              (getSingleTag(property, ITag.TagType.Summary), "Summary")
+              (getSingleTag(property, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(property, ITag.TagType.Value), "Value")
+              (getSingleTag(property, ITag.TagType.Example), "Example")
+              (getExceptions property, "Exceptions")
+              (getInheritedFrom property, "Inherited from")
+              (getSeeAlso property, "See also")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          let joined = content
+                       |> Seq.append (seq [ signature ])
+
+          m_creator.CreateSection(joined, property.Name, 3) |> toElement
+
+        properties
+        |> Seq.map processProperty
+      match input with
+      | :? IInterface as x -> x.Properties |> processProperties |> emptyToNone
+      | _ -> None
+
+    let events = 
+      let processEvents (events : IEvent IReadOnlyCollection) =
+        let processEvent (event : IEvent) =
+          let signature =
+            String.Format("{0}{1} {2} {3}",
+              (event.Accessor |> accessorStr |> toLower),
+              (if event.IsStatic then " static" else ""),
+              event.Type.DisplayName,
+              event.Name)
+            |> textCode
+            |> toElement
+          let content =
+            seq [
+              (getSingleTag(event, ITag.TagType.Summary), "Summary")
+              (getSingleTag(event, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(event, ITag.TagType.Example), "Example")
+              (getExceptions event, "Exceptions")
+              (getInheritedFrom event, "Inherited from")
+              (getSeeAlso event, "See also")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          let joined = content
+                       |> Seq.append (seq [ signature ])
+
+          m_creator.CreateSection(joined, event.Name, 3) |> toElement
+
+        events
+        |> Seq.map processEvent
+
+      match input with
+      | :? IInterface as x -> x.Events |> processEvents |> emptyToNone
+      | _ -> None
+
     let sections =
       seq [
         (single ITag.TagType.Summary, "Summary");
@@ -647,6 +704,8 @@ type TypePrinter(creator, resolver, linker) =
         (single ITag.TagType.Seealso, "See also")
         (constructors, "Constructors")
         (methods, "Methods")
+        (properties, "Properties")
+        (events, "Events")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
