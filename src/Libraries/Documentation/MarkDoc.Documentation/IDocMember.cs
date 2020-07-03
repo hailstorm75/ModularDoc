@@ -21,7 +21,11 @@
       /// <summary>
       /// Member is a field
       /// </summary>
-      Field = 'F'
+      Field = 'F',
+      /// <summary>
+      /// Member is an event
+      /// </summary>
+      Event ='E'
     }
 
     #region Properties
@@ -35,7 +39,7 @@
     /// </summary>
     MemberType Type { get; }
     /// <summary>
-    /// Member documnetation
+    /// Member documentation
     /// </summary>
     IDocumentation Documentation { get; } 
 

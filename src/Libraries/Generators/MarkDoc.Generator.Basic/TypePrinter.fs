@@ -28,6 +28,15 @@ type TypePrinter(creator, resolver, linker) =
   let createHeadings headings =
     headings |> Seq.map textNormal
 
+  let processReference (reference : string) =
+    match reference.[0] with
+    | 'T' -> "TODO"
+    | 'M' -> reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.'))
+    | 'P' -> reference.Substring(reference.LastIndexOf('.'))
+    | 'F' -> reference.Substring(reference.LastIndexOf('.'))
+    | 'E' -> "TODO"
+    | _ -> ""
+
   let getTypeName (input : IType) =
     let joinGenerics (i : seq<string>) =
       let generics = i |> partial String.Join ", "
@@ -128,7 +137,7 @@ type TypePrinter(creator, resolver, linker) =
         -> Some(textInline inner.Reference |> toElement)
       | IInnerTag.InnerTagType.See
       | IInnerTag.InnerTagType.SeeAlso
-        -> Some(textBold inner.Reference |> toElement) // TODO: Create link
+        -> Some(inner.Reference |> processReference |> textBold |> toElement)
       | IInnerTag.InnerTagType.Para
         -> Some(textNormal Environment.NewLine |> toElement)
       | _ -> None
