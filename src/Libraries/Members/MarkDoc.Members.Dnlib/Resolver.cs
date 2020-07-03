@@ -240,17 +240,6 @@ namespace MarkDoc.Members.Dnlib
 
       result = null;
 
-      //var genericIndex = fullname.LastIndexOf('`');
-      //var tmp = fullname;
-      //if (genericIndex != -1)
-      //  tmp = fullname.Remove(genericIndex);
-
-      //var index = tmp.LastIndexOf('.');
-      //if (index == -1)
-      //  return false;
-
-      //var namespaceCut = fullname.Remove(index);
-
       if (!m_namespaces.Value.TryFindKnownNamespace(fullname, out var ns))
         return false;
 

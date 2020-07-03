@@ -14,10 +14,11 @@ open MarkDoc.Linkers
 open MarkDoc.Helpers
 open System.Collections.Generic
 
-type TypePrinter(creator, resolver, linker) =
-  let m_creator  : IElementCreator = creator
-  let m_resolver : IDocResolver    = resolver
-  let m_linker   : ILinker         = linker
+type TypePrinter(creator, docResolver, memberResolve, linker) =
+  let m_creator        : IElementCreator = creator
+  let m_docResolver    : IDocResolver    = docResolver
+  let m_memberResolver : IResolver       = memberResolve
+  let m_linker         : ILinker         = linker
 
   let textNormal x = m_creator.CreateText(x, IText.TextStyle.Normal)
   let textBold   x = m_creator.CreateText(x, IText.TextStyle.Bold)
@@ -27,15 +28,6 @@ type TypePrinter(creator, resolver, linker) =
 
   let createHeadings headings =
     headings |> Seq.map textNormal
-
-  let processReference (reference : string) =
-    match reference.[0] with
-    | 'T' -> "TODO"
-    | 'M' -> reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.'))
-    | 'P' -> reference.Substring(reference.LastIndexOf('.'))
-    | 'F' -> reference.Substring(reference.LastIndexOf('.'))
-    | 'E' -> "TODO"
-    | _ -> ""
 
   let getTypeName (input : IType) =
     let joinGenerics (i : seq<string>) =
@@ -63,6 +55,26 @@ type TypePrinter(creator, resolver, linker) =
     | :? IStruct as x -> processStruct x
     | :? IInterface as x -> processInterface x
     | _ -> input.Name
+
+  let processReference (reference : string) =
+    let typeReference =
+      let mutable result : IType = null
+      if m_memberResolver.TryFindType(reference.[2..], &result) then
+        m_creator.CreateLink(getTypeName result |> textNormal, m_linker.CreateLink result) :> ITextContent
+      else
+        let slice = reference.AsSpan(reference.LastIndexOf('.') + 1)
+        if slice.IndexOf('`') <> -1 then
+          slice.Slice(0, slice.IndexOf('`')).ToString() |> textNormal :> ITextContent
+        else
+          slice.ToString() |> textNormal :> ITextContent
+
+    match reference.[0] with
+    | 'T' -> typeReference
+    | 'E' -> typeReference
+    | 'M' -> reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.') + 1) |> textNormal :> ITextContent
+    | 'P' -> reference.Substring(reference.LastIndexOf('.') + 1) |> textNormal :> ITextContent
+    | 'F' -> reference.Substring(reference.LastIndexOf('.') + 1) |> textNormal :> ITextContent
+    | _ -> reference.Substring(2) |> textNormal :> ITextContent
 
   let processResType (item : IResType) =
     let tryLink (item : IResType) =
@@ -137,7 +149,7 @@ type TypePrinter(creator, resolver, linker) =
         -> Some(textInline inner.Reference |> toElement)
       | IInnerTag.InnerTagType.See
       | IInnerTag.InnerTagType.SeeAlso
-        -> Some(inner.Reference |> processReference |> textBold |> toElement)
+        -> Some(inner.Reference |> processReference |> toElement)
       | IInnerTag.InnerTagType.Para
         -> Some(textNormal Environment.NewLine |> toElement)
       | _ -> None
@@ -223,7 +235,7 @@ type TypePrinter(creator, resolver, linker) =
   let findTypeTag(input : IType, tag : ITag.TagType) =
     seq [
       let mutable typeDoc : IDocElement = null
-      if (m_resolver.TryFindType(input, &typeDoc)) then
+      if (m_docResolver.TryFindType(input, &typeDoc)) then
         let mutable result : IReadOnlyCollection<ITag> = null
         if (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
           result
@@ -233,7 +245,7 @@ type TypePrinter(creator, resolver, linker) =
   let findTag(input : IType, mem : IMember, tag : ITag.TagType) =
     seq [
       let mutable typeDoc : IDocElement = null
-      if (m_resolver.TryFindType(input, &typeDoc)) then
+      if (m_docResolver.TryFindType(input, &typeDoc)) then
         let mutable memberDoc : IDocMember = null
         if (typeDoc.Members.Value.TryGetValue(mem.RawName, &memberDoc)) then
           let mutable result : IReadOnlyCollection<ITag> = null
@@ -471,7 +483,7 @@ type TypePrinter(creator, resolver, linker) =
 
     let getExceptions (m : IMember) =
       let exceptions = findTag(input, m, ITag.TagType.Exception)
-                       |> Seq.map (fun x -> seq [ x.Reference |> textNormal |> toElement; x |> tagShort |> toElement ] |> Linq.ToReadOnlyCollection)
+                       |> Seq.map (fun x -> seq [ x.Reference |> processReference |> toElement; x |> tagShort |> toElement ] |> Linq.ToReadOnlyCollection)
 
       if Seq.isEmpty exceptions then
         None
@@ -518,9 +530,12 @@ type TypePrinter(creator, resolver, linker) =
 
     let getInheritedFrom(m : IMember) = 
       let getInheritance(x : IInterface) =
+        let typeReference (t : IType) = 
+          m_creator.CreateLink(getTypeName t |> textNormal, m_linker.CreateLink t) |> toElement
+
         let mutable result : IInterface = null
         if x.InheritedTypes.Value.TryGetValue(m, &result) then
-          Some(seq [ getTypeName result |> textNormal |> toElement ])
+          Some(seq [ typeReference result ])
         else
           None
 

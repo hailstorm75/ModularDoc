@@ -1,4 +1,5 @@
 ﻿using MarkDoc.Members.ResolvedTypes;
+using MarkDoc.Members.Types;
 
 namespace MarkDoc.Linkers
 {
@@ -13,5 +14,12 @@ namespace MarkDoc.Linkers
     /// <param name="type">Type to link to</param>
     /// <returns>Retrieved link</returns>
     string CreateLink(IResType type);
+
+    /// <summary>
+    /// Creates a link to a given <paramref name="type"/>
+    /// </summary>
+    /// <param name="type">Type to link to</param>
+    /// <returns>Retrieved link</returns>
+    string CreateLink(IType type);
   }
 }
