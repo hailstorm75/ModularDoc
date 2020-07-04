@@ -7,7 +7,6 @@ namespace MarkDoc.Members.Members
   /// Interface for type members
   /// </summary>
   public interface IMember
-    : IEquatable<IMember>
   {
     #region Properties
 
@@ -32,17 +31,5 @@ namespace MarkDoc.Members.Members
     AccessorType Accessor { get; } 
 
     #endregion
-
-#pragma warning disable CA1033 // Interface methods should be callable by child types
-    bool IEquatable<IMember>.Equals(IMember other)
-    {
-      if (ReferenceEquals(this, other))
-        return true;
-      if (IsStatic != other?.IsStatic)
-        return false;
-
-      return RawName.Equals(other?.RawName ?? string.Empty, StringComparison.InvariantCulture);
-    }
-#pragma warning restore CA1033 // Interface methods should be callable by child types
   }
 }

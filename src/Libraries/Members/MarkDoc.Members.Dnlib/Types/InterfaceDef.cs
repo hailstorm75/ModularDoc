@@ -90,30 +90,37 @@ namespace MarkDoc.Members.Dnlib.Types
 
     #region Methods
 
-    protected IReadOnlyDictionary<IMember, IInterface> ResolveInheritedMembers(IEnumerable<IResType> inheritedTypes)
+    private IReadOnlyDictionary<IMember, IInterface> ResolveInheritedMembers(IEnumerable<IResType> inheritedTypes)
     {
-      IEnumerable<(IMember member, IInterface type)> XXX(IInterface type)
+      IEnumerable<(IMember member, IInterface type)> GetInheritedTypes(IInterface type)
       {
-        var methods = type.Methods.Union(Methods).Select(x => (x as IMember, type));
-        var properties = type.Properties.Union(Properties).Select(x => (x as IMember, type));
-        var events = type.Events.Union(Events).Select(x => (x as IMember, type));
-        var delegates = type.Delegates.Union(Delegates).Select(x => (x as IMember, type));
+        IEnumerable<(IMember member, IInterface type)> Intersect<T>(IEnumerable<T> left, IEnumerable<T> right)
+          where T : IMember
+          => left.Intersect(right, EqualityComparerEx<T>.Create(x => x.RawName, x=> x.RawName)).Select(x => (x as IMember, type));
+
+        var methods = Intersect(type.Methods, Methods);
+        var properties = Intersect(type.Properties, Properties);
+        var events = Intersect(type.Events, Events);
+        var delegates = Intersect(type.Delegates, Delegates);
 
         return methods
           .Concat(properties)
           .Concat(events)
           .Concat(delegates)
-          .Where(x => !type.InheritedTypes.Value.ContainsKey(x.Item1))
+          .Where(x => !type.InheritedTypes.Value.ContainsKey(x.member))
           .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
       }
 
-      return inheritedTypes
-        .Where(x => x.Reference.Value != null)
+      var res = inheritedTypes
         .Select(x => x.Reference.Value)
+        .WhereNotNull()
         .OfType<IInterface>()
-        .Select(XXX)
-        .SelectMany(Linq.XtoX)
-        .ToDictionary(x => x.member, x => x.type);
+        .Select(GetInheritedTypes)
+        .SelectMany(Linq.XtoX).ToArray();
+
+      var b = res.GroupBy(x => x.member).ToDictionary(Linq.GroupKey, x => x.GroupValues().ToArray());
+
+      return res.ToDictionary(x => x.member, x => x.type);
     }
 
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
@@ -141,6 +148,9 @@ namespace MarkDoc.Members.Dnlib.Types
           GenericParamAttributes.Contravariant => Variance.Contravariant,
           _ => throw new NotSupportedException(Resources.varianceInvalid),
         };
+
+      if (source is null)
+        throw new ArgumentNullException(nameof(source));
 
       return source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
                                      .ToDictionary(x => x.Name.String, x => ResolveParameter(x, source.ResolveTypeGenerics()));
