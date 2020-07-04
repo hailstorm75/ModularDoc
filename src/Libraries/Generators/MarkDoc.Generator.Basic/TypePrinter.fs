@@ -602,11 +602,12 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
               else
                 String.Format("<{0}>", String.Join(", ", method.Generics))
 
-            String.Format("{0}{1} {2}{3} {4}{5}({6})",
+            String.Format("{0}{1} {2}{3}{4} {5}{6}({7})",
               (method.Accessor |> accessorStr |> toLower),
               (if method.IsStatic then " static" else ""),
               (if method.IsAsync then "async " else ""),
               (if isNull method.Returns then "void" else method.Returns.DisplayName),
+              (if method.IsOperator then " operator" else ""),
               method.Name,
               getGenerics,
               (methodArguments2 method))
@@ -618,6 +619,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
               (getSingleTag(method, ITag.TagType.Summary), "Summary")
               (getSingleTag(method, ITag.TagType.Remarks), "Remarks")
               (getSingleTag(method, ITag.TagType.Example), "Example")
+              (getSingleTag(method, ITag.TagType.Returns), "Returns")
               (getExceptions method, "Exceptions")
               (getInheritedFrom method, "Inherited from")
               (getSeeAlso method, "See also")
@@ -628,7 +630,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
-          m_creator.CreateSection(joined, method.Name + getOverloads, 3) |> toElement
+          m_creator.CreateSection(joined, (if method.IsOperator then "Operator " else "") + method.Name + getOverloads, 3) |> toElement
 
         methods
         |> Seq.map processMethod
