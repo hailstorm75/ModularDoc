@@ -41,7 +41,7 @@
     /// <summary>
     /// Member documentation
     /// </summary>
-    IDocumentation Documentation { get; } 
+    IDocumentation Documentation { get; }
 
     #endregion
   }

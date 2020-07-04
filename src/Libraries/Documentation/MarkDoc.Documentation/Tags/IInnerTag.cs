@@ -21,7 +21,7 @@ namespace MarkDoc.Documentation.Tags
 
     InnerTagType Type { get; }
     string Reference { get; }
-    IReadOnlyCollection<IContent> Content { get; } 
+    IReadOnlyCollection<IContent> Content { get; }
 
     #endregion
   }

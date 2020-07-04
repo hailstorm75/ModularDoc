@@ -117,7 +117,7 @@ namespace MarkDoc.Members.Dnlib.Members
         return MemberInheritance.Abstract;
 
       return MemberInheritance.Normal;
-    } 
+    }
 
     #endregion
   }

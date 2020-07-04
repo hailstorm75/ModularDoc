@@ -16,7 +16,7 @@ namespace MarkDoc.Documentation.Xml
     public MemberType Type { get; }
 
     /// <inheritdoc />
-    public IDocumentation Documentation { get; } 
+    public IDocumentation Documentation { get; }
 
     #endregion
 
