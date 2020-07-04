@@ -240,10 +240,10 @@ namespace MarkDoc.Members.Dnlib
 
       result = null;
 
-      if (!m_namespaces.Value.TryFindKnownNamespace(fullname, out var ns))
+      if (!m_namespaces.Value.TryFindKnownNamespace(fullname, out var ns)
+      || !Types.Value.TryGetValue(ns, out var types))
         return false;
 
-      var types = Types.Value[ns];
       result = types.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
 
       return result != null;
