@@ -1,4 +1,5 @@
-﻿using MarkDoc.Members.Enums;
+﻿using System;
+using MarkDoc.Members.Enums;
 
 namespace MarkDoc.Members.Members
 {
@@ -6,7 +7,10 @@ namespace MarkDoc.Members.Members
   /// Interface for type members
   /// </summary>
   public interface IMember
+    : IEquatable<IMember>
   {
+    #region Properties
+
     /// <summary>
     /// Is method static
     /// </summary>
@@ -25,6 +29,20 @@ namespace MarkDoc.Members.Members
     /// <summary>
     /// Member accessor
     /// </summary>
-    AccessorType Accessor { get; }
+    AccessorType Accessor { get; } 
+
+    #endregion
+
+#pragma warning disable CA1033 // Interface methods should be callable by child types
+    bool IEquatable<IMember>.Equals(IMember other)
+    {
+      if (ReferenceEquals(this, other))
+        return true;
+      if (IsStatic != other?.IsStatic)
+        return false;
+
+      return RawName.Equals(other?.RawName ?? string.Empty, StringComparison.InvariantCulture);
+    }
+#pragma warning restore CA1033 // Interface methods should be callable by child types
   }
 }
