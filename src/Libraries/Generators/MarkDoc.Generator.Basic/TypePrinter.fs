@@ -315,7 +315,20 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
               |> Seq.isEmpty
               |> not
 
-            let signature = seq [ textInline method.Name :> ITextContent; textNormal "(" :> ITextContent;  (if hasOverloads then textInline "..." :> ITextContent else (methodArguments method)); textNormal ")" :> ITextContent; ]
+            let signature =
+              seq [
+                if method.IsOperator then
+                  yield textInline "operator" :> ITextContent
+                  yield textNormal " " :> ITextContent
+
+                yield textInline method.Name :> ITextContent
+                yield textNormal "(" :> ITextContent
+
+                if hasOverloads then yield textInline "..." :> ITextContent
+                else yield methodArguments method
+
+                yield textNormal ")" :> ITextContent
+              ]
             let signatureText = m_creator.JoinTextContent(signature, "")
             memberNameSummary(signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
