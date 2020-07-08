@@ -9,6 +9,9 @@ module internal Helpers =
 
   let partial f x y = f(x , y)
 
+  let toTextContent (t : 'T when 'T :> ITextContent) =
+    t :> ITextContent
+
   let toElement x = x :> IElement 
 
   let emptyToNone (a : seq<'a>) =

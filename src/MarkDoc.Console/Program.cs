@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -17,19 +16,23 @@ using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
 using MarkDoc.Members.ResolvedTypes;
 using NBench;
+using MarkDoc.Members.Types;
 
 namespace MarkDoc.Console
 {
-  public class Bench
+  internal class Bench
   {
-    public class Linker
+    internal sealed class Linker
       : ILinker
     {
       public string CreateLink(IResType type)
         => "google.com";
+
+      public string CreateLink(IType type)
+        => "google.com";
     }
 
-    public class Creator
+    internal sealed class Creator
       : IElementCreator
     {
       public ILink CreateLink(IText content, string reference = "")
