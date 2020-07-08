@@ -115,14 +115,19 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     m_creator.JoinTextContent(item.Arguments |> Seq.map argument, ", ")
 
   // TODO: Refactor
-  let methodArguments2(item : IConstructor) =
+  let methodArguments2(item : IMember) =
     let argument (arg : IArgument) =
       let args =
         seq [ arg |> argumentTypeStr; processResType2 arg.Type; arg.Name ]
         |> Seq.filter (String.IsNullOrEmpty >> not)
       String.Join(" ", args)
+    let processArguments (args : IArgument seq) =
+      String.Join(", ", args |> Seq.map argument)
 
-    String.Join(", ", item.Arguments |> Seq.map argument)
+    match item with 
+    | :? IConstructor as c -> c.Arguments |> processArguments
+    | :? IDelegate as d -> d.Arguments |> processArguments
+    | _ -> raise (Exception())
 
   let rec processContent (item : IContent) =
     let getInlineText (tag : IInnerTag) =
@@ -497,7 +502,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         None
       else
         seq [ m_creator.CreateList(seeAlsos, IList.ListType.Dotted) |> toElement ] |> Some
-    let getArguments(c : IConstructor) = 
+    let getArguments(c : IMember) = 
       let argumentDocs = findTag(input, c, ITag.TagType.Param)
                          |> Seq.map (fun x -> x.Reference, x |> tagShort |> toElement)
                          |> dict
@@ -521,12 +526,18 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         |> Seq.append typeName
         |> Linq.ToReadOnlyCollection
 
-      let arguments = c.Arguments
-                      |> Seq.map processArguments
-      if (Seq.isEmpty c.Arguments || Seq.isEmpty arguments) then
-        None
-      else
-        seq [ m_creator.CreateTable(arguments, seq [ "Type"; "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
+      let generateResult (args : IArgument seq) =
+        let arguments = args
+                        |> Seq.map processArguments
+        if (Seq.isEmpty args || Seq.isEmpty arguments) then
+          None
+        else
+          seq [ m_creator.CreateTable(arguments, seq [ "Type"; "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
+
+      match c with
+      | :? IConstructor as x -> generateResult x.Arguments
+      | :? IDelegate as x -> generateResult x.Arguments
+      | _ -> raise (Exception())
 
     let getInheritedFrom(m : IMember) = 
       let getInheritance(x : IInterface) =
@@ -679,7 +690,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       let processEvents (events : IEvent IReadOnlyCollection) =
         let processEvent (event : IEvent) =
           let signature =
-            String.Format("{0}{1} {2} {3}",
+            String.Format("{0}{1} event {2} {3}",
               (event.Accessor |> accessorStr |> toLower),
               (if event.IsStatic then " static" else ""),
               event.Type.DisplayName,
@@ -710,6 +721,62 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       | :? IInterface as x -> x.Events |> processEvents |> emptyToNone
       | _ -> None
 
+    let delegates = 
+      let processDelegates (delegates : IDelegate IReadOnlyCollection) =
+        let overloads =
+          delegates
+          |> Seq.groupBy (fun x -> x.Name)
+          |> Seq.map (fun x -> (fst x, snd x |> Seq.mapi (fun x y -> (y.RawName, x)) |> dict))
+          |> dict
+        let processDelegate (deleg : IDelegate) =
+          let getOverloads = 
+            let ov = overloads.[deleg.Name]
+            if ov.Count > 1 then
+              String.Format(" [{0}/{1}]", ov.[deleg.RawName] + 1, ov.Count)
+            else
+              ""
+
+          let signature =
+            let getGenerics = 
+              if Seq.isEmpty deleg.Generics then
+                ""
+              else
+                String.Format("<{0}>", String.Join(", ", deleg.Generics))
+
+            String.Format("{0}{1} delegate {2} {3}{4}({5})",
+              (deleg.Accessor |> accessorStr |> toLower),
+              (if deleg.IsStatic then " static" else ""),
+              (if isNull deleg.Returns then "void" else deleg.Returns.DisplayName),
+              deleg.Name,
+              getGenerics,
+              (methodArguments2 deleg))
+            |> textCode
+            |> toElement
+          let content =
+            seq [
+              (getArguments deleg, "Arguments")
+              (getSingleTag(deleg, ITag.TagType.Summary), "Summary")
+              (getSingleTag(deleg, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(deleg, ITag.TagType.Example), "Example")
+              (getSingleTag(deleg, ITag.TagType.Returns), "Returns")
+              (getInheritedFrom deleg, "Inherited from")
+              (getSeeAlso deleg, "See also")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          let joined = content
+                       |> Seq.append (seq [ signature ])
+
+          m_creator.CreateSection(joined, deleg.Name, 3) |> toElement
+
+        delegates
+        |> Seq.map processDelegate
+
+      match input with
+      | :? IInterface as x -> x.Delegates |> processDelegates |> emptyToNone
+      | _ -> None
+
     let sections =
       seq [
         (single ITag.TagType.Summary, "Summary");
@@ -723,6 +790,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         (methods, "Methods")
         (properties, "Properties")
         (events, "Events")
+        (delegates, "Delegates")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
