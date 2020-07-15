@@ -45,6 +45,7 @@ namespace MarkDoc.Members.Dnlib.Types
       BaseClass = baseType;
       Constructors = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                                             && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                                            && !x.IsPrivate
                                             && x.IsConstructor)
                                    .Select(x => new ConstructorDef(resolver, x, parent != null))
                                    .ToReadOnlyCollection();
