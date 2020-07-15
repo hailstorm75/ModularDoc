@@ -56,24 +56,63 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     | :? IInterface as x -> processInterface x
     | _ -> input.Name
 
+  let tryFindMember (input : IType, memberFull : string, memberCut : string) =
+    match input with
+    | :? IInterface as i ->
+      match memberFull.[0] with
+      | 'M' -> i.Methods |> Seq.map (fun x -> x :> IMember) |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
+      | 'P' -> i.Properties |> Seq.map (fun x -> x :> IMember) |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
+      | 'E' -> i.Events |> Seq.map (fun x -> x :> IMember) |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
+      //| 'F' ->
+      | _ -> None
+    | _ -> None
+
   let processReference (reference : string) =
-    let typeReference =
+    let typeReference (reference : string) =
       let mutable result : IType = null
       if m_memberResolver.TryFindType(reference.[2..], &result) then
         m_creator.CreateLink(getTypeName result |> textNormal, m_linker.CreateLink result) :> ITextContent
       else
         let slice = reference.AsSpan(reference.LastIndexOf('.') + 1)
-        if slice.IndexOf('`') <> -1 then
-          slice.Slice(0, slice.IndexOf('`')).ToString() |> textNormal :> ITextContent
+        let index = slice.IndexOf('`')
+        if index <> -1 then
+          let generateGenerics = 
+            seq [ 1 .. (slice.Slice(index + 1).ToString() |> int) ]
+            |> Seq.map (fun x -> "T" + x.ToString())
+
+          String.Format("{0}<{1}>", slice.Slice(0, slice.IndexOf('`')).ToString(), String.Join(", ", generateGenerics)) |> textNormal :> ITextContent
         else
           slice.ToString() |> textNormal :> ITextContent
 
+    let memberReference cutter =
+      let memberString : string = cutter()
+      let typeString = reference.[..reference.Length - memberString.Length - 1]
+      let typeRef = typeReference typeString
+
+      let memberAnchor = 
+        let mutable result : IType = null
+        if m_memberResolver.TryFindType(typeString.[2..], &result) then
+          let mem = tryFindMember(result, reference, memberString)
+          if Option.isSome mem then
+            m_creator.CreateLink(memberString |> textNormal, m_linker.CreateAnchor (mem |> Option.get)) :> ITextContent
+          else
+            textNormal memberString :> ITextContent
+        else
+          textNormal memberString :> ITextContent
+
+      m_creator.JoinTextContent(seq [ typeRef; memberAnchor ], ".") |> toTextContent
+
+    let cutMethod() = 
+      reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.') + 1)
+    let cutMember() = 
+      reference.Substring(reference.LastIndexOf('.') + 1)
+
     match reference.[0] with
-    | 'T' -> typeReference
-    | 'E' -> typeReference
-    | 'M' -> reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.') + 1) |> textNormal :> ITextContent
-    | 'P' -> reference.Substring(reference.LastIndexOf('.') + 1) |> textNormal :> ITextContent
-    | 'F' -> reference.Substring(reference.LastIndexOf('.') + 1) |> textNormal :> ITextContent
+    | 'T' -> typeReference reference
+    | 'E' -> typeReference reference
+    | 'M' -> memberReference cutMethod
+    | 'P' -> memberReference cutMember
+    | 'F' -> memberReference cutMember
     | _ -> reference.Substring(2) |> textNormal :> ITextContent
 
   let processResType (item : IResType) =
@@ -185,6 +224,8 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         | :? IListTag -> true
         | :? IInnerTag as tag ->
           match tag.Type with
+          | IInnerTag.InnerTagType.See
+          | IInnerTag.InnerTagType.SeeAlso
           | IInnerTag.InnerTagType.Code
           | IInnerTag.InnerTagType.InvalidTag -> true
           | _ -> false
