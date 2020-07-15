@@ -93,7 +93,10 @@ namespace MarkDoc.Members.Dnlib.Members
         return AccessorType.Public;
       if (method.Access == dnlib.DotNet.MethodAttributes.Family)
         return AccessorType.Protected;
-      return AccessorType.Internal;
+      if (method.Access == dnlib.DotNet.MethodAttributes.Assembly)
+        return AccessorType.Internal;
+
+      throw new Exception("Private methods not allowed");
     }
 
     #endregion
