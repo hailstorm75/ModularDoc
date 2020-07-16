@@ -13,6 +13,7 @@ open MarkDoc.Elements
 open MarkDoc.Linkers
 open MarkDoc.Helpers
 open System.Collections.Generic
+open MarkDoc.Members.Enums
 
 type TypePrinter(creator, docResolver, memberResolve, linker) =
   let m_creator        : IElementCreator = creator
@@ -667,9 +668,10 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
               else
                 String.Format("<{0}>", String.Join(", ", method.Generics))
 
-            String.Format("{0}{1} {2}{3}{4} {5}{6}({7})",
+            String.Format("{0}{1}{2} {3}{4}{5} {6}{7}({8})",
               (method.Accessor |> accessorStr |> toLower),
               (if method.IsStatic then " static" else ""),
+              (if (method.Inheritance = MemberInheritance.Normal) then "" else " " + (inheritanceStr method.Inheritance)),
               (if method.IsAsync then "async " else ""),
               (if isNull method.Returns then "void" else method.Returns.DisplayName),
               (if method.IsOperator then " operator" else ""),
@@ -708,9 +710,10 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       let processProperties (properties : IProperty IReadOnlyCollection) =
         let processProperty (property : IProperty) =
           let signature =
-            String.Format("{0}{1} {2} {3} {{ {4} }}",
+            String.Format("{0}{1}{2} {3} {4} {{ {5} }}",
               (property.Accessor |> accessorStr |> toLower),
               (if property.IsStatic then " static" else ""),
+              (if (property.Inheritance = MemberInheritance.Normal) then "" else " " + (inheritanceStr property.Inheritance)),
               property.Type.DisplayName,
               property.Name,
               String.Join("; ", processMethods property))

@@ -29,11 +29,16 @@ module internal Helpers =
     |> Seq.map Option.get
 
   let processMethods (property : IProperty) =
+    let accessor (acc : AccessorType) = 
+      match acc with
+      | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
+      | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
+      | _ -> ""
     seq [
       if property.GetAccessor.HasValue then
-        yield "get" 
+        yield (accessor property.GetAccessor.Value) + "get" 
       if property.SetAccessor.HasValue then
-        yield "set" 
+        yield (accessor property.SetAccessor.Value) + "set" 
     ]
 
   let listType (t : IListTag.ListType) =
@@ -65,6 +70,13 @@ module internal Helpers =
     | AccessorType.Public -> "Public"
     | AccessorType.Protected -> "Protected"
     | AccessorType.Internal -> "Internal"
+    | _ -> ""
+
+  let inheritanceStr (inheritance : MemberInheritance) =
+    match inheritance with
+    | MemberInheritance.Abstract -> "abstract"
+    | MemberInheritance.Override -> "override"
+    | MemberInheritance.Virtual -> "virtual"
     | _ -> ""
 
   let groupMembers (members : seq<'M> when 'M :> IMember) =
