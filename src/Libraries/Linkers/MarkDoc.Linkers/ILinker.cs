@@ -1,4 +1,6 @@
-﻿using MarkDoc.Members.Members;
+﻿using System;
+using System.Collections.Generic;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
 
@@ -9,6 +11,13 @@ namespace MarkDoc.Linkers
   /// </summary>
   public interface ILinker
   {
+    /// <summary>
+    /// Types path structure
+    /// </summary>
+    IReadOnlyDictionary<IType, string> Paths { get; }
+
+    #region Methods
+
     /// <summary>
     /// Creates a link to a given <paramref name="type"/>
     /// </summary>
@@ -28,6 +37,8 @@ namespace MarkDoc.Linkers
     /// </summary>
     /// <param name="member">Member to link to</param>
     /// <returns>Retrieved link</returns>
-    string CreateAnchor(IMember member);
+    string CreateAnchor(IMember member); 
+
+    #endregion
   }
 }

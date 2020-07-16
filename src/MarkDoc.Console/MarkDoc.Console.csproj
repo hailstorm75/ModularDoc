@@ -36,6 +36,7 @@
     <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements\MarkDoc.Elements.csproj" />
     <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />
     <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\Libraries\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj" />
     <ProjectReference Include="..\Libraries\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj" />
   </ItemGroup>
 

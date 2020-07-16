@@ -12,26 +12,18 @@ using MarkDoc.Generator;
 using MarkDoc.Generator.Basic;
 using MarkDoc.Helpers;
 using MarkDoc.Linkers;
+using MarkDoc.Linkers.Markdown;
 using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
 using MarkDoc.Members.ResolvedTypes;
 using NBench;
 using MarkDoc.Members.Types;
+using MarkDoc.Members.Members;
 
 namespace MarkDoc.Console
 {
   internal class Bench
   {
-    internal sealed class Linker
-      : ILinker
-    {
-      public string CreateLink(IResType type)
-        => "google.com";
-
-      public string CreateLink(IType type)
-        => "google.com";
-    }
-
     internal sealed class Creator
       : IElementCreator
     {
@@ -83,7 +75,7 @@ namespace MarkDoc.Console
     [PerfBenchmark(NumberOfIterations = 3, RunMode = RunMode.Iterations, TestMode = TestMode.Measurement)]
     [TimingMeasurement]
     [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-    public void Foo()
+    public void Multithreaded()
     {
       var container = Build();
 
@@ -112,7 +104,7 @@ namespace MarkDoc.Console
     [PerfBenchmark(NumberOfIterations = 3, RunMode = RunMode.Iterations, TestMode = TestMode.Measurement)]
     [TimingMeasurement]
     [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-    public void Bar()
+    public void Synchronous()
     {
       var container = Build();
 
