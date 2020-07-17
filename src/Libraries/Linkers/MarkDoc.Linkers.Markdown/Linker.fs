@@ -11,9 +11,16 @@ type Linker(memberResolver) =
   let m_memberResolver : IResolver = memberResolver
 
   let generateStructure =
+    let getName (input: IType) = 
+      match input with
+      | :? IInterface as i ->
+        i.Name + new System.String('T', i.Generics.Count)
+      | _ ->
+        input.Name
+
     let result = new Dictionary<IType, string>()
     m_memberResolver.Types.Value
-    |> Seq.map (fun x -> x.Value |> Seq.map (fun y -> (y, x.Key.ToLowerInvariant().Replace('.', '/') + "/" + y.Name)))
+    |> Seq.map (fun x -> x.Value |> Seq.map (fun y -> (y, x.Key.ToLowerInvariant().Replace('.', '/') + "/" + getName y)))
     |> Seq.collect id
     |> Seq.iter (fun x -> result.Add(fst x, snd x))
 
