@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,14 +14,11 @@ using MarkDoc.Linkers;
 using MarkDoc.Linkers.Markdown;
 using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
-using MarkDoc.Members.ResolvedTypes;
-using NBench;
 using MarkDoc.Members.Types;
-using MarkDoc.Members.Members;
 
 namespace MarkDoc.Console
 {
-  internal class Bench
+  public static class Program
   {
     internal sealed class Creator
       : IElementCreator
@@ -51,6 +47,8 @@ namespace MarkDoc.Console
 
     #region Fields
 
+    private const string OUTPUT = @"";
+
     private static readonly IReadOnlyCollection<string> DLL_PATHS = new[]
     {
       ""
@@ -72,69 +70,45 @@ namespace MarkDoc.Console
       return builder.Build();
     }
 
-    [PerfBenchmark(NumberOfIterations = 3, RunMode = RunMode.Iterations, TestMode = TestMode.Measurement)]
-    [TimingMeasurement]
-    [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-    public void Multithreaded()
+    private static async Task Main()
+      => await Run().ConfigureAwait(false);
+
+    private static async Task Run()
     {
       var container = Build();
 
       var resolver = container.Resolve<IResolver>();
       var docResolver = container.Resolve<IDocResolver>();
 
-      var tasks = XML_PATHS.Select(docResolver.Resolve)
+      var tasks = XML_PATHS
+        .Select(docResolver.Resolve)
         .Concat(new[] { Task.Run(() => Parallel.ForEach(DLL_PATHS, resolver.Resolve)) });
 
-      Task.WhenAll(tasks).GetAwaiter().GetResult();
+      await Task.WhenAll(tasks).ConfigureAwait(false);
 
       var result = resolver.Types.Value;
       var printer = container.Resolve<ITypePrinter>();
 
-      var bag = new ConcurrentBag<string>();
-      var pages = result.Values
-        .AsParallel()
-        .SelectMany(Linq.XtoX)
-        .Select(printer.Print)
-        .Select(x => x.ToString());
-      pages.ForAll(bag.Add);
+      var linker = container.Resolve<ILinker>();
 
-      container.Disposer.Dispose();
-    }
+      async Task Print(IElement element, IType type)
+      {
+        var path = Path.Combine(OUTPUT, linker.Paths[type]) + ".md";
 
-    [PerfBenchmark(NumberOfIterations = 3, RunMode = RunMode.Iterations, TestMode = TestMode.Measurement)]
-    [TimingMeasurement]
-    [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-    public void Synchronous()
-    {
-      var container = Build();
+        if (!Directory.Exists(path))
+          Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-      var resolver = container.Resolve<IResolver>();
-      var docResolver = container.Resolve<IDocResolver>();
-
-      var tasks = XML_PATHS.Select(docResolver.Resolve)
-        .Concat(new[] { Task.Run(() => Parallel.ForEach(DLL_PATHS, resolver.Resolve)) });
-
-      Task.WhenAll(tasks).GetAwaiter().GetResult();
-
-      var result = resolver.Types.Value;
-      var printer = container.Resolve<ITypePrinter>();
+        await using var file = File.CreateText(path);
+        await file.WriteAsync(element.ToString()).ConfigureAwait(false);
+      }
 
       var pages = result.Values
         .SelectMany(Linq.XtoX)
-        .Select(printer.Print)
-        .Select(x => x.ToString())
-        .ToReadOnlyCollection();
+        .Select(x => Print(printer.Print(x), x));
 
-      container.Disposer.Dispose();
-    }
-  }
+      await Task.WhenAll(pages).ConfigureAwait(false);
 
-  public static class Program
-  {
-    private static void Main()
-    {
-      NBenchRunner.Run<Bench>();
-      System.Console.ReadLine();
+      await container.Disposer.DisposeAsync().ConfigureAwait(false);
     }
   }
 }
