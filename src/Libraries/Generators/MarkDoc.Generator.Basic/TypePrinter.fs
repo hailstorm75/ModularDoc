@@ -68,11 +68,11 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       | _ -> None
     | _ -> None
 
-  let processReference (reference : string) =
+  let processReference (input: IType, reference : string) =
     let typeReference (reference : string) =
       let mutable result : IType = null
       if m_memberResolver.TryFindType(reference.[2..], &result) then
-        m_creator.CreateLink(getTypeName result |> textNormal, m_linker.CreateLink result) :> ITextContent
+        m_creator.CreateLink(getTypeName result |> textNormal, m_linker.CreateLink(&input, &result)) :> ITextContent
       else
         let slice = reference.AsSpan(reference.LastIndexOf('.') + 1)
         let index = slice.IndexOf('`')
@@ -116,9 +116,9 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     | 'F' -> memberReference cutMember
     | _ -> reference.Substring(2) |> textNormal :> ITextContent
 
-  let processResType (item : IResType) =
+  let processResType (source: IType, item : IResType) =
     let tryLink (item : IResType) =
-      let link = m_linker.CreateLink(item)
+      let link = m_linker.CreateLink(&source, &item)
       if not (String.IsNullOrEmpty link) then
         m_creator.CreateLink(textInline item.DisplayName, link) :> ITextContent
       else
@@ -147,9 +147,9 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     | _ -> tryLink item
 
   // TODO: Refactor
-  let methodArguments (item : IConstructor) =
+  let methodArguments (source: IType, item : IConstructor) =
     let argument (arg : IArgument) =
-      let args = seq [ arg |> (argumentTypeStr >> textNormal) :> ITextContent; processResType arg.Type; textNormal arg.Name :> ITextContent ]
+      let args = seq [ arg |> (argumentTypeStr >> textNormal) :> ITextContent; processResType(source, arg.Type); textNormal arg.Name :> ITextContent ]
       m_creator.JoinTextContent(args, " ")
 
     m_creator.JoinTextContent(item.Arguments |> Seq.map argument, ", ")
@@ -169,7 +169,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     | :? IDelegate as d -> d.Arguments |> processArguments
     | _ -> raise (Exception())
 
-  let rec processContent (item : IContent) =
+  let rec processContent (input: IType, item : IContent) =
     let getInlineText (tag : IInnerTag) =
       tag.Content
       |> Seq.where(fun x -> x :? ITextTag)
@@ -177,7 +177,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
     let processColumn(column : seq<IContent>) =
       column
-      |> Seq.map processContent
+      |> Seq.map (fun x -> processContent(input, x))
       |> whereSome
       |> Seq.map toElement
 
@@ -194,7 +194,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         -> Some(textInline inner.Reference |> toElement)
       | IInnerTag.InnerTagType.See
       | IInnerTag.InnerTagType.SeeAlso
-        -> Some(inner.Reference |> processReference |> toElement)
+        -> Some(processReference(input, inner.Reference) |> toElement)
       | IInnerTag.InnerTagType.Para
         -> Some(textNormal Environment.NewLine |> toElement)
       | _ -> None
@@ -204,7 +204,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         let content = list.Rows
                       |> Seq.map (processColumn >> Linq.ToReadOnlyCollection)
         let headings = list.Headings
-                       |> Seq.map processContent
+                       |> Seq.map (fun x -> processContent(input, x))
                        |> whereSome
                        |> Seq.filter(fun x-> x :? IText)
                        |> Seq.map(fun x -> x :?> IText)
@@ -212,13 +212,13 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       | _ ->
         let content = list.Rows
                       |> Seq.collect id
-                      |> Seq.map processContent
+                      |> Seq.map (fun x -> processContent(input, x))
                       |> whereSome
 
         Some(m_creator.CreateList(content, listType list.Type) |> toElement)
     | _ -> None
 
-  let tagShort (x : ITag) =
+  let tagShort (input: IType, x : ITag) =
     let getCount =
       let isInvalid (item : IContent) =
         match item with
@@ -240,7 +240,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let readMore = if (count <> x.Content.Count) then Some(textNormal "..." |> toElement) else None
     let processed = x.Content
                     |> Seq.take count
-                    |> Seq.map processContent
+                    |> Seq.map (fun x -> processContent(input, x))
     let content = seq [readMore]
                   |> Seq.append processed
                   |> whereSome
@@ -249,9 +249,9 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
     m_creator.JoinTextContent(content, " ")
 
-  let tagFull (x : ITag) =
+  let tagFull (input: IType, x : ITag) =
     let content = x.Content
-                  |> Seq.map processContent
+                  |> Seq.map (fun x -> processContent(input, x))
                   |> whereSome
 
     let list = new LinkedList<ITextContent>()
@@ -274,10 +274,10 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     else
       result
 
-  let memberNameSummary(name : ITextContent, summary : Option<ITag>) =
+  let memberNameSummary(input: IType, name : ITextContent, summary : Option<ITag>) =
     match summary with
     | None -> name
-    | Some x -> m_creator.JoinTextContent(seq [ name; tagShort x ], Environment.NewLine)
+    | Some x -> m_creator.JoinTextContent(seq [ name; tagShort(input, x) ], Environment.NewLine)
 
   let findTypeTag(input : IType, tag : ITag.TagType) =
     seq [
@@ -304,7 +304,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
   let printIntroduction(input : IType) =
     match findTypeTag(input, ITag.TagType.Summary) |> Seq.tryExactlyOne with
     | None -> None
-    | Some x -> Some(seq [ x |> tagShort :> IElement])
+    | Some x -> Some(seq [ tagShort(input, x) :> IElement])
 
   let printMemberTables(input : IType) =
     let processInterface(input : IInterface) =
@@ -323,9 +323,9 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         let createRow(property : IProperty) =
           let processName =
             let name = textInline property.Name :> ITextContent
-            memberNameSummary(name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+            memberNameSummary(input, name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
-          seq [ processResType property.Type; processName; m_creator.JoinTextContent(processMethods property |> Seq.map (fun x -> textInline x :> ITextContent), " ") ]
+          seq [ processResType(input, property.Type); processName; m_creator.JoinTextContent(processMethods property |> Seq.map (fun x -> textInline x :> ITextContent), " ") ]
           |> Seq.map toElement
           |> Linq.ToReadOnlyCollection
 
@@ -348,7 +348,9 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
             if isNull method.Returns then
               content :> ITextContent
             else
-              let link = m_linker.CreateLink method.Returns
+              let a = input :> IType
+              let b = method.Returns
+              let link = m_linker.CreateLink(&a, &b)
               if String.IsNullOrEmpty link then
                 content :> ITextContent
               else
@@ -372,12 +374,12 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
                 yield textNormal "(" :> ITextContent
 
                 if hasOverloads then yield textInline "..." :> ITextContent
-                else yield methodArguments method
+                else yield methodArguments(input,  method)
 
                 yield textNormal ")" :> ITextContent
               ]
             let signatureText = m_creator.JoinTextContent(signature, "")
-            memberNameSummary(signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+            memberNameSummary(input, signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
           seq [ processReturn; processMethod ]
           |> Seq.map toElement
@@ -422,7 +424,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       if Option.isNone tag then
         None
       else
-        tag |> Option.get |> tagFull |> emptyToNone
+        tagFull(input, tag |> Option.get) |> emptyToNone
 
     let nested =
       let getNested (x : IStruct) =
@@ -467,7 +469,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let inheritance =
       let getInterfaces (x : 'M when 'M :> IInterface) =
         x.InheritedInterfaces
-        |> Seq.map (processResType >> toElement)
+        |> Seq.map (fun x -> processResType(input, x) |> toElement)
 
       let createList l =
         if (Seq.isEmpty l) then
@@ -477,7 +479,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
       match input with
       | :? IClass as x ->
-        let baseType = if (isNull x.BaseClass) then None else x.BaseClass |> processResType |> toElement |> Some
+        let baseType = if (isNull x.BaseClass) then None else processResType(input, x.BaseClass) |> toElement |> Some
         let interfaces = getInterfaces x
         seq [ baseType ]
         |> whereSome
@@ -495,7 +497,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
             if generics.ContainsKey(x.Reference) then
               let types = generics.[x.Reference].ToTuple()
                           |> snd
-                          |> Seq.map processResType
+                          |> Seq.map (fun x -> processResType(input, x))
               m_creator.JoinTextContent(types, Environment.NewLine) |> Some
             else
               None
@@ -513,7 +515,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
           let constraints = getConstraints x
           seq [
             yield getName x
-            yield tagShort x |> toElement
+            yield tagShort(input, x) |> toElement
 
             if (Option.isSome constraints) then
               yield constraints |> Option.get |> toElement
@@ -535,7 +537,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let getSingleTag (m : IMember, t : ITag.TagType) =
       let single (tags : ITag option) =
         match tags with
-        | Some -> tags |> Option.get |> tagFull |> emptyToNone
+        | Some -> tagFull(input, tags |> Option.get) |> emptyToNone
         | None -> None
       findTag(input, m, t)
       |> Seq.tryExactlyOne
@@ -543,7 +545,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
     let getExceptions (m : IMember) =
       let exceptions = findTag(input, m, ITag.TagType.Exception)
-                       |> Seq.map (fun x -> seq [ x.Reference |> processReference |> toElement; x |> tagShort |> toElement ] |> Linq.ToReadOnlyCollection)
+                       |> Seq.map (fun x -> seq [ processReference(input, x.Reference) |> toElement; tagShort(input, x) |> toElement ] |> Linq.ToReadOnlyCollection)
 
       if Seq.isEmpty exceptions then
         None
@@ -551,7 +553,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         seq [ m_creator.CreateTable(exceptions, seq [ "Name"; "Description" ] |> createHeadings) |> toElement ] |> Some
     let getSeeAlso (m : IMember) =
       let seeAlsos = findTag(input, m, ITag.TagType.Seealso)
-                     |> Seq.map (tagShort >> toElement)
+                     |> Seq.map (fun x -> tagShort(input, x) |> toElement)
 
       if Seq.isEmpty seeAlsos then
         None
@@ -559,7 +561,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         seq [ m_creator.CreateList(seeAlsos, IList.ListType.Dotted) |> toElement ] |> Some
     let getArguments(c : IMember) = 
       let argumentDocs = findTag(input, c, ITag.TagType.Param)
-                         |> Seq.map (fun x -> x.Reference, x |> tagShort |> toElement)
+                         |> Seq.map (fun x -> x.Reference, tagShort(input, x) |> toElement)
                          |> dict
 
       let processArguments (x : IArgument) =
@@ -574,7 +576,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
               yield argType |> textInline :> ITextContent
           ]
 
-          m_creator.JoinTextContent(seq [ x.Type |> processResType ] |> Seq.append argType, " ")
+          m_creator.JoinTextContent(seq [ processResType(input, x.Type) ] |> Seq.append argType, " ")
 
         let typeName = seq [ argType |> toElement; x.Name |> textNormal |> toElement ]
         getDescription
@@ -597,7 +599,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let getInheritedFrom(m : IMember) = 
       let getInheritance(x : IInterface) =
         let typeReference (t : IType) = 
-          m_creator.CreateLink(getTypeName t |> textNormal, m_linker.CreateLink t) |> toElement
+          m_creator.CreateLink(getTypeName t |> textNormal, m_linker.CreateLink(&input, &t)) |> toElement
 
         let mutable result : IInterface = null
         if x.InheritedTypes.Value.TryGetValue(m, &result) then

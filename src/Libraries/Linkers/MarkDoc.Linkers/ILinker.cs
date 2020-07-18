@@ -19,18 +19,20 @@ namespace MarkDoc.Linkers
     #region Methods
 
     /// <summary>
-    /// Creates a link to a given <paramref name="type"/>
+    /// Creates a link to a given type <paramref name="target"/>
     /// </summary>
-    /// <param name="type">Type to link to</param>
+    /// <param name="source">Link from</param>
+    /// <param name="target">Link target</param>
     /// <returns>Retrieved link</returns>
-    string CreateLink(IResType type);
+    string CreateLink(in IType source, in IResType target);
 
     /// <summary>
-    /// Creates a link to a given <paramref name="type"/>
+    /// Creates a link to a given type <paramref name="target"/>
     /// </summary>
-    /// <param name="type">Type to link to</param>
+    /// <param name="source"></param>
+    /// <param name="target"></param>
     /// <returns>Retrieved link</returns>
-    string CreateLink(IType type);
+    string CreateLink(in IType source, in IType target);
 
     /// <summary>
     /// Creates an anchor to a given <paramref name="member"/>

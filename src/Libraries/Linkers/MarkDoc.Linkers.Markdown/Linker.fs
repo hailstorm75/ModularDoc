@@ -26,18 +26,18 @@ type Linker(memberResolver) =
 
     result :> IReadOnlyDictionary<IType, string>
 
-  let createLink (input: IType) =
+  let createLink (source: IType, target: IType) =
     let mutable result : string = null
-    if generateStructure.TryGetValue(input, &result) then
+    if generateStructure.TryGetValue(target, &result) then
       result
     else
       ""
 
-  let createResLink (input: IResType) =
-    if isNull input.Reference.Value then
+  let createResLink (source: IType, target: IResType) =
+    if isNull target.Reference.Value then
       ""
     else
-      createLink(input.Reference.Value)
+      createLink(source, target.Reference.Value)
 
   let createAnchor (input: IMember) =
     ""
@@ -45,6 +45,6 @@ type Linker(memberResolver) =
   interface ILinker with
     member __.Paths with get() = generateStructure
 
-    member __.CreateLink(input: IType) = createLink input
-    member __.CreateLink(input: IResType) = createResLink input
-    member __.CreateAnchor(input: IMember) = createAnchor input
+    member __.CreateLink(source: IType inref, target: IType inref) = createLink(source, target)
+    member __.CreateLink(source: IType inref, target: IResType inref) = createResLink(source, target)
+    member __.CreateAnchor(target: IMember) = createAnchor target
