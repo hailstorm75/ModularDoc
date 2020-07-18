@@ -108,7 +108,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         return name;
 
       return name.Remove(genericsIndex);
-    } 
+    }
 
     #endregion
   }

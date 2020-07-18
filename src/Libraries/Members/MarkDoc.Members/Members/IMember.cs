@@ -1,5 +1,4 @@
-﻿using System;
-using MarkDoc.Members.Enums;
+﻿using MarkDoc.Members.Enums;
 
 namespace MarkDoc.Members.Members
 {
@@ -28,7 +27,7 @@ namespace MarkDoc.Members.Members
     /// <summary>
     /// Member accessor
     /// </summary>
-    AccessorType Accessor { get; } 
+    AccessorType Accessor { get; }
 
     #endregion
   }

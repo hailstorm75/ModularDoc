@@ -17,7 +17,7 @@ namespace MarkDoc.Documentation.Xml
   {
     #region Fields
 
-    private readonly Cache m_documentation = new Cache();
+    private readonly Cache m_documentation;
     private readonly IResolver m_typeResolver;
 
     #endregion
@@ -25,7 +25,10 @@ namespace MarkDoc.Documentation.Xml
     public DocResolver(IResolver typeResolver)
     {
       m_typeResolver = typeResolver;
+      m_documentation = new Cache();
     }
+
+    #region Methods
 
     /// <inheritdoc />
     public async Task Resolve(string path)
@@ -159,5 +162,7 @@ namespace MarkDoc.Documentation.Xml
 
       return resultMembers != null;
     }
+
+    #endregion
   }
 }

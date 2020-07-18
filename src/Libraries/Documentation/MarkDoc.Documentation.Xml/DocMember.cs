@@ -4,8 +4,8 @@ using static MarkDoc.Documentation.IDocMember;
 
 namespace MarkDoc.Documentation.Xml
 {
-  public class DocMember
-    : IDocMember
+  public readonly struct DocMember
+    : IDocMember, IEquatable<DocMember>
   {
     #region Properties
 
@@ -36,5 +36,23 @@ namespace MarkDoc.Documentation.Xml
       Type = type;
       Documentation = documentation;
     }
+
+    /// <inheritdoc />
+    public bool Equals(DocMember other)
+      => Name == other.Name && Type == other.Type && Documentation.Equals(other.Documentation);
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj)
+      => obj is DocMember other && Equals(other);
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+      => HashCode.Combine(Name, (int) Type, Documentation);
+
+    public static bool operator ==(DocMember left, DocMember right)
+      => left.Equals(right);
+
+    public static bool operator !=(DocMember left, DocMember right)
+      => !left.Equals(right);
   }
 }

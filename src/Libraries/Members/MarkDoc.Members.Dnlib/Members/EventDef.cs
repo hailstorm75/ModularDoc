@@ -19,7 +19,7 @@ namespace MarkDoc.Members.Dnlib.Members
     public override string Name { get; }
 
     /// <inheritdoc />
-    public override AccessorType Accessor { get; } 
+    public override AccessorType Accessor { get; }
 
     /// <inheritdoc />
     public IResType Type { get; }
@@ -53,7 +53,7 @@ namespace MarkDoc.Members.Dnlib.Members
         MethodAttributes.Public => AccessorType.Public,
         MethodAttributes.Family => AccessorType.Protected,
         _ => AccessorType.Internal
-      }; 
+      };
 
     #endregion
   }

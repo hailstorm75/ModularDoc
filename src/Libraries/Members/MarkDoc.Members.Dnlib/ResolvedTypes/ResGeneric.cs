@@ -13,7 +13,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
   {
     #region Properties
 
-    public IReadOnlyCollection<IResType> Generics { get; } 
+    public IReadOnlyCollection<IResType> Generics { get; }
 
     #endregion
 

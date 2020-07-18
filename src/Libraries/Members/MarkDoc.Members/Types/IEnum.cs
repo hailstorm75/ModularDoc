@@ -3,7 +3,7 @@
 namespace MarkDoc.Members.Types
 {
   /// <summary>
-  /// Interface for enums 
+  /// Interface for enums
   /// </summary>
   public interface IEnum
     : IType

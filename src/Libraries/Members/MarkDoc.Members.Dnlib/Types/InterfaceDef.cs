@@ -111,16 +111,13 @@ namespace MarkDoc.Members.Dnlib.Types
           .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
       }
 
-      var res = inheritedTypes
+      return inheritedTypes
         .Select(x => x.Reference.Value)
         .WhereNotNull()
         .OfType<IInterface>()
         .Select(GetInheritedTypes)
-        .SelectMany(Linq.XtoX).ToArray();
-
-      var b = res.GroupBy(x => x.member).ToDictionary(Linq.GroupKey, x => x.GroupValues().ToArray());
-
-      return res.ToDictionary(x => x.member, x => x.type);
+        .SelectMany(Linq.XtoX)
+        .ToDictionary(x => x.member, x => x.type);
     }
 
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)

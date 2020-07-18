@@ -9,8 +9,8 @@ using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml
 {
-  public class DocumentationContent
-    : IDocumentation
+  public readonly struct DocumentationContent
+    : IDocumentation, IEquatable<DocumentationContent>
   {
     #region Properties
 
@@ -46,7 +46,34 @@ namespace MarkDoc.Documentation.Xml
       InheritDocRef = t?.First()?.Reference ?? string.Empty;
     }
 
+    #region Methods
+
     private static IEnumerable<ITag> ResolveTags(IEnumerable<XElement> source)
       => source.Select(node => new Tag(node));
+
+    /// <inheritdoc />
+    public override bool Equals(object obj)
+    {
+      if (!(obj is DocumentationContent doc))
+        return false;
+
+      return Equals(doc);
+    }
+
+    public static bool operator ==(DocumentationContent left, DocumentationContent right)
+      => left.Equals(right);
+
+    public static bool operator !=(DocumentationContent left, DocumentationContent right)
+      => !(left == right);
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+      => HashCode.Combine(Tags, HasInheritDoc, InheritDocRef);
+
+    /// <inheritdoc />
+    public bool Equals(DocumentationContent other)
+      => Tags.Equals(other.Tags) && HasInheritDoc == other.HasInheritDoc && InheritDocRef == other.InheritDocRef;
+
+    #endregion
   }
 }

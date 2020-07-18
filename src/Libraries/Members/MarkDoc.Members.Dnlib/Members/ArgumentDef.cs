@@ -62,7 +62,7 @@ namespace MarkDoc.Members.Dnlib.Members
         return ArgumentType.Optional;
 
       return ArgumentType.Normal;
-    } 
+    }
 
     #endregion
   }

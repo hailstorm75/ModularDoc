@@ -33,7 +33,7 @@ namespace MarkDoc.Members.ResolvedTypes
     /// <summary>
     /// Reference to known type
     /// </summary>
-    Lazy<IType?> Reference { get; } 
+    Lazy<IType?> Reference { get; }
 
     #endregion
   }
