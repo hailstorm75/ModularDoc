@@ -58,12 +58,14 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     | _ -> input.Name
 
   let tryFindMember (input : IType, memberFull : string, memberCut : string) =
+    let toMember (a: 'M when 'M :> IMember) =
+      a :> IMember
     match input with
     | :? IInterface as i ->
       match memberFull.[0] with
-      | 'M' -> i.Methods |> Seq.map (fun x -> x :> IMember) |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
-      | 'P' -> i.Properties |> Seq.map (fun x -> x :> IMember) |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
-      | 'E' -> i.Events |> Seq.map (fun x -> x :> IMember) |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
+      | 'M' -> i.Methods |> Seq.map toMember |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
+      | 'P' -> i.Properties |> Seq.map toMember |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
+      | 'E' -> i.Events |> Seq.map toMember |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
       //| 'F' ->
       | _ -> None
     | _ -> None
