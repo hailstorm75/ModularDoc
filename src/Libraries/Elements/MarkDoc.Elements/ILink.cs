@@ -1,4 +1,5 @@
-﻿using MarkDoc.Elements.Extensions;
+﻿using System;
+using MarkDoc.Elements.Extensions;
 
 namespace MarkDoc.Elements
 {
@@ -12,6 +13,6 @@ namespace MarkDoc.Elements
     /// Link reference
     /// </summary>
     /// <value>String containing a URI</value>
-    string Reference { get; }
+    Lazy<string> Reference { get; }
   }
 }

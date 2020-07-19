@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using static MarkDoc.Elements.IList;
 
 namespace MarkDoc.Elements
@@ -35,13 +36,14 @@ namespace MarkDoc.Elements
     /// <param name="style">Text style</param>
     /// <returns>Created instance</returns>
     IText CreateText(string content, IText.TextStyle style = IText.TextStyle.Normal);
+
     /// <summary>
     /// Creates a new <see cref="ILink"/> instance
     /// </summary>
     /// <param name="content">Wrapped text</param>
     /// <param name="reference">Link reference</param>
     /// <returns>Created instance</returns>
-    ILink CreateLink(IText content, string reference);
+    ILink CreateLink(IText content, Lazy<string> reference);
     /// <summary>
     /// Joins text <paramref name="content"/> into a single <see cref="ITextContent"/> separated by a <paramref name="delimiter"/>
     /// </summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MarkDoc.Elements.Markdown
 {
@@ -11,23 +12,23 @@ namespace MarkDoc.Elements.Markdown
     public IText Content { get; }
 
     /// <inheritdoc />
-    public string Reference { get; }
+    public Lazy<string> Reference { get; }
 
     #endregion
 
-    public Link(IText content, string reference)
+    public Link(IText content, Lazy<string> reference)
     {
       Content = content;
       Reference = reference;
     }
 
     public override string ToString()
-      => $"[{Content.ToString()}]({Reference})";
+      => $"[{Content.ToString()}]({Reference.Value})";
 
     /// <inheritdoc />
     public IEnumerable<string> Print()
     {
-      yield return $"[{Content.ToString()}]({Reference})";
+      yield return $"[{Content.ToString()}]({Reference.Value})";
     }
   }
 }

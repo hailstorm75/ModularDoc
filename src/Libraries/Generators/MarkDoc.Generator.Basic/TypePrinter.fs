@@ -72,7 +72,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let typeReference (reference : string) =
       let mutable result : IType = null
       if m_memberResolver.TryFindType(reference.[2..], &result) then
-        m_creator.CreateLink(getTypeName result |> textNormal, m_linker.CreateLink(&input, &result)) :> ITextContent
+        m_creator.CreateLink(getTypeName result |> textNormal, lazy(m_linker.CreateLink(&input, &result))) :> ITextContent
       else
         let slice = reference.AsSpan(reference.LastIndexOf('.') + 1)
         let index = slice.IndexOf('`')
@@ -95,7 +95,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         if m_memberResolver.TryFindType(typeString.[2..], &result) then
           let mem = tryFindMember(result, reference, memberString)
           if Option.isSome mem then
-            m_creator.CreateLink(memberString |> textNormal, m_linker.CreateAnchor (mem |> Option.get)) :> ITextContent
+            m_creator.CreateLink(memberString |> textNormal, lazy(m_linker.CreateAnchor (mem |> Option.get))) :> ITextContent
           else
             textNormal memberString :> ITextContent
         else
@@ -120,7 +120,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let tryLink (item : IResType) =
       let link = m_linker.CreateLink(&source, &item)
       if not (String.IsNullOrEmpty link) then
-        m_creator.CreateLink(textInline item.DisplayName, link) :> ITextContent
+        m_creator.CreateLink(textInline item.DisplayName, lazy(link)) :> ITextContent
       else
         textInline item.DisplayName :> ITextContent
 
@@ -354,7 +354,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
               if String.IsNullOrEmpty link then
                 content :> ITextContent
               else
-                m_creator.CreateLink(content, link) :> ITextContent
+                m_creator.CreateLink(content, lazy(link)) :> ITextContent
 
           let processMethod =
             let hasOverloads =
@@ -599,7 +599,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let getInheritedFrom(m : IMember) = 
       let getInheritance(x : IInterface) =
         let typeReference (t : IType) = 
-          m_creator.CreateLink(getTypeName t |> textNormal, m_linker.CreateLink(&input, &t)) |> toElement
+          m_creator.CreateLink(getTypeName t |> textNormal, lazy(m_linker.CreateLink(&input, &t))) |> toElement
 
         let mutable result : IInterface = null
         if x.InheritedTypes.Value.TryGetValue(m, &result) then
