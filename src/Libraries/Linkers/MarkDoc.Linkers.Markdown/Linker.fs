@@ -15,10 +15,13 @@ type Linker(memberResolver) =
 
   static let normalizerRegex = new Regex(@"(?<wh>\s)|(?<sym>[^A-Za-z0-9]*)")
   static let normalizerDictionary (x: Match) =
-    match x.Groups.[0].Name with
-    | "wh" -> "-"
-    | "sym" -> ""
-    | _ -> ""
+    match x.Groups |> Seq.tryFind (fun x -> x.Success) with
+    | Some as s ->
+      match s.Value.Name with 
+      | "wh" -> "-"
+      | "sym" -> ""
+      | _ -> x.Value
+    | None -> x.Value
 
   let generateStructure =
     let getName (input: IType) = 
