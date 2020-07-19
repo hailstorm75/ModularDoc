@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using MarkDoc.Helpers;
 using static MarkDoc.Elements.IList;
@@ -69,6 +70,44 @@ namespace MarkDoc.Elements.Markdown
       }
 
       return result.ToString();
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<string> Print()
+      => Print(1);
+
+    public IEnumerable<string> Print(int indent)
+    {
+      if (!string.IsNullOrEmpty(Heading))
+      {
+        yield return Heading.ToHeading(Level);
+        yield return Environment.NewLine;
+      }
+
+      var index = 0;
+
+      foreach (var item in Content)
+      {
+        if (item is IList list)
+        {
+          yield return list.ToString(indent + 1);
+          continue;
+        }
+
+        yield return $"{new string(' ', indent * 2 - 1)}";
+        switch (Type)
+        {
+          case ListType.Numbered:
+            yield return $"{++index}. ";
+            break;
+          case ListType.Dotted:
+            yield return "- ";
+            break;
+        }
+
+        foreach (var line in item.Print())
+          yield return line;
+      }
     }
   }
 }

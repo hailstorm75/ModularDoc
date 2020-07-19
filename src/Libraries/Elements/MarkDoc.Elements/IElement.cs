@@ -1,4 +1,6 @@
-﻿namespace MarkDoc.Elements
+﻿using System.Collections.Generic;
+
+namespace MarkDoc.Elements
 {
   /// <summary>
   /// Interface for elements
@@ -10,5 +12,7 @@
     /// </summary>
     /// <returns>Conversion result</returns>
     string ToString();
+
+    IEnumerable<string> Print();
   }
 }

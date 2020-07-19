@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MarkDoc.Helpers;
@@ -41,6 +42,27 @@ namespace MarkDoc.Elements.Markdown
       result.AppendLine(Content.Last().ToString());
 
       return result.ToString();
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<string> Print()
+    {
+      if (!string.IsNullOrEmpty(Heading))
+      {
+        yield return Heading.ToHeading(Level);
+        yield return Environment.NewLine;
+      }
+
+      foreach (var element in Content.Take(Content.Count - 1))
+      {
+        foreach (var line in element.Print())
+          yield return line;
+
+        yield return Environment.NewLine;
+      }
+
+      foreach (var line in Content.Last().Print())
+        yield return line;
     }
   }
 }

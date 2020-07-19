@@ -1,4 +1,6 @@
-﻿namespace MarkDoc.Elements.Markdown
+﻿using System.Collections.Generic;
+
+namespace MarkDoc.Elements.Markdown
 {
   public class Link
     : ILink
@@ -21,5 +23,11 @@
 
     public override string ToString()
       => $"[{Content.ToString()}]({Reference})";
+
+    /// <inheritdoc />
+    public IEnumerable<string> Print()
+    {
+      yield return $"[{Content.ToString()}]({Reference})";
+    }
   }
 }

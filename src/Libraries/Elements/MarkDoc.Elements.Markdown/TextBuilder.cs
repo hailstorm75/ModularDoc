@@ -25,5 +25,11 @@ namespace MarkDoc.Elements.Markdown
 
     public override string ToString()
       => string.Join(Delimiter, Content.Select(x => x.ToString()).Where(x => !string.IsNullOrEmpty(x)));
+
+    /// <inheritdoc />
+    public IEnumerable<string> Print()
+    {
+      yield return string.Join(Delimiter, Content.Select(x => x.ToString()).Where(x => !string.IsNullOrEmpty(x)));
+    }
   }
 }

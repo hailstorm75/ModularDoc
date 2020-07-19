@@ -73,5 +73,42 @@ namespace MarkDoc.Elements.Markdown
 
       return result.ToString();
     }
+
+    /// <inheritdoc />
+    public override IEnumerable<string> Print()
+    {
+      if (!string.IsNullOrEmpty(Heading))
+      {
+        yield return Heading.CleanInvalid().ToHeading(Level);
+        yield return Environment.NewLine;
+      }
+
+      IList CreateList(IEnumerable<IElement> elements)
+        => m_creator.CreateList(elements, ListType.Dotted);
+
+      IEnumerable<IElement> GenerateTable(IPage page)
+      {
+        var text = m_creator.CreateText(page.Heading);
+
+        yield return text;
+
+        foreach (var subpage in page.Subpages)
+          yield return CreateList(GenerateTable(subpage));
+      }
+
+      if (Subpages.Any())
+      {
+        var tableOfContents = CreateList(GenerateTable(this));
+        foreach (var line in tableOfContents.Print())
+          yield return line;
+      }
+
+      foreach (var item in Content)
+      {
+        yield return Environment.NewLine;
+        foreach (var line in item.Print())
+          yield return line;
+      }
+    }
   }
 }
