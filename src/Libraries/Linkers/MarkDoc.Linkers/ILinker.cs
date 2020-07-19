@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
@@ -39,6 +40,8 @@ namespace MarkDoc.Linkers
     /// <param name="member">Member to link to</param>
     /// <returns>Retrieved link</returns>
     string CreateAnchor(IMember member);
+
+    void RegisterAnchor(IMember member, Lazy<string> anchor);
 
     #endregion
   }
