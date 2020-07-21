@@ -106,7 +106,10 @@ namespace MarkDoc.Elements.Markdown
         }
 
         foreach (var line in item.Print())
+        {
           yield return line;
+          yield return Environment.NewLine;
+        }
       }
     }
   }

@@ -61,8 +61,15 @@ namespace MarkDoc.Elements.Markdown
         yield return Environment.NewLine;
       }
 
+      var last = "";
       foreach (var line in Content.Last().Print())
+      {
+        last = line;
         yield return line;
+      }
+
+      if (!last.Equals(Environment.NewLine, StringComparison.InvariantCultureIgnoreCase))
+        yield return Environment.NewLine;
     }
   }
 }

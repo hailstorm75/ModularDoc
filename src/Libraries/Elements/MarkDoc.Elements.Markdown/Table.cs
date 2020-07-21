@@ -136,6 +136,8 @@ namespace MarkDoc.Elements.Markdown
             yield return DEL_VERTICAL;
           }
       }
+
+      yield return Environment.NewLine;
     }
   }
 }
