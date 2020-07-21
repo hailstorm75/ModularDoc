@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,14 +101,23 @@ namespace MarkDoc.Console
           Directory.CreateDirectory(Path.GetDirectoryName(path));
 
         await using var file = File.CreateText(path);
-        await file.WriteAsync(element.ToString()).ConfigureAwait(false);
+        foreach (var line in element.Print())
+          await file.WriteAsync(line).ConfigureAwait(false);
       }
 
       var pages = result.Values
         .SelectMany(Linq.XtoX)
+        //.AsParallel()
         .Select(x => Print(printer.Print(x), x));
 
+      var watch = new Stopwatch();
+      watch.Start();
+
       await Task.WhenAll(pages).ConfigureAwait(false);
+
+      watch.Stop();
+      System.Console.WriteLine(watch.ElapsedTicks);
+      System.Console.ReadKey();
 
       await container.Disposer.DisposeAsync().ConfigureAwait(false);
     }
