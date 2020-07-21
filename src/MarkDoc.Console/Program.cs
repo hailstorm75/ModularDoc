@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace MarkDoc.Console
     internal sealed class Creator
       : IElementCreator
     {
-      public ILink CreateLink(IText content, string reference = "")
+      public ILink CreateLink(IText content, Lazy<string> reference)
         => new Link(content, reference);
 
       public IList CreateList(IEnumerable<IElement> elements, IList.ListType type, string heading = "", int level = 0)
