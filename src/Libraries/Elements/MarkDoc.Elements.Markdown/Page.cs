@@ -2,7 +2,6 @@
 using MarkDoc.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using static MarkDoc.Elements.IList;
 
 namespace MarkDoc.Elements.Markdown
@@ -37,43 +36,6 @@ namespace MarkDoc.Elements.Markdown
       Level = level;
     }
 
-    private void PrintTableOfContents(StringBuilder build)
-    {
-      IList CreateList(IEnumerable<IElement> elements)
-        => m_creator.CreateList(elements, ListType.Dotted);
-
-      IEnumerable<IElement> GenerateTable(IPage page)
-      {
-        var text = m_creator.CreateText(page.Heading);
-
-        yield return text;
-
-        foreach (var subpage in page.Subpages)
-          yield return CreateList(GenerateTable(subpage));
-      }
-
-      if (!Subpages.Any())
-        return;
-
-      var tableOfContents = CreateList(GenerateTable(this));
-      build.Append(tableOfContents.ToString());
-    }
-
-    /// <inheritdoc />
-    public override string ToString()
-    {
-      var result = new StringBuilder();
-
-      if (!string.IsNullOrEmpty(Heading))
-        result.Append(Heading.CleanInvalid().ToHeading(Level)).AppendLine();
-
-      PrintTableOfContents(result);
-
-      result.AppendJoin(Environment.NewLine, Content.Select(x => x.ToString()));
-
-      return result.ToString();
-    }
-
     /// <inheritdoc />
     public override IEnumerable<string> Print()
     {
@@ -92,8 +54,8 @@ namespace MarkDoc.Elements.Markdown
 
         yield return text;
 
-        foreach (var subpage in page.Subpages)
-          yield return CreateList(GenerateTable(subpage));
+        foreach (var subPage in page.Subpages)
+          yield return CreateList(GenerateTable(subPage));
       }
 
       if (Subpages.Any())

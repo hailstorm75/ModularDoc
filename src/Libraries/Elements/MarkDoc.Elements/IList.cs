@@ -34,6 +34,6 @@ namespace MarkDoc.Elements
     /// </summary>
     /// <param name="indent">List indentation level</param>
     /// <returns>Converted list</returns>
-    string ToString(int indent);
+    IEnumerable<string> Print(int indent);
   }
 }

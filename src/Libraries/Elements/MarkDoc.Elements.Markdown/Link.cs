@@ -22,13 +22,21 @@ namespace MarkDoc.Elements.Markdown
       Reference = reference;
     }
 
-    public override string ToString()
-      => $"[{Content.ToString()}]({Reference.Value})";
-
     /// <inheritdoc />
     public IEnumerable<string> Print()
     {
-      yield return $"[{Content.ToString()}]({Reference.Value})";
+      if (string.IsNullOrEmpty(Reference.Value))
+      {
+        foreach (var line in Content.Print())
+          yield return line;
+      }
+      else
+      {
+        yield return "[";
+        foreach (var line in Content.Print())
+          yield return line;
+        yield return $"]({Reference.Value})";
+      }
     }
   }
 }

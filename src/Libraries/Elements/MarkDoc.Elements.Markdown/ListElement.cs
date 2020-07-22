@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using MarkDoc.Helpers;
 using static MarkDoc.Elements.IList;
 
@@ -34,45 +33,6 @@ namespace MarkDoc.Elements.Markdown
     }
 
     /// <inheritdoc />
-    public override string ToString()
-      => ToString(1);
-
-    /// <inheritdoc />
-    public string ToString(int indent)
-    {
-      var result = new StringBuilder();
-
-      if (!string.IsNullOrEmpty(Heading))
-        result.AppendLine(Heading.ToHeading(Level));
-
-      var index = 0;
-
-      foreach (var item in Content)
-      {
-        if (item is IList list)
-        {
-          result.Append(list.ToString(indent + 1));
-          continue;
-        }
-
-        result.Append($"{new string(' ', indent * 2 - 1)}");
-        switch (Type)
-        {
-          case ListType.Numbered:
-            result.Append($"{++index}. ");
-            break;
-          case ListType.Dotted:
-            result.Append("- ");
-            break;
-        }
-
-        result.Append(item.ToString()).AppendLine();
-      }
-
-      return result.ToString();
-    }
-
-    /// <inheritdoc />
     public override IEnumerable<string> Print()
       => Print(1);
 
@@ -90,7 +50,9 @@ namespace MarkDoc.Elements.Markdown
       {
         if (item is IList list)
         {
-          yield return list.ToString(indent + 1);
+          foreach (var line in list.Print(indent + 1))
+            yield return line;
+
           continue;
         }
 
