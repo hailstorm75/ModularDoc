@@ -3,13 +3,13 @@
 open System.Text.RegularExpressions
 
 module private Helpers =
-  let normalizerRegex = new Regex(@"(?<wh>\s)|(?<sym>[^A-Za-z0-9]*)")
+  let normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
   let normalizerDictionary (x: Match) =
-    match x.Groups |> Seq.tryFind (fun x -> x.Success) with
+    match x.Groups |> Seq.tryFind (fun x -> x.Success && x.Name.[0] = 'G') with
     | Some as s ->
       match s.Value.Name with 
-      | "wh" -> "-"
-      | "sym" -> ""
+      | "Gwh" -> "-"
+      | "Gsym" -> ""
       | _ -> x.Value
     | None -> x.Value
 
