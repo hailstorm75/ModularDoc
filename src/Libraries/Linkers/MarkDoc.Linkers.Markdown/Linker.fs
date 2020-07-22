@@ -13,16 +13,6 @@ type Linker(memberResolver) =
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = new ConcurrentDictionary<IMember, Lazy<string>>()
 
-  static let normalizerRegex = new Regex(@"(?<wh>\s)|(?<sym>[^A-Za-z0-9]*)")
-  static let normalizerDictionary (x: Match) =
-    match x.Groups |> Seq.tryFind (fun x -> x.Success) with
-    | Some as s ->
-      match s.Value.Name with 
-      | "wh" -> "-"
-      | "sym" -> ""
-      | _ -> x.Value
-    | None -> x.Value
-
   let generateStructure =
     let getName (input: IType) = 
       match input with
@@ -53,12 +43,11 @@ type Linker(memberResolver) =
       createLink(source, target.Reference.Value)
 
   let createAnchor (input: IMember) =
-    let normalizeAnchor (anchor: string) =
-      normalizerRegex.Replace(anchor.ToLowerInvariant(), normalizerDictionary)
-
     let mutable result : Lazy<string> = null
     if m_anchors.TryGetValue(input, &result) then
-      result.Value |> normalizeAnchor
+      match Helpers.createAnchor(result.Value, GitPlatform.GitLab) with
+      | Some as s -> s.Value
+      | _ -> ""
     else
       ""
 

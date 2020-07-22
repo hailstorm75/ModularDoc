@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="GitPlatform.fs" />
+    <Compile Include="AnchorGenerator.fs" />
     <Compile Include="Linker.fs" />
   </ItemGroup>
 
