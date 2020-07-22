@@ -13,24 +13,23 @@ module private Helpers =
       | _ -> x.Value
     | None -> x.Value
 
-
   let normalizeAnchor (anchor: string) =
     normalizerRegex.Replace(anchor.ToLowerInvariant(), normalizerDictionary)
 
-  let private bitbucketAnchor (input: string) =
+  let private bitbucketAnchor (input: string Lazy) =
     // TODO: Not supported
-    "" |> Some
+    lazy("") |> Some
 
-  let private githubAnchor (input: string) =
-    "wiki#" + normalizeAnchor input |> Some
+  let private githubAnchor (input: string Lazy) =
+    lazy("wiki#" + normalizeAnchor input.Value) |> Some
 
-  let private gitlabAnchor (input: string) =
-    normalizeAnchor input |> Some
+  let private gitlabAnchor (input: string Lazy) =
+    lazy("#" + normalizeAnchor input.Value) |> Some
 
-  let private azureAnchor (input: string) =
-    "?anchor=" |> Some
+  let private azureAnchor (input: string Lazy) =
+    lazy("?anchor=") |> Some
 
-  let createAnchor(input: string, platform: GitPlatform) =
+  let createAnchor(input: string Lazy, platform: GitPlatform) =
     let creator = match platform with
                   | GitPlatform.BitBucket -> bitbucketAnchor
                   | GitPlatform.GitHub -> githubAnchor

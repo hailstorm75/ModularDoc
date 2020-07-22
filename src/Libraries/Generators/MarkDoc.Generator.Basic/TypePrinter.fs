@@ -97,7 +97,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         if m_memberResolver.TryFindType(typeString.[2..], &result) then
           let mem = tryFindMember(result, reference, memberString)
           if Option.isSome mem then
-            m_creator.CreateLink(memberString |> textNormal, lazy(m_linker.CreateAnchor (mem |> Option.get))) :> ITextContent
+            m_creator.CreateLink(memberString |> textNormal, m_linker.CreateAnchor (mem |> Option.get)) :> ITextContent
           else
             textNormal memberString :> ITextContent
         else
@@ -324,8 +324,8 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
         let createRow(property : IProperty) =
           let processName =
-            let name = textInline property.Name :> ITextContent
-            memberNameSummary(input, name, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
+            let anchor = m_creator.CreateLink(textInline property.Name, m_linker.CreateAnchor(property)) |> toTextContent
+            memberNameSummary(input, anchor, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
           seq [ processResType(input, property.Type); processName; m_creator.JoinTextContent(processMethods property |> Seq.map (fun x -> textInline x :> ITextContent), " ") ]
           |> Seq.map toElement
@@ -369,16 +369,16 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
             let signature =
               seq [
                 if method.IsOperator then
-                  yield textInline "operator" :> ITextContent
-                  yield textNormal " " :> ITextContent
+                  yield textInline "operator" |> toTextContent
+                  yield textNormal " " |> toTextContent
 
-                yield textInline method.Name :> ITextContent
-                yield textNormal "(" :> ITextContent
+                yield m_creator.CreateLink(textInline method.Name, m_linker.CreateAnchor(method)) |> toTextContent
+                yield textNormal "(" |> toTextContent
 
-                if hasOverloads then yield textInline "..." :> ITextContent
+                if hasOverloads then yield textInline "..." |> toTextContent
                 else yield methodArguments(input,  method)
 
-                yield textNormal ")" :> ITextContent
+                yield textNormal ")" |> toTextContent
               ]
             let signatureText = m_creator.JoinTextContent(signature, "")
             memberNameSummary(input, signatureText, findTag(input, method, ITag.TagType.Summary) |> Seq.tryExactlyOne)
@@ -701,7 +701,9 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
-          m_creator.CreateSection(joined, (if method.IsOperator then "Operator " else "") + method.Name + getOverloads, 3) |> toElement
+          let name = (if method.IsOperator then "Operator " else "") + method.Name + getOverloads
+          m_linker.RegisterAnchor(method, lazy(name))
+          m_creator.CreateSection(joined, name, 3) |> toElement
 
         methods
         |> Seq.map processMethod
@@ -739,6 +741,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
+          m_linker.RegisterAnchor(property, lazy(property.Name))
           m_creator.CreateSection(joined, property.Name, 3) |> toElement
 
         properties

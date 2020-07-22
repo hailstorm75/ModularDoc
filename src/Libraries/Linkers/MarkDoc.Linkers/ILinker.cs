@@ -39,7 +39,7 @@ namespace MarkDoc.Linkers
     /// </summary>
     /// <param name="member">Member to link to</param>
     /// <returns>Retrieved link</returns>
-    string CreateAnchor(IMember member);
+    Lazy<string> CreateAnchor(IMember member);
 
     void RegisterAnchor(IMember member, Lazy<string> anchor);
 

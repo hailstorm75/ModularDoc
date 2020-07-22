@@ -44,12 +44,14 @@ type Linker(memberResolver) =
 
   let createAnchor (input: IMember) =
     let mutable result : Lazy<string> = null
-    if m_anchors.TryGetValue(input, &result) then
-      match Helpers.createAnchor(result.Value, GitPlatform.GitLab) with
-      | Some as s -> s.Value
-      | _ -> ""
-    else
-      ""
+    lazy(
+      if m_anchors.TryGetValue(input, &result) then
+        match Helpers.createAnchor(result, GitPlatform.GitLab) with
+        | Some as s -> s.Value.Value
+        | _ -> ""
+      else
+        ""
+    )
 
   let registerAnchor(target: IMember, anchor: Lazy<string>) =
     m_anchors.TryAdd(target, anchor) |> ignore
