@@ -53,7 +53,7 @@ namespace MarkDoc.Console
 
     private static readonly IReadOnlyCollection<string> DLL_PATHS = new[]
     {
-      ""
+      @""
     };
 
     private static readonly IReadOnlyCollection<string> XML_PATHS = DLL_PATHS.Select(x => Path.Join(Path.GetDirectoryName(x), Path.GetFileNameWithoutExtension(x) + ".xml")).ToArray();
@@ -107,7 +107,7 @@ namespace MarkDoc.Console
 
       var pages = result.Values
         .SelectMany(Linq.XtoX)
-        //.AsParallel()
+        .AsParallel()
         .Select(x => Print(printer.Print(x), x));
 
       var watch = new Stopwatch();
