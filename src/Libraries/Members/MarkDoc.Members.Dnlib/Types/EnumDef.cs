@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Members;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members.Dnlib.Types
@@ -14,7 +16,7 @@ namespace MarkDoc.Members.Dnlib.Types
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<string> Fields { get; }
+    public IReadOnlyCollection<IEnumField> Fields { get; }
 
     #endregion
 
@@ -28,7 +30,8 @@ namespace MarkDoc.Members.Dnlib.Types
         throw new ArgumentNullException(nameof(source));
 
       Fields = source.Fields.Where(x => x.ElementType != dnlib.DotNet.ElementType.End)
-                            .Select(x => x.Name.String).ToReadOnlyCollection();
+                            .Select(x => new EnumFieldDef(x, Accessor))
+                            .ToReadOnlyCollection();
     }
   }
 }

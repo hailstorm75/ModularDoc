@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MarkDoc.Members.Members;
 
 namespace MarkDoc.Members.Types
 {
@@ -11,6 +12,6 @@ namespace MarkDoc.Members.Types
     /// <summary>
     /// Enum fields
     /// </summary>
-    IReadOnlyCollection<string> Fields { get; }
+    IReadOnlyCollection<IEnumField> Fields { get; }
   }
 }

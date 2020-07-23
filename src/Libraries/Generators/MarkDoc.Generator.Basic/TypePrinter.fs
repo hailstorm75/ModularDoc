@@ -776,6 +776,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
+          m_linker.RegisterAnchor(event, lazy(event.Name))
           m_creator.CreateSection(joined, event.Name, 3) |> toElement
 
         events
@@ -832,6 +833,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
+          m_linker.RegisterAnchor(deleg, lazy(deleg.Name))
           m_creator.CreateSection(joined, deleg.Name, 3) |> toElement
 
         delegates
@@ -839,6 +841,30 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
       match input with
       | :? IInterface as x -> x.Delegates |> processDelegates |> emptyToNone
+      | _ -> None
+
+    let enumFields = 
+      let processFields(fields: IEnumField IReadOnlyCollection) =
+        let processField (field: IEnumField) =
+          let content =
+            seq [
+              (getSingleTag(field, ITag.TagType.Summary), "Summary")
+              (getSingleTag(field, ITag.TagType.Remarks), "Remarks")
+              (getSingleTag(field, ITag.TagType.Example), "Example")
+              (getSingleTag(field, ITag.TagType.Returns), "Returns")
+              (getSeeAlso field, "See also")
+            ]
+            |> Seq.filter (fst >> Option.isSome)
+            |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 4) |> toElement)
+
+          m_linker.RegisterAnchor(field, lazy(field.Name))
+          m_creator.CreateSection((if Seq.isEmpty content then seq [ textNormal "" |> toElement ] else content), field.Name, 3) |> toElement
+
+        fields
+        |> Seq.map processField
+
+      match input with
+      | :? IEnum as e -> e.Fields |> processFields |> emptyToNone
       | _ -> None
 
     let sections =
@@ -855,6 +881,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         (properties, "Properties")
         (events, "Events")
         (delegates, "Delegates")
+        (enumFields, "Fields")
       ]
       |> Seq.filter (fst >> Option.isSome)
       |> Seq.map(fun x -> m_creator.CreateSection(fst x |> Option.get, snd x, 2) |> toElement)
