@@ -26,7 +26,7 @@ namespace MarkDoc.Members.Dnlib.Members
         throw new ArgumentNullException(nameof(source));
 
       Name = source.Name.String;
-      RawName = source.FullName;
+      RawName = source.FullName.Replace("::",".", StringComparison.InvariantCultureIgnoreCase);
       Accessor = accessor;
     }
   }

@@ -24,32 +24,6 @@ namespace MarkDoc.Elements.Markdown
       Style = style;
     }
 
-    /// <inheritdoc cref="IElement" />
-    public override string ToString()
-    {
-      if (string.IsNullOrEmpty(Content))
-        return string.Empty;
-
-      return Style switch
-      {
-        TextStyle.Normal
-          => Content.CleanInvalid(),
-        TextStyle.CodeInline
-          => $"`{Content}`",
-        TextStyle.Code
-          => $"```csharp{Environment.NewLine}{Content}{Environment.NewLine}```",
-        TextStyle.Italic
-          => Content.CleanInvalid().Any(x => x.Equals('*'))
-            ? $"_{Content}_"
-            : $"*{Content}*",
-        TextStyle.Bold
-          => Content.CleanInvalid().Any(x => x.Equals('*'))
-            ? $"__{Content}__"
-            : $"**{Content}**",
-        _ => throw new Exception() // TODO: Specify exception message
-      };
-    }
-
     /// <inheritdoc />
     public override IEnumerable<string> Print()
     {

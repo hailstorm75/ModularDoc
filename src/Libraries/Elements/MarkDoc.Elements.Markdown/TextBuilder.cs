@@ -23,13 +23,10 @@ namespace MarkDoc.Elements.Markdown
       Delimiter = delimiter;
     }
 
-    public override string ToString()
-      => string.Join(Delimiter, Content.Select(x => x.ToString()).Where(x => !string.IsNullOrEmpty(x)));
-
     /// <inheritdoc />
     public IEnumerable<string> Print()
     {
-      yield return string.Join(Delimiter, Content.Select(x => x.ToString()).Where(x => !string.IsNullOrEmpty(x)));
+      yield return string.Join(Delimiter, Content.Select(x => string.Join("", x.Print())).Where(x => !string.IsNullOrEmpty(x)));
     }
   }
 }

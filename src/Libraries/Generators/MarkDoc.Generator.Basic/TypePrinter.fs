@@ -60,14 +60,16 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
   let tryFindMember (input : IType, memberFull : string, memberCut : string) =
     let toMember (a: 'M when 'M :> IMember) =
       a :> IMember
+    let findMember (a: 'M seq when 'M :> IMember) =
+      a |> Seq.map toMember |> Seq.tryFind (fun x -> x.Name.Equals(memberCut))
     match input with
     | :? IInterface as i ->
       match memberFull.[0] with
-      | 'M' -> i.Methods |> Seq.map toMember |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
-      | 'P' -> i.Properties |> Seq.map toMember |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
-      | 'E' -> i.Events |> Seq.map toMember |> Seq.tryFind (fun x -> x.RawName.Equals(memberCut))  
-      //| 'F' ->
+      | 'M' -> i.Methods |> findMember
+      | 'P' -> i.Properties |> findMember
+      | 'E' -> i.Events |> findMember
       | _ -> None
+    | :? IEnum as e -> e.Fields |> findMember
     | _ -> None
 
   let processReference (input: IType, reference : string) =
@@ -89,7 +91,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
     let memberReference cutter =
       let memberString : string = cutter()
-      let typeString = reference.[..reference.Length - memberString.Length - 1]
+      let typeString = reference.[..reference.Length - memberString.Length - 2]
       let typeRef = typeReference typeString
 
       let memberAnchor = 
