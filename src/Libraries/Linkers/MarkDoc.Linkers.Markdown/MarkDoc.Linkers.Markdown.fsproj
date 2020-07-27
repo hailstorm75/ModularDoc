@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Compile Include="GitPlatform.fs" />
+    <Compile Include="StructureGenerator.fs" />
+    <Compile Include="LinkGenerator.fs" />
     <Compile Include="AnchorGenerator.fs" />
     <Compile Include="Linker.fs" />
   </ItemGroup>

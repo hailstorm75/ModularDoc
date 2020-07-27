@@ -76,7 +76,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let typeReference (reference : string) =
       let mutable result : IType = null
       if m_memberResolver.TryFindType(reference.[2..], &result) then
-        m_creator.CreateLink(getTypeName result |> textNormal, lazy(m_linker.CreateLink(&input, &result))) :> ITextContent
+        m_creator.CreateLink(getTypeName result |> textNormal, lazy(m_linker.CreateLink(input, result))) :> ITextContent
       else
         let slice = reference.AsSpan(reference.LastIndexOf('.') + 1)
         let index = slice.IndexOf('`')
@@ -122,7 +122,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
 
   let processResType (source: IType, item : IResType) =
     let tryLink (item : IResType) =
-      let link = m_linker.CreateLink(&source, &item)
+      let link = m_linker.CreateLink(source, item)
       if not (String.IsNullOrEmpty link) then
         m_creator.CreateLink(textInline item.DisplayName, lazy(link)) :> ITextContent
       else
@@ -354,7 +354,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
             else
               let a = input :> IType
               let b = method.Returns
-              let link = m_linker.CreateLink(&a, &b)
+              let link = m_linker.CreateLink(a, b)
               if String.IsNullOrEmpty link then
                 content :> ITextContent
               else
@@ -603,7 +603,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     let getInheritedFrom(m : IMember) = 
       let getInheritance(x : IInterface) =
         let typeReference (t : IType) = 
-          m_creator.CreateLink(getTypeName t |> textNormal, lazy(m_linker.CreateLink(&input, &t))) |> toElement
+          m_creator.CreateLink(getTypeName t |> textNormal, lazy(m_linker.CreateLink(input, t))) |> toElement
 
         let mutable result : IInterface = null
         if x.InheritedTypes.Value.TryGetValue(m, &result) then

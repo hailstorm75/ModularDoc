@@ -2,7 +2,7 @@
 
 open System.Text.RegularExpressions
 
-module private Helpers =
+module private Anchor =
   let normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
   let normalizerDictionary (x: Match) =
     match x.Groups |> Seq.tryFind (fun x -> x.Success && x.Name.[0] = 'G') with

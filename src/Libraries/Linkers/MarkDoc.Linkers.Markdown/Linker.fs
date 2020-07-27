@@ -5,48 +5,30 @@ open MarkDoc.Linkers
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Types
 open MarkDoc.Members.Members
-open System.Collections.Generic
 open System.Collections.Concurrent
-open System.Text.RegularExpressions
 
 type Linker(memberResolver) =
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = new ConcurrentDictionary<IMember, Lazy<string>>()
+  let m_platform = GitPlatform.GitLab
 
-  let generateStructure =
-    let getName (input: IType) = 
-      match input with
-      | :? IInterface as i ->
-        i.Name + new System.String('T', i.Generics.Count)
-      | _ ->
-        input.Name
-
-    let result = new Dictionary<IType, string>()
-    m_memberResolver.Types.Value
-    |> Seq.map (fun x -> x.Value |> Seq.map (fun y -> (y, x.Key.ToLowerInvariant().Replace('.', '/') + "/" + getName y)))
-    |> Seq.collect id
-    |> Seq.iter (fun x -> result.Add(fst x, snd x))
-
-    result :> IReadOnlyDictionary<IType, string>
+  let structure =
+    Structure.generateStructure(m_memberResolver.Types.Value, m_platform)
 
   let createLink (source: IType, target: IType) =
-    let mutable result : string = null
-    if generateStructure.TryGetValue(target, &result) then
-      result
-    else
-      ""
+    Link.createLink(source, target, structure, m_platform)
 
   let createResLink (source: IType, target: IResType) =
-    if isNull target.Reference.Value then
-      ""
-    else
+    if isNull target.Reference.Value |> not then
       createLink(source, target.Reference.Value)
+    else
+      ""
 
-  let createAnchor (input: IMember) =
-    let mutable result : Lazy<string> = null
+  let createAnchor input =
+    let mutable result = null
     lazy(
       if m_anchors.TryGetValue(input, &result) then
-        match Helpers.createAnchor(result, GitPlatform.GitLab) with
+        match Anchor.createAnchor(result, m_platform) with
         | Some as s -> s.Value.Value
         | _ -> ""
       else
@@ -57,9 +39,9 @@ type Linker(memberResolver) =
     m_anchors.TryAdd(target, anchor) |> ignore
 
   interface ILinker with
-    member __.Paths with get() = generateStructure
+    member __.Paths with get() = structure
 
-    member __.CreateLink(source: IType inref, target: IType inref) = createLink(source, target)
-    member __.CreateLink(source: IType inref, target: IResType inref) = createResLink(source, target)
+    member __.CreateLink(source: IType, target: IType) = createLink(source, target)
+    member __.CreateLink(source: IType, target: IResType) = createResLink(source, target)
     member __.RegisterAnchor(target: IMember, anchor: Lazy<string>) = registerAnchor(target, anchor) |> ignore
     member __.CreateAnchor(target: IMember) = createAnchor target
