@@ -16,7 +16,7 @@ module private Link =
 
       let index =
         seq [
-          for i in 0 .. min foldersSource.Length foldersTarget.Length do
+          for i in 0 .. min foldersSource.Length foldersTarget.Length - 1 do
             yield foldersSource.[i].Equals(foldersTarget.[i], StringComparison.Ordinal)
         ]
         |> Seq.findIndex not
