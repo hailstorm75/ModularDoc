@@ -37,9 +37,10 @@ namespace MarkDoc.Linkers
     /// <summary>
     /// Creates an anchor to a given <paramref name="member"/>
     /// </summary>
+    /// <param name="page">Page type</param>
     /// <param name="member">Member to link to</param>
     /// <returns>Retrieved link</returns>
-    Lazy<string> CreateAnchor(IMember member);
+    Lazy<string> CreateAnchor(IType page, IMember member);
 
     void RegisterAnchor(IMember member, Lazy<string> anchor);
 

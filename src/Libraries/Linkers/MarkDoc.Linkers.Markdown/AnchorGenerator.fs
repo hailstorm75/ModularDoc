@@ -1,6 +1,7 @@
 ﻿namespace MarkDoc.Linkers.Markdown
 
 open System.Text.RegularExpressions
+open MarkDoc.Members.Types
 
 module private Anchor =
   let normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
@@ -16,25 +17,25 @@ module private Anchor =
   let normalizeAnchor (anchor: string) =
     normalizerRegex.Replace(anchor.ToLowerInvariant(), normalizerDictionary)
 
-  let private bitbucketAnchor (input: string Lazy) =
+  let private bitbucketAnchor (input: string Lazy, page: string) =
     // TODO: Not supported
     lazy("") |> Some
 
-  let private githubAnchor (input: string Lazy) =
-    lazy("wiki#" + normalizeAnchor input.Value) |> Some
+  let private githubAnchor (input: string Lazy, page: string) =
+    lazy(page + "#" + normalizeAnchor input.Value) |> Some
 
-  let private gitlabAnchor (input: string Lazy) =
+  let private gitlabAnchor (input: string Lazy, page: string) =
     lazy("#" + normalizeAnchor input.Value) |> Some
 
-  let private azureAnchor (input: string Lazy) =
+  let private azureAnchor (input: string Lazy, page: string) =
     lazy("?anchor=") |> Some
 
-  let createAnchor(input: string Lazy, platform: GitPlatform) =
+  let createAnchor(input: string Lazy, pageName: string, platform: GitPlatform) =
     let creator = match platform with
                   | GitPlatform.BitBucket -> bitbucketAnchor
                   | GitPlatform.GitHub -> githubAnchor
                   | GitPlatform.GitLab -> gitlabAnchor
                   | GitPlatform.Azure -> azureAnchor
                   | _ -> (fun _ -> None)
-    input |> creator
+    (input, pageName) |> creator
 

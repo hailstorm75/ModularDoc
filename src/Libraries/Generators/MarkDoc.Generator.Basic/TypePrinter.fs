@@ -99,7 +99,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
         if m_memberResolver.TryFindType(typeString.[2..], &result) then
           let mem = tryFindMember(result, reference, memberString)
           if Option.isSome mem then
-            m_creator.CreateLink(memberString |> textNormal, m_linker.CreateAnchor (mem |> Option.get)) :> ITextContent
+            m_creator.CreateLink(memberString |> textNormal, m_linker.CreateAnchor(input, mem |> Option.get)) :> ITextContent
           else
             textNormal memberString :> ITextContent
         else
@@ -326,7 +326,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
       let createPropertySection(isStatic, accessor, properties : seq<IProperty>) =
         let createRow(property : IProperty) =
           let processName =
-            let anchor = m_creator.CreateLink(textInline property.Name, m_linker.CreateAnchor(property)) |> toTextContent
+            let anchor = m_creator.CreateLink(textInline property.Name, m_linker.CreateAnchor(input, property)) |> toTextContent
             memberNameSummary(input, anchor, findTag(input, property, ITag.TagType.Summary) |> Seq.tryExactlyOne)
 
           seq [ processResType(input, property.Type); processName; m_creator.JoinTextContent(processMethods property |> Seq.map (fun x -> textInline x :> ITextContent), " ") ]
@@ -374,7 +374,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
                   yield textInline "operator" |> toTextContent
                   yield textNormal " " |> toTextContent
 
-                yield m_creator.CreateLink(textInline method.Name, m_linker.CreateAnchor(method)) |> toTextContent
+                yield m_creator.CreateLink(textInline method.Name, m_linker.CreateAnchor(input, method)) |> toTextContent
                 yield textNormal "(" |> toTextContent
 
                 if hasOverloads then yield textInline "..." |> toTextContent

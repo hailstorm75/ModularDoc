@@ -7,12 +7,6 @@ open System
 module private Structure =
   let generateStructure (input: IReadOnlyDictionary<string, IReadOnlyCollection<IType>>, platform: GitPlatform) =
     let result = new Dictionary<IType, string>()
-    let getName (input: IType) = 
-      match input with
-      | :? IInterface as i ->
-        i.Name + new System.String('T', i.Generics.Count)
-      | _ ->
-        input.Name
 
     let addToResult x =
       result.Add(fst x, snd x)
@@ -28,7 +22,7 @@ module private Structure =
           fun (space: string) -> space.ToLowerInvariant().Replace(".", "") + "-"
         | _ -> raise (new Exception())
 
-      (input, processor input.TypeNamespace + getName input)
+      (input, processor input.TypeNamespace + TypeHelper.getName input)
 
     input
     |> Seq.map (fun x -> x.Value |> Seq.map createStructure)

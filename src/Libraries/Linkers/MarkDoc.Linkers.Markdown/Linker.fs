@@ -10,7 +10,7 @@ open System.Collections.Concurrent
 type Linker(memberResolver) =
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = new ConcurrentDictionary<IMember, Lazy<string>>()
-  let m_platform = GitPlatform.GitLab
+  let m_platform = GitPlatform.GitHub
 
   let structure =
     Structure.generateStructure(m_memberResolver.Types.Value, m_platform)
@@ -24,11 +24,11 @@ type Linker(memberResolver) =
     else
       ""
 
-  let createAnchor input =
+  let createAnchor page input =
     let mutable result = null
     lazy(
       if m_anchors.TryGetValue(input, &result) then
-        match Anchor.createAnchor(result, m_platform) with
+        match Anchor.createAnchor(result, createLink(page, page), m_platform) with
         | Some as s -> s.Value.Value
         | _ -> ""
       else
@@ -44,4 +44,4 @@ type Linker(memberResolver) =
     member __.CreateLink(source: IType, target: IType) = createLink(source, target)
     member __.CreateLink(source: IType, target: IResType) = createResLink(source, target)
     member __.RegisterAnchor(target: IMember, anchor: Lazy<string>) = registerAnchor(target, anchor) |> ignore
-    member __.CreateAnchor(target: IMember) = createAnchor target
+    member __.CreateAnchor(page: IType, target: IMember) = createAnchor page target
