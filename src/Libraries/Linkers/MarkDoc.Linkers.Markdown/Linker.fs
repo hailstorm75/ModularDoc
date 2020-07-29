@@ -10,7 +10,7 @@ open System.Collections.Concurrent
 type Linker(memberResolver) =
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = new ConcurrentDictionary<IMember, Lazy<string>>()
-  let m_platform = GitPlatform.GitHub
+  let m_platform = GitPlatform.GitLab
 
   let structure =
     Structure.generateStructure(m_memberResolver.Types.Value, m_platform)

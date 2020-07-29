@@ -23,14 +23,14 @@ module private Link =
 
       let cdUp =
         seq [
-          for _ in 0 .. index - 1 do
-            yield "../"
+          for _ in 0 .. foldersSource.Length - index - 2 do
+            yield ".."
 
           for i in index .. foldersTarget.Length - 1 do
             yield foldersTarget.[i]
         ]
 
-      String.Join(String.Empty, cdUp)
+      String.Join('/', cdUp)
 
   let createLink(source: IType, target: IType, structure: IReadOnlyDictionary<IType, string>, platform: GitPlatform) =
     let mutable resultTarget, resultSource = null, null
