@@ -70,7 +70,7 @@ namespace MarkDoc.Members.Dnlib.Types
       Delegates = source.NestedTypes.Where(x => x.IsDelegate)
                                     .Select(x => new DelegateDef(resolver, x))
                                     .ToReadOnlyCollection();
-      NestedTypes = source.NestedTypes.Where(x => !x.IsDelegate && !x.Name.String.StartsWith('<'))
+      NestedTypes = source.NestedTypes.Where(x => !x.IsDelegate && !x.IsNestedPrivate && !x.Name.String.StartsWith('<'))
                                       .Select(x => Resolver.ResolveType(x, source))
                                       .ToReadOnlyCollection();
       Methods = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
