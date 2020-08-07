@@ -13,6 +13,6 @@ namespace MarkDoc.Generator
     /// </summary>
     /// <param name="type">Type to process</param>
     /// <returns>Generated page</returns>
-    IPage Print(IType type);
+    IPage Compose(IType type);
   }
 }

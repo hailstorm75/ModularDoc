@@ -904,7 +904,7 @@ type TypeComposer(creator, docResolver, memberResolve, linker) =
     |> Seq.map (createSection >> toElement)
 
   interface ITypeComposer with
-    member __.Print(input : IType) =
+    member __.Compose(input : IType) =
       if (isNull input) then
         raise (ArgumentNullException("input"))
       else

@@ -33,7 +33,7 @@ namespace MarkDoc.Printer.Markdown
     public async Task Print(IEnumerable<IType> types, string path)
     {
       Task PrintIntermediate(IType type)
-        => Print(m_composer.Print(type), type, path);
+        => Print(m_composer.Compose(type), type, path);
 
       var tasks = types.AsParallel().Select(PrintIntermediate);
 
