@@ -40,7 +40,9 @@ namespace MarkDoc.Members.Dnlib.Types
         throw new ArgumentNullException(nameof(source));
 
       Accessor = ResolveAccessor(source);
-      TypeNamespace = parent?.Namespace ?? source.Namespace;
+      TypeNamespace = ResolveNamespace(parent)
+        ?? ResolveNamespace(source)
+        ?? string.Empty;
       Name = ResolveName(source, parent);
       Resolver = resolver;
       RawName = source.ReflectionFullName.Replace('+', '.');
@@ -55,6 +57,25 @@ namespace MarkDoc.Members.Dnlib.Types
       if (@delegate.Visibility == TypeAttributes.NestedFamily)
         return AccessorType.Protected;
       return AccessorType.Internal;
+    }
+
+    private static string? ResolveNamespace(dnlib.DotNet.IType? source)
+    {
+      if (source is null)
+        return null;
+
+      if (!string.IsNullOrEmpty(source.Namespace))
+        return source.Namespace;
+
+      var fullName = source.FullName.AsSpan();
+      var nestedIndex = fullName.IndexOf('/');
+      if (nestedIndex != -1)
+        fullName = fullName.Slice(0, nestedIndex);
+
+      var dotIndex = fullName.LastIndexOf('.');
+      var result = fullName.Slice(0, dotIndex);
+
+      return result.ToString();
     }
 
     private static string ResolveName(dnlib.DotNet.IType source, IIsTypeOrMethod? parent)
