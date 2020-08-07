@@ -67,7 +67,7 @@ namespace MarkDoc.Console
       builder.RegisterType<DocResolver>().As<IDocResolver>().SingleInstance();
       builder.RegisterType<Creator>().As<IElementCreator>().SingleInstance();
       builder.RegisterType<Linker>().As<ILinker>().SingleInstance();
-      builder.RegisterType<TypePrinter>().As<ITypePrinter>().SingleInstance();
+      builder.RegisterType<TypeComposer>().As<ITypeComposer>().SingleInstance();
 
       return builder.Build();
     }
@@ -89,7 +89,7 @@ namespace MarkDoc.Console
       await Task.WhenAll(tasks).ConfigureAwait(false);
 
       var result = resolver.Types.Value;
-      var printer = container.Resolve<ITypePrinter>();
+      var printer = container.Resolve<ITypeComposer>();
 
       var linker = container.Resolve<ILinker>();
 

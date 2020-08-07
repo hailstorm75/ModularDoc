@@ -15,7 +15,7 @@ open MarkDoc.Helpers
 open System.Collections.Generic
 open MarkDoc.Members.Enums
 
-type TypePrinter(creator, docResolver, memberResolve, linker) =
+type TypeComposer(creator, docResolver, memberResolve, linker) =
   let m_creator        : IElementCreator = creator
   let m_docResolver    : IDocResolver    = docResolver
   let m_memberResolver : IResolver       = memberResolve
@@ -903,7 +903,7 @@ type TypePrinter(creator, docResolver, memberResolve, linker) =
     |> Seq.map (fun x -> (x |> fst |> Option.get, x |> snd))
     |> Seq.map (createSection >> toElement)
 
-  interface ITypePrinter with
+  interface ITypeComposer with
     member __.Print(input : IType) =
       if (isNull input) then
         raise (ArgumentNullException("input"))

@@ -6,7 +6,7 @@ namespace MarkDoc.Generator
   /// <summary>
   /// Interface for type printers
   /// </summary>
-  public interface ITypePrinter
+  public interface ITypeComposer
   {
     /// <summary>
     /// Prints a <see cref="IPage"/> from the provided <paramref name="type"/>
