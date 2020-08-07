@@ -41,7 +41,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkDoc.Generator", "Librar
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MarkDoc.Generator.Basic", "Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj", "{27F008AC-0C38-411D-B0F4-3D68209D2804}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MarkDoc.Linkers.Markdown", "Libraries\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj", "{195C095C-2988-4EF6-A227-A6C55DCDEFC3}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MarkDoc.Linkers.Markdown", "Libraries\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj", "{195C095C-2988-4EF6-A227-A6C55DCDEFC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Printers", "Printers", "{53A6283C-B975-4711-8865-7360517C7C0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkDoc.Printer", "Libraries\Printers\MarkDoc.Printer\MarkDoc.Printer.csproj", "{7C0ABF50-B9DD-4A4D-8C2B-981B46674B89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkDoc.Printer.Markdown", "Libraries\Printers\MarkDoc.Printer.Markdown\MarkDoc.Printer.Markdown.csproj", "{1E1D081C-3017-45D1-A1CF-0499FC0D368F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +103,14 @@ Global
 		{195C095C-2988-4EF6-A227-A6C55DCDEFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{195C095C-2988-4EF6-A227-A6C55DCDEFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{195C095C-2988-4EF6-A227-A6C55DCDEFC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C0ABF50-B9DD-4A4D-8C2B-981B46674B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C0ABF50-B9DD-4A4D-8C2B-981B46674B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C0ABF50-B9DD-4A4D-8C2B-981B46674B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C0ABF50-B9DD-4A4D-8C2B-981B46674B89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1D081C-3017-45D1-A1CF-0499FC0D368F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1D081C-3017-45D1-A1CF-0499FC0D368F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1D081C-3017-45D1-A1CF-0499FC0D368F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1D081C-3017-45D1-A1CF-0499FC0D368F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +133,9 @@ Global
 		{B916AB7F-B03D-48EA-B4DD-E2929CE8CB3B} = {8921C0E3-82A3-485D-B987-DFD4CAF97313}
 		{27F008AC-0C38-411D-B0F4-3D68209D2804} = {8921C0E3-82A3-485D-B987-DFD4CAF97313}
 		{195C095C-2988-4EF6-A227-A6C55DCDEFC3} = {791DDF8F-57A7-48E4-9A2D-C08EFEF0D0EC}
+		{53A6283C-B975-4711-8865-7360517C7C0E} = {72046ABF-82AA-495D-A4FC-F3872BEDC247}
+		{7C0ABF50-B9DD-4A4D-8C2B-981B46674B89} = {53A6283C-B975-4711-8865-7360517C7C0E}
+		{1E1D081C-3017-45D1-A1CF-0499FC0D368F} = {53A6283C-B975-4711-8865-7360517C7C0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42D5A311-9CA5-468F-9811-B2FBB27315D9}

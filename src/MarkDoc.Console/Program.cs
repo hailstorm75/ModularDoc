@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ using MarkDoc.Linkers;
 using MarkDoc.Linkers.Markdown;
 using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
-using MarkDoc.Members.Types;
+using MarkDoc.Printer;
 
 namespace MarkDoc.Console
 {
@@ -68,6 +67,7 @@ namespace MarkDoc.Console
       builder.RegisterType<Creator>().As<IElementCreator>().SingleInstance();
       builder.RegisterType<Linker>().As<ILinker>().SingleInstance();
       builder.RegisterType<TypeComposer>().As<ITypeComposer>().SingleInstance();
+      builder.RegisterType<Printer.Markdown.Printer>().As<IPrinter>().SingleInstance();
 
       return builder.Build();
     }
@@ -89,35 +89,9 @@ namespace MarkDoc.Console
       await Task.WhenAll(tasks).ConfigureAwait(false);
 
       var result = resolver.Types.Value;
-      var printer = container.Resolve<ITypeComposer>();
 
-      var linker = container.Resolve<ILinker>();
-
-      async Task Print(IElement element, IType type)
-      {
-        var path = Path.Combine(OUTPUT, linker.Paths[type]) + ".md";
-
-        if (!Directory.Exists(path))
-          Directory.CreateDirectory(Path.GetDirectoryName(path));
-
-        await using var file = File.CreateText(path);
-        foreach (var line in element.Print())
-          await file.WriteAsync(line).ConfigureAwait(false);
-      }
-
-      var pages = result.Values
-        .SelectMany(Linq.XtoX)
-        .AsParallel()
-        .Select(x => Print(printer.Print(x), x));
-
-      var watch = new Stopwatch();
-      watch.Start();
-
-      await Task.WhenAll(pages).ConfigureAwait(false);
-
-      watch.Stop();
-      System.Console.WriteLine(watch.ElapsedTicks);
-      System.Console.ReadKey();
+      var printer = container.Resolve<IPrinter>();
+      await printer.Print(result.Values.SelectMany(Linq.XtoX), OUTPUT).ConfigureAwait(false);
 
       await container.Disposer.DisposeAsync().ConfigureAwait(false);
     }
