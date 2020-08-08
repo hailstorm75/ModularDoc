@@ -7,8 +7,8 @@ module private Anchor =
   let normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
   let normalizerDictionary (x: Match) =
     match x.Groups |> Seq.tryFind (fun x -> x.Success && x.Name.[0] = 'G') with
-    | Some as s ->
-      match s.Value.Name with 
+    | Some s ->
+      match s.Name with 
       | "Gwh" -> "-"
       | "Gsym" -> ""
       | _ -> x.Value

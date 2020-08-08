@@ -29,7 +29,7 @@ type Linker(memberResolver) =
     lazy(
       if m_anchors.TryGetValue(input, &result) then
         match Anchor.createAnchor(result, createLink(page, page), m_platform) with
-        | Some as s -> s.Value.Value
+        | Some s -> s.Value
         | _ -> ""
       else
         ""

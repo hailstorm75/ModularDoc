@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using dnlib.DotNet;
 using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
-using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
+using IMethod = MarkDoc.Members.Members.IMethod;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
@@ -29,7 +30,7 @@ namespace MarkDoc.Members.Dnlib.Members
     public IResType? Returns { get; }
 
     /// <inheritdoc />
-    public bool IsOperator { get; }
+    public OperatorType Operator { get; }
 
     #endregion
 
@@ -37,12 +38,12 @@ namespace MarkDoc.Members.Dnlib.Members
     /// Default constructor
     /// </summary>
     internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
-      : base(resolver, source, ResolveName(source, out var isOperator))
+      : base(resolver, source, ResolveOperator(source, out var isOperator))
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
 
-      IsOperator = isOperator;
+      Operator = isOperator;
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
       Generics = ResolveGenerics(source).ToReadOnlyCollection();
@@ -51,63 +52,104 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #region Methods
 
-    private static string ResolveOperator(string name, out bool isOperator)
+    private static string ResolveOperator(IFullName source, out OperatorType @operator)
     {
-      isOperator = true;
+      @operator = OperatorType.Normal;
 
-      string Pass(ref bool @operator)
+      static string RetrieveConverterName(IFullName input)
       {
-        @operator = false;
-        return name;
+        var name = input.FullName.AsSpan().Slice(input.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
+        var colonIndex = name.IndexOf(':');
+
+        return name.Slice(0, colonIndex).ToString();
       }
 
-      return name.ToUpperInvariant() switch
+      switch (source.Name.ToUpperInvariant())
       {
-        "OP_IMPLICIT" => "",
-        "OP_EXPLICIT" => "",
-        "OP_ADDITION" => "+",
-        "OP_SUBTRACTION" => "-",
-        "OP_MULTIPLY" => "*",
-        "OP_DIVISION" => "/",
-        "OP_MODULUS" => "%",
-        "OP_EXCLUSIVEOR" => "^",
-        "OP_BITWISEAND" => "&",
-        "OP_BITWISEOR" => "|",
-        "OP_LOGICALAND" => "&&",
-        "OP_LOGICALOR" => "||",
-        "OP_LOGICALNOT" => "!",
-        "OP_ASSIGN" => "=",
-        "OP_LEFTSHIFT" => "<<",
-        "OP_RIGHTSHIFT" => ">>",
-        "OP_SIGNEDRIGHTSHIFT" => "",
-        "OP_UNSIGNEDRIGHTSHIFT" => "",
-        "OP_EQUALITY" => "==",
-        "OP_GREATERTHAN" => ">",
-        "OP_LESSTHAN" => "<",
-        "OP_INEQUALITY" => "!=",
-        "OP_GREATERTHANOREQUAL" => ">=",
-        "OP_LESSTHANOREQUAL" => "<=",
-        "OP_MULTIPLICATIONASSIGNMENT" => "*=",
-        "OP_SUBTRACTIONASSIGNMENT" => "-=",
-        "OP_EXCLUSIVEORASSIGNMENT" => "^=",
-        "OP_LEFTSHIFTASSIGNMENT" => "<<=",
-        "OP_MODULUSASSIGNMENT" => "%=",
-        "OP_ADDITIONASSIGNMENT" => "+=",
-        "OP_BITWISEANDASSIGNMENT" => "&=",
-        "OP_BITWISEORASSIGNMENT" => "|=",
-        "OP_COMMA" => ",",
-        "OP_DIVISIONASSIGNMENT" => "/=",
-        "OP_DECREMENT" => "--",
-        "OP_INCREMENT" => "++",
-        "OP_UNARYNEGATION" => "-",
-        "OP_UNARYPLUS" => "+",
-        "OP_ONESCOMPLEMENT" => "~",
-        _ => Pass(ref isOperator)
-      };
+        case "OP_IMPLICIT":
+          @operator = OperatorType.Implicit;
+          return RetrieveConverterName(source);
+        case "OP_EXPLICIT":
+          @operator = OperatorType.Explicit;
+          return RetrieveConverterName(source);
+        case "OP_ADDITION":
+          return "+";
+        case "OP_SUBTRACTION":
+          return "-";
+        case "OP_MULTIPLY":
+          return "*";
+        case "OP_DIVISION":
+          return "/";
+        case "OP_MODULUS":
+          return "%";
+        case "OP_EXCLUSIVEOR":
+          return "^";
+        case "OP_BITWISEAND":
+          return "&";
+        case "OP_BITWISEOR":
+          return "|";
+        case "OP_LOGICALAND":
+          return "&&";
+        case "OP_LOGICALOR":
+          return "||";
+        case "OP_LOGICALNOT":
+          return "!";
+        case "OP_ASSIGN":
+          return "=";
+        case "OP_LEFTSHIFT":
+          return "<<";
+        case "OP_RIGHTSHIFT":
+          return ">>";
+        case "OP_SIGNEDRIGHTSHIFT":
+        case "OP_UNSIGNEDRIGHTSHIFT":
+          return "";
+        case "OP_EQUALITY":
+          return "==";
+        case "OP_GREATERTHAN":
+          return ">";
+        case "OP_LESSTHAN":
+          return "<";
+        case "OP_INEQUALITY":
+          return "!=";
+        case "OP_GREATERTHANOREQUAL":
+          return ">=";
+        case "OP_LESSTHANOREQUAL":
+          return "<=";
+        case "OP_MULTIPLICATIONASSIGNMENT":
+          return "*=";
+        case "OP_SUBTRACTIONASSIGNMENT":
+          return "-=";
+        case "OP_EXCLUSIVEORASSIGNMENT":
+          return "^=";
+        case "OP_LEFTSHIFTASSIGNMENT":
+          return "<<=";
+        case "OP_MODULUSASSIGNMENT":
+          return "%=";
+        case "OP_ADDITIONASSIGNMENT":
+          return "+=";
+        case "OP_BITWISEANDASSIGNMENT":
+          return "&=";
+        case "OP_BITWISEORASSIGNMENT":
+          return "|=";
+        case "OP_COMMA":
+          return ",";
+        case "OP_DIVISIONASSIGNMENT":
+          return "/=";
+        case "OP_DECREMENT":
+          return "--";
+        case "OP_INCREMENT":
+          return "++";
+        case "OP_UNARYNEGATION":
+          return "-";
+        case "OP_UNARYPLUS":
+          return "+";
+        case "OP_ONESCOMPLEMENT":
+          return "~";
+        default:
+          @operator = OperatorType.None;
+          return source.Name;
+      }
     }
-
-    private static string ResolveName(dnlib.DotNet.MethodDef source, out bool isOperator)
-      => ResolveOperator(source.Name, out isOperator);
 
     private static bool ResolveAsync(dnlib.DotNet.MethodDef source)
       => source.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name.String.Equals(nameof(AsyncStateMachineAttribute), StringComparison.InvariantCulture)) != null;

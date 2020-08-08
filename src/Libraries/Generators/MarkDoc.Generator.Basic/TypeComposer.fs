@@ -370,9 +370,21 @@ type TypeComposer(creator, docResolver, memberResolve, linker) =
 
             let signature =
               seq [
-                if method.IsOperator then
+                match method.Operator with
+                | OperatorType.Explicit ->
+                  yield textInline "explicit" |> toTextContent
+                  yield textNormal " " |> toTextContent
                   yield textInline "operator" |> toTextContent
                   yield textNormal " " |> toTextContent
+                | OperatorType.Implicit ->
+                  yield textInline "implicit" |> toTextContent
+                  yield textNormal " " |> toTextContent
+                  yield textInline "operator" |> toTextContent
+                  yield textNormal " " |> toTextContent
+                | OperatorType.Normal ->
+                  yield textInline "operator" |> toTextContent
+                  yield textNormal " " |> toTextContent
+                | _ -> ()
 
                 yield m_creator.CreateLink(textInline method.Name, m_linker.CreateAnchor(input, method)) |> toTextContent
                 yield textNormal "(" |> toTextContent
@@ -541,8 +553,8 @@ type TypeComposer(creator, docResolver, memberResolve, linker) =
     let getSingleTag (m : IMember, t : ITag.TagType) =
       let single (tags : ITag option) =
         match tags with
-        | Some -> tagFull(input, tags |> Option.get) |> emptyToNone
-        | None -> None
+        | Some tag -> tagFull(input, tag) |> emptyToNone
+        | _ -> None
       findTag(input, m, t)
       |> Seq.tryExactlyOne
       |> single
@@ -679,8 +691,18 @@ type TypeComposer(creator, docResolver, memberResolve, linker) =
               (if method.IsStatic then " static" else ""),
               (if (method.Inheritance = MemberInheritance.Normal) then "" else " " + (inheritanceStr method.Inheritance)),
               (if method.IsAsync then "async " else ""),
-              (if isNull method.Returns then "void" else method.Returns.DisplayName),
-              (if method.IsOperator then " operator" else ""),
+              (
+                match method.Operator with
+                | OperatorType.Implicit ->
+                  "implicit"
+                | OperatorType.Explicit ->
+                  "explicit"
+                | OperatorType.None
+                | OperatorType.Normal
+                | _ ->
+                  if isNull method.Returns then "void" else method.Returns.DisplayName
+              ),
+              (if method.Operator <> OperatorType.None then " operator" else ""),
               method.Name,
               getGenerics,
               (methodArguments2 method))
@@ -703,7 +725,7 @@ type TypeComposer(creator, docResolver, memberResolve, linker) =
           let joined = content
                        |> Seq.append (seq [ signature ])
 
-          let name = (if method.IsOperator then "Operator " else "") + method.Name + getOverloads
+          let name = (if method.Operator <> OperatorType.None then "Operator " else "") + method.Name + getOverloads
           m_linker.RegisterAnchor(method, lazy(name))
           m_creator.CreateSection(joined, name, 3) |> toElement
 
