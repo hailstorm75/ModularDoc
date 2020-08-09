@@ -57,14 +57,14 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     private static string ProcessRawName(string name)
     {
       var index = name.LastIndexOf('<');
-      if (index == -1)
-        return name;
-      return name.Remove(index);
+      return index != -1
+        ? name.Remove(index)
+        : name;
     }
 
-    private static string ResolveDocName(TypeSig source)
+    protected static string ResolveDocName(TypeSig source)
     {
-      static IEnumerable<string> RetrieveNested(ITypeDefOrRef source)
+      static IEnumerable<string> RetrieveNested(dnlib.DotNet.IType source)
       {
         static string SolveGenerics(string value)
         {
@@ -73,9 +73,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
             return value;
 
           var name = value.Remove(index);
-          if (!int.TryParse(value.Substring(index + 1), out var number))
-            return name;
-          return $"{name}{{{string.Join(",", Enumerable.Repeat('`', number).Select((x,i) => $"{x}{i}"))}}}";
+          return int.TryParse(value.Substring(index + 1), out var number)
+            ? $"{name}{{{string.Join(",", Enumerable.Repeat('`', number).Select((x,i) => $"{x}{i}"))}}}"
+            : name;
         }
 
         if (source is null)
@@ -89,6 +89,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
         yield return SolveGenerics(source.Name);
       }
+
+      if (source is null)
+        throw new ArgumentNullException(nameof(source));
 
       if (!source.FullName.Contains('/', StringComparison.InvariantCultureIgnoreCase))
         return source.FullName;
@@ -104,10 +107,10 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
       var name = source.Name.String;
       var genericsIndex = name.IndexOf('`', StringComparison.InvariantCulture);
-      if (genericsIndex == -1)
-        return name;
 
-      return name.Remove(genericsIndex);
+      return genericsIndex != -1
+        ? name.Remove(genericsIndex)
+        : name;
     }
 
     #endregion
