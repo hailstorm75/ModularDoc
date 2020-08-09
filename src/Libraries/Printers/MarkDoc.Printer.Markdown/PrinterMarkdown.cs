@@ -9,7 +9,7 @@ using MarkDoc.Members.Types;
 
 namespace MarkDoc.Printer.Markdown
 {
-  public class Printer
+  public class PrinterMarkdown
     : IPrinter
   {
     #region Fields
@@ -21,7 +21,7 @@ namespace MarkDoc.Printer.Markdown
 
     #endregion
 
-    public Printer(ITypeComposer composer, ILinker linker)
+    public PrinterMarkdown(ITypeComposer composer, ILinker linker)
     {
       m_linker = linker;
       m_composer = composer;

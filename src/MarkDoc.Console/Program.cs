@@ -16,6 +16,7 @@ using MarkDoc.Linkers.Markdown;
 using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
 using MarkDoc.Printer;
+using MarkDoc.Printer.Markdown;
 
 namespace MarkDoc.Console
 {
@@ -67,7 +68,7 @@ namespace MarkDoc.Console
       builder.RegisterType<Creator>().As<IElementCreator>().SingleInstance();
       builder.RegisterType<Linker>().As<ILinker>().SingleInstance();
       builder.RegisterType<TypeComposer>().As<ITypeComposer>().SingleInstance();
-      builder.RegisterType<Printer.Markdown.Printer>().As<IPrinter>().SingleInstance();
+      builder.RegisterType<PrinterMarkdown>().As<IPrinter>().SingleInstance();
 
       return builder.Build();
     }
