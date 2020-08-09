@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -30,13 +30,15 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
+    <ProjectReference Include="..\..\Core\MarkDoc.Members\MarkDoc.Members.csproj">
+      <EmbedInteropTypes></EmbedInteropTypes>
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
-    <ProjectReference Include="..\MarkDoc.Members\MarkDoc.Members.csproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
       <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   

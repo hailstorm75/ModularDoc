@@ -43,7 +43,7 @@ namespace MarkDoc.Documentation.Tags
     /// <summary>
     /// List rows
     /// </summary>
-    IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; } 
+    IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; }
 
     #endregion
   }

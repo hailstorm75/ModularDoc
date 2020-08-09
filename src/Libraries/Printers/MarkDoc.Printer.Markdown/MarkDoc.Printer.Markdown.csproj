@@ -28,10 +28,31 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
-    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
-    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj" />
-    <ProjectReference Include="..\MarkDoc.Printer\MarkDoc.Printer.csproj" />
+    <ProjectReference Include="..\..\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\MarkDoc.Generator\MarkDoc.Generator.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <Private>false</Private>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\MarkDoc.Members\MarkDoc.Members.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <Private>false</Private>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\MarkDoc.Printer\MarkDoc.Printer.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

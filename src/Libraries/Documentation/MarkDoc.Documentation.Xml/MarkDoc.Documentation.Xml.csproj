@@ -24,21 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
+      <ReferenceOutputAssembly></ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Linkers\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\MarkDoc.Documentation\MarkDoc.Documentation.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
 

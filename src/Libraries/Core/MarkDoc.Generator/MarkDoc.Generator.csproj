@@ -9,24 +9,21 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Debug\Libraries\Documentation</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Core</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Release\Libraries\Documentation</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Libraries\Core</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj">
+    <ProjectReference Include="..\MarkDoc.Elements\MarkDoc.Elements.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\MarkDoc.Members\MarkDoc.Members.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
 

@@ -16,9 +16,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
+    <ProjectReference Include="..\..\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <Private>false</Private>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\MarkDoc.Members\MarkDoc.Members.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
 

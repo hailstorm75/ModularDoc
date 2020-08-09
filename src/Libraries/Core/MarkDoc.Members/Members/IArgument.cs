@@ -16,7 +16,7 @@ namespace MarkDoc.Members.Members
     /// <summary>
     /// Argument keyword
     /// </summary>
-    ArgumentType Keyword { get; } 
+    ArgumentType Keyword { get; }
 
     /// <summary>
     /// Argument type

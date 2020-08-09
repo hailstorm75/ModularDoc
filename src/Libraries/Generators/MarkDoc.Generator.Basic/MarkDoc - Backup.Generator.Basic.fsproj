@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Authors>Denis Akopyan</Authors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Generators</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Release\Libraries\Generators</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
+    <ProjectReference Include="..\..\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
+    <ProjectReference Include="..\..\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\..\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\Core\MarkDoc.Members\MarkDoc.Members.csproj" />
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
+      <Private>N</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helpers.fs" />
+    <Compile Include="TypeComposer.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.2" />
+  </ItemGroup>
+</Project>

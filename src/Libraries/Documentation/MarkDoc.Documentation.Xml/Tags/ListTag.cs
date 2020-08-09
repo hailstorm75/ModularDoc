@@ -19,7 +19,7 @@ namespace MarkDoc.Documentation.Xml.Tags
     public IReadOnlyCollection<IContent> Headings { get; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; } 
+    public IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; }
 
     #endregion
 
@@ -87,7 +87,7 @@ namespace MarkDoc.Documentation.Xml.Tags
           .Select(ContentResolver.Resolve)
           .SelectMany(Linq.XtoX)
           .ToReadOnlyCollection());
-    } 
+    }
 
     #endregion
   }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -9,27 +9,25 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Debug\Libraries\Printers</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Core</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Release\Libraries\Printers</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Libraries\Core</OutputPath>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers.Unstable" Version="1.0.0.59">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Elements\MarkDoc.Elements\MarkDoc.Elements.csproj" />
-    <ProjectReference Include="..\..\Members\MarkDoc.Members\MarkDoc.Members.csproj" />
+    <ProjectReference Include="..\MarkDoc.Members\MarkDoc.Members.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

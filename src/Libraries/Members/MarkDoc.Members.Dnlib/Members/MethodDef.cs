@@ -163,7 +163,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)
     {
-      if (source.IsVirtual && (source.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0)
+      if (source.IsVirtual && (source.Attributes & MethodAttributes.NewSlot) == 0)
         return MemberInheritance.Override;
       if (source.IsVirtual)
         return MemberInheritance.Virtual;

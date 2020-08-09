@@ -32,13 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
+    </ProjectReference>
     <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\MarkDoc.Elements\MarkDoc.Elements.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
 

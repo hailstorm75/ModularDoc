@@ -30,14 +30,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
-    <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
-    <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements\MarkDoc.Elements.csproj" />
-    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />
-    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator\MarkDoc.Generator.csproj" />
-    <ProjectReference Include="..\Libraries\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj" />
-    <ProjectReference Include="..\Libraries\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj" />
-    <ProjectReference Include="..\Libraries\Printers\MarkDoc.Printer.Markdown\MarkDoc.Printer.Markdown.csproj" />
+    <ProjectReference Include="..\Libraries\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj">
+      <Private></Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
+    <ProjectReference Include="..\Libraries\Printers\MarkDoc.Printer.Markdown\MarkDoc.Printer.Markdown.csproj">
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
