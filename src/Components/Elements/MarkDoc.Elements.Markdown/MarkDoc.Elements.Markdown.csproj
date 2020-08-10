@@ -6,6 +6,7 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,15 +33,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
-      <Private>false</Private>
+    <ProjectReference Include="..\..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <EmbedInteropTypes></EmbedInteropTypes>
+      <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
 

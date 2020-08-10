@@ -7,6 +7,7 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,25 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj">
-      <Private></Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Printers\MarkDoc.Printer.Markdown\MarkDoc.Printer.Markdown.csproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
+    <ProjectReference Include="..\Components\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
+    <ProjectReference Include="..\Components\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
+    <ProjectReference Include="..\Components\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />
+    <ProjectReference Include="..\Components\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj" />
+    <ProjectReference Include="..\Components\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj" />
+    <ProjectReference Include="..\Components\Printers\MarkDoc.Printer.Markdown\MarkDoc.Printer.Markdown.csproj" />
   </ItemGroup>
 
 </Project>

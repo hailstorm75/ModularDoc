@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,20 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <Private>false</Private>
-      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\MarkDoc.Members\MarkDoc.Members.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj">
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <EmbedInteropTypes></EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
 
