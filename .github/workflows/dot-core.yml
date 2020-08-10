@@ -1,0 +1,25 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ 85-buildScript ]
+  pull_request:
+    branches: [ 85-buildScript ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Move to directory
+      run: cd src/
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
