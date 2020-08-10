@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Debug\Libraries\Printers</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Components\Printers</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Release\Libraries\Printers</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Components\Printers</OutputPath>
   </PropertyGroup>
   
   <ItemGroup>

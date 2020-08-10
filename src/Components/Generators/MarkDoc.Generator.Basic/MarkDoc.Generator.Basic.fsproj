@@ -6,10 +6,10 @@
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Debug\Libraries\Generators</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Components\Generators</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Release\Libraries\Generators</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Components\Generators</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
