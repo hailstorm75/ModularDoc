@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Move to directory
-      run: cd src/
+      run: cd src/ && pwd
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore MarkDoc.sln
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build MarkDoc.sln --configuration Release --no-restore
