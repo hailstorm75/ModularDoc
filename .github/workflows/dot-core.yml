@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.400
+        dotnet-version: 3.1.301
     - name: Install dependencies
       run: pwd && dotnet restore src/MarkDoc.sln
     - name: Build
