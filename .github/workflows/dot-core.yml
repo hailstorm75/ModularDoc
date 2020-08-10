@@ -20,6 +20,6 @@ jobs:
     - name: Move to directory
       run: cd src/ && pwd
     - name: Install dependencies
-      run: dotnet restore MarkDoc.sln
+      run: pwd && dotnet restore src/MarkDoc.sln
     - name: Build
-      run: dotnet build MarkDoc.sln --configuration Release --no-restore
+      run: pwd && dotnet build src/MarkDoc.sln --configuration Release --no-restore
