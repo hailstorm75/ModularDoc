@@ -79,6 +79,15 @@ namespace MarkDoc.Members.Dnlib.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linking types before they are resolved and if none are resolved is not possible..
+        /// </summary>
+        internal static string linkBeforeAllResolvedForbidden {
+            get {
+                return ResourceManager.GetString("linkBeforeAllResolvedForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type is not generic.
         /// </summary>
         internal static string notGeneric {
@@ -111,6 +120,15 @@ namespace MarkDoc.Members.Dnlib.Properties {
         internal static string resolveAfterMaterializeForbidden {
             get {
                 return ResourceManager.GetString("resolveAfterMaterializeForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided object for resolution is of an unsupported type. Please verify whether this component is compatible..
+        /// </summary>
+        internal static string sourceNotTypeSignature {
+            get {
+                return ResourceManager.GetString("sourceNotTypeSignature", resourceCulture);
             }
         }
         
