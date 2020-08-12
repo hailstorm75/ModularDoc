@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using MarkDoc.Members.ResolvedTypes;
@@ -7,11 +8,18 @@ using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
+  /// <summary>
+  /// Class for representing resolved arrays
+  /// </summary>
+  [DebuggerDisplay(nameof(ResArray) + ": {" + nameof(DisplayName) + "}")]
   public class ResArray
     : IResArray, IResType
   {
     #region Properties
 
+    /// <summary>
+    /// Type resolver
+    /// </summary>
     private IResolver Resolver { get; }
 
     /// <inheritdoc />
@@ -50,40 +58,62 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
     #endregion
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="resolver">Type resolver instance</param>
+    /// <param name="source">Type source</param>
+    /// <param name="generics">List of known generics</param>
     internal ResArray(IResolver resolver, dnlib.DotNet.TypeSig source, IReadOnlyDictionary<string, string>? generics)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
+      // If the resolver is null..
       if (resolver is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(resolver));
 
+      Resolver = resolver;
       RawName = source.FullName;
       IsJagged = source.ElementType == dnlib.DotNet.ElementType.SZArray;
-      Resolver = resolver;
 
-      var next = ResolveNext(source, IsJagged);
-      ArrayType = Resolver.Resolve(next, generics);
-      Dimension = ResolveDimension(source, next);
+      var arrayType = ResolveArrayType(source, IsJagged);
+      ArrayType = Resolver.Resolve(arrayType, generics);
+      Dimension = ResolveDimension(source, arrayType);
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #region Methods
 
-    private static dnlib.DotNet.TypeSig ResolveNext(dnlib.DotNet.TypeSig source, bool isJagged)
+    /// <summary>
+    /// Strip away the array braces to find the array type
+    /// </summary>
+    /// <param name="source">Array to process</param>
+    /// <param name="isJagged">Is the provided <paramref name="source"/> a jagged array</param>
+    /// <returns>Array type</returns>
+    private static dnlib.DotNet.TypeSig ResolveArrayType(dnlib.DotNet.TypeSig source, bool isJagged)
     {
-      dnlib.DotNet.TypeSig? next = source.Next;
+      // Get the array
       dnlib.DotNet.TypeSig current = source;
+      // Get the array with one level lower braces
+      dnlib.DotNet.TypeSig? next = source.Next;
 
+      // While the next array still has braces..
       while (next?.ElementType == (isJagged ? dnlib.DotNet.ElementType.SZArray : dnlib.DotNet.ElementType.Array))
       {
+        // Track the next level
         current = next;
+        // Strip another level of braces
         next = current.Next;
       }
 
+      // Return the result
       return next ?? current;
     }
 
-    private int ResolveDimension(dnlib.DotNet.TypeSig source, dnlib.DotNet.TypeSig next)
+    private int ResolveDimension(dnlib.DotNet.TypeSig source, dnlib.DotNet.TypeSig array)
     {
       static int Count(ReadOnlySpan<char> span, char find)
       {
@@ -95,14 +125,18 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         return i;
       }
 
+      // Get the array fullname
       var thisType = source.FullName;
-      var nextType = next.FullName;
+      // Get the array type name
+      var arrayType = array.FullName;
 
-      var name = thisType.AsSpan(nextType.Length);
+      // Subtract the names to get the array braces
+      var braces = thisType.AsSpan(arrayType.Length);
 
+      // Return the dimension of the array based on the braces count
       return IsJagged
-        ? Count(name, '[')
-        : Count(name, ',') + 1;
+        ? Count(braces, '[')
+        : Count(braces, ',') + 1;
     }
 
     #endregion
