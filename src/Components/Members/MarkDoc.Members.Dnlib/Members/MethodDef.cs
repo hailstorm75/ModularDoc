@@ -11,6 +11,9 @@ using IMethod = MarkDoc.Members.Members.IMethod;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing method members
+  /// </summary>
   [DebuggerDisplay(nameof(MethodDef) + (": {" + nameof(Name) + "}"))]
   public class MethodDef
     : ConstructorDef, IMethod
@@ -40,7 +43,9 @@ namespace MarkDoc.Members.Dnlib.Members
     internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
       : base(resolver, source, ResolveOperator(source, out var isOperator))
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
       Operator = isOperator;
@@ -54,6 +59,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static string ResolveOperator(IFullName source, out OperatorType @operator)
     {
+      // Assume that the source is a normal operator
       @operator = OperatorType.Normal;
 
       static string RetrieveConverterName(IFullName input)
@@ -174,9 +180,9 @@ namespace MarkDoc.Members.Dnlib.Members
     }
 
     private static IEnumerable<string> ResolveGenerics(dnlib.DotNet.MethodDef source)
-      => !source.HasGenericParameters
-         ? Enumerable.Empty<string>()
-         : source.GenericParameters.Select(x => x.Name.String);
+      => source.HasGenericParameters
+           ? source.GenericParameters.Select(x => x.Name.String)
+           : Enumerable.Empty<string>();
 
     #endregion
   }

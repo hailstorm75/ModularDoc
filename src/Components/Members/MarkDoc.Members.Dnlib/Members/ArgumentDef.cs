@@ -8,6 +8,9 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing arguments
+  /// </summary>
   [DebuggerDisplay(nameof(ArgumentDef) + (": {" + nameof(Name) + "}"))]
   public class ArgumentDef
     : IArgument
@@ -32,9 +35,13 @@ namespace MarkDoc.Members.Dnlib.Members
     /// </summary>
     internal ArgumentDef(IResolver resolver, Parameter source, IReadOnlyDictionary<string, string> generics)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
+      // If the generics are null..
       if (generics is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(generics));
 
       Resolver = resolver;

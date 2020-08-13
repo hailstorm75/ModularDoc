@@ -4,11 +4,17 @@ using MarkDoc.Members.Members;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Base class for members
+  /// </summary>
   public abstract class MemberDef
     : IMember
   {
     #region Properties
 
+    /// <summary>
+    /// Type resolver
+    /// </summary>
     protected IResolver Resolver { get; }
 
     /// <inheritdoc />
@@ -29,7 +35,9 @@ namespace MarkDoc.Members.Dnlib.Members
     /// </summary>
     protected internal MemberDef(IResolver resolver, dnlib.DotNet.IMemberDef source)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
       Resolver = resolver;

@@ -6,6 +6,9 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing event members
+  /// </summary>
   [DebuggerDisplay(nameof(EventDef) + (": {" + nameof(Name) + "}"))]
   public class EventDef
     : MemberDef, IEvent

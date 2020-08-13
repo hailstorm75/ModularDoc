@@ -70,7 +70,16 @@ namespace MarkDoc.Members.Dnlib.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid property accessor type.
+        ///   Looks up a localized string similar to Private accessors are not allowed.
+        /// </summary>
+        internal static string accessorPrivate {
+            get {
+                return ResourceManager.GetString("accessorPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid accessor type.
         /// </summary>
         internal static string accessorTypeInvalid {
             get {

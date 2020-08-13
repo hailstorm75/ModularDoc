@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
@@ -8,6 +9,9 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing property members
+  /// </summary>
   [DebuggerDisplay(nameof(PropertyDef) + (": {" + nameof(Name) + "}"))]
   public class PropertyDef
     : MemberDef, IProperty
@@ -35,6 +39,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <inheritdoc />
     public AccessorType? SetAccessor { get; }
 
+    /// <inheritdoc />
     public override string RawName { get; }
 
     #endregion
@@ -60,65 +65,87 @@ namespace MarkDoc.Members.Dnlib.Members
 
     internal static PropertyDef? Initialize(IResolver resolver, dnlib.DotNet.PropertyDef source)
     {
+      // Select non-private property methods
       var methods = source.SetMethods.Concat(source.GetMethods).Where(x => !x.IsPrivate).ToArray();
 
+      // If no methods were selected..
       if (methods.Length == 0)
+        // then this property is invalid
         return null;
+      // Otherwise initialize the property
       return new PropertyDef(resolver, source, methods);
     }
 
     private static dnlib.DotNet.TypeSig ResolveType(dnlib.DotNet.PropertyDef source)
     {
+      // If the property has a getter method..
       if (source.GetMethod != null)
+        // retrieve its return type
         return source.GetMethod.ReturnType;
-      else if (source.SetMethod != null)
+      // If the property has a setter method..
+      if (source.SetMethod != null)
+        // retrieve its input argument
         return source.SetMethod.Parameters.First().Type;
 
+      // Property type was not resolved, thus this is not a valid property
       throw new NotSupportedException(Resources.notProperty);
     }
 
     private static AccessorType? ResolveAccessor(dnlib.DotNet.MethodDef? method)
     {
+      // If the method is null..
       if (method is null)
+        // return unresolved accessor
         return null;
 
-      if (method.Access == dnlib.DotNet.MethodAttributes.Public)
-        return AccessorType.Public;
-      if (method.Access == dnlib.DotNet.MethodAttributes.Family)
-        return AccessorType.Protected;
-      if (method.Access == dnlib.DotNet.MethodAttributes.Assembly)
-        return AccessorType.Internal;
-      return null;
+      // Map the property method accessor
+      return method.Access switch
+      {
+        dnlib.DotNet.MethodAttributes.Public => AccessorType.Public,
+        dnlib.DotNet.MethodAttributes.Family => AccessorType.Protected,
+        dnlib.DotNet.MethodAttributes.Assembly => AccessorType.Internal,
+        // Unresolved accessor
+        _ => null
+      };
     }
 
-    private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef[] methods)
+    private static AccessorType ResolveAccessor(IReadOnlyCollection<dnlib.DotNet.MethodDef> methods)
     {
-      if (methods.Length == 1)
-        return ResolveAccessor(methods[0]) ?? throw new Exception(Resources.accessorNull);
+      // If the property only has one method..
+      if (methods.Count == 1)
+        // process its accessor and use it as the accessor for the whole property
+        return ResolveAccessor(methods.First()) ?? throw new Exception(Resources.accessorNull);
 
+      // Otherwise resolve accessor of both methods
       var accessors = methods.Select(ResolveAccessor).ToArray();
 
+      // If any of the accessors are public..
       if (accessors.Any(x => x.Equals(AccessorType.Public)))
+        // then the property is public
         return AccessorType.Public;
+      // If any of the accessors are protected..
       if (accessors.Any(x => x.Equals(AccessorType.Protected)))
+        // then the property is protected
         return AccessorType.Protected;
+      // If any of the accessors are internal
       if (accessors.Any(x => x.Equals(AccessorType.Internal)))
+        // then the property is internal
         return AccessorType.Internal;
 
       throw new NotSupportedException(Resources.accessorTypeInvalid);
     }
 
-    private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef[] methods)
+    private static MemberInheritance ResolveInheritance(IEnumerable<dnlib.DotNet.MethodDef> methods)
     {
       var method = methods.First();
-      if (method.IsVirtual && (method.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0)
-        return MemberInheritance.Override;
-      else if (method.IsVirtual)
-        return MemberInheritance.Virtual;
-      else if (method.IsAbstract)
-        return MemberInheritance.Abstract;
-
-      return MemberInheritance.Normal;
+      return (method.IsVirtual, method.IsAbstract) switch
+      {
+        (true, _) => (method.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0
+          ? MemberInheritance.Override
+          : MemberInheritance.Virtual,
+        (false, true) => MemberInheritance.Abstract,
+        _ => MemberInheritance.Normal
+      };
     }
 
     #endregion
