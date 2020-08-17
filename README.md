@@ -47,28 +47,26 @@ The parts above are represented as interfaces and thus allow creating decoupled 
              +--------------+
              | Input folder |
              ++------------++
-              |            |
+     DLL, EXE |            | XML
               v            v
 +-------------+---+    +---+-------------+
 |     Members     |    |  Documentation  |
 +-------------+---+    +---+-------------+
-              |            |
+        IType |            | IDocElement
               v            v
-       +------+------------------+
-       |                   +-----+-------+
-       |        Composers  |   Linkers   |
-       |                   +-----+-------+
+       +------+------------+-----+
++------+------+            +-----+-------+
+|   Elements  |  Composers |   Linkers   |
++------+------+            +-----+-------+
        +------------+------------+
-                    |
-              +-----v-------+
-              |  Elements   |
+                    | IElement
+                    v
               +-----+-------+
-                    |
-              +-----v-------+
               |  Printers   |
               +-----+-------+
-                    |
-             +------v--------+
+                    | Documentaion file (.md, .htmml, ...)
+                    v
+             +------+--------+
              | Output folder |
              +---------------+
 
