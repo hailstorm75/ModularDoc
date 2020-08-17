@@ -19,24 +19,60 @@ The generated structure is inspired by the one outputted by Doxygen. If you do n
 
 As of writing this ReadMe, there is no user-friendly way of running this project. However, you can play around with the benchmark test in the console application.
 
-To do so, supply the paths to your dll's and exe's (how and where? You can figure it out, I trust you. 😁), place a breakpoint and run the console app.
+To do so, supply the paths to your dll's, exe's, and the output directory path in the `MarkDoc.Console` `Program`. You will find the respective fields there: `OUTPUT` and `DLL_PATHS`.
 
 Run it at your own risk, the code is meant to serve for development purposes.
 
 ## Technical description
 
 This project aims to be as modular as possible to support specifics of each **Git** platform and, if so be desired, to generate not only Markdown but other output types such as HTML, LaTeX, or whatever might be required in the future.
-With this in mind, the project is separated into the following parts:
+With this in mind, the project is separated into the following **component** types:
 
 | Part | Description |
 | ---- | ----------- |
 | Members | Retrieve library types structure |
 | Documentation | Retrieve library types documentation |
 | Elements | Documentation building blocks |
-| Generators | Binds the types to their documentation and generates the documentation output | 
+| Generators | Binds the types to their documentation and generates the documentation output |
 | Linkers | Define the documentation file output structure and allow linking types between files |
+| Printers | Saves the generated output to files |
 
-The parts above are represented as interfaces and thus allow creating decoupled library implementations.
+The parts above are represented as interfaces and thus allow creating decoupled component implementations.
+
+### Relational chart
+
+> Note: may vary depending on component implementations
+
+```
+             +--------------+
+             | Input folder |
+             ++------------++
+              |            |
+              v            v
++-------------+---+    +---+-------------+
+|     Members     |    |  Documentation  |
++-------------+---+    +---+-------------+
+              |            |
+              v            v
+       +------+------------------+
+       |                   +-----+-------+
+       |        Composers  |   Linkers   |
+       |                   +-----+-------+
+       +------------+------------+
+                    |
+              +-----v-------+
+              |  Elements   |
+              +-----+-------+
+                    |
+              +-----v-------+
+              |  Printers   |
+              +-----+-------+
+                    |
+             +------v--------+
+             | Output folder |
+             +---------------+
+
+```
 
 # Roadmap
 
@@ -44,9 +80,8 @@ The project is in its early stages of development.
 
 | Stage | Status   | Milestone | Description |
 | ----- | -------- | --------- | ----------- |
-| Core  | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create library which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
-| Reorganize | :mag: |         | Reorganize the project structure such that the interfaces are separate from the libraries which implement them. Prepare the application layer and the plugin layer |
+| Core  | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create components which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
+| Reorganize | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/2)  | Reorganize the project structure such that the interfaces are separate from the components which implement them. Document the project core and cover it with unit tests |
+| Smart settings   | :mag: |    | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
+| Plugins | :grey_question: |  | Create a MarkDoc plugin composed from __components__ |
 | UI   | :grey_question: |    | Create the application UI |
-| Plugins | :grey_question: |  | Create a MarkDoc plugin composed from __modules__ (libraries) |
-
-The biggest issue at hand is coming up with a way to test this project. All testing is done manually and has proven to miss most of the issues.
