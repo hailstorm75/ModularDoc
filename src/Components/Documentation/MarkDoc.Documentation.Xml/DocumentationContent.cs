@@ -9,6 +9,9 @@ using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml
 {
+  /// <summary>
+  /// Documentation container
+  /// </summary>
   public readonly struct DocumentationContent
     : IDocumentation, IEquatable<DocumentationContent>
   {
@@ -25,21 +28,34 @@ namespace MarkDoc.Documentation.Xml
 
     #endregion
 
-    public DocumentationContent(XElement source)
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="source">Documentation source</param>
+    internal DocumentationContent(XElement source)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
       Tags = ResolveTags(source.Elements())
+        // Filter out invalid tags
         .Where(x => x.Type != TagType.InvalidTag)
+        // Group the tags by their type
         .GroupBy(x => x.Type)
+        // Materialize the group into a dictionary
         .ToDictionary(Linq.GroupKey, x => x.GroupValues().ToReadOnlyCollection());
 
       HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var tags);
       InheritDocRef = tags?.First()?.Reference ?? string.Empty;
     }
 
-    public DocumentationContent(IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> tags)
+    /// <summary>
+    /// Hidden constructor
+    /// </summary>
+    /// <param name="tags">Explicit documentation source</param>
+    internal DocumentationContent(IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> tags)
     {
       Tags = tags ?? throw new ArgumentNullException(nameof(tags));
       HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var t);

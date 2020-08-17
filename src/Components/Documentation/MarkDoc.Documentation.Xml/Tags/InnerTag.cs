@@ -7,6 +7,9 @@ using MarkDoc.Helpers;
 
 namespace MarkDoc.Documentation.Xml.Tags
 {
+  /// <summary>
+  /// Documentation tag which can be within other tags
+  /// </summary>
   public class InnerTag
     : IInnerTag
   {
@@ -23,16 +26,27 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     #endregion
 
-    public InnerTag(XElement node)
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="source">Documentation source</param>
+    public InnerTag(XElement source)
     {
-      if (node is null)
-        throw new ArgumentNullException(nameof(node));
+      // If the source is null..
+      if (source is null)
+        // throw an exception
+        throw new ArgumentNullException(nameof(source));
 
-      Type = ResolveType(node);
-      Reference = ResolveReference(Type, node);
-      Content = node.Nodes()
+      Type = ResolveType(source);
+      Reference = ResolveReference(Type, source);
+      Content = source
+        // Select the documentation tags
+        .Nodes()
+        // Resolve the tags
         .Select(ContentResolver.Resolve)
+        // Flatten the sequence
         .SelectMany(Linq.XtoX)
+        // Materialize to a collection
         .ToReadOnlyCollection();
     }
 
