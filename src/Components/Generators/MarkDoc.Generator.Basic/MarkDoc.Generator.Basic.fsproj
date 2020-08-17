@@ -12,6 +12,12 @@
     <OutputPath>..\..\..\..\bin\Release\Components\Generators</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Tools.fs" />
+    <Compile Include="Helpers\SomeHelpers.fs" />
+    <Compile Include="Helpers\ElementHelpers.fs" />
+    <Compile Include="Helpers\TextHelpers.fs" />
+    <Compile Include="Helpers\ComposerHelpers.fs" />
+    <Compile Include="Composer.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="TypeComposer.fs" />
   </ItemGroup>
