@@ -64,7 +64,7 @@ The parts above are represented as interfaces and thus allow creating decoupled 
               +-----+-------+
               |  Printers   |
               +-----+-------+
-                    | Documentaion file (.md, .htmml, ...)
+                    | Documentaion file (.md, .html, ...)
                     v
              +------+--------+
              | Output folder |
