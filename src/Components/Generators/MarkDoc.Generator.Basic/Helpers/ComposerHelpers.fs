@@ -15,8 +15,8 @@ open MarkDoc.Documentation
 module internal ComposerHelpers =
   let createHeadings headings tools = headings |> Seq.map (fun x -> TextHelpers.normal x tools)
 
-  let processMethods (property : IProperty) =
-    let accessor (acc : AccessorType) = 
+  let processMethods (property: IProperty) =
+    let accessor acc = 
       match acc with
       | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
       | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
@@ -28,12 +28,12 @@ module internal ComposerHelpers =
         yield (accessor property.SetAccessor.Value) + "set" 
     ]
 
-  let getTypeName (input : IType) =
-    let joinGenerics (i : seq<string>) =
+  let getTypeName (input: IType) =
+    let joinGenerics (i: seq<string>) =
       let partial f x y = f(x , y)
       let generics = i |> partial String.Join ", "
       "<" + generics + ">"
-    let processInterface (input : IInterface) =
+    let processInterface (input: IInterface) =
       let generics =
         input.Generics
         |> Seq.map (fun x -> (x.Value.ToTuple() |> fst |> StringConverters.varianceStr) + " " + x.Key)
@@ -41,7 +41,7 @@ module internal ComposerHelpers =
         input.Name + joinGenerics generics
       else
         input.Name
-    let processStruct (input : 'M when 'M :> IInterface) =
+    let processStruct (input: 'M when 'M :> IInterface) =
       let generics =
         input.Generics
         |> Seq.map (fun x -> x.Key)
@@ -56,7 +56,7 @@ module internal ComposerHelpers =
     | :? IInterface as x -> processInterface x
     | _ -> input.Name
 
-  let tryFindMember (input : IType, memberFull : string, memberCut : string) =
+  let tryFindMember (input: IType, memberFull: string, memberCut: string) =
     let toMember (a: 'M when 'M :> IMember) =
       a :> IMember
     let findMember (a: 'M seq when 'M :> IMember) =
@@ -71,9 +71,9 @@ module internal ComposerHelpers =
     | :? IEnum as e -> e.Fields |> findMember
     | _ -> None
 
-  let processReference (input: IType, reference: string, tools: Tools) =
-    let typeReference (reference : string) =
-      let mutable result : IType = null
+  let processReference (input: IType, reference: string, tools) =
+    let typeReference (reference: string) =
+      let mutable result: IType = null
       if tools.typeResolver.TryFindType(reference.[2..], &result) then
         LinkContent ((getTypeName result) |> Normal, lazy(tools.linker.CreateLink(input, result)))
       else
@@ -89,12 +89,12 @@ module internal ComposerHelpers =
           slice.ToString() |> Normal
 
     let memberReference cutter =
-      let memberString : string = cutter()
+      let memberString: string = cutter()
       let typeString = reference.[..reference.Length - memberString.Length - 2]
       let typeRef = typeReference typeString
 
       let memberAnchor = 
-        let mutable result : IType = null
+        let mutable result: IType = null
         if tools.typeResolver.TryFindType(typeString.[2..], &result) then
           let mem = tryFindMember(result, reference, memberString)
           if Option.isSome mem then
@@ -119,8 +119,8 @@ module internal ComposerHelpers =
     | 'F' -> memberReference cutMember
     | _ -> reference.Substring(2) |> Normal
 
-  let processResType (source: IType, item : IResType, tools: Tools) =
-    let tryLink (item : IResType) =
+  let processResType source (item: IResType) tools =
+    let tryLink (item: IResType) =
       let link = tools.linker.CreateLink(source, item)
       if not (String.IsNullOrEmpty link) then
         (InlineCode item.DisplayName, lazy(link)) |> LinkContent
@@ -136,12 +136,10 @@ module internal ComposerHelpers =
       (content, "") |> JoinedText
     | _ -> tryLink item
 
-  let methodArguments (source: IType, item: IMember, tools: Tools) =
-    let argument (arg : IArgument) =
-      let args =
-        seq [ arg |> StringConverters.argumentTypeStr |> Normal; processResType(source, arg.Type, tools); Normal arg.Name ]
-      JoinedText (args, " ")
-    let processArguments (args : IArgument seq) =
+  let methodArguments source (item: IMember) tools =
+    let argument arg =
+      JoinedText ([ arg |> StringConverters.argumentTypeStr |> Normal; processResType source arg.Type tools; Normal arg.Name ], " ")
+    let processArguments args =
       JoinedText (args |> Seq.map argument, ", ")
 
     match item with 
@@ -153,12 +151,12 @@ module internal ComposerHelpers =
     let applyTools input =
       input tools
 
-    let getInlineText (tag : IInnerTag) =
+    let getInlineText (tag: IInnerTag) =
       tag.Content
       |> Seq.where(fun x -> x :? ITextTag)
       |> Seq.map (fun x -> (x :?> ITextTag).Content)
 
-    let processColumn(column : seq<IContent>) =
+    let processColumn(column: seq<IContent>) =
       column
       |> Seq.map (fun x -> processContent(input, x, tools))
       |> SomeHelpers.whereSome
@@ -194,7 +192,7 @@ module internal ComposerHelpers =
                        |> Seq.map(fun x -> x |> (ElementHelpers.initialize >> applyTools) :?> IText)
         Element<ILink>.Table(content, headings, "", 0) |> Some
       | _ ->
-        let listType (t : IListTag.ListType) =
+        let listType (t: IListTag.ListType) =
           match t with
           | IListTag.ListType.Bullet -> IList.ListType.Dotted
           | IListTag.ListType.Number -> IList.ListType.Numbered
@@ -208,9 +206,9 @@ module internal ComposerHelpers =
         Element<ILink>.ListElement(content, listType list.Type, "", 0) |> Some
     | _ -> None
 
-  let tagShort (input: IType, x : ITag, tools: Tools) =
+  let tagShort (input, tag: ITag, tools) =
     let getCount =
-      let isInvalid (item : IContent) =
+      let isInvalid (item: IContent) =
         match item with
         | :? IListTag -> true
         | :? IInnerTag as tag ->
@@ -222,13 +220,13 @@ module internal ComposerHelpers =
           | _ -> false
         | _ -> false
 
-      match (x.Content |> Seq.tryFindIndex isInvalid) with
-      | None -> x.Content.Count
+      match (tag.Content |> Seq.tryFindIndex isInvalid) with
+      | None -> tag.Content.Count
       | Some x -> x
 
     let count = getCount
-    let readMore = if (count <> x.Content.Count) then Some("..." |> Normal |> TextElement) else None
-    let processed = x.Content
+    let readMore = if (count <> tag.Content.Count) then Some("..." |> Normal |> TextElement) else None
+    let processed = tag.Content
                     |> Seq.take count
                     |> Seq.map (fun x -> processContent(input, x, tools))
     let content = seq [readMore]
@@ -238,8 +236,8 @@ module internal ComposerHelpers =
 
     JoinedText (content, " ")
 
-  let tagFull (input: IType, x : ITag, tools: Tools) =
-    let content = x.Content
+  let tagFull (input: IType, tag: ITag, tools) =
+    let content = tag.Content
                   |> Seq.map (fun x -> processContent(input, x, tools))
                   |> SomeHelpers.whereSome
                   |> Seq.map (fun x -> ElementHelpers.initialize x tools)
@@ -264,28 +262,28 @@ module internal ComposerHelpers =
     else
       result
 
-  let memberNameSummary(input: IType, name: TextType<ILink>, summary: Option<ITag>, tools: Tools) =
+  let memberNameSummary(input: IType, name: TextType<ILink>, summary: Option<ITag>, tools) =
     match summary with
     | None -> name
     | Some x -> JoinedText (seq [ name; tagShort(input, x, tools) ], Environment.NewLine)
 
-  let findTypeTag(input: IType, tag: ITag.TagType, tools: Tools) =
+  let findTypeTag(input: IType, tag: ITag.TagType, tools) =
     seq [
       let mutable typeDoc: IDocElement = null
       if (tools.docResolver.TryFindType(input, &typeDoc)) then
-        let mutable result : IReadOnlyCollection<ITag> = null
+        let mutable result: IReadOnlyCollection<ITag> = null
         if (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
           result
     ]
     |> Seq.collect id
 
-  let findTag(input : IType, mem : IMember, tag : ITag.TagType, tools: Tools) =
+  let findTag(input: IType, mem: IMember, tag: ITag.TagType, tools) =
     seq [
-      let mutable typeDoc : IDocElement = null
+      let mutable typeDoc: IDocElement = null
       if (tools.docResolver.TryFindType(input, &typeDoc)) then
-        let mutable memberDoc : IDocMember = null
+        let mutable memberDoc: IDocMember = null
         if (typeDoc.Members.Value.TryGetValue(mem.RawName, &memberDoc)) then
-          let mutable result : IReadOnlyCollection<ITag> = null
+          let mutable result: IReadOnlyCollection<ITag> = null
           if (memberDoc.Documentation.Tags.TryGetValue(tag, &result)) then
             result
     ]
@@ -296,7 +294,7 @@ module internal ComposerHelpers =
     ElementHelpers.initialize ((content, name, level) |> Section) tools
 
   let composeSections input level =
-    let createSection(x : seq<IElement>, y : string) =
+    let createSection (x, y) =
       Element.Section(x, y, level)
 
     input
@@ -307,7 +305,7 @@ module internal ComposerHelpers =
     Seq.empty |> Some
   let printMemberTables input =
     Seq.empty |> Some
-  let printDetailed(input: IType, tools: Tools) =
+  let printDetailed(input: IType, tools) =
     let applyTools input = input tools
     let joinContentWSig content signature =
       content 4
@@ -332,9 +330,9 @@ module internal ComposerHelpers =
         |> SomeHelpers.emptyToNone
 
     let nested =
-      let getNested (x : IInterface) = x.NestedTypes
+      let getNested (x: IInterface) = x.NestedTypes
 
-      let groupByType (x : IType) =
+      let groupByType (x: IType) =
         match x with
         | :? IClass
           -> "c" |> Some
@@ -346,16 +344,16 @@ module internal ComposerHelpers =
           -> "e" |> Some
         | _ -> None
 
-      let processGroup (x : string option * seq<IType>) =
-        let createTable (heading : string, group : seq<IType>) =
+      let processGroup (x: string option * seq<IType>) =
+        let createTable heading group =
           ListElement (group |> Seq.map (fun x -> ElementHelpers.initialize (getTypeName x |> InlineCode |> TextElement) tools), IList.ListType.Dotted, heading, 3)
           |> Some
 
         match x |> (fst >> Option.get) with
-        | "c" -> createTable("Classes", snd x)
-        | "i" -> createTable("Interfaces", snd x)
-        | "s" -> createTable("Structures", snd x)
-        | "e" -> createTable("Enums", snd x)
+        | "c" -> createTable "Classes" (snd x)
+        | "i" -> createTable "Interfaces" (snd x)
+        | "s" -> createTable "Structures" (snd x)
+        | "e" -> createTable "Enums" (snd x)
         | _ -> None
 
       match input with
@@ -371,9 +369,9 @@ module internal ComposerHelpers =
       | _ -> None
 
     let inheritance =
-      let getInterfaces (x : 'M when 'M :> IInterface) =
+      let getInterfaces (x: 'M when 'M :> IInterface) =
         x.InheritedInterfaces
-        |> Seq.map (fun x -> ElementHelpers.initialize (processResType(input, x, tools) |> TextElement) tools)
+        |> Seq.map (fun x -> ElementHelpers.initialize (processResType input x tools |> TextElement) tools)
 
       let createList l =
         if (Seq.isEmpty l) then
@@ -383,7 +381,7 @@ module internal ComposerHelpers =
 
       match input with
       | :? IClass as x ->
-        let baseType = if (isNull x.BaseClass) then None else ElementHelpers.initialize (processResType(input, x.BaseClass, tools) |> TextElement) tools |> Some
+        let baseType = if (isNull x.BaseClass) then None else ElementHelpers.initialize (processResType input x.BaseClass tools |> TextElement) tools |> Some
         let interfaces = getInterfaces x
         seq [ baseType ]
         |> SomeHelpers.whereSome
@@ -395,18 +393,18 @@ module internal ComposerHelpers =
 
     let typeParams =
       let getTypeParams =
-        let processTag (x : ITag) =
+        let processTag (x: ITag) =
           let generics = (input :?> IInterface).Generics
-          let getConstraints (x : ITag) =
+          let getConstraints (x: ITag) =
             if generics.ContainsKey(x.Reference) then
               let types = generics.[x.Reference].ToTuple()
                           |> snd
-                          |> Seq.map (fun x -> processResType(input, x, tools))
+                          |> Seq.map (fun x -> processResType input x tools)
               (types, Environment.NewLine) |> JoinedText |> Some
             else
               None
 
-          let getName (x : ITag) =
+          let getName (x: ITag) =
             let result = seq [
               yield x.Reference |> InlineCode
               if (generics.ContainsKey(x.Reference)) then
@@ -463,14 +461,14 @@ module internal ComposerHelpers =
         None
       else
         seq [ tools.creator.CreateList(seeAlsos, IList.ListType.Dotted) |> ElementHelpers.toElement ] |> Some
-    let getArguments (c : IMember) = 
+    let getArguments (c: IMember) = 
       let argumentDocs = findTag(input, c, ITag.TagType.Param, tools)
                          |> Seq.map (fun x -> x.Reference, tagShort(input, x, tools) |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement)
                          |> dict
 
-      let processArguments (x : IArgument) =
+      let processArguments (x: IArgument) =
         let getDescription =
-          let mutable value : IElement = null
+          let mutable value: IElement = null
           seq [ if argumentDocs.TryGetValue(x.Name, &value) then yield value ]
 
         let argType = 
@@ -480,7 +478,7 @@ module internal ComposerHelpers =
               yield argType |> InlineCode
           ]
 
-          JoinedText (seq [ processResType(input, x.Type, tools) ] |> Seq.append argType, " ")
+          JoinedText (seq [ processResType input x.Type tools ] |> Seq.append argType, " ")
 
         let typeName = seq [ argType; x.Name |> Normal ]
                        |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement)
@@ -488,7 +486,7 @@ module internal ComposerHelpers =
         |> Seq.append typeName
         |> Linq.ToReadOnlyCollection
 
-      let generateResult (args : IArgument seq) =
+      let generateResult (args: IArgument seq) =
         let arguments = args
                         |> Seq.map processArguments
         if (Seq.isEmpty args || Seq.isEmpty arguments) then
@@ -501,11 +499,11 @@ module internal ComposerHelpers =
       | :? IDelegate as x -> generateResult x.Arguments
       | _ -> raise (Exception())
     let getInheritedFrom m = 
-      let getInheritance(x : IInterface) =
-        let typeReference (t : IType) = 
+      let getInheritance(x: IInterface) =
+        let typeReference (t: IType) = 
           (getTypeName t |> Normal, tools.linker.CreateLink(input, t)) |> LinkElement
 
-        let mutable result : IInterface = null
+        let mutable result: IInterface = null
         if x.InheritedTypes.Value.TryGetValue(m, &result) then
           Some(seq [ typeReference result |> ElementHelpers.initialize |> applyTools ])
         else
@@ -555,7 +553,7 @@ module internal ComposerHelpers =
         match input with
         | :? IInterface as x -> x.Methods
         | _ -> new LinkedList<IMethod>() :> IReadOnlyCollection<IMethod>
-      let processMethod (i: int, method : IMethod) =
+      let processMethod (_, method: IMethod) =
         let getOverloads = 
           let overloads = (overloads extractor).[method.Name]
           overloadFormat overloads.Count overloads.[method.RawName]
@@ -608,7 +606,7 @@ module internal ComposerHelpers =
         match input with
         | :? IInterface as x -> x.Properties
         | _ -> new LinkedList<IProperty>() :> IReadOnlyCollection<IProperty>
-      let processProperty (i: int, property: IProperty) =
+      let processProperty (_, property: IProperty) =
         let signature =
           String.Format("{0}{1}{2} {3} {4} {{ {5} }}",
             (property.Accessor |> StringConverters.accessorStr |> StringConverters.toLower),
@@ -639,7 +637,7 @@ module internal ComposerHelpers =
         match input with
         | :? IInterface as x -> x.Events
         | _ -> new LinkedList<IEvent>() :> IReadOnlyCollection<IEvent>
-      let processEvent (i: int, event: IEvent) =
+      let processEvent (_, event: IEvent) =
         let signature =
           String.Format("{0}{1} event {2} {3}",
             (event.Accessor |> StringConverters.accessorStr |> StringConverters.toLower),
@@ -667,7 +665,7 @@ module internal ComposerHelpers =
         match input with
         | :? IInterface as x -> x.Delegates
         | _ -> new LinkedList<IDelegate>() :> IReadOnlyCollection<IDelegate>
-      let processDelegate (i: int, deleg: IDelegate) =
+      let processDelegate (_, deleg: IDelegate) =
         let getOverloads = 
           let overloads = (overloads extractor).[deleg.Name]
           overloadFormat overloads.Count overloads.[deleg.RawName]
@@ -708,7 +706,7 @@ module internal ComposerHelpers =
         match input with
         | :? IEnum as e -> e.Fields
         | _ -> new LinkedList<IEnumField>() :> IReadOnlyCollection<IEnumField>
-      let processField (i: int, field: IEnumField) =
+      let processField (_, field: IEnumField) =
         let content =
           (seq [
             (getSingleTag field ITag.TagType.Summary, "Summary")
