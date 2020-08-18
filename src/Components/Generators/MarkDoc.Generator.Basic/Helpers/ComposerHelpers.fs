@@ -530,7 +530,7 @@ module internal ComposerHelpers =
         | _ -> LinkedList<IConstructor>() :> IReadOnlyCollection<IConstructor>
       let processCtor (i: int, ctor: IConstructor) =
         let signature =
-          (ctor.Accessor |> StringConverters.accessorStr |> StringConverters.toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments(input, ctor, tools) |> TextHelpers.processTextNoStyle) + ")"
+          (ctor.Accessor |> StringConverters.accessorStr |> StringConverters.toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments input ctor tools |> TextHelpers.processTextNoStyle) + ")"
           |> Code
 
         let content =
@@ -581,7 +581,7 @@ module internal ComposerHelpers =
             (if method.Operator <> OperatorType.None then " operator" else ""),
             method.Name,
             getGenerics,
-            (methodArguments(input, method, tools) |> TextHelpers.processTextNoStyle))
+            (methodArguments input method tools |> TextHelpers.processTextNoStyle))
           |> Code
 
         let content =
@@ -683,7 +683,7 @@ module internal ComposerHelpers =
             (if isNull deleg.Returns then "void" else deleg.Returns.DisplayName),
             deleg.Name,
             getGenerics,
-            (methodArguments(input, deleg, tools) |> TextHelpers.processTextNoStyle))
+            (methodArguments input deleg tools |> TextHelpers.processTextNoStyle))
           |> Code
         let content =
           seq [
