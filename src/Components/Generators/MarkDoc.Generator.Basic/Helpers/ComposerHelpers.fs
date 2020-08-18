@@ -313,14 +313,12 @@ module internal ComposerHelpers =
       content 4
       |> Seq.map (applyTools >> ElementHelpers.toElement)
       |> Seq.append (seq [ signature |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
-
     let single x =
       let tag = findTypeTag(input, x, tools) |> Seq.tryExactlyOne
       if Option.isNone tag then
         None
       else
         tagFull(input, tag |> Option.get, tools) |> SomeHelpers.emptyToNone
-
     let genericProcessor provider processItem =
       let processItems (items: 'M IReadOnlyCollection when 'M :> IMember) =
         items
@@ -441,16 +439,15 @@ module internal ComposerHelpers =
       else
         None
 
-    let getSingleTag (m : IMember, t : ITag.TagType) =
-      let single (tags : ITag option) =
+    let getSingleTag m t =
+      let single tags =
         match tags with
         | Some tag -> tagFull(input, tag, tools) |> Seq.map ElementHelpers.toElement |> SomeHelpers.emptyToNone
         | _ -> None
       findTag(input, m, t, tools)
       |> Seq.tryExactlyOne
       |> single
-
-    let getExceptions (m : IMember) =
+    let getExceptions m =
       let exceptions = findTag(input, m, ITag.TagType.Exception, tools)
                        |> Seq.map (fun x -> seq [ processReference(input, x.Reference, tools); tagShort(input, x, tools) ] |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement) |> Linq.ToReadOnlyCollection)
 
@@ -458,7 +455,7 @@ module internal ComposerHelpers =
         None
       else
         seq [ tools.creator.CreateTable(exceptions, createHeadings (seq [ "Name"; "Description" ]) tools) |> ElementHelpers.toElement ] |> Some
-    let getSeeAlso (m : IMember) =
+    let getSeeAlso m =
       let seeAlsos = findTag(input, m, ITag.TagType.Seealso, tools)
                      |> Seq.map (fun x -> tagShort(input, x, tools) |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement)
 
@@ -466,7 +463,7 @@ module internal ComposerHelpers =
         None
       else
         seq [ tools.creator.CreateList(seeAlsos, IList.ListType.Dotted) |> ElementHelpers.toElement ] |> Some
-    let getArguments(c : IMember) = 
+    let getArguments (c : IMember) = 
       let argumentDocs = findTag(input, c, ITag.TagType.Param, tools)
                          |> Seq.map (fun x -> x.Reference, tagShort(input, x, tools) |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement)
                          |> dict
@@ -503,8 +500,7 @@ module internal ComposerHelpers =
       | :? IConstructor as x -> generateResult x.Arguments
       | :? IDelegate as x -> generateResult x.Arguments
       | _ -> raise (Exception())
-
-    let getInheritedFrom(m : IMember) = 
+    let getInheritedFrom m = 
       let getInheritance(x : IInterface) =
         let typeReference (t : IType) = 
           (getTypeName t |> Normal, tools.linker.CreateLink(input, t)) |> LinkElement
@@ -518,13 +514,11 @@ module internal ComposerHelpers =
       match input with
       | :? IInterface as i -> getInheritance i
       | _ -> None
-
     let overloads (members: 'M IReadOnlyCollection when 'M :> IMember) =
       members
       |> Seq.groupBy (fun x -> x.Name)
       |> Seq.map (fun x -> (fst x, snd x |> Seq.mapi (fun x y -> (y.RawName, x)) |> dict))
       |> dict
-
     let overloadFormat overloadCount overloadIndex =
       if overloadCount > 1 then
         String.Format(" [{0}/{1}]", overloadIndex + 1, overloadCount)
@@ -544,9 +538,9 @@ module internal ComposerHelpers =
         let content =
           seq [
             (getArguments ctor, "Arguments")
-            (getSingleTag(ctor, ITag.TagType.Summary), "Summary")
-            (getSingleTag(ctor, ITag.TagType.Remarks), "Remarks")
-            (getSingleTag(ctor, ITag.TagType.Example), "Example")
+            (getSingleTag ctor ITag.TagType.Summary, "Summary")
+            (getSingleTag ctor ITag.TagType.Remarks, "Remarks")
+            (getSingleTag ctor ITag.TagType.Example, "Example")
             (getExceptions ctor, "Exceptions")
             (getSeeAlso ctor, "See also")
           ]
@@ -595,10 +589,10 @@ module internal ComposerHelpers =
         let content =
           seq [
             (getArguments method, "Arguments")
-            (getSingleTag(method, ITag.TagType.Summary), "Summary")
-            (getSingleTag(method, ITag.TagType.Remarks), "Remarks")
-            (getSingleTag(method, ITag.TagType.Example), "Example")
-            (getSingleTag(method, ITag.TagType.Returns), "Returns")
+            (getSingleTag method ITag.TagType.Summary, "Summary")
+            (getSingleTag method ITag.TagType.Remarks, "Remarks")
+            (getSingleTag method ITag.TagType.Example, "Example")
+            (getSingleTag method ITag.TagType.Returns, "Returns")
             (getExceptions method, "Exceptions")
             (getInheritedFrom method, "Inherited from")
             (getSeeAlso method, "See also")
@@ -626,10 +620,10 @@ module internal ComposerHelpers =
           |> Code
         let content =
           seq [
-            (getSingleTag(property, ITag.TagType.Summary), "Summary")
-            (getSingleTag(property, ITag.TagType.Remarks), "Remarks")
-            (getSingleTag(property, ITag.TagType.Value), "Value")
-            (getSingleTag(property, ITag.TagType.Example), "Example")
+            (getSingleTag property ITag.TagType.Summary, "Summary")
+            (getSingleTag property ITag.TagType.Remarks, "Remarks")
+            (getSingleTag property ITag.TagType.Value, "Value")
+            (getSingleTag property ITag.TagType.Example, "Example")
             (getExceptions property, "Exceptions")
             (getInheritedFrom property, "Inherited from")
             (getSeeAlso property, "See also")
@@ -655,9 +649,9 @@ module internal ComposerHelpers =
           |> Code
         let content =
           seq [
-            (getSingleTag(event, ITag.TagType.Summary), "Summary")
-            (getSingleTag(event, ITag.TagType.Remarks), "Remarks")
-            (getSingleTag(event, ITag.TagType.Example), "Example")
+            (getSingleTag event ITag.TagType.Summary, "Summary")
+            (getSingleTag event ITag.TagType.Remarks, "Remarks")
+            (getSingleTag event ITag.TagType.Example, "Example")
             (getExceptions event, "Exceptions")
             (getInheritedFrom event, "Inherited from")
             (getSeeAlso event, "See also")
@@ -696,10 +690,10 @@ module internal ComposerHelpers =
         let content =
           seq [
             (getArguments deleg, "Arguments")
-            (getSingleTag(deleg, ITag.TagType.Summary), "Summary")
-            (getSingleTag(deleg, ITag.TagType.Remarks), "Remarks")
-            (getSingleTag(deleg, ITag.TagType.Example), "Example")
-            (getSingleTag(deleg, ITag.TagType.Returns), "Returns")
+            (getSingleTag deleg ITag.TagType.Summary, "Summary")
+            (getSingleTag deleg ITag.TagType.Remarks, "Remarks")
+            (getSingleTag deleg ITag.TagType.Example, "Example")
+            (getSingleTag deleg ITag.TagType.Returns, "Returns")
             (getInheritedFrom deleg, "Inherited from")
             (getSeeAlso deleg, "See also")
           ]
@@ -717,10 +711,10 @@ module internal ComposerHelpers =
       let processField (i: int, field: IEnumField) =
         let content =
           (seq [
-            (getSingleTag(field, ITag.TagType.Summary), "Summary")
-            (getSingleTag(field, ITag.TagType.Remarks), "Remarks")
-            (getSingleTag(field, ITag.TagType.Example), "Example")
-            (getSingleTag(field, ITag.TagType.Returns), "Returns")
+            (getSingleTag field ITag.TagType.Summary, "Summary")
+            (getSingleTag field ITag.TagType.Remarks, "Remarks")
+            (getSingleTag field ITag.TagType.Example, "Example")
+            (getSingleTag field ITag.TagType.Returns, "Returns")
             (getSeeAlso field, "See also")
           ]
           |> composeSections) 4
