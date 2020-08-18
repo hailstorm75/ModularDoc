@@ -18,5 +18,5 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
       // Otherwise..
       else
         // return the composed type page
-        let page = ElementHelpers.Page(ComposerHelpers.composeContent input |> Seq.map (fun x -> x m_tools), "TODO", 0)
+        let page = Page(ComposerHelpers.composeContent input m_tools, "TODO", 0)
         ElementHelpers.initialize page m_tools :?> IPage
