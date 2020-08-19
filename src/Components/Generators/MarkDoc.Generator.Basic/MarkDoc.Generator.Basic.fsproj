@@ -17,10 +17,6 @@
     <Compile Include="Helpers\SomeHelpers.fs" />
     <Compile Include="Helpers\TextHelpers.fs" />
     <Compile Include="Helpers\ElementHelpers.fs" />
-    <Compile Include="Helpers\TypeHelpers.fs" />
-    <Compile Include="Helpers\ContentProcessor.fs" />
-    <Compile Include="Helpers\TagHelpers.fs" />
-    <Compile Include="Helpers\ContentHelpers.fs" />
     <Compile Include="Helpers\SignatureHelpers.fs" />
     <Compile Include="Helpers\ComposerHelpers.fs" />
     <Compile Include="Composer.fs" />

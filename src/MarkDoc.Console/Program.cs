@@ -49,19 +49,11 @@ namespace MarkDoc.Console
 
     #region Fields
 
-    private const string OUTPUT = @"C:\Users\Denis\Desktop\MarkDoc";
+    private const string OUTPUT = @"";
 
     private static readonly IReadOnlyCollection<string> DLL_PATHS = new[]
     {
-      @"C:\Users\Denis\Desktop\NewestReco-master\Fasetto.Word\bin\Debug\Fasetto.Word.exe",
-      @"C:\Users\Denis\Desktop\NewestReco-master\Fasetto.Word.Core\bin\Debug\netstandard2.0\Fasetto.Word.Core.dll",
-      @"C:\Users\Denis\Desktop\NewestReco-master\Fasetto.Word.Relational\bin\Debug\netstandard2.0\Fasetto.Word.Relational.dll",
-      @"C:\Users\Denis\Source\Repos\Borec\bin\Debug\Libraries\Borec.ViewModels.dll",
-      @"C:\Users\Denis\Source\Repos\Borec\bin\Debug\Libraries\Borec.Models.dll",
-      @"C:\Users\Denis\Source\Repos\Common\bin\Libraries\Debug\CommonMath.dll",
-      @"C:\Users\Denis\Source\Repos\Common\bin\Libraries\Debug\CommonLinq.dll",
-      @"C:\Users\Denis\Source\Repos\Common\bin\Libraries\Debug\CommonData.dll"
-      //@"C:\Users\Denis\Source\Repos\TestLibrary\TestLibrary\bin\Debug\netstandard2.0\TestLibrary.dll"
+      @""
     };
 
     private static readonly IReadOnlyCollection<string> XML_PATHS = DLL_PATHS.Select(x => Path.Join(Path.GetDirectoryName(x), Path.GetFileNameWithoutExtension(x) + ".xml")).ToArray();
