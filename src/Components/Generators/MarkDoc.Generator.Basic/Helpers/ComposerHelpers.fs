@@ -15,19 +15,6 @@ open MarkDoc.Documentation
 module internal ComposerHelpers =
   let createHeadings headings tools = headings |> Seq.map (fun x -> TextHelpers.normal x tools)
 
-  let processMethods (property: IProperty) =
-    let accessor acc = 
-      match acc with
-      | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
-      | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
-      | _ -> ""
-    seq [
-      if property.GetAccessor.HasValue then
-        yield (accessor property.GetAccessor.Value) + "get" 
-      if property.SetAccessor.HasValue then
-        yield (accessor property.SetAccessor.Value) + "set" 
-    ]
-
   let getTypeName (input: IType) =
     let joinGenerics (i: seq<string>) =
       let partial f x y = f(x , y)
@@ -307,10 +294,16 @@ module internal ComposerHelpers =
     Seq.empty |> Some
   let printDetailed(input: IType, tools) =
     let applyTools input = input tools
-    let joinContentWSig content signature =
-      content 4
+    let joinContentWSig content signature (mem: IMember) =
+      let applyMember input = input mem
+      let processContent (input: (IMember -> IElement seq option) * string) =
+        (input |> fst |> applyMember, snd input)
+
+      let inter = content |> Seq.map processContent
+
+      composeSections inter 4
       |> Seq.map (applyTools >> ElementHelpers.toElement)
-      |> Seq.append (seq [ signature |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
+      |> Seq.append (seq [ signature |> applyMember |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
     let single x =
       let tag = findTypeTag(input, x, tools) |> Seq.tryExactlyOne
       if Option.isNone tag then
@@ -437,7 +430,7 @@ module internal ComposerHelpers =
       else
         None
 
-    let getSingleTag m t =
+    let getSingleTag t m =
       let single tags =
         match tags with
         | Some tag -> tagFull(input, tag, tools) |> Seq.map ElementHelpers.toElement |> SomeHelpers.emptyToNone
@@ -523,6 +516,9 @@ module internal ComposerHelpers =
       else
         String.Empty
 
+    let getArgumentsSig (mem: IMember) =
+      methodArguments input mem tools |> TextHelpers.processTextNoStyle
+
     let constructors =
       let extractor =
         match input with
@@ -530,21 +526,24 @@ module internal ComposerHelpers =
         | _ -> LinkedList<IConstructor>() :> IReadOnlyCollection<IConstructor>
       let processCtor (i: int, ctor: IConstructor) =
         let signature =
-          (ctor.Accessor |> StringConverters.accessorStr |> StringConverters.toLower) + (if ctor.IsStatic then " static " else " ") + ctor.Name + "(" + (methodArguments input ctor tools |> TextHelpers.processTextNoStyle) + ")"
-          |> Code
+          SignatureHelpers.generateSignature "{0}{1} {2}({{3}})" (seq [
+            SignatureHelpers.getAccessor;
+            SignatureHelpers.getStatic;
+            SignatureHelpers.getName;
+            getArgumentsSig
+          ])
 
         let content =
           seq [
-            (getArguments ctor, "Arguments")
-            (getSingleTag ctor ITag.TagType.Summary, "Summary")
-            (getSingleTag ctor ITag.TagType.Remarks, "Remarks")
-            (getSingleTag ctor ITag.TagType.Example, "Example")
-            (getExceptions ctor, "Exceptions")
-            (getSeeAlso ctor, "See also")
+            (getArguments , "Arguments")
+            (getSingleTag ITag.TagType.Summary, "Summary")
+            (getSingleTag ITag.TagType.Remarks, "Remarks")
+            (getSingleTag ITag.TagType.Example, "Example")
+            (getExceptions, "Exceptions")
+            (getSeeAlso, "See also")
           ]
-          |> composeSections
 
-        (ctor, ctor.Name + overloadFormat extractor.Count i, joinContentWSig content signature, tools, 3)
+        (ctor, ctor.Name + overloadFormat extractor.Count i, joinContentWSig content signature ctor, tools, 3)
 
       genericProcessor extractor processCtor
 
@@ -559,45 +558,31 @@ module internal ComposerHelpers =
           overloadFormat overloads.Count overloads.[method.RawName]
 
         let signature =
-          let getGenerics = 
-            if Seq.isEmpty method.Generics then
-              ""
-            else
-              String.Format("<{0}>", String.Join(", ", method.Generics))
-
-          String.Format("{0}{1}{2} {3}{4}{5} {6}{7}({8})",
-            (method.Accessor |> StringConverters.accessorStr |> StringConverters.toLower),
-            (if method.IsStatic then " static" else ""),
-            (if (method.Inheritance = MemberInheritance.Normal) then "" else " " + (StringConverters.inheritanceStr method.Inheritance)),
-            (if method.IsAsync then "async " else ""),
-            (
-              match method.Operator with
-              | OperatorType.Implicit -> "implicit"
-              | OperatorType.Explicit -> "explicit"
-              | OperatorType.None
-              | OperatorType.Normal
-              | _ -> if isNull method.Returns then "void" else method.Returns.DisplayName
-            ),
-            (if method.Operator <> OperatorType.None then " operator" else ""),
-            method.Name,
-            getGenerics,
-            (methodArguments input method tools |> TextHelpers.processTextNoStyle))
-          |> Code
+          SignatureHelpers.generateSignature "{0}{1}{2} {3}{4}{5} {6}{7}({8})" (seq [
+            SignatureHelpers.getAccessor;
+            SignatureHelpers.getStatic;
+            SignatureHelpers.getInheritance;
+            SignatureHelpers.getAsync;
+            SignatureHelpers.getReturn;
+            SignatureHelpers.getOperator;
+            SignatureHelpers.getName;
+            SignatureHelpers.getGenerics;
+            getArgumentsSig
+          ])
 
         let content =
           seq [
-            (getArguments method, "Arguments")
-            (getSingleTag method ITag.TagType.Summary, "Summary")
-            (getSingleTag method ITag.TagType.Remarks, "Remarks")
-            (getSingleTag method ITag.TagType.Example, "Example")
-            (getSingleTag method ITag.TagType.Returns, "Returns")
-            (getExceptions method, "Exceptions")
-            (getInheritedFrom method, "Inherited from")
-            (getSeeAlso method, "See also")
+            (getArguments, "Arguments")
+            (getSingleTag ITag.TagType.Summary, "Summary")
+            (getSingleTag ITag.TagType.Remarks, "Remarks")
+            (getSingleTag ITag.TagType.Example, "Example")
+            (getSingleTag ITag.TagType.Returns, "Returns")
+            (getExceptions, "Exceptions")
+            (getInheritedFrom, "Inherited from")
+            (getSeeAlso, "See also")
           ]
-          |> composeSections
 
-        (method, (if method.Operator <> OperatorType.None then "Operator " else "") + method.Name + getOverloads, joinContentWSig content signature, tools, 3)
+        (method, (if method.Operator <> OperatorType.None then "Operator " else "") + method.Name + getOverloads, joinContentWSig content signature method, tools, 3)
 
       genericProcessor extractor processMethod
 
@@ -608,27 +593,26 @@ module internal ComposerHelpers =
         | _ -> new LinkedList<IProperty>() :> IReadOnlyCollection<IProperty>
       let processProperty (_, property: IProperty) =
         let signature =
-          String.Format("{0}{1}{2} {3} {4} {{ {5} }}",
-            (property.Accessor |> StringConverters.accessorStr |> StringConverters.toLower),
-            (if property.IsStatic then " static" else ""),
-            (if (property.Inheritance = MemberInheritance.Normal) then "" else " " + (StringConverters.inheritanceStr property.Inheritance)),
-            property.Type.DisplayName,
-            property.Name,
-            String.Join("; ", processMethods property))
-          |> Code
+          SignatureHelpers.generateSignature "{0}{1}{2} {3} {4} {{ {5} }}" (seq [
+            SignatureHelpers.getAccessor;
+            SignatureHelpers.getStatic;
+            SignatureHelpers.getInheritance;
+            SignatureHelpers.getReturn;
+            SignatureHelpers.getName;
+            SignatureHelpers.getPropertyMethods
+          ])
         let content =
           seq [
-            (getSingleTag property ITag.TagType.Summary, "Summary")
-            (getSingleTag property ITag.TagType.Remarks, "Remarks")
-            (getSingleTag property ITag.TagType.Value, "Value")
-            (getSingleTag property ITag.TagType.Example, "Example")
-            (getExceptions property, "Exceptions")
-            (getInheritedFrom property, "Inherited from")
-            (getSeeAlso property, "See also")
+            (getSingleTag ITag.TagType.Summary, "Summary")
+            (getSingleTag ITag.TagType.Remarks, "Remarks")
+            (getSingleTag ITag.TagType.Value, "Value")
+            (getSingleTag ITag.TagType.Example, "Example")
+            (getExceptions, "Exceptions")
+            (getInheritedFrom, "Inherited from")
+            (getSeeAlso, "See also")
           ]
-          |> composeSections
 
-        (property, property.Name, joinContentWSig content signature, tools, 3)
+        (property, property.Name, joinContentWSig content signature property, tools, 3)
 
       genericProcessor extractor processProperty
 
@@ -639,24 +623,23 @@ module internal ComposerHelpers =
         | _ -> new LinkedList<IEvent>() :> IReadOnlyCollection<IEvent>
       let processEvent (_, event: IEvent) =
         let signature =
-          String.Format("{0}{1} event {2} {3}",
-            (event.Accessor |> StringConverters.accessorStr |> StringConverters.toLower),
-            (if event.IsStatic then " static" else ""),
-            event.Type.DisplayName,
-            event.Name)
-          |> Code
+          SignatureHelpers.generateSignature "{0}{1} event {2} {3}" (seq [
+            SignatureHelpers.getAccessor;
+            SignatureHelpers.getStatic;
+            SignatureHelpers.getReturn;
+            SignatureHelpers.getName
+          ])
         let content =
           seq [
-            (getSingleTag event ITag.TagType.Summary, "Summary")
-            (getSingleTag event ITag.TagType.Remarks, "Remarks")
-            (getSingleTag event ITag.TagType.Example, "Example")
-            (getExceptions event, "Exceptions")
-            (getInheritedFrom event, "Inherited from")
-            (getSeeAlso event, "See also")
+            (getSingleTag ITag.TagType.Summary, "Summary")
+            (getSingleTag ITag.TagType.Remarks, "Remarks")
+            (getSingleTag ITag.TagType.Example, "Example")
+            (getExceptions, "Exceptions")
+            (getInheritedFrom, "Inherited from")
+            (getSeeAlso, "See also")
           ]
-          |> composeSections
 
-        (event, event.Name, joinContentWSig content signature, tools, 3)
+        (event, event.Name, joinContentWSig content signature event, tools, 3)
 
       genericProcessor extractor processEvent
 
@@ -671,33 +654,27 @@ module internal ComposerHelpers =
           overloadFormat overloads.Count overloads.[deleg.RawName]
 
         let signature =
-          let getGenerics = 
-            if Seq.isEmpty deleg.Generics then
-              ""
-            else
-              String.Format("<{0}>", String.Join(", ", deleg.Generics))
+          SignatureHelpers.generateSignature "{0}{1} delegate {2} {3}{4}({5})" (seq [
+            SignatureHelpers.getAccessor;
+            SignatureHelpers.getStatic;
+            SignatureHelpers.getReturn;
+            SignatureHelpers.getName;
+            SignatureHelpers.getGenerics;
+            getArgumentsSig
+          ])
 
-          String.Format("{0}{1} delegate {2} {3}{4}({5})",
-            (deleg.Accessor |> StringConverters.accessorStr |> StringConverters.toLower),
-            (if deleg.IsStatic then " static" else ""),
-            (if isNull deleg.Returns then "void" else deleg.Returns.DisplayName),
-            deleg.Name,
-            getGenerics,
-            (methodArguments input deleg tools |> TextHelpers.processTextNoStyle))
-          |> Code
         let content =
           seq [
-            (getArguments deleg, "Arguments")
-            (getSingleTag deleg ITag.TagType.Summary, "Summary")
-            (getSingleTag deleg ITag.TagType.Remarks, "Remarks")
-            (getSingleTag deleg ITag.TagType.Example, "Example")
-            (getSingleTag deleg ITag.TagType.Returns, "Returns")
-            (getInheritedFrom deleg, "Inherited from")
-            (getSeeAlso deleg, "See also")
+            (getArguments, "Arguments")
+            (getSingleTag ITag.TagType.Summary, "Summary")
+            (getSingleTag ITag.TagType.Remarks, "Remarks")
+            (getSingleTag ITag.TagType.Example, "Example")
+            (getSingleTag ITag.TagType.Returns, "Returns")
+            (getInheritedFrom, "Inherited from")
+            (getSeeAlso, "See also")
           ]
-          |> composeSections
 
-        (deleg, deleg.Name + getOverloads, joinContentWSig content signature, tools, 3)
+        (deleg, deleg.Name + getOverloads, joinContentWSig content signature deleg, tools, 3)
 
       genericProcessor extractor processDelegate
 
@@ -709,10 +686,10 @@ module internal ComposerHelpers =
       let processField (_, field: IEnumField) =
         let content =
           (seq [
-            (getSingleTag field ITag.TagType.Summary, "Summary")
-            (getSingleTag field ITag.TagType.Remarks, "Remarks")
-            (getSingleTag field ITag.TagType.Example, "Example")
-            (getSingleTag field ITag.TagType.Returns, "Returns")
+            (getSingleTag ITag.TagType.Summary field, "Summary")
+            (getSingleTag ITag.TagType.Remarks field, "Remarks")
+            (getSingleTag ITag.TagType.Example field, "Example")
+            (getSingleTag ITag.TagType.Returns field, "Returns")
             (getSeeAlso field, "See also")
           ]
           |> composeSections) 4

@@ -27,6 +27,7 @@ module TextHelpers =
     | Code text
     | InlineCode text -> text
     | JoinedText (content, delimiter) -> String.Join(delimiter, content |> Seq.map processTextNoStyle)
+    | _ -> ""
 
   let rec processText (textType: 'M TextType when 'M :> ITextContent) tools =
     let supplyTools input =
