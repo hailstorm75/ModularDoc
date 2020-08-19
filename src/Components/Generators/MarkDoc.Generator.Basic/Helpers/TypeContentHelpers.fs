@@ -29,7 +29,7 @@ module TypeContentHelpers =
   let private createHeadings headings tools = headings |> Seq.map (fun x -> TextHelpers.normal x tools)
   let registerSection (input, name, content) tools level =
     tools.linker.RegisterAnchor(input, lazy(name))
-    ElementHelpers.initialize ((content, name, level) |> Section) tools
+    ElementHelpers.initialize ((content tools input, name, level) |> Section) tools
 
   let composeSections input level =
     let createSection (x, y) =
@@ -71,7 +71,7 @@ module TypeContentHelpers =
     let applyTools input = input tools
     (item |> (fst >> applyMember >> applyTools), snd item)
 
-  let private joinContentWSig content signature (mem: IMember) (input: IType) tools =
+  let private joinContentWSig content signature (input: IType) tools (mem: IMember) =
     let applyMember input = input mem
     let applyTools input = input tools
     let processContents (content: IType -> seq<(IMember -> Tools -> IElement seq option) * string>) =
@@ -80,10 +80,9 @@ module TypeContentHelpers =
     let toProcess = processContents (content |> ContentHelpers.processContents)
                     |> Seq.map (applyMember >> applyTools)
 
-    let a = composeSections toProcess 4
-            |> Seq.map (applyTools >> ElementHelpers.toElement)
-            |> Seq.append (seq [ signature |> applyMember |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
-    a
+    composeSections toProcess 4
+    |> Seq.map (applyTools >> ElementHelpers.toElement)
+    |> Seq.append (seq [ signature |> applyMember |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
 
   let private overloads (members: 'M IReadOnlyCollection when 'M :> IMember) =
     members
@@ -232,7 +231,7 @@ module TypeContentHelpers =
           SeeAlso
         ]
 
-      (ctor, ctor.Name + overloadFormat extractor.Count i, joinContentWSig content signature ctor input tools)
+      (ctor, ctor.Name + overloadFormat extractor.Count i, joinContentWSig content signature input)
 
     genericProcessor extractor processCtor tools
 
@@ -271,7 +270,7 @@ module TypeContentHelpers =
           SeeAlso
         ]
 
-      (method, (if method.Operator <> OperatorType.None then "Operator " else "") + method.Name + getOverloads, joinContentWSig content signature method input tools)
+      (method, (if method.Operator <> OperatorType.None then "Operator " else "") + method.Name + getOverloads, joinContentWSig content signature input)
 
     genericProcessor extractor processMethod tools
 
@@ -301,7 +300,7 @@ module TypeContentHelpers =
           SeeAlso
         ]
 
-      (property, property.Name, joinContentWSig content signature property input tools)
+      (property, property.Name, joinContentWSig content signature input)
 
     genericProcessor extractor processProperty tools
 
@@ -328,7 +327,7 @@ module TypeContentHelpers =
           SeeAlso
         ]
 
-      (event, event.Name, joinContentWSig content signature event input tools)
+      (event, event.Name, joinContentWSig content signature input)
 
     genericProcessor extractor processEvent tools
 
@@ -363,7 +362,7 @@ module TypeContentHelpers =
           SeeAlso
         ]
 
-      (deleg, deleg.Name + getOverloads, joinContentWSig content signature deleg input tools)
+      (deleg, deleg.Name + getOverloads, joinContentWSig content signature input)
 
     genericProcessor extractor processDelegate tools
 
@@ -389,7 +388,10 @@ module TypeContentHelpers =
         composeSections processed 4
         |> Seq.map applyTools
 
-      (field, field.Name, (if Seq.isEmpty content then seq [ TextHelpers.empty tools |> ElementHelpers.toElement ] else content))
+      let intermediate tools _ =
+        (if Seq.isEmpty content then seq [ TextHelpers.empty tools |> ElementHelpers.toElement ] else content)
+
+      (field, field.Name, intermediate)
 
     genericProcessor extractor processField tools
 
@@ -397,30 +399,30 @@ module TypeContentHelpers =
     let processContent content =
       match content with
       | TypeSummary as s ->
-        (single ITag.TagType.Summary input tools, "Summary")
+        (single ITag.TagType.Summary, "Summary")
       | TypeRemarks as s ->
-        (single ITag.TagType.Remarks input tools, "Remarks")
+        (single ITag.TagType.Remarks, "Remarks")
       | TypeExample as s ->
-        (single ITag.TagType.Example input tools, "Example")
+        (single ITag.TagType.Example, "Example")
       | TypeGenerics as s ->
-        (typeParams input tools, "Generic types")
+        (typeParams, "Generic types")
       | TypeInheritance as s ->
-        (inheritance input tools, "Inheritance")
+        (inheritance, "Inheritance")
       | TypeNested as s ->
-        (nested input tools, "Nested types")
+        (nested, "Nested types")
       | TypeSeeAlso as s ->
-        (single ITag.TagType.Seealso input tools, "See also")
+        (single ITag.TagType.Seealso, "See also")
       | TypeConstructors as s ->
-        (constructors input tools, "Constructors")
+        (constructors, "Constructors")
       | TypeMethods as s ->
-        (methods input tools, "Methods")
+        (methods, "Methods")
       | TypeProperties as s ->
-        (properties input tools, "Properties")
+        (properties, "Properties")
       | TypeEvents as s ->
-        (events input tools, "Events")
+        (events, "Events")
       | TypeDelegates as s ->
-        (delegates input tools, "Delegates")
+        (delegates, "Delegates")
       | TypeFields as s ->
-        (enumFields input tools, "Fields")
+        (enumFields, "Fields")
 
-    content |> Seq.map processContent
+    content |> Seq.map (processContent >> fun (c, l) -> (c input tools, l))

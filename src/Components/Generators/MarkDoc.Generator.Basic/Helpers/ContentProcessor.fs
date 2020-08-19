@@ -35,7 +35,7 @@ module ContentProcessor =
         -> Some(inner.Reference |> InlineCode |> TextElement)
       | IInnerTag.InnerTagType.See
       | IInnerTag.InnerTagType.SeeAlso
-        -> Some(TypeHelpers.processReference(input, inner.Reference, tools) |> TextElement)
+        -> Some(TypeHelpers.processReference input inner.Reference tools |> TextElement)
       | IInnerTag.InnerTagType.Para
         -> Some(Environment.NewLine |> Normal |> TextElement)
       | _ -> None
@@ -55,7 +55,7 @@ module ContentProcessor =
           match t with
           | IListTag.ListType.Bullet -> IList.ListType.Dotted
           | IListTag.ListType.Number -> IList.ListType.Numbered
-          | _ -> raise (Exception()) // TODO: Message
+          | _ -> raise (NotSupportedException())
 
         let content = list.Rows
                       |> Seq.collect id

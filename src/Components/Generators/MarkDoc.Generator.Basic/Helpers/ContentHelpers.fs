@@ -31,7 +31,7 @@ module ContentHelpers =
   let private getExceptions (input: IType) (m: IMember) tools =
     let applyTools input = input tools
     let exceptions = TagHelpers.findTag(input, m, ITag.TagType.Exception, tools)
-                     |> Seq.map (fun x -> seq [ TypeHelpers.processReference(input, x.Reference, tools); TagHelpers.tagShort(input, x, tools) ] |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement) |> Linq.ToReadOnlyCollection)
+                     |> Seq.map (fun x -> seq [ TypeHelpers.processReference input x.Reference tools; TagHelpers.tagShort(input, x, tools) ] |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement) |> Linq.ToReadOnlyCollection)
 
     if Seq.isEmpty exceptions then
       None

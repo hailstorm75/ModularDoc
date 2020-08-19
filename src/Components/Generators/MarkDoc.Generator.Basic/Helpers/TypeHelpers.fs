@@ -34,7 +34,7 @@ module TypeHelpers =
     | :? IInterface as x -> processInterface x
     | _ -> input.Name
 
-  let tryFindMember (input: IType, memberFull: string, memberCut: string) =
+  let private tryFindMember (input: IType) (memberFull: string) (memberCut: string) =
     let toMember (a: 'M when 'M :> IMember) =
       a :> IMember
     let findMember (a: 'M seq when 'M :> IMember) =
@@ -49,7 +49,7 @@ module TypeHelpers =
     | :? IEnum as e -> e.Fields |> findMember
     | _ -> None
 
-  let processReference (input: IType, reference: string, tools) =
+  let processReference (input: IType) (reference: string) tools =
     let typeReference (reference: string) =
       let mutable result: IType = null
       if tools.typeResolver.TryFindType(reference.[2..], &result) then
@@ -74,7 +74,7 @@ module TypeHelpers =
       let memberAnchor = 
         let mutable result: IType = null
         if tools.typeResolver.TryFindType(typeString.[2..], &result) then
-          let mem = tryFindMember(result, reference, memberString)
+          let mem = tryFindMember result reference memberString
           if Option.isSome mem then
             LinkContent (Normal memberString, tools.linker.CreateAnchor(input, mem |> Option.get))
           else
