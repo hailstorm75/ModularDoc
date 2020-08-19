@@ -4,6 +4,7 @@ open System
 open MarkDoc.Generator
 open MarkDoc.Members.Types
 open MarkDoc.Elements
+open MarkDoc.Documentation.Tags
 
 type TypeComposer2(creator, docResolver, memberResolver, linker) = 
   let m_tools: Tools = { linker = linker; creator = creator; docResolver = docResolver; typeResolver = memberResolver }
@@ -16,11 +17,13 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
     |> SomeHelpers.whereSome2
     |> Seq.map (SomeHelpers.get2 >> createSection >> ElementHelpers.initialize)
 
-  let printIntroduction input =
-    Seq.empty |> Some
-  let printMemberTables input =
-    Seq.empty |> Some
-  let printDetailed(input: IType, tools) =
+  let printIntroduction (input: IType) tools =
+    match TagHelpers.findTypeTag input ITag.TagType.Summary tools |> Seq.tryExactlyOne with
+    | None -> None
+    | Some x -> Some(seq [ ElementHelpers.initialize (TagHelpers.tagShort input x tools |> TextElement) ])
+  let printMemberTables =
+    TypeContentHelpers.processTableOfContents
+  let printDetailed (input: IType) tools =
     let sections =
       seq [
         TypeSummary;
@@ -43,12 +46,11 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
     sections 2 |> SomeHelpers.emptyToNone
 
   let composeContent input tools =
-    (seq [
-       (printIntroduction input, "Description");
-       (printMemberTables input, "Members");
-       (printDetailed(input, tools), "Details")
-     ]
-     |> composeSections) 1
+    composeSections (seq [
+       (printIntroduction input tools, "Description");
+       (printMemberTables input tools, "Members");
+       (printDetailed input tools, "Details")
+     ]) 1
      |> Seq.map (fun x -> x tools)
 
   interface ITypeComposer with

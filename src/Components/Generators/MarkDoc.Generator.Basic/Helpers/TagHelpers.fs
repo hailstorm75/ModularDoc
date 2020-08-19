@@ -8,7 +8,7 @@ open MarkDoc.Documentation
 open MarkDoc.Members.Members
 
 module TagHelpers =
-  let tagShort (input, tag: ITag, tools) =
+  let tagShort input (tag: ITag) tools =
     let getCount =
       let isInvalid (item: IContent) =
         match item with
@@ -38,7 +38,7 @@ module TagHelpers =
 
     JoinedText (content, " ")
 
-  let tagFull (input: IType, tag: ITag, tools) =
+  let tagFull (input: IType) (tag: ITag) tools =
     let content = tag.Content
                   |> Seq.map (fun x -> ContentProcessor.processContent(input, x, tools))
                   |> SomeHelpers.whereSome
@@ -64,7 +64,7 @@ module TagHelpers =
     else
       result
 
-  let findTypeTag(input: IType, tag: ITag.TagType, tools) =
+  let findTypeTag (input: IType) (tag: ITag.TagType) tools =
     seq [
       let mutable typeDoc: IDocElement = null
       if (tools.docResolver.TryFindType(input, &typeDoc)) then
@@ -74,7 +74,7 @@ module TagHelpers =
     ]
     |> Seq.collect id
 
-  let findTag(input: IType, mem: IMember, tag: ITag.TagType, tools) =
+  let findTag (input: IType) (mem: IMember) (tag: ITag.TagType) tools =
     seq [
       let mutable typeDoc: IDocElement = null
       if (tools.docResolver.TryFindType(input, &typeDoc)) then

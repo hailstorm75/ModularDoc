@@ -50,11 +50,11 @@ module TypeContentHelpers =
     | _ -> raise (Exception())
 
   let private single x input tools =
-    let tag = TagHelpers.findTypeTag(input, x, tools) |> Seq.tryExactlyOne
+    let tag = TagHelpers.findTypeTag input x tools |> Seq.tryExactlyOne
     if Option.isNone tag then
       None
     else
-      TagHelpers.tagFull(input, tag |> Option.get, tools) |> SomeHelpers.emptyToNone
+      TagHelpers.tagFull input (tag |> Option.get) tools |> SomeHelpers.emptyToNone
   let private genericProcessor provider processItem tools =
     let processItems (items: 'M IReadOnlyCollection when 'M :> IMember) =
       items
@@ -187,7 +187,7 @@ module TypeContentHelpers =
         let constraints = getConstraints x
         seq [
           yield getName x
-          yield TagHelpers.tagShort(input, x, tools)
+          yield TagHelpers.tagShort input x tools
 
           if (Option.isSome constraints) then
             yield constraints |> Option.get
@@ -195,7 +195,7 @@ module TypeContentHelpers =
         |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement)
 
       if input :? IInterface then
-        TagHelpers.findTypeTag(input, ITag.TagType.Typeparam, tools)
+        TagHelpers.findTypeTag input ITag.TagType.Typeparam tools
         |> Seq.map (processTag >> Linq.ToReadOnlyCollection)
         |> Some
       else
@@ -398,31 +398,157 @@ module TypeContentHelpers =
   let processContents input tools content =
     let processContent content =
       match content with
-      | TypeSummary as s ->
-        (single ITag.TagType.Summary, "Summary")
-      | TypeRemarks as s ->
-        (single ITag.TagType.Remarks, "Remarks")
-      | TypeExample as s ->
-        (single ITag.TagType.Example, "Example")
-      | TypeGenerics as s ->
-        (typeParams, "Generic types")
-      | TypeInheritance as s ->
-        (inheritance, "Inheritance")
-      | TypeNested as s ->
-        (nested, "Nested types")
-      | TypeSeeAlso as s ->
-        (single ITag.TagType.Seealso, "See also")
-      | TypeConstructors as s ->
-        (constructors, "Constructors")
-      | TypeMethods as s ->
-        (methods, "Methods")
-      | TypeProperties as s ->
-        (properties, "Properties")
-      | TypeEvents as s ->
-        (events, "Events")
-      | TypeDelegates as s ->
-        (delegates, "Delegates")
-      | TypeFields as s ->
-        (enumFields, "Fields")
+      | TypeConstructors as s -> (constructors, "Constructors")
+      | TypeInheritance as s -> (inheritance, "Inheritance")
+      | TypeProperties as s -> (properties, "Properties")
+      | TypeDelegates as s -> (delegates, "Delegates")
+      | TypeGenerics as s -> (typeParams, "Generic types")
+      | TypeSeeAlso as s -> (single ITag.TagType.Seealso, "See also")
+      | TypeSummary as s -> (single ITag.TagType.Summary, "Summary")
+      | TypeRemarks as s -> (single ITag.TagType.Remarks, "Remarks")
+      | TypeExample as s -> (single ITag.TagType.Example, "Example")
+      | TypeMethods as s -> (methods, "Methods")
+      | TypeNested as s -> (nested, "Nested types")
+      | TypeEvents as s -> (events, "Events")
+      | TypeFields as s -> (enumFields, "Fields")
 
     content |> Seq.map (processContent >> fun (c, l) -> (c input tools, l))
+
+  let processTableOfContents (input: IType) tools =
+    let applyTools input = input tools
+    let memberNameSummary name (summary: Option<ITag>) =
+      match summary with
+      | None -> name
+      | Some x -> JoinedText (seq [ name; TagHelpers.tagShort input x tools ], Environment.NewLine)
+
+    let processInterface (input: IInterface) =
+      let sectionHeading isStatic accessor section =
+        String.Join(" ", seq [ StringConverters.accessorStr accessor; StringConverters.staticStr isStatic; section ])
+
+      let createContent (members: seq<'M> when 'M :> IMember) newRow =
+        members
+        |> Seq.groupBy SignatureHelpers.getName
+        |> Seq.sortBy fst
+        |> Seq.collect snd
+        |> Seq.map newRow
+
+      let createPropertySection(isStatic, accessor, properties: seq<IProperty>) =
+        let createRow(property : IProperty) =
+          let processName =
+            let anchor = LinkContent(InlineCode property.Name, tools.linker.CreateAnchor(input, property))
+            memberNameSummary anchor ((TagHelpers.findTag input property ITag.TagType.Summary tools) |> Seq.tryExactlyOne)
+
+          seq [ TypeHelpers.processResType input property.Type tools; processName; InlineCode (SignatureHelpers.getPropertyMethods property) ]
+          |> Seq.map (TextElement >> ElementHelpers.initialize >> applyTools)
+          |> Linq.ToReadOnlyCollection
+
+        let grouped = createContent properties createRow
+
+        if (Seq.isEmpty properties) then
+          None
+        else
+          Table(grouped, TextHelpers.createHeadings (seq [ "Type"; "Name"; "Methods" ]) tools, sectionHeading isStatic accessor "properties", 3)
+          |> Some
+
+      let createMethodSection(isStatic, accessor, methods: seq<IMethod>) =
+        let methodsArray = methods |> Seq.toArray
+
+        let createRow (method: IMethod) =
+          let processReturn =
+            let name = if isNull method.Returns then "void" else method.Returns.DisplayName
+            let content = InlineCode name
+            if isNull method.Returns then
+              content
+            else
+              let a = input :> IType
+              let b = method.Returns
+              let link = tools.linker.CreateLink(a, b)
+              if String.IsNullOrEmpty link then
+                content
+              else
+                LinkContent(content, lazy(link))
+
+          let processMethod =
+            let hasOverloads =
+              methodsArray
+              |> Seq.where(fun x -> x.Name = method.Name)
+              |> Seq.skip 1
+              |> Seq.isEmpty
+              |> not
+
+            let signature =
+              seq [
+                match method.Operator with
+                | OperatorType.Explicit ->
+                  yield InlineCode "explicit"
+                  yield Normal " "
+                  yield InlineCode "operator"
+                  yield Normal " "
+                | OperatorType.Implicit ->
+                  yield InlineCode "implicit"
+                  yield Normal " "
+                  yield InlineCode "operator"
+                  yield Normal " "
+                | OperatorType.Normal ->
+                  yield InlineCode "operator"
+                  yield Normal " "
+                | _ -> ()
+
+                yield LinkContent(InlineCode method.Name, tools.linker.CreateAnchor(input, method))
+                yield Normal "("
+
+                if hasOverloads then yield InlineCode "..."
+                else yield methodArguments input method tools
+
+                yield Normal ")"
+              ]
+            let signatureText = JoinedText (signature, "")
+            memberNameSummary signatureText ((TagHelpers.findTag input method ITag.TagType.Summary tools) |> Seq.tryExactlyOne)
+
+          seq [ processReturn; processMethod ]
+          |> Seq.map (fun item -> ElementHelpers.initialize (item |> TextElement) tools)
+          |> Linq.ToReadOnlyCollection
+
+        let grouped = createContent (methodsArray |> Seq.distinctBy(fun x -> x.Name)) createRow
+
+        if (Seq.isEmpty methods) then
+          None
+        else
+          Table(grouped, TextHelpers.createHeadings (seq [ "Returns"; "Name" ]) tools , sectionHeading isStatic accessor "methods", 3)
+          |> Some
+
+      let flatten item =
+        let a = fst item
+        snd item
+        |> Seq.map(fun x -> (a, fst x, snd x))
+      let processMembers item =
+        item
+        |> Seq.map flatten
+        |> Seq.collect id
+
+      let groupMembers (members: seq<'M> when 'M :> IMember) =
+        let byStatic(x: 'M) = x.IsStatic
+        let byAccessor (x: bool * seq<'M>) = (fst x, snd x |> Seq.groupBy(fun y -> y.Accessor))
+
+        members
+        |> Seq.groupBy byStatic
+        |> Seq.map byAccessor
+      let createTable x f =
+        x
+        |> groupMembers
+        |> processMembers
+        |> Seq.map f
+        |> Seq.filter Option.isSome
+
+      seq [
+        (createTable input.Properties createPropertySection, "Properties");
+        (createTable input.Methods createMethodSection, "Methods");
+      ]
+      |> Seq.filter (fst >> Seq.isEmpty >> not)
+      |> Seq.map(fun x -> Section(x |> fst |> Seq.map (Option.get >> ElementHelpers.initialize >> applyTools), snd x, 2) |> ElementHelpers.initialize)
+
+    match input with
+    | :? IInterface as x -> processInterface x
+    | _ -> Seq.empty
+    |> SomeHelpers.emptyToNone
+

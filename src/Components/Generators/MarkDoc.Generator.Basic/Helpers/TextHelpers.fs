@@ -18,6 +18,7 @@ module TextHelpers =
 
   let normal text tools =
     tools.creator.CreateText(text, IText.TextStyle.Normal)
+  let createHeadings headings tools = headings |> Seq.map (fun x -> normal x tools)
 
   let rec processTextNoStyle (textType: 'M TextType when 'M :> ITextContent) =
     match textType with
