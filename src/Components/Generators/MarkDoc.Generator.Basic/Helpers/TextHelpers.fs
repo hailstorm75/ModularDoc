@@ -27,6 +27,7 @@ module internal TextHelpers =
     | Bold text
     | Code text
     | InlineCode text -> text
+    | LinkContent (content, _) -> content |> processTextNoStyle 
     | JoinedText (content, delimiter) -> String.Join(delimiter, content |> Seq.map processTextNoStyle |> Seq.filter (String.IsNullOrEmpty >> not))
     | _ -> ""
 
