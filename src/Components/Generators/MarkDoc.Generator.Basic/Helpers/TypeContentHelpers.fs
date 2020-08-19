@@ -37,7 +37,7 @@ module TypeContentHelpers =
 
     input
     |> SomeHelpers.whereSome2
-    |> Seq.map (SomeHelpers.get2 >> createSection >> ElementHelpers.initialize)
+    |> Seq.map (createSection >> ElementHelpers.initialize)
   let methodArguments source (item: IMember) tools =
     let argument arg =
       JoinedText ([ arg |> StringConverters.argumentTypeStr |> Normal; TypeHelpers.processResType source arg.Type tools; Normal arg.Name ], " ")
@@ -214,7 +214,7 @@ module TypeContentHelpers =
       | _ -> LinkedList<IConstructor>() :> IReadOnlyCollection<IConstructor>
     let processCtor (i: int, ctor: IConstructor) =
       let signature =
-        SignatureHelpers.generateSignature "{0}{1} {2}({{3}})" (seq [
+        SignatureHelpers.generateSignature "{0}{1} {2}({3})" (seq [
           SignatureHelpers.getAccessor;
           SignatureHelpers.getStatic;
           SignatureHelpers.getName;

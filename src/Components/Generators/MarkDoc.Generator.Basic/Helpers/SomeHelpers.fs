@@ -14,12 +14,4 @@ module internal SomeHelpers =
     input
     |> Seq.filter (fst >> Option.isSome)
     |> Seq.map (fun x -> x |> fst |> Option.get, x |> snd)
-  let get2 input: 'c * 'd =
-    let get f: 'g =
-      let v: obj = input |> f
-      match v with
-      | :? Option<'g> as a -> Option.get a
-      | _ -> v :?> 'g
-
-    (get fst, get snd)
 

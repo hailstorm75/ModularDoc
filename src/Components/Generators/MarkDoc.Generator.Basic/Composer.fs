@@ -15,7 +15,7 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
 
     input
     |> SomeHelpers.whereSome2
-    |> Seq.map (SomeHelpers.get2 >> createSection >> ElementHelpers.initialize)
+    |> Seq.map (createSection >> ElementHelpers.initialize)
 
   let printIntroduction (input: IType) tools =
     match TagHelpers.findTypeTag input ITag.TagType.Summary tools |> Seq.tryExactlyOne with
@@ -46,12 +46,17 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
     sections 2 |> SomeHelpers.emptyToNone
 
   let composeContent input tools =
-    composeSections (seq [
-       (printIntroduction input tools, "Description");
-       (printMemberTables input tools, "Members");
-       (printDetailed input tools, "Details")
-     ]) 1
-     |> Seq.map (fun x -> x tools)
+    let applyTools input = input tools
+
+    let content = seq [
+                    (printIntroduction input tools, "Description");
+                    (printMemberTables input tools, "Members");
+                    (printDetailed input tools, "Details")
+                  ]
+                  |> SomeHelpers.whereSome2
+                  |> Seq.map (fun (x, y) -> (x |> Seq.map applyTools |> Some, y))
+    composeSections content 1
+    |> Seq.map applyTools
 
   interface ITypeComposer with
     /// <inheritdoc />
