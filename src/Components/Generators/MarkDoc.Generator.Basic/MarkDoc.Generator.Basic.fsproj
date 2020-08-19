@@ -22,7 +22,7 @@
     <Compile Include="Helpers\TagHelpers.fs" />
     <Compile Include="Helpers\ContentHelpers.fs" />
     <Compile Include="Helpers\SignatureHelpers.fs" />
-    <Compile Include="Helpers\ComposerHelpers.fs" />
+    <Compile Include="Helpers\TypeContentHelpers.fs" />
     <Compile Include="Composer.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="TypeComposer.fs" />
