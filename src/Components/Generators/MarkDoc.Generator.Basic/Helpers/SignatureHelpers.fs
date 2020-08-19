@@ -4,7 +4,7 @@ open MarkDoc.Members.Members
 open System
 open MarkDoc.Members.Enums
 
-module SignatureHelpers =
+module internal SignatureHelpers =
   type Processor = IMember -> string
 
   let getGenerics (input: IMember) = 
@@ -74,5 +74,8 @@ module SignatureHelpers =
     | _ -> ""
 
   let generateSignature format (processors: Processor seq) input =
-    String.Format(format, processors |> Seq.map (fun p -> p input)) |> Code
+    let x input (col: obj[]) =
+      String.Format(input, col)
+
+    x format (processors |> Seq.map(fun x -> x input :> obj) |> Seq.toArray) |> Code
 

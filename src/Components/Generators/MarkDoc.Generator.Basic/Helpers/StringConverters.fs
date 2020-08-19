@@ -3,7 +3,7 @@
 open MarkDoc.Members.Members
 open MarkDoc.Members.Enums
 
-module StringConverters =
+module internal StringConverters =
   let toLower(x : string) =
     x.ToLower()
 

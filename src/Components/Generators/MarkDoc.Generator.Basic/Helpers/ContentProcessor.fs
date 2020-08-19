@@ -5,7 +5,7 @@ open System
 open MarkDoc.Helpers
 open MarkDoc.Elements
 
-module ContentProcessor =
+module internal ContentProcessor =
   let rec processContent (input, item, tools): Element<ILink> option =
     let applyTools input =
       input tools

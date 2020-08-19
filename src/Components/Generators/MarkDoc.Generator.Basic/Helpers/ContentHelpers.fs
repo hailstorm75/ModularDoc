@@ -18,7 +18,7 @@ type ContentType =
   | Arguments
   | Inheritance
 
-module ContentHelpers =
+module internal ContentHelpers =
   let private getSingleTag (input: IType) t (m: IMember) tools =
     let single tags =
       match tags with

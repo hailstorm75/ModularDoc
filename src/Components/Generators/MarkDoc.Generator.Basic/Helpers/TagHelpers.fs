@@ -7,7 +7,7 @@ open MarkDoc.Members.Types
 open MarkDoc.Documentation
 open MarkDoc.Members.Members
 
-module TagHelpers =
+module internal TagHelpers =
   let tagShort input (tag: ITag) tools =
     let getCount =
       let isInvalid (item: IContent) =

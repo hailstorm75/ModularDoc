@@ -13,7 +13,7 @@ type TextType<'M when 'M :> ITextContent> =
   | LinkContent of content: TextType<'M> * reference: string Lazy
   | JoinedText of content: TextType<'M> seq * delimiter: string
 
-module TextHelpers =
+module internal TextHelpers =
   let empty tools = tools.creator.CreateText("", IText.TextStyle.Normal)
 
   let normal text tools =
@@ -27,7 +27,7 @@ module TextHelpers =
     | Bold text
     | Code text
     | InlineCode text -> text
-    | JoinedText (content, delimiter) -> String.Join(delimiter, content |> Seq.map processTextNoStyle)
+    | JoinedText (content, delimiter) -> String.Join(delimiter, content |> Seq.map processTextNoStyle |> Seq.filter (String.IsNullOrEmpty >> not))
     | _ -> ""
 
   let rec processText (textType: 'M TextType when 'M :> ITextContent) tools =

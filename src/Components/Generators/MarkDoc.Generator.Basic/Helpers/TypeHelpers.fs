@@ -5,7 +5,7 @@ open System
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 
-module TypeHelpers =
+module internal TypeHelpers =
   let getTypeName (input: IType) =
     let joinGenerics (i: seq<string>) =
       let partial f x y = f(x , y)
