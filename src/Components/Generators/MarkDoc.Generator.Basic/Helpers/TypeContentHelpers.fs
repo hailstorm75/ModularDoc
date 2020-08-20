@@ -28,26 +28,33 @@ type TypeContentType =
 module TypeContentHelpers =
   let private createHeadings headings tools = headings |> Seq.map (fun x -> TextHelpers.normal x tools)
   let registerSection (input, name, content) tools level =
+    // Register an anchor to the given member section
     tools.linker.RegisterAnchor(input, lazy(name))
+    // Initialize the section
     ElementHelpers.initialize ((content tools input, name, level) |> Section) tools
 
   let composeSections input level =
     let createSection (x, y) =
-      Element.Section(x, y, level)
+      Section(x, y, level)
 
     input
+    // Filter out invalid items
     |> SomeHelpers.whereSome2
+    // Create a section out of each item
     |> Seq.map (createSection >> ElementHelpers.initialize)
   let methodArguments source (item: IMember) tools =
     let argument arg =
+      // Compose the signature of a single argument
       JoinedText ([ arg |> StringConverters.argumentTypeStr |> Normal; TypeHelpers.processResType source arg.Type tools; Normal arg.Name ], " ")
     let processArguments args =
+      // Compose arguments together 
       JoinedText (args |> Seq.map argument, ", ")
 
+    // Process arguments for types which can have them
     match item with 
     | :? IConstructor as c -> c.Arguments |> processArguments
     | :? IDelegate as d -> d.Arguments |> processArguments
-    | _ -> raise (Exception())
+    | _ -> raise (NotSupportedException())
 
   let private single x input tools =
     let tag = TagHelpers.findTypeTag input x tools |> Seq.tryExactlyOne
@@ -58,13 +65,20 @@ module TypeContentHelpers =
   let private genericProcessor provider processItem tools =
     let processItems (items: 'M IReadOnlyCollection when 'M :> IMember) =
       items
+      // Compose a section for every item after processing it
       |> Seq.mapi (fun x y -> registerSection (processItem(x, y)) tools 3 |> ElementHelpers.toElement)
 
+    // If there are no items..
     if Seq.isEmpty provider then
+      // return nothing
       None
+    // Otherwise..
     else
+      // for every item
       provider
+      // process it
       |> processItems
+      // if none are valid return nothing
       |> SomeHelpers.emptyToNone
   let private processContent (item: (IMember -> Tools -> IElement seq option) * string) (mem: IMember) tools =
     let applyMember input = input mem
@@ -86,13 +100,20 @@ module TypeContentHelpers =
 
   let private overloads (members: 'M IReadOnlyCollection when 'M :> IMember) =
     members
+    // Group the members by their names
     |> Seq.groupBy (fun x -> x.Name)
+    // Recompose the grouping to track the overload count
     |> Seq.map (fun x -> (fst x, snd x |> Seq.mapi (fun x y -> (y.RawName, x)) |> dict))
+    // Materialize the sequence to a dictionary
     |> dict
   let private overloadFormat overloadCount overloadIndex =
+    // If there are overloads..
     if overloadCount > 1 then
+      // then print them
       String.Format(" [{0}/{1}]", overloadIndex + 1, overloadCount)
+    // Otherwise..
     else
+      // return nothing
       String.Empty
   let private getArgumentsSig (input: IType) tools (mem: IMember) =
     methodArguments input mem tools |> TextHelpers.processTextNoStyle
@@ -412,14 +433,19 @@ module TypeContentHelpers =
       | TypeEvents as s -> (events, "Events")
       | TypeFields as s -> (enumFields, "Fields")
 
-    content |> Seq.map (processContent >> fun (c, l) -> (c input tools, l))
+    content
+    // Process every case and append the result
+    |> Seq.map (processContent >> fun (c, l) -> (c input tools, l))
 
   let processTableOfContents (input: IType) tools =
     let applyTools input = input tools
-    let memberNameSummary name (summary: Option<ITag>) =
+    let memberNameSummary name (summary: ITag option) =
+      // If the given member has a tag..
       match summary with
-      | None -> name
+      // print its name with the tag
       | Some x -> JoinedText (seq [ name; TagHelpers.tagShort input x tools ], Environment.NewLine)
+      // otherwise print the name only
+      | None -> name
 
     let processInterface (input: IInterface) =
       let sectionHeading isStatic accessor section =
@@ -427,57 +453,90 @@ module TypeContentHelpers =
 
       let createContent (members: seq<'M> when 'M :> IMember) newRow =
         members
+        // Group members by their names
         |> Seq.groupBy SignatureHelpers.getName
+        // Sort the groups by the name keys
         |> Seq.sortBy fst
+        // Flatten the grouped items
         |> Seq.collect snd
+        // Materialize a new row
         |> Seq.map newRow
 
       let createPropertySection(isStatic, accessor, properties: seq<IProperty>) =
-        let createRow(property : IProperty) =
+        let createRow(property: IProperty) =
+          // Get the property name
           let processName =
+            // Compose the property signature
             let anchor = LinkContent(InlineCode property.Name, tools.linker.CreateAnchor(input, property))
+            // Join the signature with the property summary
             memberNameSummary anchor ((TagHelpers.findTag input property ITag.TagType.Summary tools) |> Seq.tryExactlyOne)
 
+          // Compose a sequence of property signature parts and for each part..
           seq [ TypeHelpers.processResType input property.Type tools; processName; InlineCode (SignatureHelpers.getPropertyMethods property) ]
+          // Initialize each part
           |> Seq.map (TextElement >> ElementHelpers.initialize >> applyTools)
+          // Materialize the sequence to a collection
           |> Linq.ToReadOnlyCollection
 
-        let grouped = createContent properties createRow
+        // Get the content for the table
+        let content = createContent properties createRow
 
+        // If there are no properties..
         if (Seq.isEmpty properties) then
+          // return nothing
           None
+        // Otherwise..
         else
-          Table(grouped, TextHelpers.createHeadings (seq [ "Type"; "Name"; "Methods" ]) tools, sectionHeading isStatic accessor "properties", 3)
+          // create a table of properties
+          Table(content, TextHelpers.createHeadings (seq [ "Type"; "Name"; "Methods" ]) tools, sectionHeading isStatic accessor "properties", 3)
           |> Some
 
       let createMethodSection(isStatic, accessor, methods: seq<IMethod>) =
         let methodsArray = methods |> Seq.toArray
 
         let createRow (method: IMethod) =
+          // Get the method return type
           let processReturn =
+            // Get the method return type name
             let name = if isNull method.Returns then "void" else method.Returns.DisplayName
+            // Stylize the type name
             let content = InlineCode name
+            // If the return type is void..
             if isNull method.Returns then
+              // return it as is
               content
+            // Otherwise..
             else
               let a = input :> IType
               let b = method.Returns
+              // Try to get reference to the return type
               let link = tools.linker.CreateLink(a, b)
+              // If there is no reference..
               if String.IsNullOrEmpty link then
+                // return the type name as is
                 content
+              // Otherwise..
               else
+                // wrap the type name in a link to the reference
                 LinkContent(content, lazy(link))
 
+          // Get the method signature and description
           let processMethod =
+            // Get whether the given method has overloads
             let hasOverloads =
               methodsArray
+              // Find methods of the same name
               |> Seq.where(fun x -> x.Name = method.Name)
+              // Exclude one to account for this method
               |> Seq.skip 1
-              |> Seq.isEmpty
-              |> not
+              // Check if any methods are left
+              |> (Seq.isEmpty >> not)
 
+            // Get the method signature
             let signature =
               seq [
+                // Depending on whether the method is an operator and what operator type it is
+                // return signature keywords
                 match method.Operator with
                 | OperatorType.Explicit ->
                   yield InlineCode "explicit"
@@ -494,61 +553,89 @@ module TypeContentHelpers =
                   yield Normal " "
                 | _ -> ()
 
+                // Print the method name with an anchor to the detailed method information
                 yield LinkContent(InlineCode method.Name, tools.linker.CreateAnchor(input, method))
+
+                // Beging arguments
                 yield Normal "("
 
+                // If there are overloads do not print the arguments
                 if hasOverloads then yield InlineCode "..."
+                // Otherwise print the method arguments
                 else yield methodArguments input method tools
 
+                // End arguments
                 yield Normal ")"
               ]
+
+            // Compose the method signature
             let signatureText = JoinedText (signature, "")
+            // Join the signature with the method summary
             memberNameSummary signatureText ((TagHelpers.findTag input method ITag.TagType.Summary tools) |> Seq.tryExactlyOne)
 
           seq [ processReturn; processMethod ]
+          // Initialize all the text
           |> Seq.map (fun item -> ElementHelpers.initialize (item |> TextElement) tools)
+          // Materialize the sequence to a collection
           |> Linq.ToReadOnlyCollection
 
-        let grouped = createContent (methodsArray |> Seq.distinctBy(fun x -> x.Name)) createRow
+        // Get the content for the table
+        let content = createContent (methodsArray |> Seq.distinctBy(fun x -> x.Name)) createRow
 
+        // If there are no methods..
         if (Seq.isEmpty methods) then
+          // return nothing
           None
+        // Otherwise..
         else
-          Table(grouped, TextHelpers.createHeadings (seq [ "Returns"; "Name" ]) tools , sectionHeading isStatic accessor "methods", 3)
+          // create a table of methods
+          Table(content, TextHelpers.createHeadings (seq [ "Returns"; "Name" ]) tools , sectionHeading isStatic accessor "methods", 3)
           |> Some
 
-      let flatten item =
-        let a = fst item
-        snd item
-        |> Seq.map(fun x -> (a, fst x, snd x))
-      let processMembers item =
+      let flattenMembers item =
+        let flatten item =
+          let a = fst item
+          snd item
+          |> Seq.map(fun x -> (a, fst x, snd x))
         item
-        |> Seq.map flatten
-        |> Seq.collect id
+        // Flatten the grouping
+        |> Seq.collect (flatten >> id)
 
-      let groupMembers (members: seq<'M> when 'M :> IMember) =
-        let byStatic(x: 'M) = x.IsStatic
-        let byAccessor (x: bool * seq<'M>) = (fst x, snd x |> Seq.groupBy(fun y -> y.Accessor))
+      let createTable members create =
+        let groupMembers (members: seq<'M> when 'M :> IMember) =
+          let byStatic(x: 'M) = x.IsStatic
+          let byAccessor (x: bool * seq<'M>) = (fst x, snd x |> Seq.groupBy(fun y -> y.Accessor))
 
+          members
+          // Group members by whether they are static
+          |> Seq.groupBy byStatic
+          // Group members by their accessor
+          |> Seq.map byAccessor
         members
-        |> Seq.groupBy byStatic
-        |> Seq.map byAccessor
-      let createTable x f =
-        x
+        // Group the members
         |> groupMembers
-        |> processMembers
-        |> Seq.map f
-        |> Seq.filter Option.isSome
+        // Flatten the members with their respective keys
+        |> flattenMembers
+        // Create the content tables
+        |> Seq.map create
+        // Filter out the invalid items
+        |> SomeHelpers.whereSome
 
       seq [
         (createTable input.Properties createPropertySection, "Properties");
         (createTable input.Methods createMethodSection, "Methods");
       ]
+      // Filter out empty collections
       |> Seq.filter (fst >> Seq.isEmpty >> not)
-      |> Seq.map(fun x -> Section(x |> fst |> Seq.map (Option.get >> ElementHelpers.initialize >> applyTools), snd x, 2) |> ElementHelpers.initialize)
+      // Create sections of tables
+      |> Seq.map(fun x -> Section(x |> fst |> Seq.map (ElementHelpers.initialize >> applyTools), snd x, 2) |> ElementHelpers.initialize)
 
+    // If the input type is..
     match input with
+    // an interface, then process it
     | :? IInterface as x -> processInterface x
+    // anything else, then return nothing
     | _ -> Seq.empty
+    // Return none if the processing generated nothing
     |> SomeHelpers.emptyToNone
 
