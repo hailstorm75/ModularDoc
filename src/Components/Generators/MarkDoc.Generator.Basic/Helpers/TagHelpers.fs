@@ -12,7 +12,7 @@ module internal TagHelpers =
   /// </summary>
   /// <param name="input"></param>
   /// <param name="tag">Documentation tag to process</param>
-  /// <param name="tools">Tools for creating the text element</param>
+  /// <param name="tools">Tools for retrieving the documentation</param>
   /// <returns>Processed tag into elements</returns>
   let tagShort input (tag: ITag) tools =
     // Number of valid tags
@@ -71,7 +71,7 @@ module internal TagHelpers =
   /// </summary>
   /// <param name="input"></param>
   /// <param name="tag">Documentation tag to process</param>
-  /// <param name="tools">Tools for creating the text element</param>
+  /// <param name="tools">Tools for retrieving the documentation</param>
   /// <returns>Processed tag into elements</returns>
   let tagFull input (tag: ITag) tools =
     // Get the tag content
@@ -124,7 +124,7 @@ module internal TagHelpers =
   /// </summary>
   /// <param name="input">Type for which to retrieve the documentation</param>
   /// <param name="tag">Documentation tag type to retrieve</param>
-  /// <param name="tools">Tools for creating the text element</param>
+  /// <param name="tools">Tools for retrieving the documentation</param>
   /// <returns>Found tags</returns>
   let findTypeTag input tag tools =
     seq [
@@ -148,7 +148,7 @@ module internal TagHelpers =
   /// <param name="input">Type inside which the member is declared</param>
   /// <param name="mem">Member for which to retrieve the documentation</param>
   /// <param name="tag">Documentation tag type to retrieve</param>
-  /// <param name="tools">Tools for creating the text element</param>
+  /// <param name="tools">Tools for retrieving the documentation</param>
   /// <returns>Found tags</returns>
   let findTag input (mem: IMember) tag tools =
     seq [
