@@ -68,13 +68,27 @@ type TypeContentType =
   | TypeFields
 
 module TypeContentHelpers =
-  let private createHeadings headings tools = headings |> Seq.map (fun x -> TextHelpers.normal x tools)
+  /// <summary>
+  /// Registers the given <paramref name="input"/> member and composes its documentation section
+  /// </summary>
+  /// <param name="input">Member to register</param>
+  /// <param name="name">Member name</param>
+  /// <param name="content">Member documentation content composer</param>
+  /// <param name="tools">Tools for registering and composing member sections</param>
+  /// <param name="level">Sections heading level</param>
+  /// <returns></returns>
   let registerSection (input, name, content) tools level =
     // Register an anchor to the given member section
     tools.linker.RegisterAnchor(input, lazy(name))
     // Initialize the section
     ElementHelpers.initialize ((content tools input, name, level) |> Section) tools
 
+  /// <summary>
+  /// Composes the given <paramref name="input"/> elements into sections
+  /// </summary>
+  /// <param name="input">Elements to compose into sections</param>
+  /// <param name="level">Sections heading level</param>
+  /// <returns>Composed sections</returns>
   let composeSections input level =
     let createSection (x, y) =
       Section(x, y, level)
@@ -84,7 +98,15 @@ module TypeContentHelpers =
     |> SomeHelpers.whereSome2
     // Create a section out of each item
     |> Seq.map (createSection >> ElementHelpers.initialize)
-  let methodArguments source (item: IMember) tools =
+
+  /// <summary>
+  /// Get the arguments of the given <paramref name="method"/>
+  /// </summary>
+  /// <param name="source">Method declaring type</param>
+  /// <param name="method">Method to process</param>
+  /// <param name="tools">Tools for composing method arguments</param>
+  /// <returns>Composed arguments</returns>
+  let methodArguments source (method: IMember) tools =
     let argument arg =
       // Compose the signature of a single argument
       JoinedText ([ arg |> StringConverters.argumentTypeStr |> Normal; TypeHelpers.processResType source arg.Type tools; Normal arg.Name ], " ")
@@ -93,7 +115,7 @@ module TypeContentHelpers =
       JoinedText (args |> Seq.map argument, ", ")
 
     // Process arguments for types which can have them
-    match item with 
+    match method with 
     | :? IConstructor as c -> c.Arguments |> processArguments
     | :? IDelegate as d -> d.Arguments |> processArguments
     | _ -> raise (NotSupportedException())
@@ -330,7 +352,7 @@ module TypeContentHelpers =
     // If there are generics..
     if (Option.isSome getTypeParams && getTypeParams |> (Option.get >> Seq.isEmpty >> not)) then
       // create a table of generics documentation
-      seq [ tools.creator.CreateTable(getTypeParams |> Option.get, createHeadings (seq [ "Type"; "Description"; "Constraints" ]) tools) |> ElementHelpers.toElement ] |> Some
+      seq [ tools.creator.CreateTable(getTypeParams |> Option.get, TextHelpers.createHeadings (seq [ "Type"; "Description"; "Constraints" ]) tools) |> ElementHelpers.toElement ] |> Some
     // Otherwise..
     else
       // return nothing
@@ -546,6 +568,13 @@ module TypeContentHelpers =
     // Process the composed data
     genericProcessor extractor processField tools
 
+  /// <summary>
+  /// Composes documentation content for the given <paramref name="input"/> type
+  /// </summary>
+  /// <param name="input">Input type to process</param>
+  /// <param name="tools">Tools for creating the type documentation content</param>
+  /// <param name="content"></param>
+  /// <returns>Documentation contents</returns>
   let processContents input tools content =
     let processContent content =
       match content with
@@ -567,6 +596,12 @@ module TypeContentHelpers =
     // Process every case and append the result
     |> Seq.map (processContent >> fun (c, l) -> (c input tools, l))
 
+  /// <summary>
+  /// Composes a table of contents for the given <paramref name="input"/> type
+  /// </summary>
+  /// <param name="input">Input type to process</param>
+  /// <param name="tools">Tools for creating the table of contents</param>
+  /// <returns>Member table of contents</returns>
   let processTableOfContents (input: IType) tools =
     let applyTools input = input tools
     let memberNameSummary name (summary: ITag option) =
