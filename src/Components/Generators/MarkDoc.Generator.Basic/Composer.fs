@@ -6,7 +6,14 @@ open MarkDoc.Members.Types
 open MarkDoc.Elements
 open MarkDoc.Documentation.Tags
 
-type TypeComposer2(creator, docResolver, memberResolver, linker) = 
+/// <summary>
+/// Basic type composer
+/// </summary>
+/// <param name="creator">Injected element creator</param>
+/// <param name="docResolver">Injected documentation resolver</param>
+/// <param name="memberResolver">Injected member resolver</param>
+/// <param name="linker">Injected linker</param>
+type TypeComposer2(creator, docResolver, memberResolver, linker) =
   let m_tools: Tools = { linker = linker; creator = creator; docResolver = docResolver; typeResolver = memberResolver }
 
   let composeSections input level =
@@ -30,6 +37,7 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
 
   let printDetailed (input: IType) tools =
     let sections =
+      // Define the section types to be included in the documnetation
       seq [
         TypeSummary;
         TypeRemarks;
@@ -45,10 +53,15 @@ type TypeComposer2(creator, docResolver, memberResolver, linker) =
         TypeDelegates;
         TypeFields
       ]
+      // Process the section types to generate content
       |> TypeContentHelpers.processContents input tools
+      // Compose the content into sections
       |> composeSections
 
-    sections 2 |> SomeHelpers.emptyToNone
+    // Set the sections level to 2
+    sections 2
+    // If there are no sections return nothing
+    |> SomeHelpers.emptyToNone
 
   let composeContent input tools =
     let applyTools input = input tools
