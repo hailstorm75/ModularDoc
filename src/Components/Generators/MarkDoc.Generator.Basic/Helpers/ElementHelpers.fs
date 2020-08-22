@@ -3,7 +3,7 @@
 open MarkDoc.Elements
 open System.Collections.Generic
 
-type Element<'M when 'M :> ITextContent> =
+type internal Element<'M when 'M :> ITextContent> =
   | TextElement of content: TextType<'M>
   | LinkElement of content: TextType<'M> * reference: string
   | ListElement of content: IElement seq * listType: IList.ListType * heading: string * level: int
@@ -24,7 +24,9 @@ module internal ElementHelpers =
       | _ -> None
 
     input
+    // Extract elements that are text elements
     |> Seq.map extractor
+    // Filter out the non-text elements
     |> SomeHelpers.whereSome
 
   let toElement (input: 'M when 'M :> IElement) = input :> IElement
