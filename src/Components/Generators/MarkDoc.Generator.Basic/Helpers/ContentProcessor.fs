@@ -1,68 +1,95 @@
 ﻿namespace MarkDoc.Generator.Basic
 
 open MarkDoc.Documentation.Tags
-open System
-open MarkDoc.Helpers
 open MarkDoc.Elements
+open MarkDoc.Helpers
+open System
 
 module internal ContentProcessor =
-  let rec processContent (input, item, tools): Element<ILink> option =
-    let applyTools input =
-      input tools
+  /// <summary>
+  /// Composes provided <paramref name="content"/> to elements
+  /// </summary>
+  /// <param name="input">Content source type</param>
+  /// <param name="content">Content to process</param>
+  /// <param name="tools">Tools for processing content</param>
+  /// <returns>Composed elements</returns>
+  let rec processContent (input, content, tools) =
+    let applyTools input = input tools
+    let toSomeText input = input |> TextElement |> Some
 
     let getInlineText (tag: IInnerTag) =
       tag.Content
+      // Get content that is text
       |> Seq.where(fun x -> x :? ITextTag)
+      // Get the text
       |> Seq.map (fun x -> (x :?> ITextTag).Content)
 
     let processColumn(column: seq<IContent>) =
       column
-      |> Seq.map (fun x -> processContent(input, x, tools))
+      // Extract inner content
+      |> Seq.map (fun content -> processContent(input, content, tools))
+      // Filter out invalid content
       |> SomeHelpers.whereSome
+      // Intialize content into elements
       |> Seq.map (ElementHelpers.initialize >> applyTools)
 
-    match item with
+    // Process the content based on its type
+    match content with
     | :? ITextTag as text
-      -> Some(text.Content |> Normal |> TextElement)
+      -> text.Content |> Normal |> toSomeText
     | :? IInnerTag as inner ->
       match inner.Type with
       | IInnerTag.InnerTagType.CodeSingle
-        -> Some(getInlineText inner |> Seq.exactlyOne |> InlineCode |> TextElement)
+        -> getInlineText inner |> Seq.exactlyOne |> InlineCode |> toSomeText
       | IInnerTag.InnerTagType.Code
-        -> Some(getInlineText inner |> Seq.exactlyOne |> Code |> TextElement)
+        -> getInlineText inner |> Seq.exactlyOne |> Code |> toSomeText
       | IInnerTag.InnerTagType.ParamRef
       | IInnerTag.InnerTagType.TypeRef
-        -> Some(inner.Reference |> InlineCode |> TextElement)
+        -> inner.Reference |> InlineCode |> toSomeText
       | IInnerTag.InnerTagType.See
       | IInnerTag.InnerTagType.SeeAlso
-        -> Some(TypeHelpers.processReference input inner.Reference tools |> TextElement)
+        -> TypeHelpers.processReference input inner.Reference tools |> toSomeText
       | IInnerTag.InnerTagType.Para
-        -> Some(Environment.NewLine |> Normal |> TextElement)
+        -> Environment.NewLine |> Normal |> toSomeText
       | _ -> None
     | :? IListTag as list ->
       match list.Type with
       | IListTag.ListType.Table ->
-        let content = list.Rows
-                      |> Seq.map (processColumn >> Linq.ToReadOnlyCollection)
-        let headings = list.Headings
-                       |> Seq.map (fun x -> processContent(input, x, tools))
-                       |> SomeHelpers.whereSome
-                       |> Seq.filter ElementHelpers.isTextElement
-                       |> Seq.map(fun x -> x |> (ElementHelpers.initialize >> applyTools) :?> IText)
-        Element<ILink>.Table(content, headings, "", 0) |> Some
+        // Get table content
+        let content = list.Rows |> Seq.map (processColumn >> Linq.ToReadOnlyCollection)
+        // Get table headings
+        let headings =
+          list.Headings
+          // Extract inner content
+          |> Seq.map (fun content -> processContent(input, content, tools))
+          // Filter out invalid content
+          |> SomeHelpers.whereSome
+          // Transform the content to text elements
+          |> Seq.filter ElementHelpers.isTextElement
+          // Initialize the elements
+          |> Seq.map(fun element -> element |> (ElementHelpers.initialize >> applyTools) :?> IText)
+        // Compose the table
+        Table(content, headings, "", 0) |> Some
       | _ ->
-        let listType (t: IListTag.ListType) =
-          match t with
+        let listType (listType: IListTag.ListType) =
+          match listType with
           | IListTag.ListType.Bullet -> IList.ListType.Dotted
           | IListTag.ListType.Number -> IList.ListType.Numbered
           | _ -> raise (NotSupportedException())
 
-        let content = list.Rows
-                      |> Seq.collect id
-                      |> Seq.map (fun x -> processContent(input, x, tools))
-                      |> SomeHelpers.whereSome
-                      |> Seq.map (ElementHelpers.initialize >> applyTools)
-        Element<ILink>.ListElement(content, listType list.Type, "", 0) |> Some
+        // Get list content
+        let content =
+          list.Rows
+          // Flatten the sequence
+          |> Seq.collect id
+          // Extract inner content
+          |> Seq.map (fun content -> processContent(input, content, tools))
+          // Filter out invalid content
+          |> SomeHelpers.whereSome
+          // Intialize content into elements
+          |> Seq.map (ElementHelpers.initialize >> applyTools)
+        // Compose the list
+        ListElement(content, listType list.Type, "", 0) |> Some
     | _ -> None
 
 
