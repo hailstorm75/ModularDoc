@@ -44,7 +44,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     internal DelegateDef(IResolver resolver, TypeDef source)
     {
-      var method = source.Methods.FirstOrDefault(x => x.Name.Equals("Invoke"));
+      var method = source.Methods.First(x => x.Name.Equals("Invoke"));
       Name = ResolveName(source);
       Arguments = ResolveArguments(resolver, method).ToReadOnlyCollection();
       Generics = ResolveGenerics(source).ToReadOnlyCollection();

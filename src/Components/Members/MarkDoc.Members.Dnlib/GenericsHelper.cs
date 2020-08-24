@@ -27,7 +27,7 @@ namespace MarkDoc.Members.Dnlib
             .Select((x, i) => (x.Name.String, $"`{i}"));
 
       // Resolves generics of this method
-      static IEnumerable<(string type, string name)> ResolveTypeGenerics(MethodDef source)
+      static IEnumerable<(string type, string name)> GetTypeGenerics(ITypeOrMethodDef source)
         => source.GenericParameters.Select((x, i) => (x.Name.String, $"``{i}"));
 
       // If the source is null..
@@ -38,7 +38,7 @@ namespace MarkDoc.Members.Dnlib
       // Resolve declaring parent generics
       var outerArgs = ResolveParentTypeGenerics(source);
       // Resolve this method generics
-      var thisArgs = ResolveTypeGenerics(source);
+      var thisArgs = GetTypeGenerics(source);
 
       return outerArgs
         // Join collections

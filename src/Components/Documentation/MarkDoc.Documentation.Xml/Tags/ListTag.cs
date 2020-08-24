@@ -75,7 +75,7 @@ namespace MarkDoc.Documentation.Xml.Tags
         // Select the documentation node attributes
         .Attributes()
         // Select the attributes which hold the node type
-        .FirstOrDefault(x => x.Name.LocalName.Equals("type", StringComparison.InvariantCultureIgnoreCase))
+        .First(attribute => attribute.Name.LocalName.Equals("type", StringComparison.InvariantCultureIgnoreCase))
         // Select the attribute type value
         .Value;
 

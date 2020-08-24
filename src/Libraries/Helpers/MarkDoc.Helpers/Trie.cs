@@ -75,7 +75,7 @@ namespace MarkDoc.Helpers
       var namespaces = RetrieveNamespaces(item);
 
       var root = m_root;
-      foreach (var ns in namespaces ?? Enumerable.Empty<string>())
+      foreach (var ns in namespaces)
         root = root.Add(ns);
     }
 

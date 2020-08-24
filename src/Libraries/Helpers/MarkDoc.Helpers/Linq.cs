@@ -100,7 +100,7 @@ namespace MarkDoc.Helpers
     /// <typeparam name="T">Type of the nudes</typeparam>
     /// <param name="subject">List to add items to</param>
     /// <param name="input">Items to add</param>
-    public static void AddRange<T>(this LinkedList<T> subject, IEnumerable<T> input)
+    public static void AddRange<T>(this LinkedList<T> subject, IEnumerable<T>? input)
     {
       if (subject is null)
         throw new ArgumentNullException(nameof(subject));

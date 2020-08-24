@@ -27,7 +27,7 @@ namespace MarkDoc.Documentation.Xml.Tags
         throw new ArgumentNullException(nameof(text));
 
       // Initialize the content
-      Content = text.Value.Trim() ?? string.Empty;
+      Content = text.Value.Trim();
     }
   }
 }
