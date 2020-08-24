@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace MarkDoc.Elements.Markdown
 {
+  /// <summary>
+  /// Class for joining multiple <see cref="ITextContent"/> elements
+  /// </summary>
   public class TextBuilder
     : ITextBuilder
   {
@@ -17,6 +20,11 @@ namespace MarkDoc.Elements.Markdown
 
     #endregion
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="content">Content to join</param>
+    /// <param name="delimiter">Delimiter to use to join the <paramref name="content"/></param>
     public TextBuilder(IEnumerable<ITextContent> content, string delimiter)
     {
       Content = content.ToReadOnlyCollection();

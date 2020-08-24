@@ -70,11 +70,29 @@ namespace MarkDoc.Members.Dnlib.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid property accessor type.
+        ///   Looks up a localized string similar to Private accessors are not allowed.
+        /// </summary>
+        internal static string accessorPrivate {
+            get {
+                return ResourceManager.GetString("accessorPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid accessor type.
         /// </summary>
         internal static string accessorTypeInvalid {
             get {
                 return ResourceManager.GetString("accessorTypeInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linking types before they are resolved and if none are resolved is not possible..
+        /// </summary>
+        internal static string linkBeforeAllResolvedForbidden {
+            get {
+                return ResourceManager.GetString("linkBeforeAllResolvedForbidden", resourceCulture);
             }
         }
         
@@ -111,6 +129,15 @@ namespace MarkDoc.Members.Dnlib.Properties {
         internal static string resolveAfterMaterializeForbidden {
             get {
                 return ResourceManager.GetString("resolveAfterMaterializeForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided object for resolution is of an unsupported type. Please verify whether this component is compatible..
+        /// </summary>
+        internal static string sourceNotTypeSignature {
+            get {
+                return ResourceManager.GetString("sourceNotTypeSignature", resourceCulture);
             }
         }
         

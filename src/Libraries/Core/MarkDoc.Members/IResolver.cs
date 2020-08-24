@@ -36,7 +36,13 @@ namespace MarkDoc.Members
     /// </summary>
     /// <param name="source">Source of <paramref name="type"/></param>
     /// <param name="type">Type to link to</param>
-    /// <returns>Linked <see name="IType"/> instance</returns>
+    /// <remarks>
+    /// This method can be called after of the <see cref="Types"/> have been resolved.
+    /// Calling during resolution of <see cref="Types"/> will render incorrect results.
+    /// <para/>
+    /// Utilize lazy loading to overcome this issue
+    /// </remarks>
+    /// <returns>Linked <see name="IType"/> instance. Null if unresolved.</returns>
     IType? FindReference(object source, IResType type);
 
     /// <summary>

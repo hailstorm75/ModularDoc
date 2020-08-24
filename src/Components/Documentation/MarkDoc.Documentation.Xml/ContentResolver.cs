@@ -6,17 +6,28 @@ using MarkDoc.Documentation.Xml.Tags;
 
 namespace MarkDoc.Documentation.Xml
 {
+  /// <summary>
+  /// Helper methods for resolving documentation tags
+  /// </summary>
   internal static class ContentResolver
   {
-    public static IEnumerable<IContent> Resolve(XNode node)
-      => node switch
+    /// <summary>
+    /// Resolves tags based on the provided <paramref name="source"/>
+    /// </summary>
+    /// <param name="source">Documentation source</param>
+    /// <returns>Resolved tags</returns>
+    public static IEnumerable<IContent> Resolve(XNode source)
+      => source switch
       {
+        // Text
         XText element => new[] { new TextTag(element) },
+        // Complex
         XElement element => element.Name.LocalName.ToUpperInvariant() switch
         {
           "LIST" => new[] { new ListTag(element) },
           _ => ResolveInnerTag(element)
         },
+        // Invalid
         _ => Enumerable.Empty<IContent>()
       };
 

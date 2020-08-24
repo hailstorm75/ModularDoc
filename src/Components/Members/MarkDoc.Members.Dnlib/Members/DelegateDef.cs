@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
@@ -9,6 +10,10 @@ using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing delegate members
+  /// </summary>
+  [DebuggerDisplay(nameof(DelegateDef) + (": {" + nameof(Name) + "}"))]
   public class DelegateDef
     : IDelegate
   {
@@ -55,36 +60,41 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static IEnumerable<IArgument> ResolveArguments(IResolver resolver, dnlib.DotNet.MethodDef method)
       => method.Parameters
-        .Where(x => !string.IsNullOrEmpty(x.Name))
-        .Select(x => new ArgumentDef(resolver, x, method.ResolveMethodGenerics()))
-        .ToReadOnlyCollection();
+        // Filter out invalid arguments
+        .Where(parameter => !string.IsNullOrEmpty(parameter.Name))
+        // Initialize the arguments
+        .Select(parameter => new ArgumentDef(resolver, parameter, method.ResolveMethodGenerics()));
 
     private static IResType? ResolveReturn(IResolver resolver, dnlib.DotNet.MethodDef method)
-      => method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
-          ? null
-          : resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics());
+      => !method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
+          ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics())
+          : null;
 
     private static AccessorType ResolveAccessor(TypeDef @delegate)
-    {
-      if (@delegate.Visibility == TypeAttributes.Public)
-        return AccessorType.Public;
-      if (@delegate.Visibility == TypeAttributes.NestedFamily)
-        return AccessorType.Protected;
-      return AccessorType.Internal;
-    }
+      => @delegate.Visibility switch
+      {
+        TypeAttributes.Public => AccessorType.Public,
+        TypeAttributes.NestedFamily => AccessorType.Protected,
+        _ => AccessorType.Internal
+      };
 
     private static string ResolveName(ITypeDefOrRef source)
     {
+      // Remove the namespace from the source name
       var namespaceCut = CutNamespace(source);
+      // If the source is not generic..
       if (source is ITypeOrMethodDef type && !type.HasGenericParameters)
+        // return the name as is
         return namespaceCut;
 
+      // Otherwise find the generics
       var genericsIndex = namespaceCut.IndexOf('`', StringComparison.InvariantCulture);
+      // If none were found..
       if (genericsIndex == -1)
+        // return the name as is
         return namespaceCut;
-      var genericCut = namespaceCut.Remove(genericsIndex);
-
-      return genericCut;
+      // Otherwise cut the generics and return the result
+      return namespaceCut.Remove(genericsIndex);
     }
 
     private static string CutNamespace(ITypeDefOrRef source)

@@ -8,6 +8,9 @@ using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml.Tags
 {
+  /// <summary>
+  /// Documentation tag
+  /// </summary>
   public class Tag
     : ITag
   {
@@ -24,6 +27,10 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     #endregion
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="source">Documentation source</param>
     public Tag(XElement source)
     {
       static TagType ResolveType(XElement source)
@@ -58,14 +65,21 @@ namespace MarkDoc.Documentation.Xml.Tags
         }
       }
 
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
       Type = ResolveType(source);
       Reference = ResolveReference(Type, source);
-      Content = source.Nodes()
+      Content = source
+        // Select the source nodes
+        .Nodes()
+        // Resolve the source nodes to tags
         .Select(ContentResolver.Resolve)
+        // Flatten the sequence
         .SelectMany(Linq.XtoX)
+        // Materialize the sequence to a collection
         .ToReadOnlyCollection();
     }
   }

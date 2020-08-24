@@ -7,6 +7,10 @@ namespace MarkDoc.Elements
   /// </summary>
   public interface IElement
   {
+    /// <summary>
+    /// Converts given element to a sequence of strings
+    /// </summary>
+    /// <returns>Strings to export</returns>
     IEnumerable<string> Print();
   }
 }

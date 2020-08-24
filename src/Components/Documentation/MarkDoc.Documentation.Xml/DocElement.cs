@@ -11,6 +11,9 @@ using static MarkDoc.Documentation.Tags.ITag;
 
 namespace MarkDoc.Documentation.Xml
 {
+  /// <summary>
+  /// Element documentation
+  /// </summary>
   public class DocElement
     : IDocElement
   {
@@ -47,6 +50,15 @@ namespace MarkDoc.Documentation.Xml
 
     #endregion
 
+    #region Constructors
+
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="name">Documented element name</param>
+    /// <param name="source">Documentation source</param>
+    /// <param name="docResolver">Documentation resolver</param>
+    /// <param name="typeResolver">Type resolver</param>
     public DocElement(string name, XElement source, DocResolver docResolver, IResolver typeResolver)
     {
       if (source is null)
@@ -57,6 +69,12 @@ namespace MarkDoc.Documentation.Xml
       Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.PublicationOnly);
     }
 
+    /// <summary>
+    /// Empty constructor
+    /// </summary>
+    /// <param name="name">Documented element name</param>
+    /// <param name="docResolver">Documentation resolver</param>
+    /// <param name="typeResolver">Type resolver</param>
     internal DocElement(string name, DocResolver docResolver, IResolver typeResolver)
     {
       Name = name;
@@ -64,40 +82,57 @@ namespace MarkDoc.Documentation.Xml
       Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.PublicationOnly);
     }
 
+    #endregion
+
     #region Methods
 
     private IReadOnlyDictionary<string, IDocMember> RetrieveMembers(DocResolver docResolver, IResolver typeResolver)
     {
+      // If there is no documentation for this element..
       if (!docResolver.TryFindMembers(Name, out var memberDocs) || memberDocs is null)
+        // return empty members
         return new Dictionary<string, IDocMember>();
 
+      // Prepare the main cache
       var result = new Dictionary<string, IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>>>(memberDocs.Count);
-      foreach (var item in memberDocs.GroupBy(x => x.Value.Documentation.HasInheritDoc))
+      // For every member grouped by whether it has an inheritdoc or not..
+      foreach (var items in memberDocs.GroupBy(x => x.Value.Documentation.HasInheritDoc))
       {
-        if (item.Key && typeResolver.TryFindType(Name, out var type) && type is IInterface interfaceDef)
+        // if the items have inheritdoc and the type is known and the type is not an enum..
+        if (items.Key && typeResolver.TryFindType(Name, out var type) && type is IInterface interfaceDef)
         {
-          var temps = item.ToDictionary(x => x.Key, x => new Dictionary<TagType, LinkedList<ITag>>());
-          ProcessInheritDoc(temps, interfaceDef, temps.Select(x => x.Key).ToArray(), memberDocs, docResolver);
+          // prepare a temporary cache for the inheritdoc items
+          var temps = items.ToDictionary(pair => pair.Key, pair => new Dictionary<TagType, LinkedList<ITag>>());
+          // resolve the items inheritdoc
+          ProcessInheritDoc(temps, interfaceDef, temps.Select(pair => pair.Key).ToArray(), memberDocs, docResolver);
 
-          // Cache collected documentation
+          // for every temporarily cached documentation..
           foreach (var (key, value) in temps)
-            result.Add(key, value.ToDictionary(x => x.Key, x => x.Value.ToReadOnlyCollection()));
+            // move it to the main cache
+            result.Add(key, value.ToDictionary(pair => pair.Key, pair => pair.Value.ToReadOnlyCollection()));
         }
+        // otherwise..
         else
-          foreach (var (key, value) in item.Select(Linq.XtoX))
+          // for every item..
+          foreach (var (key, value) in items)
+            // cache the item
             result.Add(key, value.Documentation.Tags);
       }
 
       IEnumerable<IDocMember> ProcessCache(IReadOnlyDictionary<string, IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>>> cache)
       {
+        // For every cached member..
         foreach (var (key, value) in cache)
         {
+          // select the member
           var member = memberDocs[key];
 
+          // return the prepared member
           yield return new DocMember(member.Name, member.Type, new DocumentationContent(value));
         }
       }
 
+      // Materialize the processed cache to a dictionary
       return ProcessCache(result).ToDictionary(x => x.Name);
     }
 
@@ -105,11 +140,17 @@ namespace MarkDoc.Documentation.Xml
     {
       void CacheTags(IEnumerable<string> keys, IReadOnlyDictionary<string, IDocMember> members)
       {
+        // For every name..
         foreach (var name in keys)
         {
-          if (!members.TryGetValue(name, out var member)) continue;
+          // if there is no matching member by name..
+          if (!members.TryGetValue(name, out var member))
+            // continue to the next member name
+            continue;
 
+          // select the previously cached tags
           var cachedTags = cache[name];
+          // select the previously cached tags of the same tag type
           var except = new HashSet<TagType>(cachedTags.Select(x => x.Key).Where(x => SINGLE.Contains(x)));
 
           bool Filter(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
@@ -117,60 +158,89 @@ namespace MarkDoc.Documentation.Xml
 
           (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
           {
-            if (!MULTIPLE.Contains(tag.Key) || !cachedTags.TryGetValue(tag.Key, out var existing)) return (tag.Key, tag.Value);
+            // If the tag type cannot have multiple occurrences or isn't cached yet..
+            if (!MULTIPLE.Contains(tag.Key) || !cachedTags.TryGetValue(tag.Key, out var existing))
+              // return new tags to cache
+              return (tag.Key, tag.Value);
 
+            // Create a filter based on existing tag references
             var filter = new HashSet<string>(existing.Select(x => x.Reference));
+            // Create a list of tags to add which contain unique references
             var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
 
+            // Return new tags to cache
             return (tag.Key, toAdd);
           }
 
-          var tags = member.Documentation.Tags.Where(Filter).Select(Process);
+          // Prepare the sequence of tags to be cached
+          var tags = member.Documentation.Tags
+            // Filter out unwanted tags
+            .Where(Filter)
+            // Select the tags to cache
+            .Select(Process);
+
+          // For every tag..
           foreach (var (key, enumerable) in tags)
-          {
+            // if its type is already cached..
             if (cachedTags.ContainsKey(key))
+              // append it to the existing cached collection
               cachedTags[key].AddRange(enumerable);
+            // otherwise..
             else
+              // cache it
               cachedTags.Add(key, enumerable.ToLinkedList());
-          }
         }
       }
 
       CacheTags(names, memberDocs);
 
-      var baseClass = (type is IClass classDef && classDef.BaseClass?.Reference.Value != null)
-        ? new[] { classDef.BaseClass.Reference.Value }
-        : Enumerable.Empty<IType>();
-
-      var sources = type.InheritedInterfaces
-        .Select(x => x.Reference.Value)
-        .WhereNotNull()
-        .Concat(baseClass)
-        .OfType<IInterface>()
-        .ToDictionary(x => x.RawName);
-
       static string ProcessReferences(KeyValuePair<string, IDocMember> input)
       {
         // TODO: Test
         var key = input.Value.Documentation.InheritDocRef[2..];
-        if (key.EndsWith(input.Key, StringComparison.InvariantCulture))
-          key = key.Remove(key.LastIndexOf('.'));
-
-        return key;
+        return key.EndsWith(input.Key, StringComparison.InvariantCulture)
+          ? key.Remove(key.LastIndexOf('.'))
+          : key;
       }
 
-
       var withReferencesTable = memberDocs
+        // Filter out members without inheritdoc
         .Where(x => x.Value.Documentation.HasInheritDoc && !string.IsNullOrEmpty(x.Value.Documentation.InheritDocRef))
         .ToLookup(ProcessReferences, x => x.Key);
       var withReferences = withReferencesTable
+        // Flatten the sequence
         .SelectMany(Linq.GroupValues)
+        // Materialize sequence to a collection
         .ToReadOnlyCollection();
 
+      // If a base class exists..
+      var baseClass = type is IClass classDef && classDef.BaseClass?.Reference.Value != null
+        // return it
+        ? new[] { classDef.BaseClass.Reference.Value }
+        // otherwise return an empty
+        : Enumerable.Empty<IType>();
+
+      var sources = type.InheritedInterfaces
+        // Select type references
+        .Select(x => x.Reference.Value)
+        // Exclude types with no references
+        .WhereNotNull()
+        // Append the base class to the sequence
+        .Concat(baseClass)
+        // Exclude Enums
+        .OfType<IInterface>()
+        // Materialize the sequence to a dictionary
+        .ToDictionary(x => x.RawName);
+
+      // For every source of inheritance..
       foreach (var (key, value) in sources)
       {
-        if (!docResolver.TryFindType(value, out var sourceType) || sourceType is null) continue;
+        // if the inherited type is unknown..
+        if (!docResolver.TryFindType(value, out var sourceType) || sourceType is null)
+          // continue to the next source
+          continue;
 
+        // Otherwise cache the source members
         CacheTags(names.Except(withReferences.Except(withReferencesTable[key])), sourceType.Members.Value);
       }
     }

@@ -120,8 +120,14 @@
   <data name="accessorNull" xml:space="preserve">
     <value>Resolved accessor was null</value>
   </data>
+  <data name="accessorPrivate" xml:space="preserve">
+    <value>Private accessors are not allowed</value>
+  </data>
   <data name="accessorTypeInvalid" xml:space="preserve">
-    <value>Invalid property accessor type</value>
+    <value>Invalid accessor type</value>
+  </data>
+  <data name="linkBeforeAllResolvedForbidden" xml:space="preserve">
+    <value>Linking types before they are resolved and if none are resolved is not possible.</value>
   </data>
   <data name="notGeneric" xml:space="preserve">
     <value>Type is not generic</value>
@@ -134,6 +140,9 @@
   </data>
   <data name="resolveAfterMaterializeForbidden" xml:space="preserve">
     <value>Previously resolved types have been materialized. Cannot resolve more types.</value>
+  </data>
+  <data name="sourceNotTypeSignature" xml:space="preserve">
+    <value>The provided object for resolution is of an unsupported type. Please verify whether this component is compatible.</value>
   </data>
   <data name="subjectNotSupported" xml:space="preserve">
     <value>Subject not supported</value>

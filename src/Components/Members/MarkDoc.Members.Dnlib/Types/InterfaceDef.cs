@@ -19,6 +19,9 @@ using PropertyDef = MarkDoc.Members.Dnlib.Members.PropertyDef;
 
 namespace MarkDoc.Members.Dnlib.Types
 {
+  /// <summary>
+  /// Class for representing interfaces
+  /// </summary>
   [DebuggerDisplay(nameof(InterfaceDef) + (": {" + nameof(Name) + "}"))]
   public class InterfaceDef
     : TypeDef, IInterface
@@ -27,6 +30,7 @@ namespace MarkDoc.Members.Dnlib.Types
 
     /// <inheritdoc />
     public IReadOnlyCollection<IResType> InheritedInterfaces { get; }
+
     /// <inheritdoc />
     public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
 
@@ -50,6 +54,8 @@ namespace MarkDoc.Members.Dnlib.Types
 
     #endregion
 
+    #region Constructors
+
     /// <summary>
     /// Default constructor
     /// </summary>
@@ -59,34 +65,82 @@ namespace MarkDoc.Members.Dnlib.Types
     internal InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : this(resolver, source, parent, ResolveGenerics(resolver, source, parent), Enumerable.Empty<IResType>()) { }
 
+    /// <summary>
+    /// Constructor for derived types
+    /// </summary>
+    /// <param name="resolver">Type resolver instance</param>
+    /// <param name="source">Type source</param>
+    /// <param name="parent">Nested type parent</param>
+    /// <param name="generics">Generics of this given type</param>
+    /// <param name="inheritedTypes">Inherited types</param>
     protected InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics, IEnumerable<IResType> inheritedTypes)
       : base(resolver, source, parent)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
-      InheritedInterfaces = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+      // Initialize the generics
       Generics = generics;
-      Delegates = source.NestedTypes.Where(x => x.IsDelegate)
-                                    .Select(x => new DelegateDef(resolver, x))
-                                    .ToReadOnlyCollection();
-      NestedTypes = source.NestedTypes.Where(x => !x.IsDelegate && !x.IsNestedPrivate && !x.Name.String.StartsWith('<'))
-                                      .Select(x => Resolver.ResolveType(x, source))
-                                      .ToReadOnlyCollection();
-      Methods = source.Methods.Where(x => !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
-                                       && !x.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                                       && !x.Access.HasFlag(MethodAttributes.Assembly)
-                                       && !x.IsPrivate
-                                       && !x.IsConstructor)
-                              .Select(x => new MethodDef(resolver, x))
-                              .ToReadOnlyCollection();
-      Properties = source.Properties.Select(x => PropertyDef.Initialize(resolver, x))
-                                    .WhereNotNull()
-                                    .ToReadOnlyCollection();
-      Events = source.Events.Select(x => new EventDef(resolver, x))
-                            .ToReadOnlyCollection();
+
+      // Initialize the inherited interfaces
+      InheritedInterfaces = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+
+      // Initialize the delegates
+      Delegates = source.NestedTypes
+        // Select types which are delegates
+        .Where(x => x.IsDelegate)
+        // Initialize delegates
+        .Select(x => new DelegateDef(resolver, x))
+        // Materialize the collection
+        .ToReadOnlyCollection();
+
+      // Initialize the nested types
+      NestedTypes = source.NestedTypes
+        // Select types which are valid nested types
+        .Where(typeDef => !typeDef.IsDelegate
+                       && !typeDef.IsNestedPrivate
+                       && !typeDef.Name.String.StartsWith('<'))
+        // Resolve the nested types
+        .Select(typeDef => Resolver.ResolveType(typeDef, source))
+        // Materialize the collection
+        .ToReadOnlyCollection();
+
+      // Initialize the methods
+      Methods = source.Methods
+        // Select members which are non-private methods
+        .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
+                         && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                         && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
+                         && !methodDef.IsPrivate
+                         && !methodDef.IsConstructor)
+        // Initialize methods
+        .Select(methodDef => new MethodDef(resolver, methodDef))
+        // Materialize the collection
+        .ToReadOnlyCollection();
+
+      // Initialize the properties
+      Properties = source.Properties
+        // Initialize properties
+        .Select(propertyDef => PropertyDef.Initialize(resolver, propertyDef))
+        // Filter out invalid properties
+        .WhereNotNull()
+        // Materialize the collection
+        .ToReadOnlyCollection();
+
+      // Initialize the events
+      Events = source.Events
+        // Initialize events
+        .Select(eventDef => new EventDef(resolver, eventDef))
+        // Materialize the collection
+        .ToReadOnlyCollection();
+
+      // Initialize inherited members
       InheritedTypes = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
     }
+
+    #endregion
 
     #region Methods
 
@@ -96,61 +150,87 @@ namespace MarkDoc.Members.Dnlib.Types
       {
         IEnumerable<(IMember member, IInterface type)> Intersect<T>(IEnumerable<T> left, IEnumerable<T> right)
           where T : IMember
-          => left.Intersect(right, EqualityComparerEx<T>.Create(x => x.RawName, x=> x.RawName)).Select(x => (x as IMember, type));
+          => left
+              // Intersect by raw names
+              .Intersect(right, EqualityComparerEx<T>.Create(x => x.RawName, x=> x.RawName))
+              // Select the inherited member paired with the source type
+              .Select(member => (member as IMember, type));
 
+        // Select inherited methods
         var methods = Intersect(type.Methods, Methods);
+        // Select inherited properties
         var properties = Intersect(type.Properties, Properties);
+        // Select inherited events
         var events = Intersect(type.Events, Events);
+        // Select inherited delegates
         var delegates = Intersect(type.Delegates, Delegates);
 
         return methods
           .Concat(properties)
           .Concat(events)
           .Concat(delegates)
+          // Select unique inherited types
           .Where(x => !type.InheritedTypes.Value.ContainsKey(x.member))
+          // Join the newly resolved inherited types with the parent inherited types
           .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
       }
 
       return inheritedTypes
-        .Select(x => x.Reference.Value)
+        // Select type references
+        .Select(type => type.Reference.Value)
+        // Filter out types which are missing references
         .WhereNotNull()
+        // Select interface types
         .OfType<IInterface>()
+        // Get inherited types
         .Select(GetInheritedTypes)
+        // Flatten the collection
         .SelectMany(Linq.XtoX)
+        // Materialize the collection as a dictionary
         .ToDictionary(x => x.member, x => x.type);
     }
 
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
-      => source.Interfaces.Select(x => Resolver.Resolve(x.Interface.ToTypeSig(), outerArgs));
+      => source.Interfaces.Select(interfaceImpl => Resolver.Resolve(interfaceImpl.Interface.ToTypeSig(), outerArgs));
 
     protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {
       IResType ResolveType(GenericParamConstraint x, IReadOnlyDictionary<string, string> generics)
-        => resolver.Resolve(x.Constraint.ToTypeSig(), generics) ?? throw new Exception();
+        => resolver.Resolve(x.Constraint.ToTypeSig(), generics);
 
       (Variance, IReadOnlyCollection<IResType>) ResolveParameter(GenericParam parameter, IReadOnlyDictionary<string, string> generics)
       {
+        static Variance ResolveVariance(GenericParamAttributes attributes)
+          => attributes switch
+          {
+            GenericParamAttributes.NonVariant => Variance.NonVariant,
+            GenericParamAttributes.Covariant => Variance.Covariant,
+            GenericParamAttributes.Contravariant => Variance.Contravariant,
+            _ => throw new NotSupportedException(Resources.varianceInvalid),
+          };
+
+        // Retrieve the parameter variance
         var variance = ResolveVariance(parameter.Variance);
 
+        // If there are no generic constraints
         return !parameter.HasGenericParamConstraints
+          // return the default
           ? (variance, Enumerable.Empty<IResType>().ToArray())
-          : (variance, parameter.GenericParamConstraints.Select(x => ResolveType(x, generics)).ToReadOnlyCollection());
+          // otherwise return the generic constraints
+          : (variance, parameter.GenericParamConstraints.Select(constraint => ResolveType(constraint, generics)).ToReadOnlyCollection());
       }
 
-      static Variance ResolveVariance(GenericParamAttributes attributes)
-        => attributes switch
-        {
-          GenericParamAttributes.NonVariant => Variance.NonVariant,
-          GenericParamAttributes.Covariant => Variance.Covariant,
-          GenericParamAttributes.Contravariant => Variance.Contravariant,
-          _ => throw new NotSupportedException(Resources.varianceInvalid),
-        };
 
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
-      return source.GenericParameters.Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
-                                     .ToDictionary(x => x.Name.String, x => ResolveParameter(x, source.ResolveTypeGenerics()));
+      return source.GenericParameters
+        // Remove the generic parameters inherited from the parent type
+        .Except(parent?.GenericParameters ?? Enumerable.Empty<GenericParam>(), EqualityComparerEx<GenericParam>.Create(x => x.Name, x => x.Name))
+        // Materialize the collection as a dictionary
+        .ToDictionary(x => x.Name.String, x => ResolveParameter(x, source.ResolveTypeGenerics()));
     }
 
     #endregion

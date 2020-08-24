@@ -1,11 +1,11 @@
 ﻿namespace MarkDoc.Linkers.Markdown
 
 open System.Text.RegularExpressions
-open MarkDoc.Members.Types
 
 module private Anchor =
-  let normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
-  let normalizerDictionary (x: Match) =
+  let private normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
+
+  let private normalizerDictionary (x: Match) =
     match x.Groups |> Seq.tryFind (fun x -> x.Success && x.Name.[0] = 'G') with
     | Some s ->
       match s.Name with 
@@ -14,12 +14,12 @@ module private Anchor =
       | _ -> x.Value
     | None -> x.Value
 
-  let normalizeAnchor (anchor: string) =
+  let private normalizeAnchor (anchor: string) =
     normalizerRegex.Replace(anchor.ToLowerInvariant(), normalizerDictionary)
 
   let private bitbucketAnchor (input: string Lazy, page: string) =
     // TODO: Not supported
-    lazy("") |> Some
+    None
 
   let private githubAnchor (input: string Lazy, page: string) =
     lazy(page + "#" + normalizeAnchor input.Value) |> Some
@@ -30,6 +30,12 @@ module private Anchor =
   let private azureAnchor (input: string Lazy, page: string) =
     lazy("?anchor=") |> Some
 
+  /// <summary>
+  /// Creates an anchor for a given <paramref name="input"/> and <paramref name="platform"/>
+  /// </summary>
+  /// <param name="input">Input member to process</param>
+  /// <param name="pageName">Page link</param>
+  /// <param name="platform">Platform for which the structure is to be generated for</param>
   let createAnchor(input: string Lazy, pageName: string, platform: GitPlatform) =
     let creator = match platform with
                   | GitPlatform.BitBucket -> bitbucketAnchor

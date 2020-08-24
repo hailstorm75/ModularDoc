@@ -2,6 +2,9 @@
 
 namespace MarkDoc.Elements.Markdown
 {
+  /// <summary>
+  /// Helper class for elements
+  /// </summary>
   internal static class Helpers
   {
     private static readonly Regex REGEX_BRACES = new Regex("<|>");
@@ -21,12 +24,28 @@ namespace MarkDoc.Elements.Markdown
         _ => match.Value
       };
 
+    /// <summary>
+    /// Converts given <paramref name="heading"/> string to a markdown heading of a given <paramref name="level"/>
+    /// </summary>
+    /// <param name="heading">Heading to use</param>
+    /// <param name="level">Heading level to set</param>
+    /// <returns>Markdown heading</returns>
     public static string ToHeading(this string heading, int level)
       => $"{new string('#', level + 1)} {heading}";
 
+    /// <summary>
+    /// Removes invalid characters from given <paramref name="text"/>
+    /// </summary>
+    /// <param name="text">Text to process</param>
+    /// <returns>Processed text</returns>
     public static string CleanInvalid(this string text)
       => REGEX_BRACES.Replace(text, EVAL_BRACES);
 
+    /// <summary>
+    /// Replaces the OS newlines with markdown line breaks in given <paramref name="text"/>
+    /// </summary>
+    /// <param name="text">Text to process</param>
+    /// <returns>Processed text</returns>
     public static string ReplaceNewline(this string text)
       => REGEX_NEWLINES.Replace(text, EVAL_NEWLINES);
   }

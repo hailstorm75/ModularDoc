@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing constructor members
+  /// </summary>
   [DebuggerDisplay(nameof(ConstructorDef) + (": {" + nameof(Name) + "}"))]
   public class ConstructorDef
     : MemberDef, IConstructor
@@ -46,11 +50,14 @@ namespace MarkDoc.Members.Dnlib.Members
     protected ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, string name)
       : base(resolver, source)
     {
-      var generics = source.ResolveMethodGenerics();
+      // If the source is null..
+      if (source is null)
+        // throw an exception
+        throw new ArgumentNullException(nameof(source));
 
       Name = name;
       IsStatic = source.IsStatic;
-      Arguments = source.Parameters.Where(x => !string.IsNullOrEmpty(x.Name)).Select(x => new ArgumentDef(resolver, x, generics)).ToReadOnlyCollection();
+      Arguments = ResolveArguments(resolver, source).ToReadOnlyCollection();
       RawName = $"{(source.IsConstructor ? "#ctor" : name)}({string.Join(",", Arguments.Select(x => x.Type.DocumentationName))})";
       Accessor = ResolveAccessor(source);
     }
@@ -58,6 +65,13 @@ namespace MarkDoc.Members.Dnlib.Members
     #endregion
 
     #region Methods
+
+    private static IEnumerable<IArgument> ResolveArguments(IResolver resolver, dnlib.DotNet.MethodDef method)
+      => method.Parameters
+        // Filter out invalid arguments
+        .Where(parameter => !string.IsNullOrEmpty(parameter.Name))
+        // Initialize the arguments
+        .Select(parameter => new ArgumentDef(resolver, parameter, method.ResolveMethodGenerics()));
 
     private static string ResolveName(dnlib.DotNet.MethodDef source, bool isNested)
     {
@@ -88,16 +102,13 @@ namespace MarkDoc.Members.Dnlib.Members
     }
 
     private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef method)
-    {
-      if (method.Access == dnlib.DotNet.MethodAttributes.Public)
-        return AccessorType.Public;
-      if (method.Access == dnlib.DotNet.MethodAttributes.Family)
-        return AccessorType.Protected;
-      if (method.Access == dnlib.DotNet.MethodAttributes.Assembly)
-        return AccessorType.Internal;
-
-      throw new Exception("Private methods not allowed");
-    }
+      => method.Access switch
+      {
+        dnlib.DotNet.MethodAttributes.Public => AccessorType.Public,
+        dnlib.DotNet.MethodAttributes.Family => AccessorType.Protected,
+        dnlib.DotNet.MethodAttributes.Assembly => AccessorType.Internal,
+        _ => throw new NotSupportedException(Resources.accessorPrivate)
+      };
 
     #endregion
   }

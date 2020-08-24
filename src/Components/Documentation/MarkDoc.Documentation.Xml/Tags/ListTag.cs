@@ -7,6 +7,9 @@ using MarkDoc.Helpers;
 
 namespace MarkDoc.Documentation.Xml.Tags
 {
+  /// <summary>
+  /// Documentation tag for lists
+  /// </summary>
   public class ListTag
     : IListTag
   {
@@ -23,29 +26,42 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     #endregion
 
-    public ListTag(XElement node)
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="source">Documentation source</param>
+    public ListTag(XElement source)
     {
-      if (node is null)
-        throw new ArgumentNullException(nameof(node));
+      // If the source is null..
+      if (source is null)
+        // throw an exception
+        throw new ArgumentNullException(nameof(source));
 
+      // Prepare the rows collection
       var rows = new LinkedList<IReadOnlyCollection<IContent>>();
+      // Prepare the headings collection
       var headings = new LinkedList<IContent>();
-      foreach (var tag in node.Nodes().OfType<XElement>().GroupBy(x => x.Name.LocalName.ToUpperInvariant()))
-      {
+      // For every node grouped by its type..
+      foreach (var tag in source.Nodes().OfType<XElement>().GroupBy(x => x.Name.LocalName.ToUpperInvariant()))
+        // based on its type..
         switch (tag.Key)
         {
+          // Is a list item
           case "ITEM":
+            // Resolve the rows
             ResolveRows(ref rows, tag.Select(Linq.XtoX));
             break;
+          // Is the list header
           case "LISTHEADER":
+            // Resolve the headings
             ResolveHeadings(ref headings, tag.Select(Linq.XtoX));
             break;
+          // Invalid list type
           default:
             continue;
         }
-      }
 
-      Type = ResolveType(node);
+      Type = ResolveType(source);
       Rows = rows;
       Headings = headings;
     }
@@ -54,38 +70,62 @@ namespace MarkDoc.Documentation.Xml.Tags
 
     private static IListTag.ListType ResolveType(XElement node)
     {
-      var type = node.Attributes()
+      // Get the list type
+      var type = node
+        // Select the documentation node attributes
+        .Attributes()
+        // Select the attributes which hold the node type
         .FirstOrDefault(x => x.Name.LocalName.Equals("type", StringComparison.InvariantCultureIgnoreCase))
+        // Select the attribute type value
         .Value;
 
+      // Identify and return the list type
       return type?.ToUpperInvariant() switch
       {
         "BULLET" => IListTag.ListType.Bullet,
         "NUMBER" => IListTag.ListType.Number,
         "TABLE" => IListTag.ListType.Table,
-        _ => throw new NotSupportedException() // TODO: Exception message
+        _ => throw new NotSupportedException()
       };
     }
 
     private static void ResolveHeadings(ref LinkedList<IContent> result, IEnumerable<XElement> elements)
     {
+      // For every element heading..
       foreach (var element in elements)
-        result.AddLast(element.Nodes()
+        // add the heading
+        result.AddLast(element
+          // Select the documentation nodes
+          .Nodes()
+          // Select elements
           .OfType<XElement>()
+          // Select the element node
           .Select(x => x.FirstNode)
+          // Resolve the nodes to documentation elements
           .Select(ContentResolver.Resolve)
+          // Flatten the sequence
           .SelectMany(Linq.XtoX)
+          // Select the heading
           .First());
     }
 
     private static void ResolveRows(ref LinkedList<IReadOnlyCollection<IContent>> result, IEnumerable<XElement> elements)
     {
+      // For every element row..
       foreach (var element in elements)
-        result.AddLast(element.Nodes()
+        // add the row
+        result.AddLast(element
+          // Select the documentation nodes
+          .Nodes()
+          // Select elements
           .OfType<XElement>()
+          // Select the element node
           .Select(x => x.FirstNode)
+          // Resolve the nodes to documentation elements
           .Select(ContentResolver.Resolve)
+          // Flatten the sequence
           .SelectMany(Linq.XtoX)
+          // Materialize to a collection
           .ToReadOnlyCollection());
     }
 

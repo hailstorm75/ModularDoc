@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 using dnlib.DotNet;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 
 namespace MarkDoc.Members.Dnlib.Members
 {
+  /// <summary>
+  /// Class for representing enum fields
+  /// </summary>
+  [DebuggerDisplay(nameof(EnumFieldDef) + (": {" + nameof(Name) + "}"))]
   public class EnumFieldDef
     : IEnumField
   {
@@ -22,7 +27,9 @@ namespace MarkDoc.Members.Dnlib.Members
 
     internal EnumFieldDef(IFullName source, AccessorType accessor)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
       Name = source.Name.String;

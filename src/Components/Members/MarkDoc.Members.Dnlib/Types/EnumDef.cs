@@ -9,6 +9,9 @@ using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members.Dnlib.Types
 {
+  /// <summary>
+  /// Class for representing enums
+  /// </summary>
   [DebuggerDisplay(nameof(EnumDef) + (": {" + nameof(Name) + "}"))]
   public class EnumDef
     : TypeDef, IEnum
@@ -23,15 +26,25 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <summary>
     /// Default constructor
     /// </summary>
+    /// <param name="resolver">Type resolver instance</param>
+    /// <param name="source">Type source</param>
+    /// <param name="parent">Nested type parent</param>
     internal EnumDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(resolver, source, parent)
     {
+      // If the source is null..
       if (source is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(source));
 
-      Fields = source.Fields.Where(x => x.ElementType != dnlib.DotNet.ElementType.End)
-                            .Select(x => new EnumFieldDef(x, Accessor))
-                            .ToReadOnlyCollection();
+      // Initialize the enum fields
+      Fields = source.Fields
+        // Select valid enum fields
+        .Where(x => x.ElementType != dnlib.DotNet.ElementType.End)
+        // Initialize the enum fields
+        .Select(x => new EnumFieldDef(x, Accessor))
+        // Materialize the collection
+        .ToReadOnlyCollection();
     }
   }
 }
