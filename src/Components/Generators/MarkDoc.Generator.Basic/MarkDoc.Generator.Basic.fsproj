@@ -23,8 +23,6 @@
     <Compile Include="Helpers\ContentHelpers.fs" />
     <Compile Include="Helpers\SignatureHelpers.fs" />
     <Compile Include="Helpers\TypeContentHelpers.fs" />
-    <Compile Include="Composer.fs" />
-    <Compile Include="Helpers.fs" />
     <Compile Include="TypeComposer.fs" />
   </ItemGroup>
   <ItemGroup>
