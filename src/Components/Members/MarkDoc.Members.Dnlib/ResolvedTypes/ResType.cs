@@ -89,46 +89,50 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         : name;
     }
 
-    // ReSharper disable once FunctionRecursiveOnAllPaths
-    private static IEnumerable<string> RetrieveNested(dnlib.DotNet.IType source)
-    {
-      static string ReformatGenerics(string value)
-      {
-        // Find the index of generics
-        var genericsIndex = value.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
-        // If there are no generics..
-        if (genericsIndex == -1)
-          // return as is
-          return value;
-
-        // Otherwise remove the old generics
-        var name = value.Remove(genericsIndex);
-        // If the number of generics is present..
-        return int.TryParse(value.Substring(genericsIndex + 1), out var number)
-          // generate a new format for the generics and return the result
-          ? $"{name}{{{string.Join(",", Enumerable.Repeat('`', number).Select((x,i) => $"{x}{i}"))}}}"
-          // otherwise return as is
-          : name;
-      }
-
-      // Get the nested types of given type parent
-      var nested = RetrieveNested(source.ScopeType.DeclaringType);
-      // For every nested type..
-      foreach (var item in nested)
-        // return it
-        yield return item;
-
-      // If there is no parent..
-      if (source.ScopeType.DeclaringType is null)
-        // return the namespace
-        yield return source.Namespace;
-
-      // Return the generics
-      yield return ReformatGenerics(source.Name);
-    }
-
     protected static string ResolveDocName(TypeSig source)
     {
+      static IEnumerable<string> RetrieveNested(dnlib.DotNet.IType? source)
+      {
+        static string ReformatGenerics(string value)
+        {
+          // Find the index of generics
+          var genericsIndex = value.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
+          // If there are no generics..
+          if (genericsIndex == -1)
+            // return as is
+            return value;
+
+          // Otherwise remove the old generics
+          var name = value.Remove(genericsIndex);
+          // If the number of generics is present..
+          return int.TryParse(value.Substring(genericsIndex + 1), out var number)
+            // generate a new format for the generics and return the result
+            ? $"{name}{{{string.Join(",", Enumerable.Repeat('`', number).Select((x, i) => $"{x}{i}"))}}}"
+            // otherwise return as is
+            : name;
+        }
+
+        // If the source is null..
+        if (source is null)
+          // exit
+          yield break;
+
+        // Get the nested types of given type parent
+        var nested = RetrieveNested(source.ScopeType.DeclaringType);
+        // For every nested type..
+        foreach (var item in nested)
+          // return it
+          yield return item;
+
+        // If there is no parent..
+        if (source.ScopeType.DeclaringType is null)
+          // return the namespace
+          yield return source.Namespace;
+
+        // Return the generics
+        yield return ReformatGenerics(source.Name);
+      }
+
       // If the source is null..
       if (source is null)
         // throw an exception
