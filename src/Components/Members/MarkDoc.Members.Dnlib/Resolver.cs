@@ -13,16 +13,23 @@ using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
+using System.Composition;
 
 namespace MarkDoc.Members.Dnlib
 {
   /// <summary>
   /// Resolves assembly types using Dnlib library reflection
   /// </summary>
+  [Export(typeof(IResolver)),
+   ExportMetadata(nameof(IComponentMetadata.Id), ID),
+   ExportMetadata(nameof(IComponentMetadata.Name), NAME)]
   public class Resolver
     : IResolver
   {
     #region Fields
+
+    private const string ID = "D43E13A1-2A96-4D08-86EB-E05544100DB1";
+    private const string NAME = "Dnlib Resolver";
 
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
     private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
