@@ -78,7 +78,7 @@ The project is in its early stages of development.
 
 | Stage | Status   | Milestone | Description |
 | ----- | -------- | --------- | ----------- |
-| Core  | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create components which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
+| Core  | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create components which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
 | Reorganize | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/2)  | Reorganize the project structure such that the interfaces are separate from the components which implement them. Document the project core and cover it with unit tests |
 | Smart settings   | :mag: |    | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
 | Plugins | :grey_question: |  | Create a MarkDoc plugin composed from __components__ |
