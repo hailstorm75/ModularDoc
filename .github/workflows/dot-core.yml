@@ -34,9 +34,9 @@ jobs:
     - name: Install dependencies
       run: dotnet restore src/MarkDoc.sln && dotnet restore tests/MarkDoc.Tests.sln
     - name: Build project
-      run: dotnet build src/MarkDoc.sln --configuration Release --no-restore
+      run: dotnet build src/MarkDoc.sln --configuration Debug --no-restore
     - name: Build tests
-      run: dotnet build tests/MarkDoc.Tests.sln --configuration Release --no-restore
+      run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
     - name: Run tests
       run: dotnet test src/MarkDoc.sln
     
