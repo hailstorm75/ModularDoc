@@ -38,5 +38,11 @@ jobs:
     - name: Build tests
       run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
     - name: Run tests
-      run: dotnet test src/MarkDoc.sln
+      run: dotnet test src/MarkDoc.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults /p:CoverletOutputFormat=lcov && ls
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        path-to-lcov: ./TestResults/coverage.info
+        fail_ci_if_error: false
     
