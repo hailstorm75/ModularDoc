@@ -18,6 +18,31 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: pwd && dotnet restore src/MarkDoc.sln
+      run: dotnet restore src/MarkDoc.sln
     - name: Build
-      run: pwd && dotnet build src/MarkDoc.sln --configuration Release --no-restore
+      run: dotnet build src/MarkDoc.sln --configuration Release --no-restore
+  test:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: dotnet restore src/MarkDoc.sln && dotnet restore tests/MarkDoc.Tests.sln
+    - name: Build project
+      run: dotnet build src/MarkDoc.sln --configuration Debug --no-restore
+    - name: Build tests
+      run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
+    - name: Run tests
+      run: dotnet test src/MarkDoc.sln /p:CollectCoverage=true /p:CoverletOutput=TestResults /p:CoverletOutputFormat=lcov && ls
+    - name: Upload coverage
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        path-to-lcov: ./TestResults/coverage.info
+        fail_ci_if_error: false
+    
