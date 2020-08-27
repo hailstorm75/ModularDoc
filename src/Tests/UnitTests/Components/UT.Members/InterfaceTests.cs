@@ -235,7 +235,7 @@ namespace UT.Members
 
       var propertiesCount = query?.Properties.Count ?? 0;
 
-      Assert.True(propertiesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+      Assert.True(propertiesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of members than expected.");
     }
 
     [Theory]
@@ -247,7 +247,7 @@ namespace UT.Members
 
       var methodsCount = query?.Methods.Count ?? 0;
 
-      Assert.True(methodsCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+      Assert.True(methodsCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of members than expected.");
     }
 
     [Theory]
@@ -259,7 +259,7 @@ namespace UT.Members
 
       var eventsCount = query?.Events.Count ?? 0;
 
-      Assert.True(eventsCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+      Assert.True(eventsCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of members than expected.");
     }
 
     [Theory]
@@ -271,7 +271,127 @@ namespace UT.Members
 
       var delegatesCount = query?.Delegates.Count ?? 0;
 
-      Assert.True(delegatesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+      Assert.True(delegatesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceInheritedInterfaces(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var type = query?.InheritedInterfaces.FirstOrDefault(inherited => inherited.DisplayName.Equals(nameof(IDisposable)));
+
+      Assert.False(type is null, $"{resolver.GetType().FullName}: The '{name}' interface is missing the expected inherited interface.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceInheritedInterfacesCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var interfacesCount = query?.InheritedInterfaces.Count ?? 0;
+
+      Assert.True(interfacesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of inherited interface.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEnum))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeEnum(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var enumType = query?.NestedTypes.OfType<IEnum>().FirstOrDefault(nested => nested.Name.Equals("MyEnum"));
+
+      Assert.False(enumType is null, $"{resolver.GetType().FullName}: The '{name}' interface is missing the expected nested enum.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEnum))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeEnumCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var enumCount = query?.NestedTypes.OfType<IEnum>().Count() ?? 0;
+
+      Assert.True(enumCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of nested enums.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeStruct(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var structType = query?.NestedTypes.OfType<IStruct>().FirstOrDefault(nested => nested.Name.Equals("MyStruct"));
+
+      Assert.False(structType is null, $"{resolver.GetType().FullName}: The '{name}' interface is missing the expected nested struct.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeStructCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var structCount = query?.NestedTypes.OfType<IStruct>().Count() ?? 0;
+
+      Assert.True(structCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of nested structs.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeClass(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var classType = query?.NestedTypes.OfType<IClass>().FirstOrDefault(nested => nested.Name.Equals("MyClass"));
+
+      Assert.False(classType is null, $"{resolver.GetType().FullName}: The '{name}' interface is missing the expected nested class.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeClassCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var classCount = query?.NestedTypes.OfType<IClass>().Count() ?? 0;
+
+      Assert.True(classCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of nested classes.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeInterface(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var interfaceType = query?.NestedTypes.OfType<IInterface>().FirstOrDefault(nested => nested.Name.Equals("IMyInterface"));
+
+      Assert.False(interfaceType is null, $"{resolver.GetType().FullName}: The '{name}' interface is missing the expected nested interface.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceNestedTypeInterfaceCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var interfaceCount= query?.NestedTypes.OfType<IInterface>().Count(item => !(item is IClass || item is IStruct)) ?? 0;
+
+      Assert.True(interfaceCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of nested interfaces.");
     }
   }
 }

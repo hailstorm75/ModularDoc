@@ -4,6 +4,7 @@
 namespace TestLibrary.Interfaces
 {
   public interface IInterfaceTypePublic
+    : IDisposable
   {
     public enum MyEnum
     {
@@ -15,6 +16,10 @@ namespace TestLibrary.Interfaces
     }
 
     public struct MyStruct
+    {
+    }
+
+    public interface IMyInterface
     {
     }
 
