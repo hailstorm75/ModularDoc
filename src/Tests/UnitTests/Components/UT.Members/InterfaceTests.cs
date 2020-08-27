@@ -4,6 +4,7 @@ using System.Linq;
 using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
@@ -85,6 +86,21 @@ namespace UT.Members
           yield return new[] { resolver.First(), name, generics };
     }
 
+    private static IEnumerable<object[]> GetInterfacePropertiesData()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Property" });
+
+    private static IEnumerable<object[]> GetInterfaceMethodsData()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Method" });
+
+    private static IEnumerable<object[]> GetInterfaceEventsData()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Event" });
+
+    private static IEnumerable<object[]> GetInterfaceDelegatesData()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Delegate" });
+
+    private static IEnumerable<object[]> GetInterfaceWithMembers()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE });
+
     #endregion
 
     private static IInterface? GetInterface(IResolver resolver, string name)
@@ -97,7 +113,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Trait("Category",nameof(IInterface))]
+    [Trait("Category", nameof(IInterface))]
     [MemberData(nameof(GetInterfaceNames))]
     public void ValidateInterfaceNames(IResolver resolver, string name)
     {
@@ -107,7 +123,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Trait("Category",nameof(IInterface))]
+    [Trait("Category", nameof(IInterface))]
     [MemberData(nameof(GetInterfaceAccessorsData))]
     public void ValidateInterfaceAccessors(IResolver resolver, string name, AccessorType accessor)
     {
@@ -117,7 +133,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Trait("Category",nameof(IInterface))]
+    [Trait("Category", nameof(IInterface))]
     [MemberData(nameof(GetInterfaceNamespaceData))]
     public void ValidateInterfaceRawName(IResolver resolver, string name, string expectedNamespace)
     {
@@ -127,7 +143,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Trait("Category",nameof(IInterface))]
+    [Trait("Category", nameof(IInterface))]
     [MemberData(nameof(GetInterfaceGenericData))]
     public void ValidateInterfaceGenericVariances(IResolver resolver, string name, Dictionary<string, (Variance variance, IReadOnlyCollection<string>)> generics)
     {
@@ -145,7 +161,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Trait("Category",nameof(IInterface))]
+    [Trait("Category", nameof(IInterface))]
     [MemberData(nameof(GetInterfaceGenericData))]
     public void ValidateInterfaceGenericConstraints(IResolver resolver, string name, Dictionary<string, (Variance, IReadOnlyCollection<string> constraints)> generics)
     {
@@ -160,6 +176,102 @@ namespace UT.Members
         .OrderBy(key => key.Key);
 
       Assert.Equal(expectedGenerics, actualGenerics);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetInterfacePropertiesData))]
+    public void ValidateInterfaceProperties(IResolver resolver, string name, string member)
+    {
+      var query = GetInterface(resolver, name);
+
+      var hasProperty = query?.Properties.Any(property => property.Name.Equals(member)) ?? false;
+
+      Assert.True(hasProperty, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetInterfaceMethodsData))]
+    public void ValidateInterfaceMethods(IResolver resolver, string name, string member)
+    {
+      var query = GetInterface(resolver, name);
+
+      var hasMethod = query?.Methods.Any(method => method.Name.Equals(member)) ?? false;
+
+      Assert.True(hasMethod, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetInterfaceEventsData))]
+    public void ValidateInterfaceEvents(IResolver resolver, string name, string member)
+    {
+      var query = GetInterface(resolver, name);
+
+      var hasEvent = query?.Events.Any(@event => @event.Name.Equals(member)) ?? false;
+
+      Assert.True(hasEvent, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetInterfaceDelegatesData))]
+    public void ValidateInterfaceDelegates(IResolver resolver, string name, string member)
+    {
+      var query = GetInterface(resolver, name);
+
+      var hasDelegate = query?.Delegates.Any(@delegate => @delegate.Name.Equals(member)) ?? false;
+
+      Assert.True(hasDelegate, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfacePropertiesCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var propertiesCount = query?.Properties.Count ?? 0;
+
+      Assert.True(propertiesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceMethodsCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var methodsCount = query?.Methods.Count ?? 0;
+
+      Assert.True(methodsCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceEventsCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var eventsCount = query?.Events.Count ?? 0;
+
+      Assert.True(eventsCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetInterfaceWithMembers))]
+    public void ValidateInterfaceDelegatesCount(IResolver resolver, string name)
+    {
+      var query = GetInterface(resolver, name);
+
+      var delegatesCount = query?.Delegates.Count ?? 0;
+
+      Assert.True(delegatesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has more members than expected.");
     }
   }
 }
