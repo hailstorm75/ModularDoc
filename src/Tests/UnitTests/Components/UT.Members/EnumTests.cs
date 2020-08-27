@@ -3,7 +3,6 @@ using MarkDoc.Members.Types;
 using MarkDoc.Members;
 using UT.Members.Data;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Xunit;
 
@@ -91,7 +90,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category",nameof(IEnum))]
     [MemberData(nameof(GetEnumNames))]
     public void ValidateEnumNames(IResolver resolver, string name)
     {
@@ -101,7 +100,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumAccessorsData))]
     public void ValidateEnumAccessors(IResolver resolver, string name, AccessorType accessor)
     {
@@ -111,7 +110,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumFieldsData))]
     public void ValidateEnumFieldNames(IResolver resolver, string name, string[] fields)
     {
@@ -121,7 +120,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumNamespaceData))]
     public void ValidateEnumNamespace(IResolver resolver, string name, string expectedNamespace)
     {
@@ -131,7 +130,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumNamespaceData))]
     public void ValidateEnumRawName(IResolver resolver, string name, string expectedNamespace)
     {
@@ -141,7 +140,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumNamespaceData))]
     public void ValidateEnumFieldRawName(IResolver resolver, string name, string expectedNamespace)
     {
@@ -152,7 +151,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumNames))]
     public void ValidateEnumFieldIsPublic(IResolver resolver, string name)
     {
@@ -162,7 +161,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IEnum))]
+    [Trait("Category", nameof(IEnum))]
     [MemberData(nameof(GetEnumNames))]
     public void ValidateEnumFieldIsStatic(IResolver resolver, string name)
     {

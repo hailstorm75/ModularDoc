@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Autofac.Extras.Moq;
 using MarkDoc.Members;
@@ -41,13 +40,13 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IResolver))]
+    [Trait("Category",nameof(IResolver))]
     [MemberData(nameof(GetInvalidAssemblyData))]
     public void ResolverInvalidAssembly(IResolver resolver, string? path)
       => Assert.ThrowsAny<Exception>(() => resolver.Resolve(path!));
 
     [Theory]
-    [Category(nameof(IResolver))]
+    [Trait("Category", nameof(IResolver))]
     [ClassData(typeof(ResolversProvider))]
     public void ResolverAccessTypesBeforeResolve(IResolver resolver)
     {
@@ -57,7 +56,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IResolver))]
+    [Trait("Category", nameof(IResolver))]
     [MemberData(nameof(GetInvalidResolveTypeData))]
     public void ResolverResolveTypeInvalidSource(IResolver resolver, object source)
     {
@@ -67,7 +66,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IResolver))]
+    [Trait("Category", nameof(IResolver))]
     [MemberData(nameof(GetInvalidResolveTypeData))]
     public void ResolverFindReference(IResolver resolver, object source)
     {
@@ -80,7 +79,7 @@ namespace UT.Members
     }
 
     [Theory]
-    [Category(nameof(IResolver))]
+    [Trait("Category", nameof(IResolver))]
     [ClassData(typeof(ResolversProvider))]
     public void ResolverFindType(IResolver resolver)
     {
