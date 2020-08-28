@@ -15,7 +15,7 @@ namespace UT.Members
   {
     #region Data providers
 
-    private static IEnumerable<object[]> GetInterfaceNames()
+    private static IEnumerable<object[]> GetInterfaceNamesData()
     {
       var data = new[]
       {
@@ -143,12 +143,22 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IInterface))]
-    [MemberData(nameof(GetInterfaceNames))]
+    [MemberData(nameof(GetInterfaceNamesData))]
     public void ValidateInterfaceNames(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
 
       Assert.NotNull(query);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [MemberData(nameof(GetInterfaceNamespaceData))]
+    public void ValidateInterfaceNamespaces(IResolver resolver, string name, string expectedNamespace)
+    {
+      var query = GetInterface(resolver, name);
+
+      Assert.Equal(expectedNamespace, query?.TypeNamespace);
     }
 
     [Theory]
