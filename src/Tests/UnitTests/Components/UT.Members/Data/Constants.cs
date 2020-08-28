@@ -17,5 +17,11 @@
     public const string INTERNAL_NESTED_INTERFACE = "INestedInterfaceInternal";
     public const string INTERNAL_GENERIC_INTERFACE = "IGenericInterface";
     public const string INTERNAL_NESTED_GENERIC_INTERFACE = "INestedGenericInterface";
+    public const string PUBLIC_INHERITED_INTERFACE = "IInheritedInterface";
+    public const string PUBLIC_INHERITING_AND_INHERITED_INTERFACE = "IInheritingAndInheritedInterface";
+    public const string PUBLIC_INHERITING_INTERFACE = "IInheritingInterface";
+    public const string PUBLIC_INHERITING_INTERFACE_EMPTY = "IInheritingInterfaceEmpty";
+    public const string PUBLIC_INHERITING_COMPLEX_INTERFACE = "IInheritingInterfaceComplex";
+    public const string PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY = "IInheritingInterfaceComplexEmpty";
   }
 }
