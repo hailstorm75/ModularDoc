@@ -15,7 +15,7 @@ namespace UT.Members
   {
     #region Data providers
 
-    private static IEnumerable<object[]> GetInterfaceNames()
+    private static IEnumerable<object[]> GetInterfaceNamesData()
     {
       var data = new[]
       {
@@ -98,8 +98,37 @@ namespace UT.Members
     private static IEnumerable<object[]> GetInterfaceDelegatesData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Delegate" });
 
-    private static IEnumerable<object[]> GetInterfaceWithMembers()
+    private static IEnumerable<object[]> GetInterfaceWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE });
+
+    private static IEnumerable<object[]> GetInterfaceInheritedMembersData(string member)
+    {
+      var data = new[]
+      {
+        (Constants.PUBLIC_INHERITING_INTERFACE, member, Constants.PUBLIC_INHERITED_INTERFACE),
+        (Constants.PUBLIC_INHERITING_INTERFACE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE),
+        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE, member, Constants.PUBLIC_INHERITED_INTERFACE),
+        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE),
+        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE),
+        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE),
+      };
+
+      foreach (var (target, name, source) in data)
+        foreach (var resolver in new ResolversProvider())
+          yield return new[] { resolver.First(), target, name, source };
+    }
+
+    private static IEnumerable<object[]> GetInterfaceInheritedEventsData()
+      => GetInterfaceInheritedMembersData("Event");
+
+    private static IEnumerable<object[]> GetInterfaceInheritedDelegatesData()
+      => GetInterfaceInheritedMembersData("Delegate");
+
+    private static IEnumerable<object[]> GetInterfaceInheritedPropertiesData()
+      => GetInterfaceInheritedMembersData("Property");
+
+    private static IEnumerable<object[]> GetInterfaceInheritedMethodsData()
+      => GetInterfaceInheritedMembersData("Method");
 
     #endregion
 
@@ -114,12 +143,22 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IInterface))]
-    [MemberData(nameof(GetInterfaceNames))]
+    [MemberData(nameof(GetInterfaceNamesData))]
     public void ValidateInterfaceNames(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
 
       Assert.NotNull(query);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [MemberData(nameof(GetInterfaceNamespaceData))]
+    public void ValidateInterfaceNamespaces(IResolver resolver, string name, string expectedNamespace)
+    {
+      var query = GetInterface(resolver, name);
+
+      Assert.Equal(expectedNamespace, query?.TypeNamespace);
     }
 
     [Theory]
@@ -228,7 +267,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IProperty))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfacePropertiesCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -240,7 +279,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IMethod))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceMethodsCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -252,7 +291,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IEvent))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceEventsCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -264,7 +303,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IDelegate))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceDelegatesCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -276,7 +315,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IInterface))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceInheritedInterfaces(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -288,7 +327,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IInterface))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceInheritedInterfacesCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -300,7 +339,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IEnum))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeEnum(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -312,7 +351,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IEnum))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeEnumCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -324,7 +363,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IStruct))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeStruct(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -336,7 +375,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IStruct))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeStructCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -348,7 +387,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IClass))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeClass(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -360,7 +399,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IClass))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeClassCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -372,7 +411,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IInterface))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeInterface(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -384,7 +423,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IInterface))]
-    [MemberData(nameof(GetInterfaceWithMembers))]
+    [MemberData(nameof(GetInterfaceWithMembersData))]
     public void ValidateInterfaceNestedTypeInterfaceCount(IResolver resolver, string name)
     {
       var query = GetInterface(resolver, name);
@@ -392,6 +431,58 @@ namespace UT.Members
       var interfaceCount= query?.NestedTypes.OfType<IInterface>().Count(item => !(item is IClass || item is IStruct)) ?? 0;
 
       Assert.True(interfaceCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of nested interfaces.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetInterfaceInheritedEventsData))]
+    public void ValidateInheritedEventMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetInterface(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetInterfaceInheritedDelegatesData))]
+    public void ValidateInheritedDelegateMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetInterface(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetInterfaceInheritedPropertiesData))]
+    public void ValidateInheritedPropertyMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetInterface(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IInterface))]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetInterfaceInheritedMethodsData))]
+    public void ValidateInheritedMethodMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetInterface(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
   }
 }
