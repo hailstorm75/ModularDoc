@@ -24,8 +24,8 @@ namespace UT.Members
         Constants.PUBLIC_NESTED_INTERFACE,
         Constants.PROTECTED_NESTED_INTERFACE,
         Constants.INTERNAL_NESTED_INTERFACE,
-        Constants.INTERNAL_GENERIC_INTERFACE,
-        Constants.INTERNAL_NESTED_GENERIC_INTERFACE
+        Constants.PUBLIC_GENERIC_INTERFACE,
+        Constants.PUBLIC_NESTED_GENERIC_INTERFACE
       };
 
       foreach (var name in data)
@@ -77,8 +77,8 @@ namespace UT.Members
 
       var data = new[]
       {
-        Constants.INTERNAL_GENERIC_INTERFACE,
-        Constants.INTERNAL_NESTED_GENERIC_INTERFACE
+        Constants.PUBLIC_GENERIC_INTERFACE,
+        Constants.PUBLIC_NESTED_GENERIC_INTERFACE
       };
 
       foreach (var name in data)
