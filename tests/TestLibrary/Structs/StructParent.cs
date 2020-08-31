@@ -1,4 +1,7 @@
-﻿namespace TestLibrary.Structs
+﻿// ReSharper disable All
+using System;
+
+namespace TestLibrary.Structs
 {
   public class StructParent
   {
@@ -11,6 +14,11 @@
     }
 
     protected struct NestedStructProtected
+    {
+    }
+
+    public struct NestedGenericStruct<T1, T2>
+      where T2 : IDisposable
     {
     }
   }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac.Extras.Moq;
 using MarkDoc.Members;
 using MarkDoc.Members.ResolvedTypes;
@@ -21,9 +20,7 @@ namespace UT.Members
         "../../InvalidAssembly.dll"
       };
 
-      foreach (var path in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), path };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object?[]> GetInvalidResolveTypeData()
@@ -34,13 +31,11 @@ namespace UT.Members
         new object()
       };
 
-      foreach (var item in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), item };
+      return data.ComposeData();
     }
 
     [Theory]
-    [Trait("Category",nameof(IResolver))]
+    [Trait("Category", nameof(IResolver))]
     [MemberData(nameof(GetInvalidAssemblyData))]
     public void ResolverInvalidAssembly(IResolver resolver, string? path)
       => Assert.ThrowsAny<Exception>(() => resolver.Resolve(path!));
@@ -62,7 +57,7 @@ namespace UT.Members
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-      Assert.ThrowsAny<Exception>(() => resolver.Resolve(source));
+      Assert.ThrowsAny<Exception>(() => resolver.Resolve(source!));
     }
 
     [Theory]

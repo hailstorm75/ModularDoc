@@ -15,7 +15,7 @@ namespace UT.Members
   {
     #region Data providers
 
-    private static IEnumerable<object[]> GetInterfaceNamesData()
+    private static IEnumerable<object?[]> GetInterfaceNamesData()
     {
       var data = new[]
       {
@@ -28,25 +28,21 @@ namespace UT.Members
         Constants.PUBLIC_NESTED_GENERIC_INTERFACE
       };
 
-      foreach (var name in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetInterfaceAccessorsData()
     {
       var data = new[]
       {
-        (Constants.PUBLIC_INTERFACE, AccessorType.Public),
-        (Constants.INTERNAL_INTERFACE, AccessorType.Internal),
-        (Constants.PUBLIC_NESTED_INTERFACE, AccessorType.Public),
-        (Constants.PROTECTED_NESTED_INTERFACE, AccessorType.Protected),
-        (Constants.INTERNAL_NESTED_INTERFACE, AccessorType.Internal),
+        new object[] {Constants.PUBLIC_INTERFACE, AccessorType.Public},
+        new object[] {Constants.INTERNAL_INTERFACE, AccessorType.Internal},
+        new object[] {Constants.PUBLIC_NESTED_INTERFACE, AccessorType.Public},
+        new object[] {Constants.PROTECTED_NESTED_INTERFACE, AccessorType.Protected},
+        new object[] {Constants.INTERNAL_NESTED_INTERFACE, AccessorType.Internal},
       };
 
-      foreach (var (name, accessor) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, accessor };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetInterfaceNamespaceData()
@@ -54,16 +50,14 @@ namespace UT.Members
       const string interfaceNameSpace = "TestLibrary.Interfaces";
       var data = new[]
       {
-        (Constants.PUBLIC_INTERFACE, interfaceNameSpace),
-        (Constants.INTERNAL_INTERFACE, interfaceNameSpace),
-        (Constants.PUBLIC_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"),
-        (Constants.PROTECTED_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"),
-        (Constants.INTERNAL_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"),
+        new object[] {Constants.PUBLIC_INTERFACE, interfaceNameSpace},
+        new object[] {Constants.INTERNAL_INTERFACE, interfaceNameSpace},
+        new object[] {Constants.PUBLIC_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
+        new object[] {Constants.PROTECTED_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
+        new object[] {Constants.INTERNAL_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
       };
 
-      foreach (var (name, space) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, space };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetInterfaceGenericData()
@@ -77,26 +71,27 @@ namespace UT.Members
 
       var data = new[]
       {
-        Constants.PUBLIC_GENERIC_INTERFACE,
-        Constants.PUBLIC_NESTED_GENERIC_INTERFACE
+        new object[] { Constants.PUBLIC_GENERIC_INTERFACE, generics },
+        new object[] { Constants.PUBLIC_NESTED_GENERIC_INTERFACE, generics }
       };
 
-      foreach (var name in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, generics };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetInterfacePropertiesData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Property" });
+      => GetInterfaceWithMembersData("Property");
 
     private static IEnumerable<object[]> GetInterfaceMethodsData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Method" });
+      => GetInterfaceWithMembersData("Method");
 
     private static IEnumerable<object[]> GetInterfaceEventsData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Event" });
+      => GetInterfaceWithMembersData("Event");
 
     private static IEnumerable<object[]> GetInterfaceDelegatesData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, "Delegate" });
+      => GetInterfaceWithMembersData("Delegate");
+
+    private static IEnumerable<object[]> GetInterfaceWithMembersData(string name)
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, name });
 
     private static IEnumerable<object[]> GetInterfaceWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE });
@@ -105,17 +100,15 @@ namespace UT.Members
     {
       var data = new[]
       {
-        (Constants.PUBLIC_INHERITING_INTERFACE, member, Constants.PUBLIC_INHERITED_INTERFACE),
-        (Constants.PUBLIC_INHERITING_INTERFACE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE),
-        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE, member, Constants.PUBLIC_INHERITED_INTERFACE),
-        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE),
-        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE),
-        (Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE),
+        new object[] {Constants.PUBLIC_INHERITING_INTERFACE, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_INTERFACE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_INTERFACE_EMPTY, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE},
       };
 
-      foreach (var (target, name, source) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), target, name, source };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetInterfaceInheritedEventsData()

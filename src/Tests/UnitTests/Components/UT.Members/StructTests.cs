@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Types;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members;
@@ -13,7 +15,7 @@ namespace UT.Members
   {
     #region Data providers
 
-    private static IEnumerable<object[]> GetStructNames()
+    private static IEnumerable<object?[]> GetStructNames()
     {
       var data = new[]
       {
@@ -24,25 +26,21 @@ namespace UT.Members
         Constants.INTERNAL_NESTED_STRUCT,
       };
 
-      foreach (var name in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetStructAccessorsData()
     {
       var data = new[]
       {
-        (Constants.PUBLIC_STRUCT, AccessorType.Public),
-        (Constants.INTERNAL_STRUCT, AccessorType.Internal),
-        (Constants.PUBLIC_NESTED_STRUCT, AccessorType.Public),
-        (Constants.PROTECTED_NESTED_STRUCT, AccessorType.Protected),
-        (Constants.INTERNAL_NESTED_STRUCT, AccessorType.Internal),
+        new object[] {Constants.PUBLIC_STRUCT, AccessorType.Public},
+        new object[] {Constants.INTERNAL_STRUCT, AccessorType.Internal},
+        new object[] {Constants.PUBLIC_NESTED_STRUCT, AccessorType.Public},
+        new object[] {Constants.PROTECTED_NESTED_STRUCT, AccessorType.Protected},
+        new object[] {Constants.INTERNAL_NESTED_STRUCT, AccessorType.Internal},
       };
 
-      foreach (var (name, accessor) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, accessor };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetStructNamespaceData()
@@ -50,16 +48,14 @@ namespace UT.Members
       const string interfaceNameSpace = "TestLibrary.Structs";
       var data = new[]
       {
-        (Constants.PUBLIC_STRUCT, interfaceNameSpace),
-        (Constants.INTERNAL_STRUCT, interfaceNameSpace),
-        (Constants.PUBLIC_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"),
-        (Constants.PROTECTED_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"),
-        (Constants.INTERNAL_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"),
+        new object[] {Constants.PUBLIC_STRUCT, interfaceNameSpace},
+        new object[] {Constants.INTERNAL_STRUCT, interfaceNameSpace},
+        new object[] {Constants.PUBLIC_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
+        new object[] {Constants.PROTECTED_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
+        new object[] {Constants.INTERNAL_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
       };
 
-      foreach (var (name, space) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, space };
+      return data.ComposeData();
     }
 
     private static IEnumerable<object[]> GetStructWithMembersData()
@@ -79,6 +75,23 @@ namespace UT.Members
 
     private static IEnumerable<object[]> GetStructDelegatesData()
       => GetStructMemberData("Delegate");
+
+    private static IEnumerable<object[]> GetStructGenericData()
+    {
+      var generics = new Dictionary<string, (Variance, IReadOnlyCollection<string>)>
+      {
+        { "T1", (Variance.NonVariant, new string[]{}) },
+        { "T2", (Variance.NonVariant, new []{ nameof(IDisposable) }) },
+      };
+
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_GENERIC_STRUCT, generics },
+        new object[] { Constants.PUBLIC_NESTED_GENERIC_STRUCT, generics }
+      };
+
+      return data.ComposeData();
+    }
 
     #endregion
 
@@ -297,6 +310,42 @@ namespace UT.Members
       var classCount = query?.NestedTypes.OfType<IClass>().Count() ?? 0;
 
       Assert.True(classCount == 1, $"{resolver.GetType().FullName}: The '{name}' struct has an unexpected number of nested classes.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetStructGenericData))]
+    public void ValidateStructGenericVariances(IResolver resolver, string name, Dictionary<string, (Variance variance, IReadOnlyCollection<string>)> generics)
+    {
+      var query = GetStruct(resolver, name);
+
+      var interfaceGenerics = query?.Generics
+        .Select(item => (item.Key, item.Value.variance))
+        .OrderBy(key => key.Key);
+
+      var expectedGenerics = generics
+        .Select(item => (item.Key, item.Value.variance))
+        .OrderBy(key => key.Key);
+
+      Assert.Equal(expectedGenerics, interfaceGenerics);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetStructGenericData))]
+    public void ValidateStructGenericConstraints(IResolver resolver, string name, Dictionary<string, (Variance, IReadOnlyCollection<string> constraints)> generics)
+    {
+      var query = GetStruct(resolver, name);
+
+      var actualGenerics = query?.Generics
+        .Select(item => (item.Key, string.Join(";", item.Value.constraints.Select(constraint => constraint.DisplayName).OrderBy(Linq.XtoX))))
+        .OrderBy(key => key.Key);
+
+      var expectedGenerics = generics
+        .Select(item => (item.Key, string.Join(";", item.Value.constraints.OrderBy(Linq.XtoX))))
+        .OrderBy(key => key.Key);
+
+      Assert.Equal(expectedGenerics, actualGenerics);
     }
   }
 }
