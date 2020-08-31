@@ -62,7 +62,7 @@ namespace UT.Members
           yield return new[] { resolver.First(), name, space };
     }
 
-    private static IEnumerable<object[]> GetStructWithMembers()
+    private static IEnumerable<object[]> GetStructWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_STRUCT });
 
     private static IEnumerable<object[]> GetStructMemberData(string member)
@@ -181,7 +181,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IProperty))]
-    [MemberData(nameof(GetStructWithMembers))]
+    [MemberData(nameof(GetStructWithMembersData))]
     public void ValidateStructPropertiesCount(IResolver resolver, string name)
     {
       var query = GetStruct(resolver, name);
@@ -193,7 +193,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IMethod))]
-    [MemberData(nameof(GetStructWithMembers))]
+    [MemberData(nameof(GetStructWithMembersData))]
     public void ValidateStructMethodsCount(IResolver resolver, string name)
     {
       var query = GetStruct(resolver, name);
@@ -205,7 +205,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IEvent))]
-    [MemberData(nameof(GetStructWithMembers))]
+    [MemberData(nameof(GetStructWithMembersData))]
     public void ValidateStructEventsCount(IResolver resolver, string name)
     {
       var query = GetStruct(resolver, name);
@@ -217,7 +217,7 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IDelegate))]
-    [MemberData(nameof(GetStructWithMembers))]
+    [MemberData(nameof(GetStructWithMembersData))]
     public void ValidateStructDelegatesCount(IResolver resolver, string name)
     {
       var query = GetStruct(resolver, name);
@@ -225,6 +225,78 @@ namespace UT.Members
       var delegatesCount = query?.Delegates.Count ?? 0;
 
       Assert.True(delegatesCount == 1, $"{resolver.GetType().FullName}: The '{name}' struct has an unexpected number of members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEnum))]
+    [MemberData(nameof(GetStructWithMembersData))]
+    public void ValidateStructNestedTypeEnum(IResolver resolver, string name)
+    {
+      var query = GetStruct(resolver, name);
+
+      var enumType = query?.NestedTypes.OfType<IEnum>().FirstOrDefault(nested => nested.Name.Equals("MyEnum"));
+
+      Assert.False(enumType is null, $"{resolver.GetType().FullName}: The '{name}' struct is missing the expected nested enum.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEnum))]
+    [MemberData(nameof(GetStructWithMembersData))]
+    public void ValidateStructNestedTypeEnumCount(IResolver resolver, string name)
+    {
+      var query = GetStruct(resolver, name);
+
+      var enumCount = query?.NestedTypes.OfType<IEnum>().Count() ?? 0;
+
+      Assert.True(enumCount == 1, $"{resolver.GetType().FullName}: The '{name}' struct has an unexpected number of nested enums.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetStructWithMembersData))]
+    public void ValidateStructNestedTypeStruct(IResolver resolver, string name)
+    {
+      var query = GetStruct(resolver, name);
+
+      var structType = query?.NestedTypes.OfType<IStruct>().FirstOrDefault(nested => nested.Name.Equals("MyStruct"));
+
+      Assert.False(structType is null, $"{resolver.GetType().FullName}: The '{name}' struct is missing the expected nested struct.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetStructWithMembersData))]
+    public void ValidateStructNestedTypeStructCount(IResolver resolver, string name)
+    {
+      var query = GetStruct(resolver, name);
+
+      var structCount = query?.NestedTypes.OfType<IStruct>().Count() ?? 0;
+
+      Assert.True(structCount == 1, $"{resolver.GetType().FullName}: The '{name}' struct has an unexpected number of nested structs.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetStructWithMembersData))]
+    public void ValidateStructNestedTypeClass(IResolver resolver, string name)
+    {
+      var query = GetStruct(resolver, name);
+
+      var classType = query?.NestedTypes.OfType<IClass>().FirstOrDefault(nested => nested.Name.Equals("MyClass"));
+
+      Assert.False(classType is null, $"{resolver.GetType().FullName}: The '{name}' struct is missing the expected nested class.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetStructWithMembersData))]
+    public void ValidateStructNestedTypeClassCount(IResolver resolver, string name)
+    {
+      var query = GetStruct(resolver, name);
+
+      var classCount = query?.NestedTypes.OfType<IClass>().Count() ?? 0;
+
+      Assert.True(classCount == 1, $"{resolver.GetType().FullName}: The '{name}' struct has an unexpected number of nested classes.");
     }
   }
 }

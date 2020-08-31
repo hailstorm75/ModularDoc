@@ -15,8 +15,6 @@
     public const string PUBLIC_NESTED_INTERFACE = "INestedInterfacePublic";
     public const string PROTECTED_NESTED_INTERFACE = "INestedInterfaceProtected";
     public const string INTERNAL_NESTED_INTERFACE = "INestedInterfaceInternal";
-    public const string INTERNAL_GENERIC_INTERFACE = "IGenericInterface";
-    public const string INTERNAL_NESTED_GENERIC_INTERFACE = "INestedGenericInterface";
     public const string PUBLIC_INHERITED_INTERFACE = "IInheritedInterface";
     public const string PUBLIC_INHERITING_AND_INHERITED_INTERFACE = "IInheritingAndInheritedInterface";
     public const string PUBLIC_INHERITING_INTERFACE = "IInheritingInterface";
