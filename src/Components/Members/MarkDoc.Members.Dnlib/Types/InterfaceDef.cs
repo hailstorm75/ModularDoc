@@ -107,6 +107,15 @@ namespace MarkDoc.Members.Dnlib.Types
         // Materialize the collection
         .ToReadOnlyCollection();
 
+      // Initialize the events
+      Events = source.Events
+        // Initialize events
+        .Select(eventDef => new EventDef(resolver, eventDef))
+        // Materialize the collection
+        .ToReadOnlyCollection();
+
+      var eventMethods = GetEventMembers(Events).ToHashSet();
+
       // Initialize the methods
       Methods = source.Methods
         // Select members which are non-private methods
@@ -114,7 +123,8 @@ namespace MarkDoc.Members.Dnlib.Types
                          && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                          && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
                          && !methodDef.IsPrivate
-                         && !methodDef.IsConstructor)
+                         && !methodDef.IsConstructor
+                         && !eventMethods.Contains(methodDef.Name.String))
         // Initialize methods
         .Select(methodDef => new MethodDef(resolver, methodDef))
         // Materialize the collection
@@ -129,13 +139,6 @@ namespace MarkDoc.Members.Dnlib.Types
         // Materialize the collection
         .ToReadOnlyCollection();
 
-      // Initialize the events
-      Events = source.Events
-        // Initialize events
-        .Select(eventDef => new EventDef(resolver, eventDef))
-        // Materialize the collection
-        .ToReadOnlyCollection();
-
       // Initialize inherited members
       InheritedTypes = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
     }
@@ -143,6 +146,15 @@ namespace MarkDoc.Members.Dnlib.Types
     #endregion
 
     #region Methods
+
+    private static IEnumerable<string> GetEventMembers(IEnumerable<IEvent> events)
+    {
+      foreach (var @event in events)
+      {
+        yield return $"add_{@event.Name}";
+        yield return $"remove_{@event.Name}";
+      }
+    }
 
     private IReadOnlyDictionary<IMember, IInterface> ResolveInheritedMembers(IEnumerable<IResType> inheritedTypes)
     {
