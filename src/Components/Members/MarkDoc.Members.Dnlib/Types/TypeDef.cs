@@ -50,8 +50,7 @@ namespace MarkDoc.Members.Dnlib.Types
       // Initialize the accessor
       Accessor = ResolveAccessor(source);
       // Initialize the namespace
-      TypeNamespace = ResolveNamespace(source)
-        ?? string.Empty;
+      TypeNamespace = ResolveNamespace(source);
       // Initialize the name
       Name = ResolveName(source, parent);
       // Initialize the raw name
@@ -76,13 +75,8 @@ namespace MarkDoc.Members.Dnlib.Types
       return AccessorType.Internal;
     }
 
-    private static string? ResolveNamespace(dnlib.DotNet.TypeDef? source)
+    private static string ResolveNamespace(dnlib.DotNet.TypeDef source)
     {
-      // If the source is null..
-      if (source is null)
-        // propagate missing namespace
-        return null;
-
       // If the namespace is present..
       if (!string.IsNullOrEmpty(source.Namespace) && !source.IsNested)
         // return the namespace

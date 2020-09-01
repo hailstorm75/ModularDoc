@@ -175,16 +175,18 @@ namespace MarkDoc.Members.Dnlib.Types
         // Select inherited events
         var events = Intersect(type.Events, Events);
         // Select inherited delegates
-        var delegates = Intersect(type.Delegates, Delegates);
+        IEnumerable<(IMember member, IInterface type)> delegates = type.Delegates.Select(member => (member as IMember, type));
 
-        return methods
+        var a = methods
           .Concat(properties)
           .Concat(events)
           .Concat(delegates)
           // Select unique inherited types
           .Where(x => !type.InheritedTypes.Value.ContainsKey(x.member))
           // Join the newly resolved inherited types with the parent inherited types
-          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
+          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value))).ToArray();
+
+        return a;
       }
 
       return inheritedTypes
@@ -198,6 +200,8 @@ namespace MarkDoc.Members.Dnlib.Types
         .Select(GetInheritedTypes)
         // Flatten the collection
         .SelectMany(Linq.XtoX)
+        // Ensure there are no duplicates
+        .DistinctBy(Linq.XtoX)
         // Materialize the collection as a dictionary
         .ToDictionary(x => x.member, x => x.type);
     }
