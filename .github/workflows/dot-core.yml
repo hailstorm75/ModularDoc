@@ -39,7 +39,7 @@ jobs:
     - name: Build tests
       run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
     - name: Run tests
-      run: dotnet test src/MarkDoc.sln /p:CollectCoverage=true /p:CoverletOutput=. /p:CoverletOutputFormat=lcov && ls
+      run: dotnet test src/MarkDoc.sln /p:CollectCoverage=true /p:CoverletOutput=. /p:CoverletOutputFormat=lcov --settings coverlet.runsettings
     - name: Upload coverage
       if: always()
       uses: codecov/codecov-action@v1
