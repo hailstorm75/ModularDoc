@@ -327,12 +327,12 @@ namespace MarkDoc.Members.Dnlib
       // Returns types which can have nested types
       static IInterface GetTypeWithNested(IResolver resolver, TypeDef source)
       {
+        if (source.IsValueType)
+          return new StructDef(resolver, source, null);
         if (source.IsClass)
           return new ClassDef(resolver, source, null);
         if (source.IsInterface)
           return new InterfaceDef(resolver, source, null);
-        if (source.IsValueType)
-          return new StructDef(resolver, source, null);
 
         // The provided source is not supported
         throw new NotSupportedException(Resources.subjectNotSupported);
