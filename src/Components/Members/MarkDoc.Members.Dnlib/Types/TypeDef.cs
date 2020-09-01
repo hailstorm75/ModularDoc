@@ -40,7 +40,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    protected internal TypeDef(IResolver resolver, dnlib.DotNet.TypeDef source, ITypeDefOrRef? parent)
+    protected internal TypeDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {
       // If the source is null..
       if (source is null)
@@ -50,8 +50,7 @@ namespace MarkDoc.Members.Dnlib.Types
       // Initialize the accessor
       Accessor = ResolveAccessor(source);
       // Initialize the namespace
-      TypeNamespace = ResolveNamespace(parent)
-        ?? ResolveNamespace(source)
+      TypeNamespace = ResolveNamespace(source)
         ?? string.Empty;
       // Initialize the name
       Name = ResolveName(source, parent);
@@ -77,7 +76,7 @@ namespace MarkDoc.Members.Dnlib.Types
       return AccessorType.Internal;
     }
 
-    private static string? ResolveNamespace(dnlib.DotNet.IType? source)
+    private static string? ResolveNamespace(dnlib.DotNet.TypeDef? source)
     {
       // If the source is null..
       if (source is null)
@@ -85,7 +84,7 @@ namespace MarkDoc.Members.Dnlib.Types
         return null;
 
       // If the namespace is present..
-      if (!string.IsNullOrEmpty(source.Namespace))
+      if (!string.IsNullOrEmpty(source.Namespace) && !source.IsNested)
         // return the namespace
         return source.Namespace;
 
@@ -100,13 +99,13 @@ namespace MarkDoc.Members.Dnlib.Types
         // remove it
         fullName = fullName.Slice(0, nestedIndex);
 
-      // Find the last delimiter before the type name
-      var dotIndex = fullName.LastIndexOf('.');
-      // Remove the type name from the namespace
-      var result = fullName.Slice(0, dotIndex);
+      //// Find the last delimiter before the type name
+      //var dotIndex = fullName.LastIndexOf('.');
+      //// Remove the type name from the namespace
+      //var result = fullName.Slice(0, dotIndex);
 
       // Return the result
-      return result.ToString();
+      return fullName.ToString();
     }
 
     private static string ResolveName(dnlib.DotNet.IType source, IIsTypeOrMethod? parent)
