@@ -757,7 +757,7 @@ module TypeContentHelpers =
           Table(content, TextHelpers.createHeadings (seq [ "Returns"; "Name" ]) tools , sectionHeading isStatic accessor "methods", 3)
           |> Some
 
-      let flattenMembers item =
+      let flattenMembers (item: seq<bool * seq<AccessorType * seq<'M>>>) =
         let flatten item =
           let a = fst item
           snd item
