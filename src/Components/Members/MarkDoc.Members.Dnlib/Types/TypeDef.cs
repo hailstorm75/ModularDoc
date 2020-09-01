@@ -66,7 +66,7 @@ namespace MarkDoc.Members.Dnlib.Types
     private static AccessorType ResolveAccessor(dnlib.DotNet.TypeDef type)
     {
       // If the type is public..
-      if (type.Visibility == TypeAttributes.Public)
+      if (type.Visibility == TypeAttributes.Public || (type.IsNested && type.Visibility == TypeAttributes.NestedPublic))
         // return public
         return AccessorType.Public;
       // If the type is nested
