@@ -21,6 +21,7 @@ jobs:
       run: dotnet restore src/MarkDoc.sln
     - name: Build
       run: dotnet build src/MarkDoc.sln --configuration Release --no-restore
+
   test:
     
     runs-on: ubuntu-latest
