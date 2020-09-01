@@ -39,11 +39,12 @@ jobs:
     - name: Build tests
       run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
     - name: Run tests
-      run: dotnet test src/MarkDoc.sln /p:CollectCoverage=true /p:CoverletOutput=. /p:CoverletOutputFormat=lcov --settings coverlet.runsettings
+      run: dotnet test src/MarkDoc.sln --collect:"XPlat Code Coverage"
     - name: Upload coverage
       if: always()
       uses: codecov/codecov-action@v1
       with:
+        file: "src/Tests/*/TestResults/*/*.xml"
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
     
