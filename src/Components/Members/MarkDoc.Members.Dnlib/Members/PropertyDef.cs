@@ -52,7 +52,7 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       var generics = source.ResolvePropertyGenerics(methods);
       Name = source.Name;
-      RawName = source.Name;
+      RawName = source.Name.String.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
       IsStatic = methods.First().IsStatic;
       Type = Resolver.Resolve(ResolveType(source), generics);
       Inheritance = ResolveInheritance(methods);

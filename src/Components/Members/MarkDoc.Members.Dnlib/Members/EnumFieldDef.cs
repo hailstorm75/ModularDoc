@@ -33,7 +33,7 @@ namespace MarkDoc.Members.Dnlib.Members
         throw new ArgumentNullException(nameof(source));
 
       Name = source.Name.String;
-      RawName = source.FullName.Replace("::",".", StringComparison.InvariantCultureIgnoreCase);
+      RawName = source.FullName.Replace("::",".", StringComparison.InvariantCultureIgnoreCase).Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
       Accessor = accessor;
     }
   }

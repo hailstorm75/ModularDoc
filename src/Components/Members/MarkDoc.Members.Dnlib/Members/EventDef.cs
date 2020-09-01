@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using dnlib.DotNet;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
@@ -27,7 +28,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <inheritdoc />
     public IResType Type { get; }
 
-    public override string RawName { get; } = string.Empty;
+    public override string RawName { get; }
 
     #endregion
 
@@ -43,6 +44,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Type = ResolveType(source);
       IsStatic = source.AddMethod.IsStatic;
       Accessor = ResolveAccessor(source.AddMethod);
+      RawName = source.FullName.Replace("::",".", StringComparison.InvariantCultureIgnoreCase).Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
     }
 
     #region Methods

@@ -54,11 +54,15 @@ namespace MarkDoc.Members.Dnlib.Members
       if (source is null)
         // throw an exception
         throw new ArgumentNullException(nameof(source));
+      // If the name is null..
+      if (name is null)
+        // throw an exception
+        throw new ArgumentNullException(nameof(name));
 
       Name = name;
       IsStatic = source.IsStatic;
       Arguments = ResolveArguments(resolver, source).ToReadOnlyCollection();
-      RawName = $"{(source.IsConstructor ? "#ctor" : name)}({string.Join(",", Arguments.Select(x => x.Type.DocumentationName))})";
+      RawName = $"{(source.IsConstructor ? "#ctor" : name.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase))}({string.Join(",", Arguments.Select(x => x.Type.DocumentationName))})";
       Accessor = ResolveAccessor(source);
     }
 
