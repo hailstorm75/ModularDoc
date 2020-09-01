@@ -5,19 +5,19 @@ namespace TestLibrary.Classes
 {
   public class ClassParent
   {
-    public struct NestedClassPublic
+    public class NestedClassPublic
     {
     }
 
-    internal struct NestedClassInternal
+    internal class NestedClassInternal
     {
     }
 
-    protected struct NestedClassProtected
+    protected class NestedClassProtected
     {
     }
 
-    public struct NestedGenericClass<T1, T2>
+    public class NestedGenericClass<T1, T2>
       where T2 : IDisposable
     {
     }
