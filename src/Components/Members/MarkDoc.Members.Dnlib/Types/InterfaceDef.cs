@@ -160,33 +160,31 @@ namespace MarkDoc.Members.Dnlib.Types
     {
       IEnumerable<(IMember member, IInterface type)> GetInheritedTypes(IInterface type)
       {
-        IEnumerable<(IMember member, IInterface type)> Intersect<T>(IEnumerable<T> left, IEnumerable<T> right)
-          where T : IMember
-          => left
-              // Intersect by raw names
-              .Intersect(right, EqualityComparerEx<T>.Create(x => x.RawName, x=> x.RawName))
-              // Select the inherited member paired with the source type
-              .Select(member => (member as IMember, type));
+        //IEnumerable<(IMember member, IInterface type)> Intersect<T>(IEnumerable<T> left, IEnumerable<T> right)
+        //  where T : IMember
+        //  => left
+        //      // Intersect by raw names
+        //      .Intersect(right, EqualityComparerEx<T>.Create(x => x.RawName, x=> x.RawName))
+        //      // Select the inherited member paired with the source type
+        //      .Select(member => (member as IMember, type));
 
         // Select inherited methods
-        var methods = Intersect(type.Methods, Methods);
+        IEnumerable<(IMember member, IInterface type)> methods = type.Methods.Select(member => (member as IMember, type));
         // Select inherited properties
-        var properties = Intersect(type.Properties, Properties);
+        IEnumerable<(IMember member, IInterface type)> properties = type.Properties.Select(member => (member as IMember, type));
         // Select inherited events
-        var events = Intersect(type.Events, Events);
+        IEnumerable<(IMember member, IInterface type)> events = type.Events.Select(member => (member as IMember, type));
         // Select inherited delegates
         IEnumerable<(IMember member, IInterface type)> delegates = type.Delegates.Select(member => (member as IMember, type));
 
-        var a = methods
+        return methods
           .Concat(properties)
           .Concat(events)
           .Concat(delegates)
           // Select unique inherited types
           .Where(x => !type.InheritedTypes.Value.ContainsKey(x.member))
           // Join the newly resolved inherited types with the parent inherited types
-          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value))).ToArray();
-
-        return a;
+          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
       }
 
       return inheritedTypes
