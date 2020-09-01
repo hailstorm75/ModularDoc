@@ -27,6 +27,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="displayName">Type displayed name</param>
     /// <param name="docName">Type documentation name</param>
     protected ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName, string docName)
-      : base(resolver, source, displayName, docName, source.FullName ?? throw new ArgumentNullException(nameof(source))) { }
+      // ReSharper disable once ConstantConditionalAccessQualifier
+      : base(resolver, source, displayName, docName, source?.FullName ?? throw new ArgumentNullException(nameof(source))) { }
   }
 }
