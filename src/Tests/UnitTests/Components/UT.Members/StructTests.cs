@@ -93,6 +93,34 @@ namespace UT.Members
       return data.ComposeData();
     }
 
+    private static IEnumerable<object[]> GetStructInheritedMembersData(string member)
+    {
+      var data = new[]
+      {
+        new object[] {Constants.PUBLIC_INHERITING_STRUCT, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_STRUCT_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_STRUCT, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_STRUCT, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE},
+      };
+
+      return data.ComposeData();
+    }
+
+    private static IEnumerable<object[]> GetStructInheritedEventsData()
+      => GetStructInheritedMembersData("Event");
+
+    private static IEnumerable<object[]> GetStructInheritedDelegatesData()
+      => GetStructInheritedMembersData("Delegate");
+
+    private static IEnumerable<object[]> GetStructInheritedPropertiesData()
+      => GetStructInheritedMembersData("Property");
+
+    private static IEnumerable<object[]> GetStructInheritedMethodsData()
+      => GetStructInheritedMembersData("Method");
+
+
     #endregion
 
     private static IStruct? GetStruct(IResolver resolver, string name)
@@ -346,6 +374,58 @@ namespace UT.Members
         .OrderBy(key => key.Key);
 
       Assert.Equal(expectedGenerics, actualGenerics);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetStructInheritedEventsData))]
+    public void ValidateInheritedEventMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetStruct(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetStructInheritedDelegatesData))]
+    public void ValidateInheritedDelegateMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetStruct(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetStructInheritedPropertiesData))]
+    public void ValidateInheritedPropertyMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetStruct(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetStructInheritedMethodsData))]
+    public void ValidateInheritedMethodMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetStruct(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
   }
 }

@@ -31,5 +31,9 @@
     public const string INTERNAL_NESTED_STRUCT = "NestedStructInternal";
     public const string PUBLIC_GENERIC_STRUCT = "GenericStruct";
     public const string PUBLIC_NESTED_GENERIC_STRUCT = "NestedGenericStruct";
+    public const string PUBLIC_INHERITING_STRUCT = "InheritingStruct";
+    public const string PUBLIC_INHERITING_STRUCT_EMPTY = "InheritingStructEmpty";
+    public const string PUBLIC_INHERITING_COMPLEX_STRUCT = "InheritingStructComplex";
+    public const string PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY = "InheritingStructComplexEmpty";
   }
 }
