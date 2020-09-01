@@ -35,5 +35,13 @@
     public const string PUBLIC_INHERITING_STRUCT_EMPTY = "InheritingStructEmpty";
     public const string PUBLIC_INHERITING_COMPLEX_STRUCT = "InheritingStructComplex";
     public const string PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY = "InheritingStructComplexEmpty";
+
+    public const string PUBLIC_CLASS = "ClassTypePublic";
+    public const string INTERNAL_CLASS = "ClassTypeInternal";
+    public const string PUBLIC_NESTED_CLASS = "NestedClassPublic";
+    public const string PROTECTED_NESTED_CLASS = "NestedClassProtected";
+    public const string INTERNAL_NESTED_CLASS = "NestedClassInternal";
+    public const string PUBLIC_GENERIC_CLASS = "GenericClass";
+    public const string PUBLIC_NESTED_GENERIC_CLASS = "NestedGenericClass";
   }
 }
