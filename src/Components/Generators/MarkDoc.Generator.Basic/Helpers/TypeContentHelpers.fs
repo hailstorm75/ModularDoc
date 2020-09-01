@@ -107,10 +107,10 @@ module TypeContentHelpers =
   /// <param name="tools">Tools for composing method arguments</param>
   /// <returns>Composed arguments</returns>
   let methodArguments source (method: IMember) tools =
-    let argument arg =
+    let argument (arg: IArgument) =
       // Compose the signature of a single argument
       JoinedText ([ arg |> StringConverters.argumentTypeStr |> Normal; TypeHelpers.processResType source arg.Type tools; Normal arg.Name ], " ")
-    let processArguments args =
+    let processArguments (args: IArgument seq) =
       // Compose arguments together 
       JoinedText (args |> Seq.map argument, ", ")
 
