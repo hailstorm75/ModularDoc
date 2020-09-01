@@ -21,6 +21,18 @@ jobs:
       run: dotnet restore src/MarkDoc.sln
     - name: Build
       run: dotnet build src/MarkDoc.sln --configuration Release --no-restore
+    - name: sonarscan-dotnet
+      # You may pin to the exact commit or the version.
+      # uses: highbyte/sonarscan-dotnet@0c686893f970009558530f17487075587dbad82e
+      uses: highbyte/sonarscan-dotnet@1.0
+      with:
+        # The key of the SonarQube project
+        sonarProjectKey: hailstorm
+        # The name of the SonarQube project
+        sonarProjectName: hailstorm75_MarkDoc.Core
+        # Optional. Set to 1 or true to not run 'dotnet test' command
+        dotnetDisableTests: 1
+
   test:
     
     runs-on: ubuntu-latest
