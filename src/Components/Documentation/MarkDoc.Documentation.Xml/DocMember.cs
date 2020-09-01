@@ -38,7 +38,7 @@ namespace MarkDoc.Documentation.Xml
         // throw an exception
         throw new ArgumentNullException(nameof(source));
 
-      Name = name;
+      Name = name.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
       Type = (MemberType)typeKey;
       Documentation = new DocumentationContent(source);
     }
