@@ -28,6 +28,22 @@ namespace UT.Members
       return data.ComposeData();
     }
 
+    private static IEnumerable<object[]> GetClassNamespacesData()
+    {
+      const string classNameSpace = "TestLibrary.Classes";
+
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_CLASS, classNameSpace },
+        new object[] { Constants.INTERNAL_CLASS, classNameSpace },
+        new object[] { Constants.PUBLIC_NESTED_CLASS, $"{classNameSpace}.ClassParent" },
+        new object[] { Constants.PROTECTED_NESTED_CLASS, $"{classNameSpace}.ClassParent"},
+        new object[] { Constants.INTERNAL_NESTED_CLASS, $"{classNameSpace}.ClassParent"}
+      };
+
+      return data.ComposeData();
+    }
+
     private static IEnumerable<object[]> GetClassAccessorsData()
     {
       var data = new[]
@@ -104,6 +120,16 @@ namespace UT.Members
 
     [Theory]
     [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassNamespacesData))]
+    public void ValidateClassRawNames(IResolver resolver, string name, string expected)
+    {
+      var query = GetClass(resolver, name);
+
+      Assert.True(query?.RawName.Equals($"{expected}.{name}"), $"{resolver.GetType().FullName}: The '{name}' raw name is invalid. Expected '{expected}.{name}' != Actual '{query?.RawName}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
     [MemberData(nameof(GetClassAccessorsData))]
     public void ValidateClassAccessors(IResolver resolver, string name, AccessorType accessor)
     {
@@ -140,6 +166,16 @@ namespace UT.Members
       var query = GetClass(resolver, name);
 
       Assert.Equal(expected, query?.IsStatic);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassNamespacesData))]
+    public void ValidateClassNamespace(IResolver resolver, string name, string expected)
+    {
+      var query = GetClass(resolver, name);
+
+      Assert.True(query?.TypeNamespace.Equals(expected), $"{resolver.GetType().FullName}: The '{name}' namespace is invalid. Expected '{expected}' != Actual '{query?.TypeNamespace}'.");
     }
   }
 }
