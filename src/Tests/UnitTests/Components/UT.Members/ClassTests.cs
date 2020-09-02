@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Types;
@@ -115,6 +117,23 @@ namespace UT.Members
       return data.ComposeData();
     }
 
+    private static IEnumerable<object[]> GetClassGenericData()
+    {
+      var generics = new Dictionary<string, (Variance, IReadOnlyCollection<string>)>
+      {
+        { "T1", (Variance.NonVariant, new string[]{}) },
+        { "T2", (Variance.NonVariant, new []{ nameof(IDisposable) }) },
+      };
+
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_GENERIC_CLASS, generics },
+        new object[] { Constants.PUBLIC_NESTED_GENERIC_CLASS, generics },
+      };
+
+      return data.ComposeData();
+    }
+
     #endregion
 
     private static IClass? GetClass(IResolver resolver, string name)
@@ -204,6 +223,42 @@ namespace UT.Members
       var query = GetClass(resolver, name);
 
       Assert.Equal(expected, query?.BaseClass != null);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassGenericData))]
+    public void ValidateClassGenericVariances(IResolver resolver, string name, Dictionary<string, (Variance variance, IReadOnlyCollection<string>)> generics)
+    {
+      var query = GetClass(resolver, name);
+
+      var interfaceGenerics = query?.Generics
+        .Select(item => (item.Key, item.Value.variance))
+        .OrderBy(key => key.Key);
+
+      var expectedGenerics = generics
+        .Select(item => (item.Key, item.Value.variance))
+        .OrderBy(key => key.Key);
+
+      Assert.Equal(expectedGenerics, interfaceGenerics);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassGenericData))]
+    public void ValidateClassGenericConstraints(IResolver resolver, string name, Dictionary<string, (Variance, IReadOnlyCollection<string> constraints)> generics)
+    {
+      var query = GetClass(resolver, name);
+
+      var actualGenerics = query?.Generics
+        .Select(item => (item.Key, string.Join(";", item.Value.constraints.Select(constraint => constraint.DisplayName).OrderBy(Linq.XtoX))))
+        .OrderBy(key => key.Key);
+
+      var expectedGenerics = generics
+        .Select(item => (item.Key, string.Join(";", item.Value.constraints.OrderBy(Linq.XtoX))))
+        .OrderBy(key => key.Key);
+
+      Assert.Equal(expectedGenerics, actualGenerics);
     }
   }
 }
