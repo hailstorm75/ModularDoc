@@ -42,6 +42,45 @@ namespace UT.Members
       return data.ComposeData();
     }
 
+    private static IEnumerable<object[]> GetClassAbstractData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_CLASS, false },
+        new object[] { Constants.PUBLIC_CLASS_STATIC, false },
+        new object[] { Constants.PUBLIC_CLASS_SEALED, false },
+        new object[] { Constants.PUBLIC_CLASS_ABSTRACT, true }
+      };
+
+      return data.ComposeData();
+    }
+
+    private static IEnumerable<object[]> GetClassSealedData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_CLASS, false },
+        new object[] { Constants.PUBLIC_CLASS_STATIC, false },
+        new object[] { Constants.PUBLIC_CLASS_ABSTRACT, false },
+        new object[] { Constants.PUBLIC_CLASS_SEALED, true }
+      };
+
+      return data.ComposeData();
+    }
+
+    private static IEnumerable<object[]> GetClassStaticData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_CLASS, false },
+        new object[] { Constants.PUBLIC_CLASS_ABSTRACT, false },
+        new object[] { Constants.PUBLIC_CLASS_SEALED, false },
+        new object[] { Constants.PUBLIC_CLASS_STATIC, true }
+      };
+
+      return data.ComposeData();
+    }
+
     #endregion
 
     private static IClass? GetClass(IResolver resolver, string name)
@@ -56,7 +95,7 @@ namespace UT.Members
     [Theory]
     [Trait("Category", nameof(IClass))]
     [MemberData(nameof(GetClassNamesData))]
-    public void ValidateInterfaceNames(IResolver resolver, string name)
+    public void ValidateClassNames(IResolver resolver, string name)
     {
       var query = GetClass(resolver, name);
 
@@ -66,11 +105,41 @@ namespace UT.Members
     [Theory]
     [Trait("Category", nameof(IClass))]
     [MemberData(nameof(GetClassAccessorsData))]
-    public void ValidateInterfaceAccessors(IResolver resolver, string name, AccessorType accessor)
+    public void ValidateClassAccessors(IResolver resolver, string name, AccessorType accessor)
     {
       var query = GetClass(resolver, name);
 
       Assert.True(query?.Accessor == accessor, $"{resolver.GetType().FullName}: The '{name}' accessor type is invalid. Expected '{accessor}' != Actual '{query?.Accessor}'");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassAbstractData))]
+    public void ValidateClassAbstract(IResolver resolver, string name, bool expected)
+    {
+      var query = GetClass(resolver, name);
+
+      Assert.Equal(expected, query?.IsAbstract);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassSealedData))]
+    public void ValidateClassSealed(IResolver resolver, string name, bool expected)
+    {
+      var query = GetClass(resolver, name);
+
+      Assert.Equal(expected, query?.IsSealed);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassStaticData))]
+    public void ValidateClassStatic(IResolver resolver, string name, bool expected)
+    {
+      var query = GetClass(resolver, name);
+
+      Assert.Equal(expected, query?.IsStatic);
     }
   }
 }

@@ -37,6 +37,9 @@
     public const string PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY = "InheritingStructComplexEmpty";
 
     public const string PUBLIC_CLASS = "ClassTypePublic";
+    public const string PUBLIC_CLASS_ABSTRACT = "ClassTypePublicAbstract";
+    public const string PUBLIC_CLASS_SEALED = "ClassTypePublicSealed";
+    public const string PUBLIC_CLASS_STATIC = "ClassTypePublicStatic";
     public const string INTERNAL_CLASS = "ClassTypeInternal";
     public const string PUBLIC_NESTED_CLASS = "NestedClassPublic";
     public const string PROTECTED_NESTED_CLASS = "NestedClassProtected";
