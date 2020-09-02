@@ -97,6 +97,24 @@ namespace UT.Members
       return data.ComposeData();
     }
 
+    private static IEnumerable<object[]> GetClassBaseClassData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_CLASS, false },
+        new object[] { Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE, true },
+        new object[] { Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY, true },
+        new object[] { Constants.PUBLIC_INHERITING_COMPLEX_CLASS, false },
+        new object[] { Constants.PUBLIC_INHERITING_COMPLEX_CLASS_EMPTY, false },
+        new object[] { Constants.PUBLIC_INHERITING_CLASS_BASE, true },
+        new object[] { Constants.PUBLIC_INHERITING_CLASS_BASE_EMPTY, true },
+        new object[] { Constants.PUBLIC_INHERITING_CLASS_EMPTY, false },
+        new object[] { Constants.PUBLIC_INHERITING_CLASS, false },
+      };
+
+      return data.ComposeData();
+    }
+
     #endregion
 
     private static IClass? GetClass(IResolver resolver, string name)
@@ -176,6 +194,16 @@ namespace UT.Members
       var query = GetClass(resolver, name);
 
       Assert.True(query?.TypeNamespace.Equals(expected), $"{resolver.GetType().FullName}: The '{name}' namespace is invalid. Expected '{expected}' != Actual '{query?.TypeNamespace}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassBaseClassData))]
+    public void ValidateClassHasBase(IResolver resolver, string name, bool expected)
+    {
+      var query = GetClass(resolver, name);
+
+      Assert.Equal(expected, query?.BaseClass != null);
     }
   }
 }

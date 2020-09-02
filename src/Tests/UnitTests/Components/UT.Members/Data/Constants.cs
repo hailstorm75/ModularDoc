@@ -46,5 +46,13 @@
     public const string INTERNAL_NESTED_CLASS = "NestedClassInternal";
     public const string PUBLIC_GENERIC_CLASS = "GenericClass";
     public const string PUBLIC_NESTED_GENERIC_CLASS = "NestedGenericClass";
+    public const string PUBLIC_INHERITING_CLASS = "InheritingClass";
+    public const string PUBLIC_INHERITING_CLASS_EMPTY = "InheritingClassEmpty";
+    public const string PUBLIC_INHERITING_CLASS_BASE = "InheritingClassWithBase";
+    public const string PUBLIC_INHERITING_CLASS_BASE_EMPTY = "InheritingClassWithBaseEmpty";
+    public const string PUBLIC_INHERITING_COMPLEX_CLASS = "InheritingClassComplex";
+    public const string PUBLIC_INHERITING_COMPLEX_CLASS_EMPTY = "InheritingClassComplexEmpty";
+    public const string PUBLIC_INHERITING_COMPLEX_CLASS_BASE = "InheritingClassComplexWithBase";
+    public const string PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY = "InheritingClassComplexWithBaseEmpty";
   }
 }
