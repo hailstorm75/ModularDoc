@@ -4,6 +4,7 @@ using System.Linq;
 using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
@@ -134,6 +135,43 @@ namespace UT.Members
       return data.ComposeData();
     }
 
+    private static IEnumerable<object[]> GetClassInheritedMembersData(string member)
+    {
+      var data = new[]
+      {
+        new object[] {Constants.PUBLIC_INHERITING_CLASS, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_CLASS_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_CLASS_BASE, $"Base{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_CLASS_BASE_EMPTY, $"Base{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_EMPTY, $"Other{member}", Constants.PUBLIC_INHERITING_AND_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY, member, Constants.PUBLIC_INHERITED_INTERFACE},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE, $"Base{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY, $"Base{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE, $"Abstract{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY, $"Abstract{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE, $"Virtual{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+        new object[] {Constants.PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY, $"Virtual{member}", Constants.PUBLIC_CLASS_ABSTRACT},
+      };
+
+      return data.ComposeData();
+    }
+
+    private static IEnumerable<object[]> GetClassInheritedEventsData()
+      => GetClassInheritedMembersData("Event");
+
+    //private static IEnumerable<object[]> GetClassInheritedDelegatesData()
+    //  => GetClassInheritedMembersData("Delegate");
+
+    private static IEnumerable<object[]> GetClassInheritedPropertiesData()
+      => GetClassInheritedMembersData("Property");
+
+    private static IEnumerable<object[]> GetClassInheritedMethodsData()
+      => GetClassInheritedMembersData("Method");
+
     #endregion
 
     private static IClass? GetClass(IResolver resolver, string name)
@@ -259,6 +297,58 @@ namespace UT.Members
         .OrderBy(key => key.Key);
 
       Assert.Equal(expectedGenerics, actualGenerics);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetClassInheritedEventsData))]
+    public void ValidateInheritedEventMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetClass(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    //[Theory]
+    //[Trait("Category", nameof(IClass))]
+    //[Trait("Category", nameof(IDelegate))]
+    //[MemberData(nameof(GetClassInheritedDelegatesData))]
+    //public void ValidateInheritedDelegateMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    //{
+    //  var query = GetClass(resolver, name);
+
+    //  var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+    //  Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    //}
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetClassInheritedPropertiesData))]
+    public void ValidateInheritedPropertyMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetClass(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetClassInheritedMethodsData))]
+    public void ValidateInheritedMethodMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetClass(resolver, name);
+
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
   }
 }
