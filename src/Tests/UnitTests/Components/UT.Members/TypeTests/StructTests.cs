@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using MarkDoc.Helpers;
-using MarkDoc.Members.Types;
-using MarkDoc.Members.Enums;
 using MarkDoc.Members;
+using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
+using MarkDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
 
-namespace UT.Members
+namespace UT.Members.TypeTests
 {
   public class StructTests
   {

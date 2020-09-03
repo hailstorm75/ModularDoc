@@ -1,13 +1,13 @@
-﻿using MarkDoc.Members;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MarkDoc.Helpers;
+using MarkDoc.Members;
 using MarkDoc.Members.Types;
 using UT.Members.Data;
 
-namespace UT.Members
+namespace UT.Members.TypeTests
 {
-  internal static class MemberHelpers
+  internal static class TypeHelpers
   {
     public static IReadOnlyCollection<T> GetTypes<T>(this IResolver resolver)
       where T : IType

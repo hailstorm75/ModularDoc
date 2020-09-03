@@ -9,7 +9,7 @@ using MarkDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
 
-namespace UT.Members
+namespace UT.Members.TypeTests
 {
   public class ClassTests
   {

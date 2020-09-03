@@ -7,7 +7,7 @@ using UT.Members.Data;
 using Xunit;
 using Constants = UT.Members.Data.Constants;
 
-namespace UT.Members
+namespace UT.Members.TypeTests
 {
   public class ResolverTests
   {
