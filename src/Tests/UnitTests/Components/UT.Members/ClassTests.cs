@@ -172,7 +172,8 @@ namespace UT.Members
     private static IEnumerable<object[]> GetClassInheritedMethodsData()
       => GetClassInheritedMembersData("Method");
 
-    #endregion
+    private static IEnumerable<object[]> GetClassWithMembersData()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS });
 
     private static IClass? GetClass(IResolver resolver, string name)
     {
@@ -182,6 +183,8 @@ namespace UT.Members
         .GetTypes<IClass>()
         .FirstOrDefault(type => type.Name.Equals(name));
     }
+
+    #endregion
 
     [Theory]
     [Trait("Category", nameof(IClass))]
@@ -351,5 +354,100 @@ namespace UT.Members
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
 
+    [Theory]
+    [Trait("Category", nameof(IEnum))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeEnum(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var enumType = query?.NestedTypes.OfType<IEnum>().FirstOrDefault(nested => nested.Name.Equals("MyEnum"));
+
+      Assert.False(enumType is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected nested enum.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEnum))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeEnumCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var enumCount = query?.NestedTypes.OfType<IEnum>().Count() ?? 0;
+
+      Assert.True(enumCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested enums.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeStruct(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var structType = query?.NestedTypes.OfType<IStruct>().FirstOrDefault(nested => nested.Name.Equals("MyStruct"));
+
+      Assert.False(structType is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected nested struct.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeStructCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var structCount = query?.NestedTypes.OfType<IStruct>().Count() ?? 0;
+
+      Assert.True(structCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested structs.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeClass(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var classType = query?.NestedTypes.OfType<IClass>().FirstOrDefault(nested => nested.Name.Equals("MyClass"));
+
+      Assert.False(classType is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected nested class.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeClassCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var classCount = query?.NestedTypes.OfType<IClass>().Count() ?? 0;
+
+      Assert.True(classCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested classes.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeInterface(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var interfaceType = query?.NestedTypes.OfType<IInterface>().FirstOrDefault(nested => nested.Name.Equals("IMyInterface"));
+
+      Assert.False(interfaceType is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected nested interface.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassNestedTypeInterfaceCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var interfaceCount= query?.NestedTypes.OfType<IInterface>().Count(item => !(item is IClass || item is IStruct)) ?? 0;
+
+      Assert.True(interfaceCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested interfaces.");
+    }
   }
 }
