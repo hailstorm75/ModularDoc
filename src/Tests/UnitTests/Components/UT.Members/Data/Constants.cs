@@ -54,5 +54,8 @@
     public const string PUBLIC_INHERITING_COMPLEX_CLASS_EMPTY = "InheritingClassComplexEmpty";
     public const string PUBLIC_INHERITING_COMPLEX_CLASS_BASE = "InheritingClassComplexWithBase";
     public const string PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY = "InheritingClassComplexWithBaseEmpty";
+    public const string PUBLIC_CLASS_DEFAULT_CTOR = "ClassWithDefaultConstructor";
+    public const string PUBLIC_CLASS_PARAM_CTOR = "ClassWithParamConstructor";
+
   }
 }

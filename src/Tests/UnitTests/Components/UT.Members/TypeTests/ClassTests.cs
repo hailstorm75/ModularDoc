@@ -193,6 +193,17 @@ namespace UT.Members.TypeTests
     private static IEnumerable<object[]> GetClassDelegatesData()
       => GetClassWithMembersData("Delegate");
 
+    private static IEnumerable<object[]> GetClassConstructorData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_CLASS_DEFAULT_CTOR, 0 },
+        new object[] { Constants.PUBLIC_CLASS_PARAM_CTOR, 1 },
+      };
+
+      return data.ComposeData();
+    }
+
     private static IClass? GetClass(IResolver resolver, string name)
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -588,6 +599,28 @@ namespace UT.Members.TypeTests
       Assert.True(delegatesCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of members than expected.");
     }
 
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassConstructorData))]
+    public void ValidateClassConstructors(IResolver resolver, string name, int expected)
+    {
+      var query = GetClass(resolver, name);
 
+      var constructors = query?.Constructors;
+
+      Assert.True(constructors?.FirstOrDefault()?.Arguments.Count == expected);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassConstructorData))]
+    public void ValidateClassConstructorsCount(IResolver resolver, string name, int _)
+    {
+      var query = GetClass(resolver, name);
+
+      var constructors = query?.Constructors;
+
+      Assert.True(constructors?.Count == 1);
+    }
   }
 }
