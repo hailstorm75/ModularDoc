@@ -163,8 +163,8 @@ namespace UT.Members
     private static IEnumerable<object[]> GetClassInheritedEventsData()
       => GetClassInheritedMembersData("Event");
 
-    //private static IEnumerable<object[]> GetClassInheritedDelegatesData()
-    //  => GetClassInheritedMembersData("Delegate");
+    private static IEnumerable<object[]> GetClassInheritedDelegatesData()
+      => GetClassInheritedMembersData("Delegate").Where(x => !((string)x[2]).StartsWith("Abstract", StringComparison.InvariantCultureIgnoreCase) && !((string)x[2]).StartsWith("Virtual", StringComparison.InvariantCultureIgnoreCase));
 
     private static IEnumerable<object[]> GetClassInheritedPropertiesData()
       => GetClassInheritedMembersData("Property");
@@ -312,18 +312,18 @@ namespace UT.Members
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
 
-    //[Theory]
-    //[Trait("Category", nameof(IClass))]
-    //[Trait("Category", nameof(IDelegate))]
-    //[MemberData(nameof(GetClassInheritedDelegatesData))]
-    //public void ValidateInheritedDelegateMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
-    //{
-    //  var query = GetClass(resolver, name);
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetClassInheritedDelegatesData))]
+    public void ValidateInheritedDelegateMembers(IResolver resolver, string name, string memberName, string sourceTypeName)
+    {
+      var query = GetClass(resolver, name);
 
-    //  var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
-    //  Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
-    //}
+      Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
 
     [Theory]
     [Trait("Category", nameof(IClass))]
@@ -350,5 +350,6 @@ namespace UT.Members
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
+
   }
 }
