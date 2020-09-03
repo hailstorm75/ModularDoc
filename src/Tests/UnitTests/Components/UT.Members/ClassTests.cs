@@ -175,6 +175,9 @@ namespace UT.Members
     private static IEnumerable<object[]> GetClassWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS });
 
+    private static IEnumerable<object[]> GetClassWithInterfacesData()
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INHERITING_CLASS });
+
     private static IClass? GetClass(IResolver resolver, string name)
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -352,6 +355,30 @@ namespace UT.Members
       var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithInterfacesData))]
+    public void ValidateInterfaceInheritedInterfaces(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var type = query?.InheritedInterfaces.FirstOrDefault(inherited => inherited.DisplayName.Equals(Constants.PUBLIC_INHERITED_INTERFACE));
+
+      Assert.False(type is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected inherited interface.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithInterfacesData))]
+    public void ValidateInterfaceInheritedInterfacesCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var interfacesCount = query?.InheritedInterfaces.Count ?? 0;
+
+      Assert.True(interfacesCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of inherited interface.");
     }
 
     [Theory]
