@@ -178,6 +178,21 @@ namespace UT.Members
     private static IEnumerable<object[]> GetClassWithInterfacesData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INHERITING_CLASS });
 
+    private static IEnumerable<object[]> GetClassWithMembersData(string name)
+      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS, name });
+
+    private static IEnumerable<object[]> GetClassPropertiesData()
+      => GetClassWithMembersData("Property");
+
+    private static IEnumerable<object[]> GetClassMethodsData()
+      => GetClassWithMembersData("Method");
+
+    private static IEnumerable<object[]> GetClassEventsData()
+      => GetClassWithMembersData("Event");
+
+    private static IEnumerable<object[]> GetClassDelegatesData()
+      => GetClassWithMembersData("Delegate");
+
     private static IClass? GetClass(IResolver resolver, string name)
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -476,5 +491,103 @@ namespace UT.Members
 
       Assert.True(interfaceCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested interfaces.");
     }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetClassPropertiesData))]
+    public void ValidateClassProperties(IResolver resolver, string name, string member)
+    {
+      var query = GetClass(resolver, name);
+
+      var hasProperty = query?.Properties.Any(property => property.Name.Equals(member)) ?? false;
+
+      Assert.True(hasProperty, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetClassMethodsData))]
+    public void ValidateClassMethods(IResolver resolver, string name, string member)
+    {
+      var query = GetClass(resolver, name);
+
+      var hasMethod = query?.Methods.Any(method => method.Name.Equals(member)) ?? false;
+
+      Assert.True(hasMethod, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetClassEventsData))]
+    public void ValidateClassEvents(IResolver resolver, string name, string member)
+    {
+      var query = GetClass(resolver, name);
+
+      var hasEvent = query?.Events.Any(@event => @event.Name.Equals(member)) ?? false;
+
+      Assert.True(hasEvent, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetClassDelegatesData))]
+    public void ValidateClassDelegates(IResolver resolver, string name, string member)
+    {
+      var query = GetClass(resolver, name);
+
+      var hasDelegate = query?.Delegates.Any(@delegate => @delegate.Name.Equals(member)) ?? false;
+
+      Assert.True(hasDelegate, $"{resolver.GetType().FullName}: The '{name}' interface is missing the '{member}'.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassPropertiesCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var propertiesCount = query?.Properties.Count ?? 0;
+
+      Assert.True(propertiesCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassMethodsCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var methodsCount = query?.Methods.Count ?? 0;
+
+      Assert.True(methodsCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassEventsCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var eventsCount = query?.Events.Count ?? 0;
+
+      Assert.True(eventsCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of members than expected.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetClassWithMembersData))]
+    public void ValidateClassDelegatesCount(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+
+      var delegatesCount = query?.Delegates.Count ?? 0;
+
+      Assert.True(delegatesCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of members than expected.");
+    }
+
+
   }
 }
