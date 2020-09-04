@@ -120,8 +120,16 @@ namespace UT.Members.TypeTests
     private static IEnumerable<object[]> GetStructInheritedMethodsData()
       => GetStructInheritedMembersData("Method");
 
+    private static IEnumerable<object[]> GetStructConstructorData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_STRUCT_EMPTY_CTOR, 0 },
+        new object[] { Constants.PUBLIC_STRUCT_PARAM_CTOR, 1 },
+      };
 
-    #endregion
+      return data.ComposeData();
+    }
 
     private static IStruct? GetStruct(IResolver resolver, string name)
     {
@@ -131,6 +139,8 @@ namespace UT.Members.TypeTests
         .GetTypes<IStruct>()
         .FirstOrDefault(type => type.Name.Equals(name));
     }
+
+    #endregion
 
     [Theory]
     [Trait("Category", nameof(IStruct))]
@@ -426,6 +436,18 @@ namespace UT.Members.TypeTests
       var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetStructConstructorData))]
+    public void ValidateClassConstructorsCount(IResolver resolver, string name, int count)
+    {
+      var query = GetStruct(resolver, name);
+
+      var constructors = query?.Constructors;
+
+      Assert.True(constructors?.Count == count);
     }
   }
 }

@@ -35,6 +35,8 @@
     public const string PUBLIC_INHERITING_STRUCT_EMPTY = "InheritingStructEmpty";
     public const string PUBLIC_INHERITING_COMPLEX_STRUCT = "InheritingStructComplex";
     public const string PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY = "InheritingStructComplexEmpty";
+    public const string PUBLIC_STRUCT_PARAM_CTOR = "StructWithParamConstructor";
+    public const string PUBLIC_STRUCT_EMPTY_CTOR = "StructEmptyConstructor";
 
     public const string PUBLIC_CLASS = "ClassTypePublic";
     public const string PUBLIC_CLASS_ABSTRACT = "ClassTypePublicAbstract";
@@ -56,6 +58,5 @@
     public const string PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY = "InheritingClassComplexWithBaseEmpty";
     public const string PUBLIC_CLASS_DEFAULT_CTOR = "ClassWithDefaultConstructor";
     public const string PUBLIC_CLASS_PARAM_CTOR = "ClassWithParamConstructor";
-
   }
 }
