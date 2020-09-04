@@ -45,8 +45,6 @@ namespace MarkDoc.Members.Dnlib.Types
                          && methodDef.IsConstructor)
         // Initialize constructors
         .Select(x => new ConstructorDef(resolver, x, parent != null))
-        // Filter out empty constructors
-        //.Where(ctor => ctor.Arguments.Count != 0)
         // Materialize the collection
         .ToReadOnlyCollection();
     }
