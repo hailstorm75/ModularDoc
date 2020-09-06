@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Members;
 using MarkDoc.Members.Enums;
+using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
 
@@ -16,6 +18,13 @@ namespace MarkDoc.Members.Dnlib.Types
   public class StructDef
     : InterfaceDef, IStruct
   {
+    #region Properties
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<IConstructor> Constructors { get; }
+
+    #endregion
+
     #region Constructors
 
     /// <summary>
@@ -25,7 +34,20 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
     internal StructDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : base(resolver, source, parent, ResolveGenericStructs(resolver, source, parent), Enumerable.Empty<IResType>()) { }
+      : base(resolver, source, parent, ResolveGenericStructs(resolver, source, parent), Enumerable.Empty<IResType>())
+    {
+      // Initialize the constructors
+      Constructors = source.Methods
+        // Select valid constructors
+        .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
+                         && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                         && !methodDef.IsPrivate
+                         && methodDef.IsConstructor)
+        // Initialize constructors
+        .Select(x => new ConstructorDef(resolver, x, parent != null))
+        // Materialize the collection
+        .ToReadOnlyCollection();
+    }
 
     #endregion
 
