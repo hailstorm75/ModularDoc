@@ -17,4 +17,9 @@
     <OutputPath>..\..\bin.tests</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Members\Events\" />
+    <Folder Include="Members\Methods\" />
+  </ItemGroup>
+
 </Project>
