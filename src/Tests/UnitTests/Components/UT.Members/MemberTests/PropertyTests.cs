@@ -59,6 +59,16 @@ namespace UT.Members.MemberTests
       }
     }
 
+    private static IProperty? GetProperty(IInterface type, string name, bool throwIfNull = false)
+    {
+      var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+      if (throwIfNull && member is null)
+        throw new KeyNotFoundException();
+
+      return member;
+    }
+
     #endregion
 
     [Theory]
@@ -66,9 +76,9 @@ namespace UT.Members.MemberTests
     [MemberData(nameof(GetPropertyGettersSettersData))]
     public void ValidatePropertyGettersSetters(IInterface type, string name, bool hasGet, bool hasSet)
     {
-      var query = type.Properties.First(property => property.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+      var member = GetProperty(type, name, true);
 
-      Assert.True((query.GetAccessor != null) == hasGet && (query.SetAccessor != null) == hasSet);
+      Assert.True((member?.GetAccessor != null) == hasGet && (member?.SetAccessor != null) == hasSet);
     }
 
     [Theory]
@@ -76,7 +86,7 @@ namespace UT.Members.MemberTests
     [MemberData(nameof(GetPropertyAccessorData))]
     public void ValidatePropertyAccessors(IClass type, string name, AccessorType? property, AccessorType? getter, AccessorType? setter)
     {
-      var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+      var member = GetProperty(type, name);
 
       Assert.Equal(property, member?.Accessor);
     }
@@ -86,7 +96,7 @@ namespace UT.Members.MemberTests
     [MemberData(nameof(GetPropertyAccessorData))]
     public void ValidatePropertyGetterAccessors(IClass type, string name, AccessorType? property, AccessorType? getter, AccessorType? setter)
     {
-      var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+      var member = GetProperty(type, name);
 
       Assert.Equal(getter, member?.GetAccessor);
     }
@@ -96,7 +106,7 @@ namespace UT.Members.MemberTests
     [MemberData(nameof(GetPropertyAccessorData))]
     public void ValidatePropertySetterAccessors(IClass type, string name, AccessorType? property, AccessorType? getter, AccessorType? setter)
     {
-      var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+      var member = GetProperty(type, name);
 
       Assert.Equal(setter, member?.SetAccessor);
     }
