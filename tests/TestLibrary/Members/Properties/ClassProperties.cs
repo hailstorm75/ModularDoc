@@ -1,4 +1,5 @@
-﻿// ReSharper disable All
+﻿#pragma warning disable IDE0051 // Remove unused private members
+// ReSharper disable All
 namespace TestLibrary.Members.Properties
 {
   public class ClassProperties

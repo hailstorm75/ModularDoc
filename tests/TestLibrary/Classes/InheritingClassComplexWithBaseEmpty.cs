@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable 414
+using System;
 using TestLibrary.Interfaces;
 
 namespace TestLibrary.Classes

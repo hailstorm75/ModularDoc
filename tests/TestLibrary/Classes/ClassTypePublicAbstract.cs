@@ -1,4 +1,5 @@
 ﻿#pragma warning disable 67
+#pragma warning disable 414
 // ReSharper disable all
 using System;
 

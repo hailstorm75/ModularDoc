@@ -1,5 +1,6 @@
 ﻿// ReSharper disable all
 #pragma warning disable 67
+#pragma warning disable 414
 using System;
 using TestLibrary.Interfaces;
 
