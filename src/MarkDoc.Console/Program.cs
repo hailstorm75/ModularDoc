@@ -22,6 +22,7 @@ namespace MarkDoc.Console
 {
   public static class Program
   {
+#pragma warning disable CA1812
     internal sealed class Creator
       : IElementCreator
     {

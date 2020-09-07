@@ -254,7 +254,7 @@ namespace MarkDoc.Members.Dnlib
 
       if (subjectSig.IsEnum)
         return new EnumDef(this, subjectSig, nestedParent);
-      if (subjectSig.IsValueType) // TODO: Verify whether truly struct
+      if (subjectSig.IsValueType)
         return new StructDef(this, subjectSig, nestedParent);
       if (subjectSig.IsClass)
         return new ClassDef(this, subjectSig, nestedParent);

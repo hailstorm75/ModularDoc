@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MarkDoc.Helpers.Properties;
 
 namespace MarkDoc.Helpers
 {
@@ -83,12 +84,12 @@ namespace MarkDoc.Helpers
     {
       if (item is null)
         throw new ArgumentNullException(nameof(item));
-      if (string.IsNullOrEmpty(item))
-        throw new ArgumentException(); // TODO: Item empty
+      if (item.Length == 0)
+        throw new ArgumentException(Resources.emptyNamespace);
 
       var result = item.Split('.', StringSplitOptions.RemoveEmptyEntries);
       if (result.Length == 0)
-        throw new ArgumentException(); // TODO: No namespaces
+        throw new ArgumentException(Resources.noNamespacePresent);
 
       return result;
     }

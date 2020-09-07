@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace MarkDoc.Helpers
 {
+#pragma warning disable CA1724
   public static class Linq
   {
     /// <summary>

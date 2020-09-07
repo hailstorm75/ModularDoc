@@ -6,4 +6,5 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters", Justification = "Reuse of data providers", Scope = "type", Target = "T:UT.Members.MemberTests.PropertyTests")]
+[assembly: SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters", Justification = "Reuse of data providers", Scope = "type", Target = "T:UT.Members.TypeTests.ClassTests")]
 [assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Reuse of data providers", Scope = "type", Target = "T:UT.Members.MemberTests.PropertyTests")]
