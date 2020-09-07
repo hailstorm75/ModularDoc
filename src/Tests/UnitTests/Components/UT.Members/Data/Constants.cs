@@ -64,14 +64,14 @@
     public const string PROPERTY_GET = "PropertyGet";
     public const string PROPERTY_SET = "PropertySet";
     public const string PROPERTY_PUBLIC = "PropertyPublic";
-    public const string PROPERTY_PROTECTED = "PropertyPublic";
+    public const string PROPERTY_PROTECTED = "PropertyProtected";
     public const string PROPERTY_INTERNAL = "PropertyInternal";
     public const string PROPERTY_PRIVATE = "PropertyPrivate";
     public const string PROPERTY_PUBLIC_GET_PROTECTED = "PropertyPublicGetProtected";
-    public const string PROPERTY_PUBLIC_GET_INTERNAL = "PropertyPublicGetInternal";
-    public const string PROPERTY_PUBLIC_GET_PRIVATE = "PropertyPublicGetPrivate";
+    public const string PROPERTY_PUBLIC_GET_INTERNAL  = "PropertyPublicGetInternal";
+    public const string PROPERTY_PUBLIC_GET_PRIVATE   = "PropertyPublicGetPrivate";
     public const string PROPERTY_PUBLIC_SET_PROTECTED = "PropertyPublicSetProtected";
-    public const string PROPERTY_PUBLIC_SET_INTERNAL = "PropertyPublicSetInternal";
-    public const string PROPERTY_PUBLIC_SET_PRIVATE = "PropertyPublicSetPrivate";
+    public const string PROPERTY_PUBLIC_SET_INTERNAL  = "PropertyPublicSetInternal";
+    public const string PROPERTY_PUBLIC_SET_PRIVATE   = "PropertyPublicSetPrivate";
   }
 }
