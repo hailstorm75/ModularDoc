@@ -2,14 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
 using System.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using Autofac;
-using Autofac.Integration.Mef;
 using MarkDoc.Helpers;
 using MarkDoc.Members;
 using Microsoft.Extensions.DependencyModel;
