@@ -20,9 +20,9 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extras.Moq" Version="5.0.1" />
-    <PackageReference Include="Autofac.Mef" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
     <PackageReference Include="System.Composition.TypedParts" Version="1.4.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
