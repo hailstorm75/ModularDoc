@@ -1,12 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Loader;
+using Autofac;
+using Autofac.Integration.Mef;
 using MarkDoc.Helpers;
 using MarkDoc.Members;
+using Microsoft.Extensions.DependencyModel;
 
 namespace UT.Members.Data
 {
@@ -20,6 +26,20 @@ namespace UT.Members.Data
 
     private void Compose()
     {
+      static Assembly Load(string assemblyFullPath)
+      {
+        var fileNameWithOutExtension = Path.GetFileNameWithoutExtension(assemblyFullPath);
+
+        var inCompileLibraries = DependencyContext.Default.CompileLibraries.Any(l => l.Name.Equals(fileNameWithOutExtension, StringComparison.OrdinalIgnoreCase));
+        var inRuntimeLibraries = DependencyContext.Default.RuntimeLibraries.Any(l => l.Name.Equals(fileNameWithOutExtension, StringComparison.OrdinalIgnoreCase));
+
+        var assembly = (inCompileLibraries || inRuntimeLibraries)
+          ? Assembly.Load(new AssemblyName(fileNameWithOutExtension))
+          : AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyFullPath);
+
+        return assembly;
+      }
+
       lock (this)
       {
         if (m_composed)
@@ -28,8 +48,7 @@ namespace UT.Members.Data
         var path = Path.GetFullPath("../../../Components/Members");
         var assemblies = Directory
           .GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly)
-          .Concat(Directory.GetFiles(Path.GetFullPath("../../../"), "dnlib.dll", SearchOption.TopDirectoryOnly))
-          .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)
+          .Select(Load)
           .ToArray();
         var configuration = new ContainerConfiguration()
           .WithAssemblies(assemblies);
