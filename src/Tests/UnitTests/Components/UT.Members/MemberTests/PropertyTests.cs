@@ -84,6 +84,26 @@ namespace UT.Members.MemberTests
       }
     }
 
+    private static IEnumerable<object?[]> GetPropertyStaticData()
+    {
+      var data = new object[]
+      {
+        new object[] { Constants.PROPERTY_PUBLIC, false },
+        new object[] { Constants.PROPERTY_STATIC, true },
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals("ClassProperties"));
+        object?[] typeWrapper = { result };
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray();
+      }
+    }
+
     private static IProperty? GetProperty(IInterface type, string name, bool throwIfNull = false)
     {
       var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -134,6 +154,16 @@ namespace UT.Members.MemberTests
       var member = GetProperty(type, name);
 
       Assert.NotNull(member);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertyStaticData))]
+    public void ValidatePropertyIsStatic(IInterface type, string name, bool isStatic)
+    {
+      var member = GetProperty(type, name);
+
+      Assert.Equal(isStatic, member?.IsStatic);
     }
 
     [Theory]
