@@ -28,6 +28,8 @@ namespace MarkDoc.Helpers
     {
       if (source is null)
         throw new ArgumentNullException(nameof(source));
+      if (keySelector is null)
+        throw new ArgumentNullException(nameof(keySelector));
 
       var seenKeys = new HashSet<TKey>();
       foreach (var element in source)

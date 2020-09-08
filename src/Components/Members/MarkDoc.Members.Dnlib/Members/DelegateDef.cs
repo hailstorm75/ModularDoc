@@ -20,7 +20,7 @@ namespace MarkDoc.Members.Dnlib.Members
     #region Properties
 
     /// <inheritdoc />
-    public bool IsStatic { get; } = false;
+    public bool IsStatic => false;
 
     /// <inheritdoc />
     public string Name { get; }
