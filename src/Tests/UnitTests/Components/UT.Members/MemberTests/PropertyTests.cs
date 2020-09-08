@@ -16,12 +16,16 @@ namespace UT.Members.MemberTests
 
     private static IEnumerable<object[]> GetPropertyGettersSettersData()
     {
+      var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
+
       foreach (var container in new ResolversProvider())
       {
         var resolver = container.First() as IResolver;
         resolver?.Resolve(Constants.TEST_ASSEMBLY);
 
-        var types = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IInterface>();
+        var types = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE]
+          .OfType<IInterface>()
+          .Where(type => filter.Contains(type.Name));
         foreach (var type in types ?? throw new Exception())
         {
           yield return new object[] { type, Constants.PROPERTY_GET_SET, true, true };
@@ -56,6 +60,27 @@ namespace UT.Members.MemberTests
         object?[] typeWrapper = { result };
         foreach (object?[] entry in data)
           yield return typeWrapper.Concat(entry).ToArray();
+      }
+    }
+
+    private static IEnumerable<object[]> GetPropertyNameData()
+    {
+      var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var types = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE]
+          .OfType<IInterface>()
+          .Where(type => filter.Contains(type.Name));
+        foreach (var type in types ?? throw new Exception())
+        {
+          yield return new object[] { type, Constants.PROPERTY_GET_SET };
+          yield return new object[] { type, Constants.PROPERTY_GET };
+          yield return new object[] { type, Constants.PROPERTY_SET };
+        }
       }
     }
 
@@ -99,6 +124,16 @@ namespace UT.Members.MemberTests
       var member = GetProperty(type, name);
 
       Assert.Equal(getter, member?.GetAccessor);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertyNameData))]
+    public void ValidatePropertyNames(IInterface type, string name)
+    {
+      var member = GetProperty(type, name);
+
+      Assert.NotNull(member);
     }
 
     [Theory]

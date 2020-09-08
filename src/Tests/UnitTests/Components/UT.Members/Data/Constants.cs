@@ -59,6 +59,10 @@
     public const string PUBLIC_CLASS_DEFAULT_CTOR = "ClassWithDefaultConstructor";
     public const string PUBLIC_CLASS_PARAM_CTOR = "ClassWithParamConstructor";
 
+    public const string PROPERTIES_NAMESPACE = "TestLibrary.Members.Properties";
+    public const string PROPERTIES_CLASS = "ClassProperties";
+    public const string PROPERTIES_STRUCT = "StructProperties";
+    public const string PROPERTIES_INTERFACE = "IInterfaceProperties";
     public const string PROPERTY_STATIC = "PropertyStatic";
     public const string PROPERTY_GET_SET = "PropertyGetSet";
     public const string PROPERTY_GET = "PropertyGet";
@@ -68,10 +72,16 @@
     public const string PROPERTY_INTERNAL = "PropertyInternal";
     public const string PROPERTY_PRIVATE = "PropertyPrivate";
     public const string PROPERTY_PUBLIC_GET_PROTECTED = "PropertyPublicGetProtected";
-    public const string PROPERTY_PUBLIC_GET_INTERNAL  = "PropertyPublicGetInternal";
-    public const string PROPERTY_PUBLIC_GET_PRIVATE   = "PropertyPublicGetPrivate";
+    public const string PROPERTY_PUBLIC_GET_INTERNAL = "PropertyPublicGetInternal";
+    public const string PROPERTY_PUBLIC_GET_PRIVATE = "PropertyPublicGetPrivate";
     public const string PROPERTY_PUBLIC_SET_PROTECTED = "PropertyPublicSetProtected";
-    public const string PROPERTY_PUBLIC_SET_INTERNAL  = "PropertyPublicSetInternal";
-    public const string PROPERTY_PUBLIC_SET_PRIVATE   = "PropertyPublicSetPrivate";
+    public const string PROPERTY_PUBLIC_SET_INTERNAL = "PropertyPublicSetInternal";
+    public const string PROPERTY_PUBLIC_SET_PRIVATE = "PropertyPublicSetPrivate";
+    public const string PUBLIC_CLASS_PROPERTY_PARENT = "ClassPropertiesParent";
+    public const string PROPERTY_PUBLIC_TOP = "PropertyTop";
+    public const string PUBLIC_CLASS_PROPERTY_NESTED  = "ClassPropertiesParentNested";
+    public const string PROPERTY_PUBLIC_NESTED = "PropertyNested";
+    public const string PUBLIC_CLASS_PROPERTY_NESTED2  = "ClassPropertiesParentNestedNested";
+    public const string PROPERTY_PUBLIC_NESTED2 = "PropertyNestedNested";
   }
 }
