@@ -104,6 +104,27 @@ namespace UT.Members.MemberTests
       }
     }
 
+    private static IEnumerable<object[]> GetPropertyValueData()
+    {
+      var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var types = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE]
+          .OfType<IInterface>()
+          .Where(type => filter.Contains(type.Name));
+        foreach (var type in types ?? throw new Exception())
+        {
+          yield return new object[] { type, Constants.PROPERTY_GET_SET, "string" };
+          yield return new object[] { type, Constants.PROPERTY_GET, "string" };
+          yield return new object[] { type, Constants.PROPERTY_SET, "string" };
+        }
+      }
+    }
+
     private static IProperty? GetProperty(IInterface type, string name, bool throwIfNull = false)
     {
       var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -174,6 +195,16 @@ namespace UT.Members.MemberTests
       var member = GetProperty(type, name);
 
       Assert.Equal(setter, member?.SetAccessor);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertyValueData))]
+    public void ValidatePropertyValue(IInterface type, string name, string typeName)
+    {
+      var members = GetProperty(type, name, true);
+
+      Assert.Equal(typeName, members?.Type.DisplayName);
     }
   }
 }
