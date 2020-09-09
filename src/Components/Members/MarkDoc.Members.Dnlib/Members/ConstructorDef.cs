@@ -111,6 +111,7 @@ namespace MarkDoc.Members.Dnlib.Members
         dnlib.DotNet.MethodAttributes.Public => AccessorType.Public,
         dnlib.DotNet.MethodAttributes.Family => AccessorType.Protected,
         dnlib.DotNet.MethodAttributes.Assembly => AccessorType.Internal,
+        dnlib.DotNet.MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
         _ => throw new NotSupportedException(Resources.accessorPrivate)
       };
 

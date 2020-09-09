@@ -22,7 +22,7 @@ module internal TagHelpers =
         | :? IListTag -> true
         | :? IInnerTag as tag ->
           match tag.Type with
-          | IInnerTag.InnerTagType.See
+          //| IInnerTag.InnerTagType.See
           | IInnerTag.InnerTagType.SeeAlso
           | IInnerTag.InnerTagType.Code
           | IInnerTag.InnerTagType.InvalidTag -> true

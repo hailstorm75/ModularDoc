@@ -17,5 +17,9 @@
     /// Visible within library
     /// </summary>
     Internal,
+    /// <summary>
+    /// Visible to children within the library
+    /// </summary>
+    ProtectedInternal,
   }
 }
