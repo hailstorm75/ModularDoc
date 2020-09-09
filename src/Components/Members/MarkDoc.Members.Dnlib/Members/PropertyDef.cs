@@ -85,7 +85,7 @@ namespace MarkDoc.Members.Dnlib.Members
       // If the property has a setter method..
       if (source.SetMethod != null)
         // retrieve its input argument
-        return source.SetMethod.Parameters.First().Type;
+        return source.SetMethod.Parameters.Last().Type;
 
       // Property type was not resolved, thus this is not a valid property
       throw new NotSupportedException(Resources.notProperty);
