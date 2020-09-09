@@ -195,7 +195,7 @@ namespace MarkDoc.Members.Dnlib
 #pragma warning restore CA1822 // Mark members as static
 
     /// <inheritdoc />
-    /// <exception cref="InvalidOperationException">When attempting to access <see cref="Types"/> to early</exception>
+    /// <exception cref="InvalidOperationException">When attempting to access <see cref="Types"/> too early</exception>
     /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
     public IType? FindReference(object source, IResType type)
