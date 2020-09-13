@@ -143,10 +143,10 @@ namespace MarkDoc.Members.Dnlib.Members
       var method = methods.First();
       return (method.IsVirtual, method.IsAbstract) switch
       {
-        (true, _) => (method.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0
+        (_, true) => MemberInheritance.Abstract,
+        (true, false) => (method.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0
           ? MemberInheritance.Override
           : MemberInheritance.Virtual,
-        (false, true) => MemberInheritance.Abstract,
         _ => MemberInheritance.Normal
       };
     }

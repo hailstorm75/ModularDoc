@@ -61,6 +61,11 @@
 
     public const string PROPERTIES_NAMESPACE = "TestLibrary.Members.Properties";
     public const string PROPERTIES_CLASS = "ClassProperties";
+    public const string PROPERTIES_CLASS_ABSTRACT = "ClassPropertiesAbstract";
+    public const string PROPERTY_NORMAL = "PropertyNormal";
+    public const string PROPERTY_VIRTUAL = "PropertyVirtual";
+    public const string PROPERTY_ABSTRACT = "PropertyAbstract";
+    public const string PROPERTY_OVERRIDE = "PropertyOverride";
     public const string PROPERTIES_STRUCT = "StructProperties";
     public const string PROPERTIES_INTERFACE = "IInterfaceProperties";
     public const string PROPERTY_STATIC = "PropertyStatic";

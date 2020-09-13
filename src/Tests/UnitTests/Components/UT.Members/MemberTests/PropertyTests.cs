@@ -97,7 +97,7 @@ namespace UT.Members.MemberTests
         var resolver = container.First() as IResolver;
         resolver?.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals("ClassProperties"));
+        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS));
         object?[] typeWrapper = { result };
         foreach (object?[] entry in data)
           yield return typeWrapper.Concat(entry).ToArray();
@@ -122,6 +122,28 @@ namespace UT.Members.MemberTests
           yield return new object[] { type, Constants.PROPERTY_GET, "string" };
           yield return new object[] { type, Constants.PROPERTY_SET, "string" };
         }
+      }
+    }
+
+    private static IEnumerable<object[]> GetPropertiesInheritanceData()
+    {
+      var data = new object[]
+      {
+        new object[] { Constants.PROPERTY_NORMAL, MemberInheritance.Normal },
+        new object[] { Constants.PROPERTY_OVERRIDE, MemberInheritance.Override },
+        new object[] { Constants.PROPERTY_ABSTRACT, MemberInheritance.Abstract },
+        new object[] { Constants.PROPERTY_VIRTUAL, MemberInheritance.Virtual },
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS_ABSTRACT));
+        object?[] typeWrapper = { result };
+        foreach (object?[] entry in data)
+          yield return typeWrapper?.Concat(entry).ToArray()!;
       }
     }
 
@@ -205,6 +227,16 @@ namespace UT.Members.MemberTests
       var members = GetProperty(type, name, true);
 
       Assert.Equal(typeName, members?.Type.DisplayName);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertiesInheritanceData))]
+    public void ValidatePropertyInheritance(IClass type, string name, MemberInheritance inheritance)
+    {
+      var members = GetProperty(type, name, true);
+
+      Assert.Equal(inheritance, members?.Inheritance);
     }
   }
 }
