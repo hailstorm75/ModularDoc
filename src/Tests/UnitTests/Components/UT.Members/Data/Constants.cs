@@ -71,6 +71,9 @@
     public const string PROPERTY_PROTECTED = "PropertyProtected";
     public const string PROPERTY_INTERNAL = "PropertyInternal";
     public const string PROPERTY_PRIVATE = "PropertyPrivate";
+    public const string PROPERTY_PROTECTED_INTERNAL = "PropertyProtectedInternal";
+    public const string PROPERTY_PROTECTED_INTERNAL_GET_PRIVATE = "PropertyProtectedInternalGetPrivate";
+    public const string PROPERTY_PROTECTED_INTERNAL_SET_PRIVATE = "PropertyProtectedInternalSetPrivate";
     public const string PROPERTY_PUBLIC_GET_PROTECTED = "PropertyPublicGetProtected";
     public const string PROPERTY_PUBLIC_GET_INTERNAL = "PropertyPublicGetInternal";
     public const string PROPERTY_PUBLIC_GET_PRIVATE = "PropertyPublicGetPrivate";

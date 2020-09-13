@@ -104,6 +104,7 @@ namespace MarkDoc.Members.Dnlib.Members
         dnlib.DotNet.MethodAttributes.Public => AccessorType.Public,
         dnlib.DotNet.MethodAttributes.Family => AccessorType.Protected,
         dnlib.DotNet.MethodAttributes.Assembly => AccessorType.Internal,
+        dnlib.DotNet.MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
         // Unresolved accessor
         _ => null
       };
@@ -131,6 +132,8 @@ namespace MarkDoc.Members.Dnlib.Members
       if (accessors.Any(x => x.Equals(AccessorType.Internal)))
         // then the property is internal
         return AccessorType.Internal;
+      if (accessors.Any(x => x.Equals(AccessorType.ProtectedInternal)))
+        return AccessorType.ProtectedInternal;
 
       throw new NotSupportedException(Resources.accessorTypeInvalid);
     }

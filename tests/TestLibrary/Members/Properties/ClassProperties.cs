@@ -28,5 +28,9 @@ namespace TestLibrary.Members.Properties
 
     internal string PropertyInternalSetPrivate { get; private set; } = null!;
     internal string PropertyInternalGetPrivate { private get; set; } = null!;
+
+    protected internal string PropertyProtectedInternal { get; set; } = null!;
+    protected internal string PropertyProtectedInternalGetPrivate { private get; set; } = null!;
+    protected internal string PropertyProtectedInternalSetPrivate { get; private set; } = null!;
   }
 }
