@@ -52,7 +52,7 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       var generics = source.ResolvePropertyGenerics(methods);
       Name = source.Name;
-      RawName = source.Name.String.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
+      RawName = ResolveRawName(source);
       IsStatic = methods.First().IsStatic;
       Type = Resolver.Resolve(ResolveType(source), generics);
       Inheritance = ResolveInheritance(methods);
@@ -74,6 +74,16 @@ namespace MarkDoc.Members.Dnlib.Members
         return null;
       // Otherwise initialize the property
       return new PropertyDef(resolver, source, methods);
+    }
+
+    private static string ResolveRawName(dnlib.DotNet.PropertyDef source)
+    {
+      var rawName = source.FullName.AsSpan(source.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
+      rawName = rawName.Slice(0, rawName.LastIndexOf("(", StringComparison.InvariantCultureIgnoreCase));
+
+      return rawName.ToString()
+        .Replace("::", ".", StringComparison.InvariantCultureIgnoreCase)
+        .Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
     }
 
     private static dnlib.DotNet.TypeSig ResolveType(dnlib.DotNet.PropertyDef source)
