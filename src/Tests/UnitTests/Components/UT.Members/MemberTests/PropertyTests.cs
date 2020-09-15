@@ -48,7 +48,10 @@ namespace UT.Members.MemberTests
         new object?[] { Constants.PROPERTY_PUBLIC_GET_PRIVATE, AccessorType.Public, null, AccessorType.Public },
         new object[] { Constants.PROPERTY_PUBLIC_SET_PROTECTED, AccessorType.Public, AccessorType.Public, AccessorType.Protected },
         new object[] { Constants.PROPERTY_PUBLIC_SET_INTERNAL, AccessorType.Public, AccessorType.Public, AccessorType.Internal },
-        new object?[] { Constants.PROPERTY_PUBLIC_SET_PRIVATE, AccessorType.Public, AccessorType.Public, null }
+        new object?[] { Constants.PROPERTY_PUBLIC_SET_PRIVATE, AccessorType.Public, AccessorType.Public, null },
+        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal },
+        new object?[] { Constants.PROPERTY_PROTECTED_INTERNAL_GET_PRIVATE, AccessorType.ProtectedInternal, null, AccessorType.ProtectedInternal },
+        new object?[] { Constants.PROPERTY_PROTECTED_INTERNAL_SET_PRIVATE, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, null },
       };
 
       foreach (var container in new ResolversProvider())
@@ -147,6 +150,29 @@ namespace UT.Members.MemberTests
       }
     }
 
+    private static IEnumerable<object[]> GetPropertyRawNamesData()
+    {
+      var data = new (string name, object[] data)[]
+      {
+        (Constants.PUBLIC_CLASS_PROPERTY_PARENT, new object[] { Constants.PROPERTY_PUBLIC_TOP, $"{Constants.PROPERTIES_NAMESPACE}.{Constants.PUBLIC_CLASS_PROPERTY_PARENT}.{Constants.PROPERTY_PUBLIC_TOP}" }),
+        (Constants.PUBLIC_CLASS_PROPERTY_NESTED, new object[] { Constants.PROPERTY_PUBLIC_NESTED, $"{Constants.PROPERTIES_NAMESPACE}.{Constants.PUBLIC_CLASS_PROPERTY_PARENT}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED}.{Constants.PROPERTY_PUBLIC_NESTED}" }),
+        (Constants.PUBLIC_CLASS_PROPERTY_NESTED2, new object[] { Constants.PROPERTY_PUBLIC_NESTED2, $"{Constants.PROPERTIES_NAMESPACE}.{Constants.PUBLIC_CLASS_PROPERTY_PARENT}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED2}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED2}" }),
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        foreach (var (name, objects) in data)
+        {
+          var result = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE].OfType<IClass>().First(x => x.Name.Equals(name));
+          object?[] typeWrapper = { result };
+          yield return typeWrapper.Concat(objects).ToArray()!;
+        }
+      }
+    }
+
     private static IProperty? GetProperty(IInterface type, string name, bool throwIfNull = false)
     {
       var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -197,6 +223,16 @@ namespace UT.Members.MemberTests
       var member = GetProperty(type, name);
 
       Assert.NotNull(member);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertyRawNamesData))]
+    public void ValidatePropertyRawNames(IInterface type, string name, string raw)
+    {
+      var member = GetProperty(type, name);
+
+      Assert.Equal(raw, member?.RawName);
     }
 
     [Theory]

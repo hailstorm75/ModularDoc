@@ -87,9 +87,9 @@
     public const string PROPERTY_PUBLIC_SET_PRIVATE = "PropertyPublicSetPrivate";
     public const string PUBLIC_CLASS_PROPERTY_PARENT = "ClassPropertiesParent";
     public const string PROPERTY_PUBLIC_TOP = "PropertyTop";
-    public const string PUBLIC_CLASS_PROPERTY_NESTED  = "ClassPropertiesParentNested";
+    public const string PUBLIC_CLASS_PROPERTY_NESTED  = "ClassPropertiesNested";
     public const string PROPERTY_PUBLIC_NESTED = "PropertyNested";
-    public const string PUBLIC_CLASS_PROPERTY_NESTED2  = "ClassPropertiesParentNestedNested";
+    public const string PUBLIC_CLASS_PROPERTY_NESTED2  = "ClassPropertiesNestedNested";
     public const string PROPERTY_PUBLIC_NESTED2 = "PropertyNestedNested";
   }
 }
