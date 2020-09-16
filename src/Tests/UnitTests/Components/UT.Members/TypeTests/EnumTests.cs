@@ -20,6 +20,7 @@ namespace UT.Members.TypeTests
         Constants.INTERNAL_ENUM,
         Constants.PUBLIC_NESTED_ENUM,
         Constants.PROTECTED_NESTED_ENUM,
+        Constants.PROTECTED_INTERNAL_NESTED_ENUM,
         Constants.INTERNAL_NESTED_ENUM,
       };
 
@@ -36,6 +37,7 @@ namespace UT.Members.TypeTests
         (Constants.INTERNAL_ENUM, AccessorType.Internal),
         (Constants.PUBLIC_NESTED_ENUM, AccessorType.Public),
         (Constants.PROTECTED_NESTED_ENUM, AccessorType.Protected),
+        (Constants.PROTECTED_INTERNAL_NESTED_ENUM, AccessorType.ProtectedInternal),
         (Constants.INTERNAL_NESTED_ENUM, AccessorType.Internal),
       };
 
@@ -52,6 +54,7 @@ namespace UT.Members.TypeTests
         Constants.INTERNAL_ENUM,
         Constants.PUBLIC_NESTED_ENUM,
         Constants.PROTECTED_NESTED_ENUM,
+        Constants.PROTECTED_INTERNAL_NESTED_ENUM,
         Constants.INTERNAL_NESTED_ENUM,
       };
 
@@ -70,6 +73,7 @@ namespace UT.Members.TypeTests
         (Constants.INTERNAL_ENUM, enumNameSpace),
         (Constants.PUBLIC_NESTED_ENUM, $"{enumNameSpace}.EnumParent"),
         (Constants.PROTECTED_NESTED_ENUM, $"{enumNameSpace}.EnumParent"),
+        (Constants.PROTECTED_INTERNAL_NESTED_ENUM, $"{enumNameSpace}.EnumParent"),
         (Constants.INTERNAL_NESTED_ENUM, $"{enumNameSpace}.EnumParent"),
       };
 

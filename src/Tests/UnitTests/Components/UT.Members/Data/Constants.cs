@@ -8,12 +8,14 @@
     public const string INTERNAL_ENUM = "EnumTypeInternal";
     public const string PUBLIC_NESTED_ENUM = "NestedEnumPublic";
     public const string PROTECTED_NESTED_ENUM = "NestedEnumProtected";
+    public const string PROTECTED_INTERNAL_NESTED_ENUM = "NestedEnumProtectedInternal";
     public const string INTERNAL_NESTED_ENUM = "NestedEnumInternal";
 
     public const string PUBLIC_INTERFACE = "IInterfaceTypePublic";
     public const string INTERNAL_INTERFACE = "IInterfaceTypeInternal";
     public const string PUBLIC_NESTED_INTERFACE = "INestedInterfacePublic";
     public const string PROTECTED_NESTED_INTERFACE = "INestedInterfaceProtected";
+    public const string PROTECTED_INTERNAL_NESTED_INTERFACE = "INestedInterfaceProtectedInternal";
     public const string INTERNAL_NESTED_INTERFACE = "INestedInterfaceInternal";
     public const string PUBLIC_INHERITED_INTERFACE = "IInheritedInterface";
     public const string PUBLIC_INHERITING_AND_INHERITED_INTERFACE = "IInheritingAndInheritedInterface";
@@ -28,6 +30,7 @@
     public const string INTERNAL_STRUCT = "StructTypeInternal";
     public const string PUBLIC_NESTED_STRUCT = "NestedStructPublic";
     public const string PROTECTED_NESTED_STRUCT = "NestedStructProtected";
+    public const string PROTECTED_INTERNAL_NESTED_STRUCT = "NestedStructProtectedInternal";
     public const string INTERNAL_NESTED_STRUCT = "NestedStructInternal";
     public const string PUBLIC_GENERIC_STRUCT = "GenericStruct";
     public const string PUBLIC_NESTED_GENERIC_STRUCT = "NestedGenericStruct";
@@ -45,6 +48,7 @@
     public const string INTERNAL_CLASS = "ClassTypeInternal";
     public const string PUBLIC_NESTED_CLASS = "NestedClassPublic";
     public const string PROTECTED_NESTED_CLASS = "NestedClassProtected";
+    public const string PROTECTED_INTERNAL_NESTED_CLASS = "NestedClassProtectedInternal";
     public const string INTERNAL_NESTED_CLASS = "NestedClassInternal";
     public const string PUBLIC_GENERIC_CLASS = "GenericClass";
     public const string PUBLIC_NESTED_GENERIC_CLASS = "NestedGenericClass";

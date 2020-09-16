@@ -23,6 +23,7 @@ namespace UT.Members.TypeTests
         Constants.INTERNAL_STRUCT,
         Constants.PUBLIC_NESTED_STRUCT,
         Constants.PROTECTED_NESTED_STRUCT,
+        Constants.PROTECTED_INTERNAL_NESTED_STRUCT,
         Constants.INTERNAL_NESTED_STRUCT,
       };
 
@@ -37,6 +38,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.INTERNAL_STRUCT, AccessorType.Internal},
         new object[] {Constants.PUBLIC_NESTED_STRUCT, AccessorType.Public},
         new object[] {Constants.PROTECTED_NESTED_STRUCT, AccessorType.Protected},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_STRUCT, AccessorType.ProtectedInternal},
         new object[] {Constants.INTERNAL_NESTED_STRUCT, AccessorType.Internal},
       };
 
@@ -52,6 +54,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.INTERNAL_STRUCT, interfaceNameSpace},
         new object[] {Constants.PUBLIC_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
         new object[] {Constants.PROTECTED_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
         new object[] {Constants.INTERNAL_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
       };
 

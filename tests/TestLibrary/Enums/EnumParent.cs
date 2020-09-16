@@ -19,6 +19,11 @@ namespace TestLibrary.Enums
       FieldA,
       FieldB
     }
+    protected internal enum NestedEnumProtectedInternal
+    {
+      FieldA,
+      FieldB
+    }
     private enum NestedEnumPrivate
     {
       FieldA,
