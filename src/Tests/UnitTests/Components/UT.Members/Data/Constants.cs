@@ -91,5 +91,19 @@
     public const string PROPERTY_PUBLIC_NESTED = "PropertyNested";
     public const string PUBLIC_CLASS_PROPERTY_NESTED2  = "ClassPropertiesNestedNested";
     public const string PROPERTY_PUBLIC_NESTED2 = "PropertyNestedNested";
+
+    public const string EVENTS_NAMESPACE = "TestLibrary.Members.Events";
+    public const string EVENTS_CLASS = "ClassEvents";
+    public const string EVENTS_STRUCT = "StructEvents";
+    public const string EVENTS_INTERFACE = "IInterfaceEvents";
+    public const string EVENTS_CLASS_ABSTRACT = "ClassEventsAbstract";
+    public const string EVENT_PUBLIC = "EventPublic";
+    public const string EVENT_INTERNAL = "EventInternal";
+    public const string EVENT_PROTECTED = "EventProtected";
+    public const string EVENT_PROTECTED_INTERNAL = "EventProtectedInternal";
+    public const string EVENT_NORMAL = "EventNormal";
+    public const string EVENT_VIRTUAL = "EventVirtual";
+    public const string EVENT_ABSTRACT = "EventAbstract";
+    public const string EVENT_OVERRIDE = "EventOverride";
   }
 }

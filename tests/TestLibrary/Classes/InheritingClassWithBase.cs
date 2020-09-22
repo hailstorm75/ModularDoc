@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 67
 #pragma warning disable 414
+// ReSharper disable All
 using System;
 
 namespace TestLibrary.Classes

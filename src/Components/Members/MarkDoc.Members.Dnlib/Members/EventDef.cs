@@ -57,6 +57,7 @@ namespace MarkDoc.Members.Dnlib.Members
       {
         MethodAttributes.Public => AccessorType.Public,
         MethodAttributes.Family => AccessorType.Protected,
+        MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
         _ => AccessorType.Internal
       };
 

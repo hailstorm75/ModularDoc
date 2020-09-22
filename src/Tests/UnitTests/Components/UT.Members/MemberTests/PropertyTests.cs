@@ -59,7 +59,7 @@ namespace UT.Members.MemberTests
         var resolver = container.First() as IResolver;
         resolver?.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals("ClassProperties"));
+        var result = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS));
         object?[] typeWrapper = { result };
         foreach (object?[] entry in data)
           yield return typeWrapper.Concat(entry).ToArray();
@@ -143,7 +143,7 @@ namespace UT.Members.MemberTests
         var resolver = container.First() as IResolver;
         resolver?.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS_ABSTRACT));
+        var result = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS_ABSTRACT));
         object?[] typeWrapper = { result };
         foreach (object?[] entry in data)
           yield return typeWrapper?.Concat(entry).ToArray()!;
