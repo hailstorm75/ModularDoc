@@ -14,7 +14,7 @@ namespace UT.Members.MemberTests
   {
     #region Data provider
 
-    private static IEnumerable<object[]> GetPropertyGettersSettersData()
+    public static IEnumerable<object[]> GetPropertyGettersSettersData()
     {
       var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
 
@@ -35,7 +35,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object?[]> GetPropertyAccessorData()
+    public static IEnumerable<object?[]> GetPropertyAccessorData()
     {
       var data = new object[]
       {
@@ -66,7 +66,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object[]> GetPropertyNameData()
+    public static IEnumerable<object[]> GetPropertyNameData()
     {
       var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
 
@@ -87,7 +87,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object?[]> GetPropertyStaticData()
+    public static IEnumerable<object?[]> GetPropertyStaticData()
     {
       var data = new object[]
       {
@@ -107,7 +107,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object[]> GetPropertyValueData()
+    public static IEnumerable<object[]> GetPropertyValueData()
     {
       var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
 
@@ -128,7 +128,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object[]> GetPropertiesInheritanceData()
+    public static IEnumerable<object[]> GetPropertiesInheritanceData()
     {
       var data = new object[]
       {
@@ -150,7 +150,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object[]> GetPropertyRawNamesData()
+    public static IEnumerable<object[]> GetPropertyRawNamesData()
     {
       var data = new (string name, object[] data)[]
       {

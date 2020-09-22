@@ -15,7 +15,7 @@ namespace UT.Members.TypeTests
   {
     #region Data providers
 
-    private static IEnumerable<object?[]> GetClassNamesData()
+    public static IEnumerable<object?[]> GetClassNamesData()
     {
       var data = new[]
       {
@@ -32,7 +32,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassNamespacesData()
+    public static IEnumerable<object[]> GetClassNamespacesData()
     {
       const string classNameSpace = "TestLibrary.Classes";
 
@@ -49,7 +49,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassAccessorsData()
+    public static IEnumerable<object[]> GetClassAccessorsData()
     {
       var data = new[]
       {
@@ -64,7 +64,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassAbstractData()
+    public static IEnumerable<object[]> GetClassAbstractData()
     {
       var data = new[]
       {
@@ -77,7 +77,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassSealedData()
+    public static IEnumerable<object[]> GetClassSealedData()
     {
       var data = new[]
       {
@@ -90,7 +90,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassStaticData()
+    public static IEnumerable<object[]> GetClassStaticData()
     {
       var data = new[]
       {
@@ -103,7 +103,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassBaseClassData()
+    public static IEnumerable<object[]> GetClassBaseClassData()
     {
       var data = new[]
       {
@@ -121,7 +121,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassGenericData()
+    public static IEnumerable<object[]> GetClassGenericData()
     {
       var generics = new Dictionary<string, (Variance, IReadOnlyCollection<string>)>
       {
@@ -163,40 +163,40 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetClassInheritedEventsData()
+    public static IEnumerable<object[]> GetClassInheritedEventsData()
       => GetClassInheritedMembersData("Event");
 
-    private static IEnumerable<object[]> GetClassInheritedDelegatesData()
+    public static IEnumerable<object[]> GetClassInheritedDelegatesData()
       => GetClassInheritedMembersData("Delegate").Where(x => !((string)x[2]).StartsWith("Abstract", StringComparison.InvariantCultureIgnoreCase) && !((string)x[2]).StartsWith("Virtual", StringComparison.InvariantCultureIgnoreCase));
 
-    private static IEnumerable<object[]> GetClassInheritedPropertiesData()
+    public static IEnumerable<object[]> GetClassInheritedPropertiesData()
       => GetClassInheritedMembersData("Property");
 
-    private static IEnumerable<object[]> GetClassInheritedMethodsData()
+    public static IEnumerable<object[]> GetClassInheritedMethodsData()
       => GetClassInheritedMembersData("Method");
 
-    private static IEnumerable<object[]> GetClassWithMembersData()
+    public static IEnumerable<object[]> GetClassWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS });
 
-    private static IEnumerable<object[]> GetClassWithInterfacesData()
+    public static IEnumerable<object[]> GetClassWithInterfacesData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INHERITING_CLASS });
 
-    private static IEnumerable<object[]> GetClassWithMembersData(string name)
+    public static IEnumerable<object[]> GetClassWithMembersData(string name)
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS, name });
 
-    private static IEnumerable<object[]> GetClassPropertiesData()
+    public static IEnumerable<object[]> GetClassPropertiesData()
       => GetClassWithMembersData("Property");
 
-    private static IEnumerable<object[]> GetClassMethodsData()
+    public static IEnumerable<object[]> GetClassMethodsData()
       => GetClassWithMembersData("Method");
 
-    private static IEnumerable<object[]> GetClassEventsData()
+    public static IEnumerable<object[]> GetClassEventsData()
       => GetClassWithMembersData("Event");
 
-    private static IEnumerable<object[]> GetClassDelegatesData()
+    public static IEnumerable<object[]> GetClassDelegatesData()
       => GetClassWithMembersData("Delegate");
 
-    private static IEnumerable<object[]> GetClassConstructorData()
+    public static IEnumerable<object[]> GetClassConstructorData()
     {
       var data = new[]
       {

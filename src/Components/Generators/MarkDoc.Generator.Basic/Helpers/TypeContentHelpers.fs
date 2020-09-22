@@ -4,7 +4,6 @@ open MarkDoc.Documentation.Tags
 open MarkDoc.Members.Members
 open MarkDoc.Members.Types
 open MarkDoc.Members.Enums
-open MarkDoc.Members
 open MarkDoc.Elements
 open MarkDoc.Helpers
 open System.Collections.Generic
@@ -314,7 +313,7 @@ module TypeContentHelpers =
               // Get the constraint variance type
               let variance = generics.[tag.Reference].ToTuple() |> fst
               // if the constraint is a variant type..
-              if (variance <> Enums.Variance.NonVariant) then
+              if (variance <> Variance.NonVariant) then
                 // print the variance type
                 yield variance |> StringConverters.varianceStr |> InlineCode
           ]
@@ -394,7 +393,7 @@ module TypeContentHelpers =
       // If the input can have methods, return the methods. Otherwise return an empty collection
       match input with
       | :? IInterface as x -> x.Methods
-      | _ -> new LinkedList<IMethod>() :> IReadOnlyCollection<IMethod>
+      | _ -> LinkedList<IMethod>() :> IReadOnlyCollection<IMethod>
     let processMethod (_, method: IMethod) =
       let getOverloads = 
         let overloads = (overloads extractor).[method.Name]
@@ -436,7 +435,7 @@ module TypeContentHelpers =
       // If the input can have properties, return the properties. Otherwise return an empty collection
       match input with
       | :? IInterface as x -> x.Properties
-      | _ -> new LinkedList<IProperty>() :> IReadOnlyCollection<IProperty>
+      | _ -> LinkedList<IProperty>() :> IReadOnlyCollection<IProperty>
     let processProperty (_, property: IProperty) =
       let signature =
         SignatureHelpers.generateSignature "{0}{1}{2} {3} {4} {{ {5} }}" (seq [
@@ -470,7 +469,7 @@ module TypeContentHelpers =
       // If the input can have events, return the events. Otherwise return an empty collection
       match input with
       | :? IInterface as x -> x.Events
-      | _ -> new LinkedList<IEvent>() :> IReadOnlyCollection<IEvent>
+      | _ -> LinkedList<IEvent>() :> IReadOnlyCollection<IEvent>
     let processEvent (_, event: IEvent) =
       let signature =
         SignatureHelpers.generateSignature "{0}{1} event {2} {3}" (seq [
@@ -501,7 +500,7 @@ module TypeContentHelpers =
       // If the input can have delegates, return the delegates. Otherwise return an empty collection
       match input with
       | :? IInterface as x -> x.Delegates
-      | _ -> new LinkedList<IDelegate>() :> IReadOnlyCollection<IDelegate>
+      | _ -> LinkedList<IDelegate>() :> IReadOnlyCollection<IDelegate>
     let processDelegate (_, deleg: IDelegate) =
       let getOverloads = 
         let overloads = (overloads extractor).[deleg.Name]
@@ -539,7 +538,7 @@ module TypeContentHelpers =
       // If the input is an enum, return its fields. Otherwise return an empty collection
       match input with
       | :? IEnum as e -> e.Fields
-      | _ -> new LinkedList<IEnumField>() :> IReadOnlyCollection<IEnumField>
+      | _ -> LinkedList<IEnumField>() :> IReadOnlyCollection<IEnumField>
     let processField (_, field: IEnumField) =
       let applyTools input = input tools
 

@@ -12,7 +12,7 @@ module private Structure =
   /// <param name="platform">Platform for which the structure is to be generated for</param>
   /// <returns>Paired types to their output location</returns>
   let generateStructure (input: IReadOnlyDictionary<string, IReadOnlyCollection<IType>>, platform: GitPlatform) =
-    let result = new Dictionary<IType, string>()
+    let result = Dictionary<IType, string>()
 
     let addToResult x =
       result.Add(fst x, snd x)
@@ -26,7 +26,7 @@ module private Structure =
           fun (space: string) -> space.ToLowerInvariant().Replace('.', '/') + "/"
         | GitPlatform.GitHub ->
           fun (space: string) -> space.ToLowerInvariant().Replace(".", "") + "-"
-        | _ -> raise (new NotSupportedException())
+        | _ -> raise (NotSupportedException())
 
       (input, processor input.TypeNamespace + TypeHelper.getName input)
 

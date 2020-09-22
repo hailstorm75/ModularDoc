@@ -9,8 +9,11 @@ namespace MarkDoc.Members.Members
   public interface IEvent
     : IMember
   {
+    /// <summary>
+    /// Event inheritance type
+    /// </summary>
     MemberInheritance Inheritance { get; }
-    
+
     /// <summary>
     /// Event type
     /// </summary>

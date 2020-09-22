@@ -14,7 +14,7 @@ namespace UT.Members.MemberTests
   {
     #region Data providers
 
-    private static IEnumerable<object[]> GetEventNameData()
+    public static IEnumerable<object[]> GetEventNameData()
     {
       var filter = new HashSet<string> { Constants.EVENTS_CLASS, Constants.EVENTS_STRUCT, Constants.EVENTS_INTERFACE };
 
@@ -31,7 +31,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object?[]> GetEventAccessorData()
+    public static IEnumerable<object?[]> GetEventAccessorData()
     {
       var data = new object[]
       {
@@ -53,7 +53,7 @@ namespace UT.Members.MemberTests
       }
     }
 
-    private static IEnumerable<object[]> GetEventInheritanceData()
+    public static IEnumerable<object[]> GetEventInheritanceData()
     {
       var data = new object[]
       {

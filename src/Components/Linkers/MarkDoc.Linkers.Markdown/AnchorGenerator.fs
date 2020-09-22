@@ -3,7 +3,7 @@
 open System.Text.RegularExpressions
 
 module private Anchor =
-  let private normalizerRegex = new Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
+  let private normalizerRegex = Regex(@"(?<Gwh>\s)|(?<Gsym>[^a-z0-9]*)")
 
   let private normalizerDictionary (x: Match) =
     match x.Groups |> Seq.tryFind (fun x -> x.Success && x.Name.[0] = 'G') with
@@ -17,17 +17,17 @@ module private Anchor =
   let private normalizeAnchor (anchor: string) =
     normalizerRegex.Replace(anchor.ToLowerInvariant(), normalizerDictionary)
 
-  let private bitbucketAnchor (input: string Lazy, page: string) =
+  let private bitbucketAnchor (_: string Lazy, _: string) =
     // TODO: Not supported
     None
 
   let private githubAnchor (input: string Lazy, page: string) =
     lazy(page + "#" + normalizeAnchor input.Value) |> Some
 
-  let private gitlabAnchor (input: string Lazy, page: string) =
+  let private gitlabAnchor (input: string Lazy, _: string) =
     lazy("#" + normalizeAnchor input.Value) |> Some
 
-  let private azureAnchor (input: string Lazy, page: string) =
+  let private azureAnchor (_: string Lazy, _: string) =
     lazy("?anchor=") |> Some
 
   /// <summary>

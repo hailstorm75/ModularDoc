@@ -15,7 +15,7 @@ namespace UT.Members.TypeTests
   {
     #region Data providers
 
-    private static IEnumerable<object?[]> GetStructNames()
+    public static IEnumerable<object?[]> GetStructNames()
     {
       var data = new[]
       {
@@ -30,7 +30,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetStructAccessorsData()
+    public static IEnumerable<object[]> GetStructAccessorsData()
     {
       var data = new[]
       {
@@ -45,7 +45,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetStructNamespaceData()
+    public static IEnumerable<object[]> GetStructNamespaceData()
     {
       const string interfaceNameSpace = "TestLibrary.Structs";
       var data = new[]
@@ -61,25 +61,25 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetStructWithMembersData()
+    public static IEnumerable<object[]> GetStructWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_STRUCT });
 
     private static IEnumerable<object[]> GetStructMemberData(string member)
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_STRUCT, member });
 
-    private static IEnumerable<object[]> GetStructPropertiesData()
+    public static IEnumerable<object[]> GetStructPropertiesData()
       => GetStructMemberData("Property");
 
-    private static IEnumerable<object[]> GetStructMethodsData()
+    public static IEnumerable<object[]> GetStructMethodsData()
       => GetStructMemberData("Method");
 
-    private static IEnumerable<object[]> GetStructEventsData()
+    public static IEnumerable<object[]> GetStructEventsData()
       => GetStructMemberData("Event");
 
-    private static IEnumerable<object[]> GetStructDelegatesData()
+    public static IEnumerable<object[]> GetStructDelegatesData()
       => GetStructMemberData("Delegate");
 
-    private static IEnumerable<object[]> GetStructGenericData()
+    public static IEnumerable<object[]> GetStructGenericData()
     {
       var generics = new Dictionary<string, (Variance, IReadOnlyCollection<string>)>
       {
@@ -111,19 +111,19 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetStructInheritedEventsData()
+    public static IEnumerable<object[]> GetStructInheritedEventsData()
       => GetStructInheritedMembersData("Event");
 
-    private static IEnumerable<object[]> GetStructInheritedDelegatesData()
+    public static IEnumerable<object[]> GetStructInheritedDelegatesData()
       => GetStructInheritedMembersData("Delegate");
 
-    private static IEnumerable<object[]> GetStructInheritedPropertiesData()
+    public static IEnumerable<object[]> GetStructInheritedPropertiesData()
       => GetStructInheritedMembersData("Property");
 
-    private static IEnumerable<object[]> GetStructInheritedMethodsData()
+    public static IEnumerable<object[]> GetStructInheritedMethodsData()
       => GetStructInheritedMembersData("Method");
 
-    private static IEnumerable<object[]> GetStructConstructorData()
+    public static IEnumerable<object[]> GetStructConstructorData()
     {
       var data = new[]
       {

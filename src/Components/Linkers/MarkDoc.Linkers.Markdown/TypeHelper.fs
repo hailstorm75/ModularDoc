@@ -11,7 +11,7 @@ module private TypeHelper =
   let getName (input: IType) = 
     match input with
     | :? IInterface as i ->
-      i.Name + new System.String('T', i.Generics.Count)
+      i.Name + System.String('T', i.Generics.Count)
     | _ ->
       input.Name
 

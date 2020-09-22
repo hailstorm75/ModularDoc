@@ -11,7 +11,7 @@ namespace UT.Members.TypeTests
 {
   public class ResolverTests
   {
-    private static IEnumerable<object?[]> GetInvalidAssemblyData()
+    public static IEnumerable<object?[]> GetInvalidAssemblyData()
     {
       var data = new[]
       {
@@ -23,7 +23,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object?[]> GetInvalidResolveTypeData()
+    public static IEnumerable<object?[]> GetInvalidResolveTypeData()
     {
       var data = new[]
       {

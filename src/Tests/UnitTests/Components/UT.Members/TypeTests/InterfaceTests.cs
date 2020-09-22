@@ -15,7 +15,7 @@ namespace UT.Members.TypeTests
   {
     #region Data providers
 
-    private static IEnumerable<object?[]> GetInterfaceNamesData()
+    public static IEnumerable<object?[]> GetInterfaceNamesData()
     {
       var data = new[]
       {
@@ -32,7 +32,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetInterfaceAccessorsData()
+    public static IEnumerable<object[]> GetInterfaceAccessorsData()
     {
       var data = new[]
       {
@@ -47,7 +47,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetInterfaceNamespaceData()
+    public static IEnumerable<object[]> GetInterfaceNamespaceData()
     {
       const string interfaceNameSpace = "TestLibrary.Interfaces";
       var data = new[]
@@ -63,7 +63,7 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetInterfaceGenericData()
+    public static IEnumerable<object[]> GetInterfaceGenericData()
     {
       var generics = new Dictionary<string, (Variance, IReadOnlyCollection<string>)>
       {
@@ -81,22 +81,22 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetInterfacePropertiesData()
+    public static IEnumerable<object[]> GetInterfacePropertiesData()
       => GetInterfaceWithMembersData("Property");
 
-    private static IEnumerable<object[]> GetInterfaceMethodsData()
+    public static IEnumerable<object[]> GetInterfaceMethodsData()
       => GetInterfaceWithMembersData("Method");
 
-    private static IEnumerable<object[]> GetInterfaceEventsData()
+    public static IEnumerable<object[]> GetInterfaceEventsData()
       => GetInterfaceWithMembersData("Event");
 
-    private static IEnumerable<object[]> GetInterfaceDelegatesData()
+    public static IEnumerable<object[]> GetInterfaceDelegatesData()
       => GetInterfaceWithMembersData("Delegate");
 
-    private static IEnumerable<object[]> GetInterfaceWithMembersData(string name)
+    public static IEnumerable<object[]> GetInterfaceWithMembersData(string name)
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, name });
 
-    private static IEnumerable<object[]> GetInterfaceWithMembersData()
+    public static IEnumerable<object[]> GetInterfaceWithMembersData()
       => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE });
 
     private static IEnumerable<object[]> GetInterfaceInheritedMembersData(string member)
@@ -114,19 +114,17 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
-    private static IEnumerable<object[]> GetInterfaceInheritedEventsData()
+    public static IEnumerable<object[]> GetInterfaceInheritedEventsData()
       => GetInterfaceInheritedMembersData("Event");
 
-    private static IEnumerable<object[]> GetInterfaceInheritedDelegatesData()
+    public static IEnumerable<object[]> GetInterfaceInheritedDelegatesData()
       => GetInterfaceInheritedMembersData("Delegate");
 
-    private static IEnumerable<object[]> GetInterfaceInheritedPropertiesData()
+    public static IEnumerable<object[]> GetInterfaceInheritedPropertiesData()
       => GetInterfaceInheritedMembersData("Property");
 
-    private static IEnumerable<object[]> GetInterfaceInheritedMethodsData()
+    public static IEnumerable<object[]> GetInterfaceInheritedMethodsData()
       => GetInterfaceInheritedMembersData("Method");
-
-    #endregion
 
     private static IInterface? GetInterface(IResolver resolver, string name)
     {
@@ -136,6 +134,8 @@ namespace UT.Members.TypeTests
         .GetTypes<IInterface>()
         .FirstOrDefault(type => type.Name.Equals(name));
     }
+
+    #endregion
 
     [Theory]
     [Trait("Category", nameof(IInterface))]

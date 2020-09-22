@@ -12,7 +12,7 @@ namespace UT.Members.TypeTests
   {
     #region Data providers
 
-    private static IEnumerable<object[]> GetEnumNames()
+    public static IEnumerable<object[]> GetEnumNames()
     {
       var data = new[]
       {
@@ -29,7 +29,7 @@ namespace UT.Members.TypeTests
           yield return new[] { resolver.First(), name };
     }
 
-    private static IEnumerable<object[]> GetEnumAccessorsData()
+    public static IEnumerable<object[]> GetEnumAccessorsData()
     {
       var data = new[]
       {
@@ -46,7 +46,7 @@ namespace UT.Members.TypeTests
           yield return new[] { resolver.First(), name, accessor };
     }
 
-    private static IEnumerable<object[]> GetEnumFieldsData()
+    public static IEnumerable<object[]> GetEnumFieldsData()
     {
       var data = new[]
       {
@@ -64,7 +64,7 @@ namespace UT.Members.TypeTests
           yield return new[] { resolver.First(), name, fields };
     }
 
-    private static IEnumerable<object[]> GetEnumNamespaceData()
+    public static IEnumerable<object[]> GetEnumNamespaceData()
     {
       const string enumNameSpace = "TestLibrary.Enums";
       var data = new[]

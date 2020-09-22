@@ -84,7 +84,7 @@ module internal TagHelpers =
                   |> Seq.map (fun element -> ElementHelpers.initialize element tools)
 
     // Buffer for text elements
-    let list = new LinkedList<ITextContent>()
+    let list = LinkedList<ITextContent>()
     // Process the tag content
     let content = seq [
       // For each element..

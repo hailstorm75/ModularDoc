@@ -1,4 +1,5 @@
-﻿namespace UT.Members.Data
+﻿// ReSharper disable All
+namespace UT.Members.Data
 {
   internal static class Constants
   {
