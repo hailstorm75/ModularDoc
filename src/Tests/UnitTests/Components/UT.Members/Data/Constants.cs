@@ -102,6 +102,7 @@ namespace UT.Members.Data
     public const string EVENTS_STRUCT = "StructEvents";
     public const string EVENTS_INTERFACE = "IInterfaceEvents";
     public const string EVENTS_CLASS_ABSTRACT = "ClassEventsAbstract";
+    public const string EVENT_STATIC = "EventStatic";
     public const string EVENT_PUBLIC = "EventPublic";
     public const string EVENT_INTERNAL = "EventInternal";
     public const string EVENT_PROTECTED = "EventProtected";

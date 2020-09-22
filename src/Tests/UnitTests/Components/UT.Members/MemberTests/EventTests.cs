@@ -71,7 +71,46 @@ namespace UT.Members.MemberTests
         var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS_ABSTRACT));
         object?[] typeWrapper = { result };
         foreach (object?[] entry in data)
-          yield return typeWrapper?.Concat(entry).ToArray()!;
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
+
+    public static IEnumerable<object[]> GetEventStaticData()
+    {
+      var data = new object[]
+      {
+        new object[] { Constants.EVENT_PUBLIC, false },
+        new object[] { Constants.EVENT_STATIC, true },
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS));
+        object?[] typeWrapper = { result };
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
+
+    public static IEnumerable<object[]> GetEventTypeData()
+    {
+      var data = new object[]
+      {
+        new object[] { Constants.EVENT_PUBLIC, nameof(EventHandler) },
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS));
+        object?[] typeWrapper = { result };
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
       }
     }
 
@@ -115,6 +154,26 @@ namespace UT.Members.MemberTests
       var members = GetEvent(type, name, true);
 
       Assert.Equal(inheritance, members?.Inheritance);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetEventStaticData))]
+    public void ValidatePropertyIsStatic(IClass type, string name, bool isStatic)
+    {
+      var members = GetEvent(type, name, true);
+
+      Assert.Equal(isStatic, members?.IsStatic);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetEventTypeData))]
+    public void ValidatePropertyType(IClass type, string name, string returns)
+    {
+      var members = GetEvent(type, name, true);
+
+      Assert.Equal(returns, members?.Type.DisplayName);
     }
   }
 }

@@ -10,5 +10,6 @@ namespace TestLibrary.Members.Events
     internal event EventHandler EventInternal = null!;
     protected event EventHandler EventProtected = null!;
     protected internal event EventHandler EventProtectedInternal = null!;
+    public static event EventHandler EventStatic = null!;
   }
 }
