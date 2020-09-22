@@ -17,6 +17,10 @@ namespace TestLibrary.Classes
     {
     }
 
+    protected internal class NestedClassProtectedInternal
+    {
+    }
+
     public class NestedGenericClass<T1, T2>
       where T2 : IDisposable
     {

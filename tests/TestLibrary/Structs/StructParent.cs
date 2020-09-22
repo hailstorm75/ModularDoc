@@ -17,6 +17,10 @@ namespace TestLibrary.Structs
     {
     }
 
+    protected internal struct NestedStructProtectedInternal
+    {
+    }
+
     public struct NestedGenericStruct<T1, T2>
       where T2 : IDisposable
     {

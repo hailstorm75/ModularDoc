@@ -67,10 +67,14 @@ namespace MarkDoc.Members.Dnlib.Types
       if (type.Visibility == TypeAttributes.Public || (type.IsNested && type.Visibility == TypeAttributes.NestedPublic))
         // return public
         return AccessorType.Public;
-      // If the type is nested
+      // If the type is nested protected
       if (type.Visibility == TypeAttributes.NestedFamily)
         // return protected
         return AccessorType.Protected;
+      // If the type is nested protected internal
+      if (type.Visibility == TypeAttributes.NestedFamORAssem)
+        // return protected internal
+        return AccessorType.ProtectedInternal;
       // Otherwise return internal
       return AccessorType.Internal;
     }

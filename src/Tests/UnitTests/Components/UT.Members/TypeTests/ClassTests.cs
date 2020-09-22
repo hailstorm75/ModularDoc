@@ -23,6 +23,7 @@ namespace UT.Members.TypeTests
         Constants.INTERNAL_CLASS,
         Constants.PUBLIC_NESTED_CLASS,
         Constants.PROTECTED_NESTED_CLASS,
+        Constants.PROTECTED_INTERNAL_NESTED_CLASS,
         Constants.INTERNAL_NESTED_CLASS,
         Constants.PUBLIC_GENERIC_CLASS,
         Constants.PUBLIC_NESTED_GENERIC_CLASS
@@ -41,6 +42,7 @@ namespace UT.Members.TypeTests
         new object[] { Constants.INTERNAL_CLASS, classNameSpace },
         new object[] { Constants.PUBLIC_NESTED_CLASS, $"{classNameSpace}.ClassParent" },
         new object[] { Constants.PROTECTED_NESTED_CLASS, $"{classNameSpace}.ClassParent"},
+        new object[] { Constants.PROTECTED_INTERNAL_NESTED_CLASS, $"{classNameSpace}.ClassParent"},
         new object[] { Constants.INTERNAL_NESTED_CLASS, $"{classNameSpace}.ClassParent"}
       };
 
@@ -55,6 +57,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.INTERNAL_CLASS, AccessorType.Internal},
         new object[] {Constants.PUBLIC_NESTED_CLASS, AccessorType.Public},
         new object[] {Constants.PROTECTED_NESTED_CLASS, AccessorType.Protected},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_CLASS, AccessorType.ProtectedInternal},
         new object[] {Constants.INTERNAL_NESTED_CLASS, AccessorType.Internal},
       };
 

@@ -23,6 +23,7 @@ namespace UT.Members.TypeTests
         Constants.INTERNAL_INTERFACE,
         Constants.PUBLIC_NESTED_INTERFACE,
         Constants.PROTECTED_NESTED_INTERFACE,
+        Constants.PROTECTED_INTERNAL_NESTED_INTERFACE,
         Constants.INTERNAL_NESTED_INTERFACE,
         Constants.PUBLIC_GENERIC_INTERFACE,
         Constants.PUBLIC_NESTED_GENERIC_INTERFACE
@@ -39,6 +40,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.INTERNAL_INTERFACE, AccessorType.Internal},
         new object[] {Constants.PUBLIC_NESTED_INTERFACE, AccessorType.Public},
         new object[] {Constants.PROTECTED_NESTED_INTERFACE, AccessorType.Protected},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_INTERFACE, AccessorType.ProtectedInternal},
         new object[] {Constants.INTERNAL_NESTED_INTERFACE, AccessorType.Internal},
       };
 
@@ -54,6 +56,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.INTERNAL_INTERFACE, interfaceNameSpace},
         new object[] {Constants.PUBLIC_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
         new object[] {Constants.PROTECTED_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
         new object[] {Constants.INTERNAL_NESTED_INTERFACE, $"{interfaceNameSpace}.InterfaceParent"},
       };
 
