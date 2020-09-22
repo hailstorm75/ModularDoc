@@ -26,6 +26,9 @@ namespace MarkDoc.Members.Dnlib.Members
     public override AccessorType Accessor { get; }
 
     /// <inheritdoc />
+    public MemberInheritance Inheritance { get; }
+
+    /// <inheritdoc />
     public IResType Type { get; }
 
     public override string RawName { get; }
@@ -43,11 +46,24 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = source.Name.String;
       Type = ResolveType(source);
       IsStatic = source.AddMethod.IsStatic;
+      Inheritance = ResolveInheritance(source.RemoveMethod);
       Accessor = ResolveAccessor(source.AddMethod);
       RawName = source.FullName.Replace("::",".", StringComparison.InvariantCultureIgnoreCase).Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
     }
 
     #region Methods
+
+    private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)
+    {
+      if (source.IsVirtual && (source.Attributes & MethodAttributes.NewSlot) == 0)
+        return MemberInheritance.Override;
+      if (source.IsAbstract)
+        return MemberInheritance.Abstract;
+      if (source.IsVirtual)
+        return MemberInheritance.Virtual;
+
+      return MemberInheritance.Normal;
+    }
 
     private IResType ResolveType(dnlib.DotNet.EventDef source)
       => Resolver.Resolve(source.EventType.ToTypeSig());
@@ -57,6 +73,7 @@ namespace MarkDoc.Members.Dnlib.Members
       {
         MethodAttributes.Public => AccessorType.Public,
         MethodAttributes.Family => AccessorType.Protected,
+        MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
         _ => AccessorType.Internal
       };
 

@@ -1,4 +1,5 @@
-﻿using MarkDoc.Members.ResolvedTypes;
+﻿using MarkDoc.Members.Enums;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Members
 {
@@ -8,6 +9,8 @@ namespace MarkDoc.Members.Members
   public interface IEvent
     : IMember
   {
+    MemberInheritance Inheritance { get; }
+    
     /// <summary>
     /// Event type
     /// </summary>
