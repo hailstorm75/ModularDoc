@@ -18,8 +18,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Members\Events\" />
     <Folder Include="Members\Methods\" />
+    <Folder Include="Members\Delegates\" />
   </ItemGroup>
 
 </Project>
