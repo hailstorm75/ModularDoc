@@ -114,6 +114,29 @@ namespace UT.Members.MemberTests
       }
     }
 
+    public static IEnumerable<object[]> GetEventRawNameData()
+    {
+      var data = new (string name, object[] data)[]
+      {
+        (Constants.PUBLIC_CLASS_EVENT_PARENT, new object[] { Constants.EVENT_PUBLIC_TOP, $"{Constants.EVENTS_NAMESPACE}.{Constants.PUBLIC_CLASS_EVENT_PARENT}.{Constants.EVENT_PUBLIC_TOP}" }),
+        (Constants.PUBLIC_CLASS_EVENT_NESTED, new object[] { Constants.EVENT_PUBLIC_NESTED, $"{Constants.EVENTS_NAMESPACE}.{Constants.PUBLIC_CLASS_EVENT_PARENT}.{Constants.PUBLIC_CLASS_EVENT_NESTED}.{Constants.EVENT_PUBLIC_NESTED}" }),
+        (Constants.PUBLIC_CLASS_EVENT_NESTED2, new object[] { Constants.EVENT_PUBLIC_NESTED2, $"{Constants.EVENTS_NAMESPACE}.{Constants.PUBLIC_CLASS_EVENT_PARENT}.{Constants.PUBLIC_CLASS_EVENT_NESTED}.{Constants.PUBLIC_CLASS_EVENT_NESTED2}.{Constants.EVENT_PUBLIC_NESTED2}" }),
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        foreach (var (name, objects) in data)
+        {
+          var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(x => x.Name.Equals(name));
+          object?[] typeWrapper = { result };
+          yield return typeWrapper.Concat(objects).ToArray()!;
+        }
+      }
+    }
+
     private static IEvent? GetEvent(IInterface type, string name, bool throwIfNull = false)
     {
       var member = type.Events.FirstOrDefault(ev => ev.Name.Equals(name, StringComparison.InvariantCulture));
@@ -134,6 +157,16 @@ namespace UT.Members.MemberTests
       var member = GetEvent(type, name);
 
       Assert.NotNull(member);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IEvent))]
+    [MemberData(nameof(GetEventRawNameData))]
+    public void ValidatePropertyRawNames(IInterface type, string name, string rawName)
+    {
+      var member = GetEvent(type, name);
+
+      Assert.Equal(rawName, member?.RawName);
     }
 
     [Theory]

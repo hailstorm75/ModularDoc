@@ -48,10 +48,19 @@ namespace MarkDoc.Members.Dnlib.Members
       IsStatic = source.AddMethod.IsStatic;
       Inheritance = ResolveInheritance(source.RemoveMethod);
       Accessor = ResolveAccessor(source.AddMethod);
-      RawName = source.FullName.Replace("::",".", StringComparison.InvariantCultureIgnoreCase).Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
+      RawName = ResolveRawName(source);
     }
 
     #region Methods
+
+    private static string ResolveRawName(dnlib.DotNet.EventDef source)
+    {
+      var rawName = source.FullName.AsSpan(source.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
+
+      return rawName.ToString()
+        .Replace("::", ".", StringComparison.InvariantCultureIgnoreCase)
+        .Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
+    }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)
     {

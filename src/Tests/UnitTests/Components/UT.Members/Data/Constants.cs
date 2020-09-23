@@ -98,6 +98,12 @@ namespace UT.Members.Data
     public const string PROPERTY_PUBLIC_NESTED2 = "PropertyNestedNested";
 
     public const string EVENTS_NAMESPACE = "TestLibrary.Members.Events";
+    public const string PUBLIC_CLASS_EVENT_PARENT = "ClassEventsParent";
+    public const string PUBLIC_CLASS_EVENT_NESTED = "ClassEventsNested";
+    public const string PUBLIC_CLASS_EVENT_NESTED2 = "ClassEventsNestedNested";
+    public const string EVENT_PUBLIC_TOP = "EventTop";
+    public const string EVENT_PUBLIC_NESTED = "EventNested";
+    public const string EVENT_PUBLIC_NESTED2 = "EventNestedNested";
     public const string EVENTS_CLASS = "ClassEvents";
     public const string EVENTS_STRUCT = "StructEvents";
     public const string EVENTS_INTERFACE = "IInterfaceEvents";
