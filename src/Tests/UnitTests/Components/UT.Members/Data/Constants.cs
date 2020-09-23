@@ -159,6 +159,28 @@ namespace UT.Members.Data
     public const string METHOD_OVERRIDE = "MethodOverride";
     public const string METHOD_VIRTUAL = "MethodVirtual";
     public const string METHOD_ABSTRACT = "MethodAbstract";
+    public const string METHOD_ADDITION = "+";
+    public const string METHOD_SUBSTRACTION = "-";
+    public const string METHOD_MULTIPLY = "*";
+    public const string METHOD_DIVISION = "/";
+    public const string METHOD_MODULUS = "%";
+    public const string METHOD_EXCLUSIVEOR = "^";
+    public const string METHOD_BITWISEAND = "&";
+    public const string METHOD_BITWISEOR = "|";
+    public const string METHOD_LOGICALNOT = "!";
+    public const string METHOD_LEFTSHIFT = "<<";
+    public const string METHOD_RIGHTSHIFT = ">>";
+    public const string METHOD_EQUALITY = "==";
+    public const string METHOD_INEQUALITY = "!=";
+    public const string METHOD_GREATERTHAN = ">";
+    public const string METHOD_LESSTHAN = "<";
+    public const string METHOD_GREATERTHANEQUALS = ">=";
+    public const string METHOD_LESSTHANEQUALS = "<=";
+    public const string METHOD_DECREMENT = "--";
+    public const string METHOD_INCREMENT = "++";
+    public const string METHOD_ONESCOMPLEMENT = "~";
+    public const string METHOD_IMPLICIT = "int";
+    public const string METHOD_EXPLICIT = "uint";
 
     #endregion
   }

@@ -14,6 +14,33 @@ namespace UT.Members.MemberTests
   {
     #region Data providers
 
+    private static IEnumerable<(string name, OperatorType type)> GetOperators()
+      => new (string, OperatorType)[]
+      {
+        (Constants.METHOD_ADDITION, OperatorType.Normal),
+        (Constants.METHOD_SUBSTRACTION, OperatorType.Normal),
+        (Constants.METHOD_MULTIPLY, OperatorType.Normal),
+        (Constants.METHOD_DIVISION, OperatorType.Normal),
+        (Constants.METHOD_MODULUS, OperatorType.Normal),
+        (Constants.METHOD_EXCLUSIVEOR, OperatorType.Normal),
+        (Constants.METHOD_BITWISEAND, OperatorType.Normal),
+        (Constants.METHOD_BITWISEOR, OperatorType.Normal),
+        (Constants.METHOD_LOGICALNOT, OperatorType.Normal),
+        (Constants.METHOD_LEFTSHIFT, OperatorType.Normal),
+        (Constants.METHOD_RIGHTSHIFT, OperatorType.Normal),
+        (Constants.METHOD_EQUALITY, OperatorType.Normal),
+        (Constants.METHOD_INEQUALITY, OperatorType.Normal),
+        (Constants.METHOD_GREATERTHAN, OperatorType.Normal),
+        (Constants.METHOD_LESSTHAN, OperatorType.Normal),
+        (Constants.METHOD_GREATERTHANEQUALS, OperatorType.Normal),
+        (Constants.METHOD_LESSTHANEQUALS, OperatorType.Normal),
+        (Constants.METHOD_DECREMENT, OperatorType.Normal),
+        (Constants.METHOD_INCREMENT, OperatorType.Normal),
+        (Constants.METHOD_ONESCOMPLEMENT, OperatorType.Normal),
+        (Constants.METHOD_IMPLICIT, OperatorType.Implicit),
+        (Constants.METHOD_EXPLICIT, OperatorType.Explicit)
+      };
+
     public static IEnumerable<object?[]> GetMethodAccessorData()
     {
       var data = new object[]
@@ -40,6 +67,7 @@ namespace UT.Members.MemberTests
 
     public static IEnumerable<object[]> GetMethodNameData()
     {
+      var operators = GetOperators().ToArray();
       var filter = new HashSet<string> {Constants.METHODS_CLASS, Constants.METHODS_STRUCT, Constants.METHODS_INTERFACE};
 
       foreach (var container in new ResolversProvider())
@@ -52,6 +80,11 @@ namespace UT.Members.MemberTests
           .Where(type => filter.Contains(type.Name));
         foreach (var type in types ?? throw new Exception())
           yield return new object[] {type, Constants.METHOD_PUBLIC};
+
+        var classMethod =
+          types.First(type => type.Name.Equals(Constants.METHODS_CLASS, StringComparison.InvariantCulture));
+        foreach (var @operator in operators)
+          yield return new object[] {classMethod, @operator.name};
       }
     }
 
@@ -135,9 +168,21 @@ namespace UT.Members.MemberTests
     // {
     // }
 
-    // public static IEnumerable<object[]> GetMethodOperatorData()
-    // {
-    // }
+    public static IEnumerable<object[]> GetMethodOperatorData()
+    {
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
+        object?[] typeWrapper = {result};
+        foreach (var (name, type) in GetOperators())
+          yield return typeWrapper.Concat(new object[] { name, type }).ToArray()!;
+      }
+    }
 
     private static IMethod? GetMethod(IInterface type, string name, bool throwIfNull = false)
     {
@@ -154,7 +199,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodNameData))]
-    public void ValidatePropertyNames(IInterface type, string name)
+    public void ValidateMethodNames(IInterface type, string name)
     {
       var member = GetMethod(type, name);
 
@@ -164,7 +209,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodAccessorData))]
-    public void ValidatePropertyAccessors(IInterface type, string name, AccessorType methods)
+    public void ValidateMethodAccessors(IInterface type, string name, AccessorType methods)
     {
       var member = GetMethod(type, name);
 
@@ -174,7 +219,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodInheritanceData))]
-    public void ValidatePropertyInheritance(IInterface type, string name, MemberInheritance inheritance)
+    public void ValidateMethodInheritance(IInterface type, string name, MemberInheritance inheritance)
     {
       var members = GetMethod(type, name, true);
 
@@ -184,7 +229,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodIsStaticData))]
-    public void ValidatePropertyIsStatic(IInterface type, string name, bool isStatic)
+    public void ValidateMethodIsStatic(IInterface type, string name, bool isStatic)
     {
       var members = GetMethod(type, name, true);
 
@@ -194,11 +239,21 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodIsAsyncData))]
-    public void ValidatePropertyIsAsync(IInterface type, string name, bool isAsync)
+    public void ValidateMethodIsAsync(IInterface type, string name, bool isAsync)
     {
       var members = GetMethod(type, name, true);
 
       Assert.Equal(isAsync, members?.IsAsync);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetMethodOperatorData))]
+    public void ValidateMethodOperators(IInterface type, string name, OperatorType operatorType)
+    {
+      var members = GetMethod(type, name, true);
+
+      Assert.Equal(operatorType, members?.Operator);
     }
   }
 }

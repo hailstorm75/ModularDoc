@@ -152,7 +152,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IEvent))]
     [MemberData(nameof(GetEventNameData))]
-    public void ValidatePropertyNames(IInterface type, string name)
+    public void ValidateEventNames(IInterface type, string name)
     {
       var member = GetEvent(type, name);
 
@@ -162,7 +162,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IEvent))]
     [MemberData(nameof(GetEventRawNameData))]
-    public void ValidatePropertyRawNames(IInterface type, string name, string rawName)
+    public void ValidateEventRawNames(IInterface type, string name, string rawName)
     {
       var member = GetEvent(type, name);
 
@@ -172,7 +172,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IEvent))]
     [MemberData(nameof(GetEventAccessorData))]
-    public void ValidatePropertyAccessors(IClass type, string name, AccessorType property)
+    public void ValidateEventAccessors(IInterface type, string name, AccessorType property)
     {
       var member = GetEvent(type, name);
 
@@ -182,7 +182,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IEvent))]
     [MemberData(nameof(GetEventInheritanceData))]
-    public void ValidatePropertyInheritance(IClass type, string name, MemberInheritance inheritance)
+    public void ValidateEventInheritance(IInterface type, string name, MemberInheritance inheritance)
     {
       var members = GetEvent(type, name, true);
 
@@ -192,7 +192,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IEvent))]
     [MemberData(nameof(GetEventStaticData))]
-    public void ValidatePropertyIsStatic(IClass type, string name, bool isStatic)
+    public void ValidateEventIsStatic(IInterface type, string name, bool isStatic)
     {
       var members = GetEvent(type, name, true);
 
@@ -202,7 +202,7 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IEvent))]
     [MemberData(nameof(GetEventTypeData))]
-    public void ValidatePropertyType(IClass type, string name, string returns)
+    public void ValidateEventType(IInterface type, string name, string returns)
     {
       var members = GetEvent(type, name, true);
 
