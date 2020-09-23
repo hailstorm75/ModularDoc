@@ -5,12 +5,18 @@ namespace UT.Members.Data
   {
     public const string TEST_ASSEMBLY = "../../../../../bin.tests/TestLibrary.dll";
 
+    #region Enum
+
     public const string PUBLIC_ENUM = "EnumTypePublic";
     public const string INTERNAL_ENUM = "EnumTypeInternal";
     public const string PUBLIC_NESTED_ENUM = "NestedEnumPublic";
     public const string PROTECTED_NESTED_ENUM = "NestedEnumProtected";
     public const string PROTECTED_INTERNAL_NESTED_ENUM = "NestedEnumProtectedInternal";
     public const string INTERNAL_NESTED_ENUM = "NestedEnumInternal";
+
+    #endregion
+
+    #region Interface
 
     public const string PUBLIC_INTERFACE = "IInterfaceTypePublic";
     public const string INTERNAL_INTERFACE = "IInterfaceTypeInternal";
@@ -27,6 +33,10 @@ namespace UT.Members.Data
     public const string PUBLIC_GENERIC_INTERFACE = "IGenericInterface";
     public const string PUBLIC_NESTED_GENERIC_INTERFACE = "INestedGenericInterface";
 
+    #endregion
+
+    #region Struct
+
     public const string PUBLIC_STRUCT = "StructTypePublic";
     public const string INTERNAL_STRUCT = "StructTypeInternal";
     public const string PUBLIC_NESTED_STRUCT = "NestedStructPublic";
@@ -41,6 +51,10 @@ namespace UT.Members.Data
     public const string PUBLIC_INHERITING_COMPLEX_STRUCT_EMPTY = "InheritingStructComplexEmpty";
     public const string PUBLIC_STRUCT_PARAM_CTOR = "StructWithParamConstructor";
     public const string PUBLIC_STRUCT_EMPTY_CTOR = "StructEmptyConstructor";
+
+    #endregion
+
+    #region Class
 
     public const string PUBLIC_CLASS = "ClassTypePublic";
     public const string PUBLIC_CLASS_ABSTRACT = "ClassTypePublicAbstract";
@@ -63,6 +77,10 @@ namespace UT.Members.Data
     public const string PUBLIC_INHERITING_COMPLEX_CLASS_BASE_EMPTY = "InheritingClassComplexWithBaseEmpty";
     public const string PUBLIC_CLASS_DEFAULT_CTOR = "ClassWithDefaultConstructor";
     public const string PUBLIC_CLASS_PARAM_CTOR = "ClassWithParamConstructor";
+
+    #endregion
+
+    #region Properties
 
     public const string PROPERTIES_NAMESPACE = "TestLibrary.Members.Properties";
     public const string PROPERTIES_CLASS = "ClassProperties";
@@ -97,6 +115,10 @@ namespace UT.Members.Data
     public const string PUBLIC_CLASS_PROPERTY_NESTED2  = "ClassPropertiesNestedNested";
     public const string PROPERTY_PUBLIC_NESTED2 = "PropertyNestedNested";
 
+    #endregion
+
+    #region Events
+
     public const string EVENTS_NAMESPACE = "TestLibrary.Members.Events";
     public const string PUBLIC_CLASS_EVENT_PARENT = "ClassEventsParent";
     public const string PUBLIC_CLASS_EVENT_NESTED = "ClassEventsNested";
@@ -117,5 +139,27 @@ namespace UT.Members.Data
     public const string EVENT_VIRTUAL = "EventVirtual";
     public const string EVENT_ABSTRACT = "EventAbstract";
     public const string EVENT_OVERRIDE = "EventOverride";
+
+    #endregion
+
+    #region Methods
+
+    public const string METHODS_NAMESPACE = "TestLibrary.Members.Methods";
+    public const string METHODS_CLASS = "ClassMethods";
+    public const string METHODS_CLASS_ABSTRACT = "ClassMethodsAbstract";
+    public const string METHODS_STRUCT = "StructMethods";
+    public const string METHODS_INTERFACE = "IInterfaceMethods";
+    public const string METHOD_STATIC = "MethodStatic";
+    public const string METHOD_ASYNC = "MethodAsync";
+    public const string METHOD_PUBLIC = "MethodPublic";
+    public const string METHOD_INTERNAL = "MethodInternal";
+    public const string METHOD_PROTECTED = "MethodProtected";
+    public const string METHOD_PROTECTED_INTERNAL = "MethodProtectedInternal";
+    public const string METHOD_NORMAL = "MethodNormal";
+    public const string METHOD_OVERRIDE = "MethodOverride";
+    public const string METHOD_VIRTUAL = "MethodVirtual";
+    public const string METHOD_ABSTRACT = "MethodAbstract";
+
+    #endregion
   }
 }

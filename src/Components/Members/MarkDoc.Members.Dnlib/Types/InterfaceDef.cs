@@ -121,8 +121,8 @@ namespace MarkDoc.Members.Dnlib.Types
         // Select members which are non-private methods
         .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                          && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                         && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
-                         && !methodDef.IsPrivate
+                         // && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
+                         // && !methodDef.IsPrivate
                          && !methodDef.IsConstructor
                          && !eventMethods.Contains(methodDef.Name.String))
         // Initialize methods

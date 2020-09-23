@@ -171,10 +171,10 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       if (source.IsVirtual && (source.Attributes & MethodAttributes.NewSlot) == 0)
         return MemberInheritance.Override;
-      if (source.IsVirtual)
-        return MemberInheritance.Virtual;
       if (source.IsAbstract)
         return MemberInheritance.Abstract;
+      if (source.IsVirtual)
+        return MemberInheritance.Virtual;
 
       return MemberInheritance.Normal;
     }
