@@ -351,3 +351,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /bin.tests
+/src/.idea/
+/tests/.idea/
