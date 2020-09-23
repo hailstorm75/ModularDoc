@@ -160,9 +160,27 @@ namespace UT.Members.MemberTests
       }
     }
 
-    // public static IEnumerable<object[]> GetMethodGenericsData()
-    // {
-    // }
+    public static IEnumerable<object[]> GetMethodGenericsData()
+    {
+      var data = new object[]
+      {
+        new object[] {Constants.METHOD_GENERIC, ("TMethod", new string[] { })},
+        new object[] {Constants.METHOD_GENERIC_CONSTRAINTS, ("TMethod", new [] {nameof(IDisposable)})}
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.METHODS_CLASS_GENERIC));
+        object?[] typeWrapper = {result};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
 
     public static IEnumerable<object[]> GetMethodReturnData()
     {
@@ -282,6 +300,17 @@ namespace UT.Members.MemberTests
       var members = GetMethod(type, name, true);
 
       Assert.Equal(operatorType, members?.Operator);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetMethodGenericsData))]
+    public void ValidateMethodGenericNames(IInterface type, string name, (string generic, string[] constraints) generics)
+    {
+      var members = GetMethod(type, name, true);
+      var generic = members?.Generics.First();
+
+      Assert.Equal(generics.generic, generic);
     }
   }
 }

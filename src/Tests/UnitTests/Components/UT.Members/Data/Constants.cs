@@ -145,6 +145,7 @@ namespace UT.Members.Data
     #region Methods
 
     public const string METHODS_NAMESPACE = "TestLibrary.Members.Methods";
+    public const string METHODS_CLASS_GENERIC = "ClassMethodsGenerics";
     public const string METHODS_CLASS = "ClassMethods";
     public const string METHODS_CLASS_ABSTRACT = "ClassMethodsAbstract";
     public const string METHODS_STRUCT = "StructMethods";
@@ -182,6 +183,8 @@ namespace UT.Members.Data
     public const string METHOD_ONESCOMPLEMENT = "~";
     public const string METHOD_IMPLICIT = "int";
     public const string METHOD_EXPLICIT = "uint";
+    public const string METHOD_GENERIC = "MethodGeneric";
+    public const string METHOD_GENERIC_CONSTRAINTS = "MethodGenericConstraint";
 
     #endregion
   }
