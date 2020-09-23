@@ -472,8 +472,9 @@ module TypeContentHelpers =
       | _ -> LinkedList<IEvent>() :> IReadOnlyCollection<IEvent>
     let processEvent (_, event: IEvent) =
       let signature =
-        SignatureHelpers.generateSignature "{0}{1} event {2} {3}" (seq [
-          SignatureHelpers.getAccessor;
+        SignatureHelpers.generateSignature "{0}{1}{2} event {3} {4}" (seq [
+          SignatureHelpers.getAccessor
+          SignatureHelpers.getInheritance;
           SignatureHelpers.getStatic;
           SignatureHelpers.getReturn;
           SignatureHelpers.getName
