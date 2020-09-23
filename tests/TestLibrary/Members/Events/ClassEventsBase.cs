@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS0414
+// ReSharper disable All
+using System;
 
 namespace TestLibrary.Members.Events
 {

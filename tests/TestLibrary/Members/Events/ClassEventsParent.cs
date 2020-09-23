@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 67
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+#pragma warning disable CS0414
 // ReSharper disable All
 using System;
 

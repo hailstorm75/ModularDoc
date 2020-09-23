@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable CS0414
+using System;
 
 namespace TestLibrary.Members.Events
 {

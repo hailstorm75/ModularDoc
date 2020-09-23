@@ -1,4 +1,5 @@
-﻿#pragma warning disable 67
+﻿#pragma warning disable CS0414
+#pragma warning disable 67
 using System;
 
 namespace TestLibrary.Members.Events
