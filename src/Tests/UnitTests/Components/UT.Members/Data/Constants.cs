@@ -151,6 +151,7 @@ namespace UT.Members.Data
     public const string METHODS_INTERFACE = "IInterfaceMethods";
     public const string METHOD_STATIC = "MethodStatic";
     public const string METHOD_ASYNC = "MethodAsync";
+    public const string METHOD_STRING = "MethodString";
     public const string METHOD_PUBLIC = "MethodPublic";
     public const string METHOD_INTERNAL = "MethodInternal";
     public const string METHOD_PROTECTED = "MethodProtected";

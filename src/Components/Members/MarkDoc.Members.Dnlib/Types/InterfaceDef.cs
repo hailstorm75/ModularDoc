@@ -100,8 +100,8 @@ namespace MarkDoc.Members.Dnlib.Types
       NestedTypes = source.NestedTypes
         // Select types which are valid nested types
         .Where(typeDef => !typeDef.IsDelegate
-                       && !typeDef.IsNestedPrivate
-                       && !typeDef.Name.String.StartsWith('<'))
+                          && !typeDef.IsNestedPrivate
+                          && !typeDef.Name.String.StartsWith('<'))
         // Resolve the nested types
         .Select(typeDef => Resolver.ResolveType(typeDef, source))
         // Materialize the collection
@@ -120,11 +120,11 @@ namespace MarkDoc.Members.Dnlib.Types
       Methods = source.Methods
         // Select members which are non-private methods
         .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
-                         && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                         // && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
-                         // && !methodDef.IsPrivate
-                         && !methodDef.IsConstructor
-                         && !eventMethods.Contains(methodDef.Name.String))
+                            && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                            // && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
+                            // && !methodDef.IsPrivate
+                            && !methodDef.IsConstructor
+                            && !eventMethods.Contains(methodDef.Name.String))
         // Initialize methods
         .Select(methodDef => new MethodDef(resolver, methodDef))
         // Materialize the collection

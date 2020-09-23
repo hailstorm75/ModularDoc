@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 // ReSharper disable All
 #pragma warning disable 660,661
 
@@ -12,6 +11,8 @@ namespace TestLibrary.Members.Methods
     protected internal void MethodProtectedInternal() { }
     internal void MethodInternal() { }
 
+    public string MethodString() => string.Empty;
+    
     public static void MethodStatic() { }
     public async Task MethodAsync() => await Task.Delay(1);
 

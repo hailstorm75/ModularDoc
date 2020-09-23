@@ -63,7 +63,7 @@ namespace MarkDoc.Members.Dnlib.Members
       @operator = OperatorType.Normal;
 
       static string RetrieveConverterName(IResolver resolver, dnlib.DotNet.MethodDef input)
-        => resolver.Resolve(input.ReturnType, null).DisplayName;
+        => resolver.Resolve(input.ReturnType).DisplayName;
 
       switch (source.Name.ToUpperInvariant())
       {
@@ -176,8 +176,8 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static IEnumerable<string> ResolveGenerics(dnlib.DotNet.MethodDef source)
       => source.HasGenericParameters
-           ? source.GenericParameters.Select(x => x.Name.String)
-           : Enumerable.Empty<string>();
+        ? source.GenericParameters.Select(x => x.Name.String)
+        : Enumerable.Empty<string>();
 
     #endregion
   }

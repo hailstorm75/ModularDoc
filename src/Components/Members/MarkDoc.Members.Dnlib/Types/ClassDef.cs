@@ -58,9 +58,9 @@ namespace MarkDoc.Members.Dnlib.Types
       Constructors = source.Methods
         // Select valid constructors
         .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
-                         && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                         && !methodDef.IsPrivate
-                         && methodDef.IsConstructor)
+                            && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
+                            && !methodDef.IsPrivate
+                            && methodDef.IsConstructor)
         // Initialize constructors
         .Select(x => new ConstructorDef(resolver, x, parent != null))
         // Materialize the collection

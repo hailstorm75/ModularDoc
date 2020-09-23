@@ -15,7 +15,7 @@ namespace UT.Members.MemberTests
     #region Data providers
 
     private static IEnumerable<(string name, OperatorType type)> GetOperators()
-      => new (string, OperatorType)[]
+      => new[]
       {
         (Constants.METHOD_ADDITION, OperatorType.Normal),
         (Constants.METHOD_SUBSTRACTION, OperatorType.Normal),
@@ -164,9 +164,27 @@ namespace UT.Members.MemberTests
     // {
     // }
 
-    // public static IEnumerable<object[]> GetMethodReturnData()
-    // {
-    // }
+    public static IEnumerable<object[]> GetMethodReturnData()
+    {
+      var data = new object[]
+      {
+        new object?[] {Constants.METHOD_PUBLIC, null!},
+        new object?[] {Constants.METHOD_STRING, "string"},
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
+        object?[] typeWrapper = {result};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
 
     public static IEnumerable<object[]> GetMethodOperatorData()
     {
@@ -195,6 +213,16 @@ namespace UT.Members.MemberTests
     }
 
     #endregion
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetMethodReturnData))]
+    public void ValidateMethodReturnTypes(IInterface type, string name, string? returnType)
+    {
+      var member = GetMethod(type, name, true);
+
+      Assert.Equal(returnType, member?.Returns?.DisplayName);
+    }
 
     [Theory]
     [Trait("Category", nameof(IMethod))]
