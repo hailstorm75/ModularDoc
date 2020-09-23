@@ -41,7 +41,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// Default constructor
     /// </summary>
     internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
-      : base(resolver, source, ResolveOperator(source, out var isOperator))
+      : base(resolver, source, ResolveOperator(source, resolver, out var isOperator))
     {
       // If the source is null..
       if (source is null)
@@ -57,27 +57,22 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #region Methods
 
-    private static string ResolveOperator(IFullName source, out OperatorType @operator)
+    private static string ResolveOperator(dnlib.DotNet.MethodDef source, IResolver resolver, out OperatorType @operator)
     {
       // Assume that the source is a normal operator
       @operator = OperatorType.Normal;
 
-      static string RetrieveConverterName(IFullName input)
-      {
-        var name = input.FullName.AsSpan().Slice(input.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
-        var colonIndex = name.IndexOf(':');
-
-        return name.Slice(0, colonIndex).ToString();
-      }
+      static string RetrieveConverterName(IResolver resolver, dnlib.DotNet.MethodDef input)
+        => resolver.Resolve(input.ReturnType, null).DisplayName;
 
       switch (source.Name.ToUpperInvariant())
       {
         case "OP_IMPLICIT":
           @operator = OperatorType.Implicit;
-          return RetrieveConverterName(source);
+          return RetrieveConverterName(resolver, source);
         case "OP_EXPLICIT":
           @operator = OperatorType.Explicit;
-          return RetrieveConverterName(source);
+          return RetrieveConverterName(resolver, source);
         case "OP_ADDITION":
           return "+";
         case "OP_SUBTRACTION":
