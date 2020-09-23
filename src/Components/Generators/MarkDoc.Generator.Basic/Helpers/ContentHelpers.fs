@@ -199,15 +199,15 @@ module internal ContentHelpers =
     let processContent content =
       // Composes content based on its type
       match content with
-      | Summary as s -> (getSingleTag input ITag.TagType.Summary, "Summary")
-      | Remarks as s -> (getSingleTag input ITag.TagType.Remarks, "Remarks")
-      | Example as s -> (getSingleTag input ITag.TagType.Example, "Example")
-      | Value as s -> (getSingleTag input ITag.TagType.Value, "Value")
-      | Returns as s -> (getSingleTag input ITag.TagType.Returns, "Returns")
-      | Exceptions as s -> (getExceptions input, "Exceptions")
-      | SeeAlso as s -> (getSeeAlso input, "See also")
-      | Arguments as s -> (getArguments input, "Arguments")
-      | Inheritance as s -> (getInheritedFrom input, "Inherited from")
+      | Summary -> (getSingleTag input ITag.TagType.Summary, "Summary")
+      | Remarks -> (getSingleTag input ITag.TagType.Remarks, "Remarks")
+      | Example -> (getSingleTag input ITag.TagType.Example, "Example")
+      | Value -> (getSingleTag input ITag.TagType.Value, "Value")
+      | Returns -> (getSingleTag input ITag.TagType.Returns, "Returns")
+      | Exceptions -> (getExceptions input, "Exceptions")
+      | SeeAlso -> (getSeeAlso input, "See also")
+      | Arguments -> (getArguments input, "Arguments")
+      | Inheritance -> (getInheritedFrom input, "Inherited from")
 
     content
     // Compose the requested content

@@ -71,27 +71,27 @@ namespace MarkDoc.Documentation.Xml
             // Get the member name without the identifier key
             var memberNameRaw = name[(3 + key.Length)..];
 
-            // If the member is a method..
-            if (name.First().Equals('M'))
+            // If the member is not a method..
+            if (!name.First().Equals('M'))
+              // return the member name
+              return memberNameRaw;
+            // if the method has no arguments..
+            if (!memberNameRaw.EndsWith(')'))
+              // and empty braces to the raw name
+              memberNameRaw += "()";
+            // otherwise..
+            else
             {
-              // if the method has no arguments..
-              if (!memberNameRaw.EndsWith(')'))
-                // and empty braces to the raw name
-                memberNameRaw += "()";
-              // otherwise..
-              else
-              {
-                // find the method braces
-                var braceIndex = memberNameRaw.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
-                // get the method name
-                var memberName = memberNameRaw.Remove(braceIndex);
-                // find the generics
-                var genericIndex = memberName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
-                // if there are no generics..
-                if (genericIndex != -1)
-                  // remove the generics
-                  memberNameRaw = memberName.Remove(genericIndex) + memberNameRaw.Substring(braceIndex);
-              }
+              // find the method braces
+              var braceIndex = memberNameRaw.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
+              // get the method name
+              var memberName = memberNameRaw.Remove(braceIndex);
+              // find the generics
+              var genericIndex = memberName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
+              // if there are no generics..
+              if (genericIndex != -1)
+                // remove the generics
+                memberNameRaw = memberName.Remove(genericIndex) + memberNameRaw.Substring(braceIndex);
             }
 
             // Return the processed name

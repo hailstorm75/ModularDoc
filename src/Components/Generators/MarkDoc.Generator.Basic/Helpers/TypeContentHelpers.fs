@@ -577,19 +577,19 @@ module TypeContentHelpers =
   let processContents input tools content =
     let processContent content =
       match content with
-      | TypeConstructors as s -> (constructors, "Constructors")
-      | TypeInheritance as s -> (inheritance, "Inheritance")
-      | TypeProperties as s -> (properties, "Properties")
-      | TypeDelegates as s -> (delegates, "Delegates")
-      | TypeGenerics as s -> (typeParams, "Generic types")
-      | TypeSeeAlso as s -> (single ITag.TagType.Seealso, "See also")
-      | TypeSummary as s -> (single ITag.TagType.Summary, "Summary")
-      | TypeRemarks as s -> (single ITag.TagType.Remarks, "Remarks")
-      | TypeExample as s -> (single ITag.TagType.Example, "Example")
-      | TypeMethods as s -> (methods, "Methods")
-      | TypeNested as s -> (nested, "Nested types")
-      | TypeEvents as s -> (events, "Events")
-      | TypeFields as s -> (enumFields, "Fields")
+      | TypeConstructors -> (constructors, "Constructors")
+      | TypeInheritance -> (inheritance, "Inheritance")
+      | TypeProperties -> (properties, "Properties")
+      | TypeDelegates -> (delegates, "Delegates")
+      | TypeGenerics -> (typeParams, "Generic types")
+      | TypeSeeAlso -> (single ITag.TagType.Seealso, "See also")
+      | TypeSummary -> (single ITag.TagType.Summary, "Summary")
+      | TypeRemarks -> (single ITag.TagType.Remarks, "Remarks")
+      | TypeExample -> (single ITag.TagType.Example, "Example")
+      | TypeMethods -> (methods, "Methods")
+      | TypeNested -> (nested, "Nested types")
+      | TypeEvents -> (events, "Events")
+      | TypeFields -> (enumFields, "Fields")
 
     content
     // Process every case and append the result
