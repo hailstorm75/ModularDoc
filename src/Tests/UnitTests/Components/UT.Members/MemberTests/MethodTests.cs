@@ -362,7 +362,18 @@ namespace UT.Members.MemberTests
       var members = GetMethod(type, name, true);
       var generic = members?.Generics.First();
 
-      Assert.Equal(generics.generic, generic);
+      Assert.Equal(generics.generic, generic?.Key);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetMethodGenericsData))]
+    public void ValidateMethodGenericConstraints(IInterface type, string name, (string generic, string[] constraints) generics)
+    {
+      var members = GetMethod(type, name, true);
+      var generic = members?.Generics.First();
+
+      Assert.Equal(generics.constraints, generic?.Value.Select(c => c.DisplayName));
     }
   }
 }
