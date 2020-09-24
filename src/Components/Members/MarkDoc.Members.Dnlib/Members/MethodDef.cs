@@ -27,7 +27,7 @@ namespace MarkDoc.Members.Dnlib.Members
     public MemberInheritance Inheritance { get; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<string> Generics { get; }
+    public IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
 
     /// <inheritdoc />
     public IResType? Returns { get; }
@@ -51,7 +51,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Operator = isOperator;
       IsAsync = ResolveAsync(source);
       Inheritance = ResolveInheritance(source);
-      Generics = ResolveGenerics(source).ToReadOnlyCollection();
+      Generics = ResolveGenerics(source, resolver);
       Returns = ResolveReturn(source);
     }
 
@@ -174,10 +174,15 @@ namespace MarkDoc.Members.Dnlib.Members
       return MemberInheritance.Normal;
     }
 
-    private static IEnumerable<string> ResolveGenerics(dnlib.DotNet.MethodDef source)
-      => source.HasGenericParameters
-        ? source.GenericParameters.Select(x => x.Name.String)
-        : Enumerable.Empty<string>();
+    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(dnlib.DotNet.MethodDef source, IResolver resolver)
+    {
+      IResType ResolveType(GenericParamConstraint x)
+        => resolver.Resolve(x.Constraint.ToTypeSig());
+
+      return source.HasGenericParameters
+        ? source.GenericParameters.ToDictionary(x => x.Name.String, param => param.GenericParamConstraints.Select(constraint => ResolveType(constraint)).ToReadOnlyCollection())
+        : new Dictionary<string, IReadOnlyCollection<IResType>>();
+    }
 
     #endregion
   }

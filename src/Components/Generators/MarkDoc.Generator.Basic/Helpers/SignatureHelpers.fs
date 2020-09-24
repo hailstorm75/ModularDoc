@@ -15,7 +15,7 @@ module internal SignatureHelpers =
   let getGenerics (input: IMember) =
     // Get the generics from the given input member
     let generics = match input with
-                   | :? IMethod as method -> method.Generics :> string seq
+                   | :? IMethod as method -> method.Generics.Keys
                    | :? IDelegate as del -> del.Generics :> string seq
                    | _ -> Seq.empty
 

@@ -18,7 +18,7 @@ namespace MarkDoc.Members.Members
     /// <summary>
     /// Method generic arguments
     /// </summary>
-    IReadOnlyCollection<string> Generics { get; }
+    IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
 
     /// <summary>
     /// Determines whether the method is asynchronous
