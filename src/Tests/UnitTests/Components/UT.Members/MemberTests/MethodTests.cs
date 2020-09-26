@@ -88,9 +88,51 @@ namespace UT.Members.MemberTests
       }
     }
 
-    // public static IEnumerable<object[]> GetMethodRawNameData()
-    // {
-    // }
+    public static IEnumerable<object?[]> GetMethodRawNameData()
+    {
+      static string FormatRawName(string methodName)
+        => string.Format($"{Constants.METHODS_NAMESPACE}.{Constants.METHODS_CLASS}.{{0}}", methodName);
+
+      var data = new object[]
+      {
+        new object[] { Constants.METHOD_PUBLIC, FormatRawName($"{Constants.METHOD_PUBLIC}()") },
+        new object[] { Constants.METHOD_ADDITION, FormatRawName("op_Addition(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_SUBSTRACTION, FormatRawName("op_Subtraction(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_MULTIPLY, FormatRawName("op_Multiply(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_DIVISION, FormatRawName("op_Division(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_MODULUS, FormatRawName("op_Modulus(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_EXCLUSIVEOR, FormatRawName("op_Exclusiveor(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_BITWISEAND, FormatRawName("op_Bitwiseand(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_BITWISEOR, FormatRawName("op_Bitwiseor(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_LOGICALNOT, FormatRawName("op_Logicalnot(TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_LEFTSHIFT, FormatRawName("op_Leftshift(TestLibrary.Members.Methods.ClassMethods,System.Int32)") },
+        new object[] { Constants.METHOD_RIGHTSHIFT, FormatRawName("op_Rightshift(TestLibrary.Members.Methods.ClassMethods,System.Int32)") },
+        new object[] { Constants.METHOD_EQUALITY, FormatRawName("op_Equality(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_INEQUALITY, FormatRawName("op_Inequality(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_GREATERTHAN, FormatRawName("op_Greaterthan(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_LESSTHAN, FormatRawName("op_Lessthan(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_GREATERTHANEQUALS, FormatRawName("op_Greaterthanorequal(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_LESSTHANEQUALS, FormatRawName("op_Lessthanorequal(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_DECREMENT, FormatRawName("op_Decrement(TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_INCREMENT, FormatRawName("op_Increment(TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_ONESCOMPLEMENT, FormatRawName("op_Onescomplement(TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_IMPLICIT, FormatRawName("op_Implicit(TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] { Constants.METHOD_EXPLICIT, FormatRawName("op_Explicit(TestLibrary.Members.Methods.ClassMethods)") },
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
+        object?[] typeWrapper = {result};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray();
+      }
+    }
 
     public static IEnumerable<object[]> GetMethodInheritanceData()
     {
@@ -250,6 +292,16 @@ namespace UT.Members.MemberTests
       var member = GetMethod(type, name);
 
       Assert.NotNull(member);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IMethod))]
+    [MemberData(nameof(GetMethodRawNameData))]
+    public void ValidateMethodRawNames(IInterface type, string name, string rawName)
+    {
+      var member = GetMethod(type, name);
+
+      Assert.Equal(rawName.ToLowerInvariant(), member?.RawName.ToLowerInvariant());
     }
 
     [Theory]
