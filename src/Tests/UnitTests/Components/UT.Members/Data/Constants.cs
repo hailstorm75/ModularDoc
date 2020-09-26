@@ -187,5 +187,26 @@ namespace UT.Members.Data
     public const string METHOD_GENERIC_CONSTRAINTS = "MethodGenericConstraint";
 
     #endregion
+
+    #region Delegates
+
+    public const string DELEGATES_NAMESPACE = "TestLibrary.Members.Delegates";
+    public const string DELEGATES_CLASS = "ClassDelegates";
+    public const string DELEGATES_PARENT = "ClassDelegatesParent";
+    public const string DELEGATES_NESTED = "ClassDelegatesNested";
+    public const string DELEGATES_NESTED2 = "ClassDelegatesNestedNested";
+    public const string DELEGATE_TOP = "DelegateTop";
+    public const string DELEGATE_NESTED = "DelegateNested";
+    public const string DELEGATE_NESTED2 = "DelegateNestedNested";
+    public const string DELEGATES_STRUCT = "StructDelegates";
+    public const string DELEGATES_INTERFACE = "IInterfaceDelegates";
+    public const string DELEGATE_PUBLIC = "DelegatePublic";
+    public const string DELEGATE_PROTECTED = "DelegateProtected";
+    public const string DELEGATE_INTERNAL = "DelegateInternal";
+    public const string DELEGATE_PROTECTED_INTERNAL = "DelegateProtectedInternal";
+    public const string DELEGATE_GENERIC = "DelegateGeneric";
+    public const string DELEGATE_GENERIC_CONSTRAINT = "DelegateGenericConstraint";
+
+    #endregion
   }
 }

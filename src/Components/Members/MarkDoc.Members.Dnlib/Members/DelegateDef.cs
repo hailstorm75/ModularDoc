@@ -70,13 +70,23 @@ namespace MarkDoc.Members.Dnlib.Members
           ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics())
           : null;
 
-    private static AccessorType ResolveAccessor(TypeDef @delegate)
-      => @delegate.Visibility switch
-      {
-        TypeAttributes.Public => AccessorType.Public,
-        TypeAttributes.NestedFamily => AccessorType.Protected,
-        _ => AccessorType.Internal
-      };
+    private static AccessorType ResolveAccessor(dnlib.DotNet.TypeDef type)
+    {
+      // If the type is public..
+      if (type.Visibility == TypeAttributes.Public || (type.IsNested && type.Visibility == TypeAttributes.NestedPublic))
+        // return public
+        return AccessorType.Public;
+      // If the type is nested protected
+      if (type.Visibility == TypeAttributes.NestedFamily)
+        // return protected
+        return AccessorType.Protected;
+      // If the type is nested protected internal
+      if (type.Visibility == TypeAttributes.NestedFamORAssem)
+        // return protected internal
+        return AccessorType.ProtectedInternal;
+      // Otherwise return internal
+      return AccessorType.Internal;
+    }
 
     private static string ResolveName(ITypeDefOrRef source)
     {
