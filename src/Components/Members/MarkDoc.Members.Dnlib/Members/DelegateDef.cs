@@ -63,7 +63,6 @@ namespace MarkDoc.Members.Dnlib.Members
         : new Dictionary<string, IReadOnlyCollection<IResType>>();
     }
 
-
     private static IEnumerable<IArgument> ResolveArguments(IResolver resolver, dnlib.DotNet.MethodDef method)
       => method.Parameters
         // Filter out invalid arguments

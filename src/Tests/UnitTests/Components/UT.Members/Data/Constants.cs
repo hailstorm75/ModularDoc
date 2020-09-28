@@ -206,7 +206,7 @@ namespace UT.Members.Data
     public const string DELEGATE_INTERNAL = "DelegateInternal";
     public const string DELEGATE_PROTECTED_INTERNAL = "DelegateProtectedInternal";
     public const string DELEGATE_GENERIC = "DelegateGeneric";
-    public const string DELEGATE_GENERIC_CONSTRAINT = "DelegateGenericContraint";
+    public const string DELEGATE_GENERIC_CONSTRAINT = "DelegateGenericConstraint";
 
     #endregion
   }
