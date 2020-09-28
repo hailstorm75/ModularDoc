@@ -53,6 +53,28 @@ namespace UT.Members.MemberTests
       }
     }
 
+    public static IEnumerable<object[]> GetDelegateGenericsData()
+    {
+      var data = new object[]
+      {
+        new object[] {Constants.DELEGATE_GENERIC, ("TDelegate", new string[] { })},
+        new object[] {Constants.DELEGATE_GENERIC_CONSTRAINT, ("TDelegate", new [] {nameof(IDisposable)})}
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS_GENERIC));
+        object?[] typeWrapper = {result};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
+
     private static IDelegate? GetDelegate(IInterface type, string name, bool throwIfNull = false)
     {
       var member = type.Delegates.FirstOrDefault(method => method.Name.Equals(name, StringComparison.InvariantCulture));
@@ -83,6 +105,28 @@ namespace UT.Members.MemberTests
       var member = GetDelegate(type, name);
 
       Assert.Equal(delegateAccessor, member?.Accessor);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetDelegateGenericsData))]
+    public void ValidateDelegateGenericNames(IInterface type, string name, (string generic, string[] constraints) generics)
+    {
+      var members = GetDelegate(type, name, true);
+      var generic = members?.Generics.First();
+
+      Assert.Equal(generics.generic, generic?.Key);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetDelegateGenericsData))]
+    public void ValidateDelegateGenericConstraints(IInterface type, string name, (string generic, string[] constraints) generics)
+    {
+      var members = GetDelegate(type, name, true);
+      var generic = members?.Generics.First();
+
+      Assert.Equal(generics.constraints, generic?.Value.Select(c => c.DisplayName));
     }
   }
 }

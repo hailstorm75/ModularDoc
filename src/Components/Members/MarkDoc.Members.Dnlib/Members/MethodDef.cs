@@ -180,7 +180,7 @@ namespace MarkDoc.Members.Dnlib.Members
         => resolver.Resolve(x.Constraint.ToTypeSig());
 
       return source.HasGenericParameters
-        ? source.GenericParameters.ToDictionary(x => x.Name.String, param => param.GenericParamConstraints.Select(constraint => ResolveType(constraint)).ToReadOnlyCollection())
+        ? source.GenericParameters.ToDictionary(x => x.Name.String, param => param.GenericParamConstraints.Select(ResolveType).ToReadOnlyCollection())
         : new Dictionary<string, IReadOnlyCollection<IResType>>();
     }
 

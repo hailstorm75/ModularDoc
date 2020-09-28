@@ -35,7 +35,7 @@ namespace MarkDoc.Members.Dnlib.Members
     public IReadOnlyCollection<IArgument> Arguments { get; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<string> Generics { get; }
+    public IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
 
     /// <inheritdoc />
     public IResType? Returns { get; }
@@ -47,16 +47,22 @@ namespace MarkDoc.Members.Dnlib.Members
       var method = source.Methods.First(x => x.Name.Equals("Invoke"));
       Name = ResolveName(source);
       Arguments = ResolveArguments(resolver, method).ToReadOnlyCollection();
-      Generics = ResolveGenerics(source).ToReadOnlyCollection();
+      Generics = ResolveGenerics(source, resolver);
       Returns = ResolveReturn(resolver, method);
       Accessor = ResolveAccessor(source);
       RawName = source.ReflectionFullName.Replace('+', '.');
     }
 
-    private static IEnumerable<string> ResolveGenerics(ITypeOrMethodDef source)
-      => !source.HasGenericParameters
-           ? Enumerable.Empty<string>()
-           : source.GenericParameters.Select(x => x.Name.String);
+    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(dnlib.DotNet.TypeDef source, IResolver resolver)
+    {
+      IResType ResolveType(GenericParamConstraint x)
+        => resolver.Resolve(x.Constraint.ToTypeSig());
+
+      return source.HasGenericParameters
+        ? source.GenericParameters.ToDictionary(x => x.Name.String, param => param.GenericParamConstraints.Select(ResolveType).ToReadOnlyCollection())
+        : new Dictionary<string, IReadOnlyCollection<IResType>>();
+    }
+
 
     private static IEnumerable<IArgument> ResolveArguments(IResolver resolver, dnlib.DotNet.MethodDef method)
       => method.Parameters
