@@ -293,7 +293,7 @@ namespace MarkDoc.Members.Dnlib
         return false;
 
       // Locate the type based on its name
-      result = types.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
+      result = types!.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
 
       // Return true if a type was found
       return result != null;
