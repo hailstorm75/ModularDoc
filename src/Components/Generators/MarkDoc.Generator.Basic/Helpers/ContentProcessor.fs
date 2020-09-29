@@ -30,7 +30,7 @@ module internal ContentProcessor =
       |> Seq.map (fun content -> processContent(input, content, tools))
       // Filter out invalid content
       |> SomeHelpers.whereSome
-      // Intialize content into elements
+      // Initialize content into elements
       |> Seq.map (ElementHelpers.initialize >> applyTools)
 
     // Process the content based on its type
@@ -86,7 +86,7 @@ module internal ContentProcessor =
           |> Seq.map (fun content -> processContent(input, content, tools))
           // Filter out invalid content
           |> SomeHelpers.whereSome
-          // Intialize content into elements
+          // Initialize content into elements
           |> Seq.map (ElementHelpers.initialize >> applyTools)
         // Compose the list
         ListElement(content, listType list.Type, "", 0) |> Some
