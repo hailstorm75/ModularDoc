@@ -8,7 +8,7 @@ namespace TestLibrary.Members.Delegates
     internal delegate void DelegateInternal();
     protected delegate void DelegateProtected();
     protected internal delegate void DelegateProtectedInternal();
-
     public delegate string DelegateString();
+    public delegate string DelegateArguments(string a, string b);
   }
 }

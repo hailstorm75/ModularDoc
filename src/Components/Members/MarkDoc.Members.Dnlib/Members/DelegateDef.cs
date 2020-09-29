@@ -50,7 +50,12 @@ namespace MarkDoc.Members.Dnlib.Members
       Generics = ResolveGenerics(source, resolver);
       Returns = ResolveReturn(resolver, method);
       Accessor = ResolveAccessor(source);
-      RawName = source.ReflectionFullName.Replace('+', '.');
+      RawName = ResolveRawName(source, method);
+    }
+
+    private static string ResolveRawName(TypeDef source, dnlib.DotNet.MethodDef method)
+    {
+      return source.ReflectionFullName.Replace('+', '.') + $"({string.Join(",", method.Parameters.WhereNotNull(x => x.ParamDef).Select(arg => arg.Type.FullName).Where(item => !string.IsNullOrEmpty(item)))})";
     }
 
     private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(TypeDef source, IResolver resolver)

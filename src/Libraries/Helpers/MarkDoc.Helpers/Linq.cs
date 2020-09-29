@@ -116,6 +116,18 @@ namespace MarkDoc.Helpers
     /// Filters out null types
     /// </summary>
     /// <param name="input">Input to process</param>
+    /// <param name="predicate">Extracts data from the <paramref name="input"/> collection</param>
+    /// <typeparam name="T">Input collection items type</typeparam>
+    /// <typeparam name="TProp">Type of the extracted data from the <paramref name="input"/> collection</typeparam>
+    /// <returns>Filtered enumeration</returns>
+    public static IEnumerable<T> WhereNotNull<T, TProp>(this IEnumerable<T> input, Func<T, TProp?> predicate)
+      where TProp : class
+      => input.Where(x => predicate(x) != null)!;
+
+    /// <summary>
+    /// Filters out null types
+    /// </summary>
+    /// <param name="input">Input to process</param>
     /// <typeparam name="T">Input collection items type</typeparam>
     /// <returns>Filtered enumeration</returns>
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> input)

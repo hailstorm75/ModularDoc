@@ -14,6 +14,32 @@ namespace UT.Members.MemberTests
   {
     #region Data provider
 
+    public static IEnumerable<object?[]> GetDelegateRawNameData()
+    {
+      static string FormatRawName(string methodName)
+        => string.Format($"{Constants.DELEGATES_NAMESPACE}.{Constants.DELEGATES_CLASS}.{{0}}", methodName);
+
+      var data = new object[]
+      {
+        new object[] { Constants.DELEGATE_PUBLIC, FormatRawName($"{Constants.DELEGATE_PUBLIC}()") },
+        new object[] { Constants.DELEGATE_PROTECTED, FormatRawName($"{Constants.DELEGATE_PROTECTED}()") },
+        new object[] { Constants.DELEGATE_ARGUMENTS, FormatRawName($"{Constants.DELEGATE_ARGUMENTS}(System.String,System.String)") },
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS));
+        object?[] typeWrapper = {result};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray();
+      }
+    }
+
     public static IEnumerable<object[]> GetDelegateNameData()
     {
       var filter = new HashSet<string>
@@ -126,7 +152,6 @@ namespace UT.Members.MemberTests
 
     #endregion
 
-
     [Theory]
     [Trait("Category", nameof(IDelegate))]
     [MemberData(nameof(GetDelegateData))]
@@ -145,6 +170,16 @@ namespace UT.Members.MemberTests
       var member = GetDelegate(type, name);
 
       Assert.NotNull(member);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetDelegateRawNameData))]
+    public void ValidateDelegateRawNames(IInterface type, string name, string rawName)
+    {
+      var member = GetDelegate(type, name);
+
+      Assert.Equal(rawName.ToLowerInvariant(), member?.RawName.ToLowerInvariant());
     }
 
     [Theory]
