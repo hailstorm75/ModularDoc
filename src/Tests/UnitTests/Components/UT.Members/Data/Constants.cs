@@ -202,6 +202,7 @@ namespace UT.Members.Data
     public const string DELEGATES_STRUCT = "StructDelegates";
     public const string DELEGATES_INTERFACE = "IInterfaceDelegates";
     public const string DELEGATE_PUBLIC = "DelegatePublic";
+    public const string DELEGATE_STRING = "DelegateString";
     public const string DELEGATE_PROTECTED = "DelegateProtected";
     public const string DELEGATE_INTERNAL = "DelegateInternal";
     public const string DELEGATE_PROTECTED_INTERNAL = "DelegateProtectedInternal";

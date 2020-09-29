@@ -92,6 +92,28 @@ namespace UT.Members.MemberTests
       }
     }
 
+    public static IEnumerable<object[]> GetDelegateReturnData()
+    {
+      var data = new object[]
+      {
+        new object?[] {Constants.DELEGATE_PUBLIC, null!},
+        new object[] {Constants.DELEGATE_STRING, "string"}
+      };
+
+      foreach (var container in new ResolversProvider())
+      {
+        var resolver = container.First() as IResolver;
+        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+
+        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
+          .OfType<IClass>()
+          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS));
+        object?[] typeWrapper = {result};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
+
     private static IDelegate? GetDelegate(IInterface type, string name, bool throwIfNull = false)
     {
       var member = type.Delegates.FirstOrDefault(method => method.Name.Equals(name, StringComparison.InvariantCulture));
@@ -157,6 +179,16 @@ namespace UT.Members.MemberTests
       var generic = members?.Generics.First();
 
       Assert.Equal(generics.constraints, generic?.Value.Select(c => c.DisplayName));
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IDelegate))]
+    [MemberData(nameof(GetDelegateReturnData))]
+    public void ValidateDelegateReturns(IInterface type, string name, string returns)
+    {
+      var members = GetDelegate(type, name, true);
+
+      Assert.Equal(returns, members?.Returns?.DisplayName);
     }
   }
 }
