@@ -211,5 +211,23 @@ namespace UT.Members.Data
     public const string DELEGATE_GENERIC_CONSTRAINT = "DelegateGenericConstraint";
 
     #endregion
+
+    #region Arguments
+
+    public const string ARGUMENTS_NAMESPACE = "TestLibrary.Members.Arguments";
+    public const string ARGUMENTS_CLASS = "ClassArguments";
+    public const string METHOD_PREFIX_FORMAT = "Method{0}";
+    public const string DELEGATE_PREFIX_FORMAT = "Delegate{0}";
+
+    public static string GetDelegate(string name)
+      => string.Format(DELEGATE_PREFIX_FORMAT, name);
+    public static string GetMethod(string name)
+      => string.Format(METHOD_PREFIX_FORMAT, name);
+
+    public const string ARGUMENT_ONE = "OneArg";
+    public const string ARGUMENT_TWO = "TwoArg";
+    public const string ARGUMENT_MODIFIERS = "ModArgs";
+
+    #endregion
   }
 }
