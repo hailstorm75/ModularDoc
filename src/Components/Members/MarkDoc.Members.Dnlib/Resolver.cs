@@ -183,6 +183,8 @@ namespace MarkDoc.Members.Dnlib
         ElementType.U8 => new ResValueType(this, signature, "ulong"),
         ElementType.R4 => new ResValueType(this, signature, "float"),
         ElementType.R8 => new ResValueType(this, signature, "double"),
+        ElementType.ByRef => Resolve(signature.Next, generics),
+        ElementType.CModReqd => Resolve(signature.Next, generics),
         _ => new ResType(this, signature),
       };
 
