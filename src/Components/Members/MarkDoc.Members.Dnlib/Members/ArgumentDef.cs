@@ -59,14 +59,14 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       var def = source.ParamDef;
 
-      // TODO: Implement ref support
-
       if (def.IsIn)
         return ArgumentType.In;
       if (def.IsOut)
         return ArgumentType.Out;
       if (def.IsOptional)
         return ArgumentType.Optional;
+      if (source.Type.ElementType == ElementType.ByRef)
+        return ArgumentType.Ref;
 
       return ArgumentType.Normal;
     }
