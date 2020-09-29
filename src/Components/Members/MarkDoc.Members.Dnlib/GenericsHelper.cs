@@ -21,10 +21,10 @@ namespace MarkDoc.Members.Dnlib
       // Resolves generics of parent generics
       static IEnumerable<(string type, string name)> ResolveParentTypeGenerics(MethodDef source)
         => GetGenericArguments(source.DeclaringType)
-            // Distinct by name
-            .DistinctBy(x => x.Name)
-            // Pair generics with their display name and raw name
-            .Select((x, i) => (x.Name.String, $"`{i}"));
+          // Distinct by name
+          .DistinctBy(x => x.Name)
+          // Pair generics with their display name and raw name
+          .Select((x, i) => (x.Name.String, $"`{i}"));
 
       // Resolves generics of this method
       static IEnumerable<(string type, string name)> GetTypeGenerics(ITypeOrMethodDef source)

@@ -53,7 +53,7 @@ namespace MarkDoc.Members.Dnlib.Members
       RawName = source.ReflectionFullName.Replace('+', '.');
     }
 
-    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(dnlib.DotNet.TypeDef source, IResolver resolver)
+    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(TypeDef source, IResolver resolver)
     {
       IResType ResolveType(GenericParamConstraint x)
         => resolver.Resolve(x.Constraint.ToTypeSig());
@@ -72,10 +72,10 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static IResType? ResolveReturn(IResolver resolver, dnlib.DotNet.MethodDef method)
       => !method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
-          ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics())
-          : null;
+        ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics())
+        : null;
 
-    private static AccessorType ResolveAccessor(dnlib.DotNet.TypeDef type)
+    private static AccessorType ResolveAccessor(TypeDef type)
     {
       // If the type is public..
       if (type.Visibility == TypeAttributes.Public || (type.IsNested && type.Visibility == TypeAttributes.NestedPublic))

@@ -53,10 +53,10 @@ namespace MarkDoc.Members.Dnlib
       // Transforms groupings of types into a dictionary
       IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
         => m_groups
-            // Flatten the collection
-            .SelectMany(Linq.XtoX)
-            // Create a dictionary of types grouped by their namespaces
-            .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
+          // Flatten the collection
+          .SelectMany(Linq.XtoX)
+          // Create a dictionary of types grouped by their namespaces
+          .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
 
       Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.PublicationOnly);
       m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys), LazyThreadSafetyMode.PublicationOnly);
@@ -75,9 +75,9 @@ namespace MarkDoc.Members.Dnlib
         var typeNamespace = Linq.GroupKey(grouping);
         // Return true if the namespace is not empty and is not excluded
         return !string.IsNullOrEmpty(typeNamespace)
-           && !EXCLUDED_NAMESPACES.Contains(typeNamespace.Contains('.', StringComparison.InvariantCulture)
-                ? typeNamespace.Remove(typeNamespace.IndexOf('.', StringComparison.InvariantCulture))
-                : typeNamespace);
+               && !EXCLUDED_NAMESPACES.Contains(typeNamespace.Contains('.', StringComparison.InvariantCulture)
+                 ? typeNamespace.Remove(typeNamespace.IndexOf('.', StringComparison.InvariantCulture))
+                 : typeNamespace);
       }
 
       // If the resolved types were read..
@@ -154,7 +154,7 @@ namespace MarkDoc.Members.Dnlib
       // If the type was cached..
       if (m_resCache.TryGetValue(signature.FullName, out var resolution))
         // return the cached type
-        return resolution;
+        return resolution!;
 
       // Resolve the type based on what it is
       var result = signature.ElementType switch
@@ -165,8 +165,8 @@ namespace MarkDoc.Members.Dnlib
         // Generic instances and tuples
         var x when x is ElementType.GenericInst && IsGeneric(signature)
           => IsTuple(signature, out var valueTuple)
-              ? new ResTuple(this, signature, valueTuple)
-              : new ResGeneric(this, signature, generics) as IResType,
+            ? new ResTuple(this, signature, valueTuple)
+            : new ResGeneric(this, signature, generics) as IResType,
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics),
         ElementType.Boolean => new ResValueType(this, signature, "bool"),

@@ -164,7 +164,7 @@ namespace MarkDoc.Documentation.Xml
               return (tag.Key, tag.Value);
 
             // Create a filter based on existing tag references
-            var filter = new HashSet<string>(existing.Select(x => x.Reference));
+            var filter = new HashSet<string>(existing!.Select(x => x.Reference));
             // Create a list of tags to add which contain unique references
             var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
 
@@ -173,7 +173,7 @@ namespace MarkDoc.Documentation.Xml
           }
 
           // Prepare the sequence of tags to be cached
-          var tags = member.Documentation.Tags
+          var tags = member!.Documentation.Tags
             // Filter out unwanted tags
             .Where(Filter)
             // Select the tags to cache
