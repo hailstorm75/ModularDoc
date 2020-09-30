@@ -35,6 +35,11 @@ namespace MarkDoc.Members.ResolvedTypes
     /// </summary>
     Lazy<IType?> Reference { get; }
 
+    /// <summary>
+    /// Is the type a reference
+    /// </summary>
+    bool IsByRef { get;  }
+
     #endregion
   }
 }

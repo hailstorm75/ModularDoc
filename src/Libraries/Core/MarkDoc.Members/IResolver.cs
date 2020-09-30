@@ -28,8 +28,9 @@ namespace MarkDoc.Members
     /// </summary>
     /// <param name="source">Type to resolve</param>
     /// <param name="generics">Dictionary of type generics</param>
+    /// <param name="isByRef"></param>
     /// <returns>Resolved type</returns>
-    IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null);
+    IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false);
 
     /// <summary>
     /// Links a <paramref name="type"/> instance to a <see name="IType"/> instance

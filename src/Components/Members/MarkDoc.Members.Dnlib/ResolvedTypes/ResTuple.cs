@@ -32,8 +32,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="isValueTuple">Is the given tuple a value tuple</param>
-    internal ResTuple(IResolver resolver, TypeSig source, bool isValueTuple)
-      : base(resolver, source, ResolveName(resolver, source, isValueTuple, out var fields), ResolveDocName(source), source.FullName)
+    /// <param name="isByRef"></param>
+    internal ResTuple(IResolver resolver, TypeSig source, bool isValueTuple, bool isByRef = false)
+      : base(resolver, source, ResolveName(resolver, source, isValueTuple, out var fields), ResolveDocName(source), source.FullName, isByRef)
     {
       IsValueTuple = isValueTuple;
       Fields = fields;

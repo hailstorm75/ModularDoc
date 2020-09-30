@@ -38,6 +38,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <inheritdoc />
     public Lazy<IType?> Reference { get; }
 
+    /// <inheritdoc />
+    public bool IsByRef { get; }
+
     #endregion
 
     /// <summary>
@@ -45,8 +48,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// </summary>
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
-    internal ResType(IResolver resolver, TypeSig source)
-      : this(resolver, source, ResolveName(source), ResolveDocName(source), source.FullName) { }
+    /// <param name="isByRef"></param>
+    internal ResType(IResolver resolver, TypeSig source, bool isByRef = false)
+      : this(resolver, source, ResolveName(source), ResolveDocName(source), source.FullName, isByRef) { }
 
     /// <summary>
     /// Inherited constructor
@@ -56,7 +60,8 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="displayName">Type display name</param>
     /// <param name="docName">Type documentation name</param>
     /// <param name="rawName">Type raw name</param>
-    protected ResType(IResolver resolver, TypeSig source, string displayName, string docName, string rawName)
+    /// <param name="isByRef"></param>
+    protected ResType(IResolver resolver, TypeSig source, string displayName, string docName, string rawName, bool isByRef)
     {
       // If the source is null..
       if (source is null)
@@ -73,6 +78,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       DisplayName = displayName;
       TypeNamespace = source.Namespace;
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.PublicationOnly);
+      IsByRef = isByRef;
     }
 
     #region Methods

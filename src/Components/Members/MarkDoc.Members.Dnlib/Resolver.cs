@@ -112,7 +112,7 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
-    public IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null)
+    public IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false)
     {
       static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
       {
@@ -183,8 +183,8 @@ namespace MarkDoc.Members.Dnlib
         ElementType.U8 => new ResValueType(this, signature, "ulong"),
         ElementType.R4 => new ResValueType(this, signature, "float"),
         ElementType.R8 => new ResValueType(this, signature, "double"),
-        ElementType.ByRef => Resolve(signature.Next, generics),
-        ElementType.CModReqd => Resolve(signature.Next, generics),
+        ElementType.ByRef => Resolve(signature.Next, generics, true),
+        ElementType.CModReqd => Resolve(signature.Next, generics, true),
         _ => new ResType(this, signature),
       };
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using dnlib.DotNet;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
 {
@@ -16,8 +17,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="displayName"></param>
-    internal ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName)
-      : this(resolver, source, displayName, source.FullName) { }
+    /// <param name="isByRef"></param>
+    internal ResValueType(IResolver resolver, TypeSig source, string displayName, bool isByRef = false)
+      : this(resolver, source, displayName, source.FullName, isByRef) { }
 
     /// <summary>
     /// Inherited constructor
@@ -26,8 +28,9 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="source">Type source</param>
     /// <param name="displayName">Type displayed name</param>
     /// <param name="docName">Type documentation name</param>
-    protected ResValueType(IResolver resolver, dnlib.DotNet.TypeSig source, string displayName, string docName)
+    /// <param name="isByRef"></param>
+    protected ResValueType(IResolver resolver, TypeSig source, string displayName, string docName, bool isByRef = false)
       // ReSharper disable once ConstantConditionalAccessQualifier
-      : base(resolver, source, displayName, docName, source?.FullName ?? throw new ArgumentNullException(nameof(source))) { }
+      : base(resolver, source, displayName, docName, source?.FullName ?? throw new ArgumentNullException(nameof(source)), isByRef) { }
   }
 }
