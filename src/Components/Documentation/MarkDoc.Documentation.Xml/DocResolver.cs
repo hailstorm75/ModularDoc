@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using MarkDoc.Members.Types;
-using Cache = System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type, System.Collections.Concurrent.ConcurrentDictionary<string, MarkDoc.Documentation.IDocMember>? members)>;
+using Cache =
+  System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type,
+    System.Collections.Concurrent.ConcurrentDictionary<string, MarkDoc.Documentation.IDocMember>? members)>;
 
 namespace MarkDoc.Documentation.Xml
 {
@@ -48,13 +50,16 @@ namespace MarkDoc.Documentation.Xml
       void CacheType(string key, XElement element)
       {
         // Prepare the type to cache
-        var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
+        var toAdd =
+          (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
         // Cache the type
         m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
       }
 
       static string RetrieveName(XElement element)
-        => element.Attributes().First(x => x.Name.LocalName.Equals("name", StringComparison.InvariantCultureIgnoreCase)).Value;
+        => element.Attributes()
+          .First(x => x.Name.LocalName.Equals("name", StringComparison.InvariantCultureIgnoreCase))
+          .Value;
 
       static bool TypeGrouper(XElement element)
         => RetrieveName(element).First().Equals('T');
@@ -154,19 +159,19 @@ namespace MarkDoc.Documentation.Xml
       // For every documentation item grouped by
       foreach (var group in doc.XPathSelectElements("doc/members/member").GroupBy(TypeGrouper))
         // Depending on whether the group is a type..
-        switch (group.Key)
+        switch (@group.Key)
         {
           // Is a type
           case true:
             // for every documented type..
-            foreach (var item in group)
+            foreach (var item in @group)
               // cache the type
               CacheType(RetrieveName(item)[2..], item);
             break;
           // Is not a type
           case false:
             // for every documented member..
-            foreach (var item in group)
+            foreach (var item in @group)
               // cache the member
               CacheMember(item);
             break;

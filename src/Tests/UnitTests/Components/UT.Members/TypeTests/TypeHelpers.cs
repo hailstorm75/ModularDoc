@@ -12,9 +12,9 @@ namespace UT.Members.TypeTests
     public static IReadOnlyCollection<T> GetTypes<T>(this IResolver resolver)
       where T : IType
       => resolver.Types.Value
-          .SelectMany(types => types.Value)
-          .OfType<T>()
-          .ToReadOnlyCollection();
+        .SelectMany(types => types.Value)
+        .OfType<T>()
+        .ToReadOnlyCollection();
 
     public static IEnumerable<object[]> ComposeData(this IEnumerable<IReadOnlyList<object>> dataCollection)
     {
