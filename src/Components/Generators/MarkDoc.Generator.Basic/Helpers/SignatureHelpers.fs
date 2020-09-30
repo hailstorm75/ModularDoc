@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Generator.Basic
 
+open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 open MarkDoc.Members.Enums
 open System
@@ -75,6 +76,12 @@ module internal SignatureHelpers =
   /// Valid only for <see cref="IMethod"/>, <see cref="IDelegate"/>, <see cref="IEvent"/>, and <see cref="IProperty"/> member types
   /// </remarks>
   let getReturn (input: IMember) =
+    let getIsByRef (returns: IResType) =
+      if returns.IsByRef then
+        "ref "
+       else
+         ""
+    
     match input with
     | :? IMethod as method ->
       // If the method is a conversion operator, replace the return type with a keyword
@@ -83,13 +90,13 @@ module internal SignatureHelpers =
       | OperatorType.Explicit -> "explicit"
       | OperatorType.None
       | OperatorType.Normal
-      | _ -> if isNull method.Returns then "void" else method.Returns.DisplayName
+      | _ -> if isNull method.Returns then "void" else getIsByRef method.Returns + method.Returns.DisplayName
     | :? IDelegate as deleg->
-      if isNull deleg.Returns then "void" else deleg.Returns.DisplayName
+      if isNull deleg.Returns then "void" else getIsByRef deleg.Returns + deleg.Returns.DisplayName
     | :? IEvent as ev ->
       ev.Type.DisplayName
     | :? IProperty as prop ->
-      prop.Type.DisplayName
+      getIsByRef prop.Type + prop.Type.DisplayName
     | _ -> ""
 
   /// <summary>
