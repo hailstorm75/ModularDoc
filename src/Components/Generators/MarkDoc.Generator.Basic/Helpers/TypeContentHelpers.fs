@@ -400,7 +400,7 @@ module TypeContentHelpers =
         overloadFormat overloads.Count overloads.[method.RawName]
 
       let signature =
-        SignatureHelpers.generateSignature "{0}{1}{2} {3}{4}{5} {6}{7}({8})" (seq [
+        SignatureHelpers.generateSignature "{0}{1}{2} {3}{4}{5} {6}{7}({8}){9}" (seq [
           SignatureHelpers.getAccessor;
           SignatureHelpers.getStatic;
           SignatureHelpers.getInheritance;
@@ -409,7 +409,8 @@ module TypeContentHelpers =
           SignatureHelpers.getOperator;
           SignatureHelpers.getName;
           SignatureHelpers.getGenerics;
-          getArgumentsSig input tools
+          getArgumentsSig input tools;
+          SignatureHelpers.getGenericConstraints;
         ])
 
       // Define the content to be documented for this member
