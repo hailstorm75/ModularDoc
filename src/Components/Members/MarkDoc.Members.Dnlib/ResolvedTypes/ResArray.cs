@@ -21,7 +21,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <summary>
     /// Type resolver
     /// </summary>
-    private IResolver Resolver { get; }
+    private Resolver Resolver { get; }
 
     /// <inheritdoc />
     public IResType ArrayType { get; }
@@ -69,7 +69,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="source">Type source</param>
     /// <param name="generics">List of known generics</param>
     /// <param name="isByRef"></param>
-    internal ResArray(IResolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, bool isByRef = false)
+    internal ResArray(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, bool isByRef = false)
     {
       // If the source is null..
       if (source is null)

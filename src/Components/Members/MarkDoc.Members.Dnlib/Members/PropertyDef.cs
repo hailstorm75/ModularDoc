@@ -47,7 +47,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Default constructor
     /// </summary>
-    private PropertyDef(IResolver resolver, dnlib.DotNet.PropertyDef source, dnlib.DotNet.MethodDef[] methods)
+    private PropertyDef(Resolver resolver, dnlib.DotNet.PropertyDef source, dnlib.DotNet.MethodDef[] methods)
       : base(resolver, source)
     {
       var generics = source.ResolvePropertyGenerics(methods);
@@ -63,7 +63,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #region Methods
 
-    internal static PropertyDef? Initialize(IResolver resolver, dnlib.DotNet.PropertyDef source)
+    internal static PropertyDef? Initialize(Resolver resolver, dnlib.DotNet.PropertyDef source)
     {
       // Select non-private property methods
       var methods = source.SetMethods.Concat(source.GetMethods).Where(x => !x.IsPrivate).ToArray();

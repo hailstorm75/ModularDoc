@@ -21,7 +21,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <summary>
     /// Type resolver
     /// </summary>
-    protected IResolver Resolver { get; }
+    protected Resolver Resolver { get; }
 
     /// <inheritdoc />
     public string DisplayName { get; }
@@ -49,7 +49,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="isByRef"></param>
-    internal ResType(IResolver resolver, TypeSig source, bool isByRef = false)
+    internal ResType(Resolver resolver, TypeSig source, bool isByRef = false)
       : this(resolver, source, ResolveName(source), ResolveDocName(source), source.FullName, isByRef) { }
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="docName">Type documentation name</param>
     /// <param name="rawName">Type raw name</param>
     /// <param name="isByRef"></param>
-    protected ResType(IResolver resolver, TypeSig source, string displayName, string docName, string rawName, bool isByRef)
+    protected ResType(Resolver resolver, TypeSig source, string displayName, string docName, string rawName, bool isByRef)
     {
       // If the source is null..
       if (source is null)

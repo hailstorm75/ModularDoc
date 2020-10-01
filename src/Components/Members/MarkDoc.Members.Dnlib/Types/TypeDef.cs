@@ -18,7 +18,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <summary>
     /// Type resolver
     /// </summary>
-    protected IResolver Resolver { get; }
+    protected Resolver Resolver { get; }
 
     /// <inheritdoc />
     public string Name { get; }
@@ -40,7 +40,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    protected internal TypeDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    protected internal TypeDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {
       // If the source is null..
       if (source is null)

@@ -41,13 +41,13 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, bool isNested)
+    internal ConstructorDef(Resolver resolver, dnlib.DotNet.MethodDef source, bool isNested)
       : this(resolver, source, ResolveName(source, isNested)) { }
 
     /// <summary>
     /// Inherited constructor
     /// </summary>
-    protected ConstructorDef(IResolver resolver, dnlib.DotNet.MethodDef source, string name)
+    protected ConstructorDef(Resolver resolver, dnlib.DotNet.MethodDef source, string name)
       : base(resolver, source)
     {
       // If the source is null..
@@ -70,7 +70,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #region Methods
 
-    private static IEnumerable<IArgument> ResolveArguments(IResolver resolver, dnlib.DotNet.MethodDef method)
+    private static IEnumerable<IArgument> ResolveArguments(Resolver resolver, dnlib.DotNet.MethodDef method)
       => method.Parameters
         // Filter out invalid arguments
         .Where(parameter => !string.IsNullOrEmpty(parameter.Name))

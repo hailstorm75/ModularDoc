@@ -40,7 +40,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// </summary>
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Member source</param>
-    internal EventDef(IResolver resolver, dnlib.DotNet.EventDef source)
+    internal EventDef(Resolver resolver, dnlib.DotNet.EventDef source)
       : base(resolver, source)
     {
       Name = source.Name.String;

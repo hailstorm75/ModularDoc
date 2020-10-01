@@ -109,10 +109,16 @@ namespace MarkDoc.Members.Dnlib
     }
 
 #pragma warning disable CA1822 // Mark members as static
-    /// <inheritdoc />
+    /// <summary>
+    /// Resolves type to a <see cref="IResType"/>
+    /// </summary>
+    /// <param name="source">Type to resolve</param>
+    /// <param name="generics">Dictionary of type generics</param>
+    /// <param name="isByRef">Is the resolved type a reference type</param>
+    /// <returns>Resolved type</returns>
     /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
-    public IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false)
+    internal IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false)
     {
       static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
       {
@@ -161,28 +167,28 @@ namespace MarkDoc.Members.Dnlib
       {
         // Arrays
         var x when x is ElementType.SZArray || x is ElementType.Array
-          => new ResArray(this, signature, generics),
+          => new ResArray(this, signature, generics, isByRef),
         // Generic instances and tuples
         var x when x is ElementType.GenericInst && IsGeneric(signature)
           => IsTuple(signature, out var valueTuple)
-            ? new ResTuple(this, signature, valueTuple)
-            : new ResGeneric(this, signature, generics) as IResType,
+            ? new ResTuple(this, signature, valueTuple, isByRef)
+            : new ResGeneric(this, signature, generics, isByRef) as IResType,
         var x when (x is ElementType.Var || x is ElementType.MVar)
-          => new ResGenericValueType(this, signature, generics),
-        ElementType.Boolean => new ResValueType(this, signature, "bool"),
-        ElementType.Object => new ResValueType(this, signature, "object"),
-        ElementType.String => new ResValueType(this, signature, "string"),
-        ElementType.Char => new ResValueType(this, signature, "char"),
-        ElementType.I1 => new ResValueType(this, signature, "sbyte"),
-        ElementType.U1 => new ResValueType(this, signature, "byte"),
-        ElementType.I2 => new ResValueType(this, signature, "short"),
-        ElementType.U2 => new ResValueType(this, signature, "ushort"),
-        ElementType.I4 => new ResValueType(this, signature, "int"),
-        ElementType.U4 => new ResValueType(this, signature, "uint"),
-        ElementType.I8 => new ResValueType(this, signature, "long"),
-        ElementType.U8 => new ResValueType(this, signature, "ulong"),
-        ElementType.R4 => new ResValueType(this, signature, "float"),
-        ElementType.R8 => new ResValueType(this, signature, "double"),
+          => new ResGenericValueType(this, signature, generics, isByRef),
+        ElementType.Boolean => new ResValueType(this, signature, "bool", isByRef),
+        ElementType.Object => new ResValueType(this, signature, "object", isByRef),
+        ElementType.String => new ResValueType(this, signature, "string", isByRef),
+        ElementType.Char => new ResValueType(this, signature, "char", isByRef),
+        ElementType.I1 => new ResValueType(this, signature, "sbyte", isByRef),
+        ElementType.U1 => new ResValueType(this, signature, "byte", isByRef),
+        ElementType.I2 => new ResValueType(this, signature, "short", isByRef),
+        ElementType.U2 => new ResValueType(this, signature, "ushort", isByRef),
+        ElementType.I4 => new ResValueType(this, signature, "int", isByRef),
+        ElementType.U4 => new ResValueType(this, signature, "uint", isByRef),
+        ElementType.I8 => new ResValueType(this, signature, "long", isByRef),
+        ElementType.U8 => new ResValueType(this, signature, "ulong", isByRef),
+        ElementType.R4 => new ResValueType(this, signature, "float", isByRef),
+        ElementType.R8 => new ResValueType(this, signature, "double", isByRef),
         ElementType.ByRef => Resolve(signature.Next, generics, true),
         ElementType.CModReqd => Resolve(signature.Next, generics, true),
         _ => new ResType(this, signature),
@@ -196,11 +202,22 @@ namespace MarkDoc.Members.Dnlib
     }
 #pragma warning restore CA1822 // Mark members as static
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Links a <paramref name="type"/> instance to a <see name="IType"/> instance
+    /// </summary>
+    /// <param name="source">Source of <paramref name="type"/></param>
+    /// <param name="type">Type to link to</param>
+    /// <remarks>
+    /// This method can be called after of the <see cref="Types"/> have been resolved.
+    /// Calling during resolution of <see cref="Types"/> will render incorrect results.
+    /// <para/>
+    /// Utilize lazy loading to overcome this issue
+    /// </remarks>
+    /// <returns>Linked <see name="IType"/> instance. Null if unresolved.</returns>
     /// <exception cref="InvalidOperationException">When attempting to access <see cref="Types"/> too early</exception>
     /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
-    public IType? FindReference(object source, IResType type)
+    internal IType? FindReference(object source, IResType type)
     {
       // If the source is null..
       if (source is null)
@@ -226,10 +243,15 @@ namespace MarkDoc.Members.Dnlib
       return null;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Resolves given <paramref name="subject"/> to a type
+    /// </summary>
+    /// <param name="subject">Subject to resolve</param>
+    /// <param name="parent">Parent of <paramref name="subject"/></param>
+    /// <returns>Resolved type</returns>
     /// <exception cref="ArgumentNullException">If the <paramref name="subject"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="subject"/> is not a <see cref="TypeSig"/></exception>
-    public IType ResolveType(object subject, object? parent = null)
+    internal IType ResolveType(object subject, object? parent = null)
     {
       static TypeDef? ResolveParent(object? parent)
       {
@@ -327,7 +349,7 @@ namespace MarkDoc.Members.Dnlib
       }
 
       // Returns types which can have nested types
-      static IInterface GetTypeWithNested(IResolver resolver, TypeDef source)
+      static IInterface GetTypeWithNested(Resolver resolver, TypeDef source)
       {
         if (source.IsValueType)
           return new StructDef(resolver, source, null);

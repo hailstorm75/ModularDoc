@@ -33,14 +33,14 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="source">Type source</param>
     /// <param name="isValueTuple">Is the given tuple a value tuple</param>
     /// <param name="isByRef"></param>
-    internal ResTuple(IResolver resolver, TypeSig source, bool isValueTuple, bool isByRef = false)
+    internal ResTuple(Resolver resolver, TypeSig source, bool isValueTuple, bool isByRef = false)
       : base(resolver, source, ResolveName(resolver, source, isValueTuple, out var fields), ResolveDocName(source), source.FullName, isByRef)
     {
       IsValueTuple = isValueTuple;
       Fields = fields;
     }
 
-    private static string ResolveName(IResolver resolver, TypeSig source, bool isValueTuple, out IReadOnlyCollection<(string, IResType)> fields)
+    private static string ResolveName(Resolver resolver, TypeSig source, bool isValueTuple, out IReadOnlyCollection<(string, IResType)> fields)
     {
       // If the source is not a generic instance..
       if (!(source is GenericInstSig token))

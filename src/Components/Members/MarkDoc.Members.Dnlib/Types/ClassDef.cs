@@ -43,7 +43,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    internal ClassDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    internal ClassDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(resolver, source, parent, ResolveGenerics(resolver, source, parent), ResolveBaseClass(source, resolver, out var baseType))
     {
       // If the source is null..
@@ -87,7 +87,7 @@ namespace MarkDoc.Members.Dnlib.Types
       }
     }
 
-    private static IEnumerable<IResType> ResolveBaseClass(dnlib.DotNet.TypeDef source, IResolver resolver, out IResType? result)
+    private static IEnumerable<IResType> ResolveBaseClass(dnlib.DotNet.TypeDef source, Resolver resolver, out IResType? result)
     {
       // If the base type is not an object..
       result = source.BaseType?.FullName.Equals("System.Object", StringComparison.InvariantCulture) == false

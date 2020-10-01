@@ -30,7 +30,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="source">Type source</param>
     /// <param name="generics">List of known generics</param>
     /// <param name="isByRef"></param>
-    internal ResGeneric(IResolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, bool isByRef = false)
+    internal ResGeneric(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, bool isByRef = false)
       : base(resolver, source, ResolveName(source), ResolveRawName(resolver, source, generics), source.FullName, isByRef)
     {
       // If the source is not generic..
@@ -41,7 +41,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       Generics = token.GenericArguments.Select(x => Resolver.Resolve(x, generics)).ToReadOnlyCollection();
     }
 
-    private static string ResolveRawName(IResolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics)
+    private static string ResolveRawName(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics)
     {
       static string ResolveGenerics(string type, IReadOnlyDictionary<string, string>? generics)
       {

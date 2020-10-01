@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac.Extras.Moq;
 using MarkDoc.Members;
-using MarkDoc.Members.ResolvedTypes;
 using UT.Members.Data;
 using Xunit;
 using Constants = UT.Members.Data.Constants;
@@ -48,29 +46,6 @@ namespace UT.Members.TypeTests
       var _ = resolver.Types.Value;
 
       Assert.ThrowsAny<Exception>(() => resolver.Resolve(Constants.TEST_ASSEMBLY));
-    }
-
-    [Theory]
-    [Trait("Category", nameof(IResolver))]
-    [MemberData(nameof(GetInvalidResolveTypeData))]
-    public void ResolverResolveTypeInvalidSource(IResolver resolver, object source)
-    {
-      resolver.Resolve(Constants.TEST_ASSEMBLY);
-
-      Assert.ThrowsAny<Exception>(() => resolver.Resolve(source!));
-    }
-
-    [Theory]
-    [Trait("Category", nameof(IResolver))]
-    [MemberData(nameof(GetInvalidResolveTypeData))]
-    public void ResolverFindReference(IResolver resolver, object source)
-    {
-      using var mock = AutoMock.GetLoose();
-      var type = mock.Mock<IResType>().Object;
-
-      resolver.Resolve(Constants.TEST_ASSEMBLY);
-
-      Assert.ThrowsAny<Exception>(() => resolver.FindReference(source, type));
     }
 
     [Theory]

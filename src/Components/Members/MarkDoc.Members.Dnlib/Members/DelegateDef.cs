@@ -42,7 +42,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #endregion
 
-    internal DelegateDef(IResolver resolver, TypeDef source)
+    internal DelegateDef(Resolver resolver, TypeDef source)
     {
       var method = source.Methods.First(x => x.Name.Equals("Invoke"));
       Name = ResolveName(source);
@@ -58,7 +58,7 @@ namespace MarkDoc.Members.Dnlib.Members
       return source.ReflectionFullName.Replace('+', '.') + $"({string.Join(",", method.Parameters.WhereNotNull(x => x.ParamDef).Select(arg => arg.Type.FullName).Where(item => !string.IsNullOrEmpty(item)))})";
     }
 
-    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(TypeDef source, IResolver resolver)
+    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(TypeDef source, Resolver resolver)
     {
       IResType ResolveType(GenericParamConstraint x)
         => resolver.Resolve(x.Constraint.ToTypeSig());
@@ -68,14 +68,14 @@ namespace MarkDoc.Members.Dnlib.Members
         : new Dictionary<string, IReadOnlyCollection<IResType>>();
     }
 
-    private static IEnumerable<IArgument> ResolveArguments(IResolver resolver, dnlib.DotNet.MethodDef method)
+    private static IEnumerable<IArgument> ResolveArguments(Resolver resolver, dnlib.DotNet.MethodDef method)
       => method.Parameters
         // Filter out invalid arguments
         .Where(parameter => !string.IsNullOrEmpty(parameter.Name))
         // Initialize the arguments
         .Select(parameter => new ArgumentDef(resolver, parameter, method.ResolveMethodGenerics()));
 
-    private static IResType? ResolveReturn(IResolver resolver, dnlib.DotNet.MethodDef method)
+    private static IResType? ResolveReturn(Resolver resolver, dnlib.DotNet.MethodDef method)
       => !method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
         ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics())
         : null;

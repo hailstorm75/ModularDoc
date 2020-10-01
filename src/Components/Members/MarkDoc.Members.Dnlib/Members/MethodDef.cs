@@ -40,7 +40,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal MethodDef(IResolver resolver, dnlib.DotNet.MethodDef source)
+    internal MethodDef(Resolver resolver, dnlib.DotNet.MethodDef source)
       : base(resolver, source, ResolveOperator(source, resolver, out var isOperator))
     {
       // If the source is null..
@@ -57,12 +57,12 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #region Methods
 
-    private static string ResolveOperator(dnlib.DotNet.MethodDef source, IResolver resolver, out OperatorType @operator)
+    private static string ResolveOperator(dnlib.DotNet.MethodDef source, Resolver resolver, out OperatorType @operator)
     {
       // Assume that the source is a normal operator
       @operator = OperatorType.Normal;
 
-      static string RetrieveConverterName(IResolver resolver, dnlib.DotNet.MethodDef input)
+      static string RetrieveConverterName(Resolver resolver, dnlib.DotNet.MethodDef input)
         => resolver.Resolve(input.ReturnType).DisplayName;
 
       switch (source.Name.ToUpperInvariant())
@@ -174,7 +174,7 @@ namespace MarkDoc.Members.Dnlib.Members
       return MemberInheritance.Normal;
     }
 
-    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(dnlib.DotNet.MethodDef source, IResolver resolver)
+    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(dnlib.DotNet.MethodDef source, Resolver resolver)
     {
       IResType ResolveType(GenericParamConstraint x)
         => resolver.Resolve(x.Constraint.ToTypeSig());

@@ -62,7 +62,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    internal InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    internal InterfaceDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : this(resolver, source, parent, ResolveGenerics(resolver, source, parent), Enumerable.Empty<IResType>()) { }
 
     /// <summary>
@@ -73,7 +73,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="parent">Nested type parent</param>
     /// <param name="generics">Generics of this given type</param>
     /// <param name="inheritedTypes">Inherited types</param>
-    protected InterfaceDef(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics, IEnumerable<IResType> inheritedTypes)
+    protected InterfaceDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics, IEnumerable<IResType> inheritedTypes)
       : base(resolver, source, parent)
     {
       // If the source is null..
@@ -207,7 +207,7 @@ namespace MarkDoc.Members.Dnlib.Types
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(interfaceImpl => Resolver.Resolve(interfaceImpl.Interface.ToTypeSig(), outerArgs));
 
-    protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(IResolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {
       IResType ResolveType(GenericParamConstraint x, IReadOnlyDictionary<string, string> generics)
         => resolver.Resolve(x.Constraint.ToTypeSig(), generics);

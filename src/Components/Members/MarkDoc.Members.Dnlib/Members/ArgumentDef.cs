@@ -17,7 +17,7 @@ namespace MarkDoc.Members.Dnlib.Members
   {
     #region Properties
 
-    protected IResolver Resolver { get; }
+    protected Resolver Resolver { get; }
 
     /// <inheritdoc />
     public ArgumentType Keyword { get; }
@@ -33,7 +33,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Default constructor
     /// </summary>
-    internal ArgumentDef(IResolver resolver, Parameter source, IReadOnlyDictionary<string, string> generics)
+    internal ArgumentDef(Resolver resolver, Parameter source, IReadOnlyDictionary<string, string> generics)
     {
       // If the source is null..
       if (source is null)

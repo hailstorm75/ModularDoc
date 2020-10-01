@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members
@@ -22,37 +21,6 @@ namespace MarkDoc.Members
     /// </summary>
     /// <param name="assembly">Path to assembly</param>
     void Resolve(string assembly);
-
-    /// <summary>
-    /// Resolves type to a <see cref="IResType"/>
-    /// </summary>
-    /// <param name="source">Type to resolve</param>
-    /// <param name="generics">Dictionary of type generics</param>
-    /// <param name="isByRef"></param>
-    /// <returns>Resolved type</returns>
-    IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false);
-
-    /// <summary>
-    /// Links a <paramref name="type"/> instance to a <see name="IType"/> instance
-    /// </summary>
-    /// <param name="source">Source of <paramref name="type"/></param>
-    /// <param name="type">Type to link to</param>
-    /// <remarks>
-    /// This method can be called after of the <see cref="Types"/> have been resolved.
-    /// Calling during resolution of <see cref="Types"/> will render incorrect results.
-    /// <para/>
-    /// Utilize lazy loading to overcome this issue
-    /// </remarks>
-    /// <returns>Linked <see name="IType"/> instance. Null if unresolved.</returns>
-    IType? FindReference(object source, IResType type);
-
-    /// <summary>
-    /// Resolves given <paramref name="subject"/> to a type
-    /// </summary>
-    /// <param name="subject">Subject to resolve</param>
-    /// <param name="parent">Parent of <paramref name="subject"/></param>
-    /// <returns>Resolved type</returns>
-    IType ResolveType(object subject, object? parent = null);
 
     /// <summary>
     /// Attempts to find a type using its <paramref name="fullname"/>

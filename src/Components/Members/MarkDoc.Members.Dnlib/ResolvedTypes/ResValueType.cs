@@ -18,7 +18,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="source">Type source</param>
     /// <param name="displayName"></param>
     /// <param name="isByRef"></param>
-    internal ResValueType(IResolver resolver, TypeSig source, string displayName, bool isByRef = false)
+    internal ResValueType(Resolver resolver, TypeSig source, string displayName, bool isByRef = false)
       : this(resolver, source, displayName, source.FullName, isByRef) { }
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="displayName">Type displayed name</param>
     /// <param name="docName">Type documentation name</param>
     /// <param name="isByRef"></param>
-    protected ResValueType(IResolver resolver, TypeSig source, string displayName, string docName, bool isByRef = false)
+    protected ResValueType(Resolver resolver, TypeSig source, string displayName, string docName, bool isByRef = false)
       // ReSharper disable once ConstantConditionalAccessQualifier
       : base(resolver, source, displayName, docName, source?.FullName ?? throw new ArgumentNullException(nameof(source)), isByRef) { }
   }

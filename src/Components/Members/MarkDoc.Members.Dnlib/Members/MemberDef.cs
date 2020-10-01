@@ -15,7 +15,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Type resolver
     /// </summary>
-    protected IResolver Resolver { get; }
+    protected Resolver Resolver { get; }
 
     /// <inheritdoc />
     public abstract bool IsStatic { get; }
@@ -33,7 +33,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Default constructor
     /// </summary>
-    protected internal MemberDef(IResolver resolver, dnlib.DotNet.IMemberDef source)
+    protected internal MemberDef(Resolver resolver, dnlib.DotNet.IMemberDef source)
     {
       // If the source is null..
       if (source is null)
