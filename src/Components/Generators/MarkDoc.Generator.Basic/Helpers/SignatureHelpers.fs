@@ -29,6 +29,13 @@ module internal SignatureHelpers =
       // format the generics
       String.Format("<{0}>", String.Join(", ", generics))
       
+  /// <summary>
+  /// Gets the generic constraints from the given <paramref name="input"/> member
+  /// </summary>
+  /// <param name="input">Member to process</param>
+  /// <remarks>
+  /// Valid only for <see cref="IMethod"/> and <see cref="IDelegate"/> member types
+  /// </remarks>
   let getGenericConstraints (input: IMember) =
     // Get the generics from the given input member
     let generics = match input with
