@@ -509,13 +509,14 @@ module TypeContentHelpers =
         overloadFormat overloads.Count overloads.[deleg.RawName]
 
       let signature =
-        SignatureHelpers.generateSignature "{0}{1} delegate {2} {3}{4}({5})" (seq [
+        SignatureHelpers.generateSignature "{0}{1} delegate {2} {3}{4}({5}){6}" (seq [
           SignatureHelpers.getAccessor;
           SignatureHelpers.getStatic;
           SignatureHelpers.getReturn;
           SignatureHelpers.getName;
           SignatureHelpers.getGenerics;
           getArgumentsSig input tools
+          SignatureHelpers.getGenericConstraints;
         ])
 
       // Define the content to be documented for this member
