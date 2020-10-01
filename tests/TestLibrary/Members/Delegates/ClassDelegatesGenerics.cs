@@ -1,3 +1,4 @@
+// ReSharper disable All
 using System;
 
 namespace TestLibrary.Members.Delegates

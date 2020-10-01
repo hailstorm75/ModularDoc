@@ -1,5 +1,3 @@
-using System;
-
 namespace TestLibrary.Members.Delegates
 {
   public class ClassDelegatesParent
