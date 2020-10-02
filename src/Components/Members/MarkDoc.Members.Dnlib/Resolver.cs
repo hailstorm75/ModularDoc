@@ -14,6 +14,7 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using System.Composition;
+using System.Runtime.CompilerServices;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -114,11 +115,12 @@ namespace MarkDoc.Members.Dnlib
     /// </summary>
     /// <param name="source">Type to resolve</param>
     /// <param name="generics">Dictionary of type generics</param>
+    /// <param name="isDynamic"></param>
     /// <param name="isByRef">Is the resolved type a reference type</param>
     /// <returns>Resolved type</returns>
     /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
-    internal IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false)
+    internal IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isDynamic = false, bool isByRef = false)
     {
       static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
       {
@@ -147,6 +149,9 @@ namespace MarkDoc.Members.Dnlib
       static bool IsGeneric(dnlib.DotNet.IType source)
         => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
 
+      string GetKey(TypeSig sig)
+        => sig.FullName + (isDynamic ? "dynamic" : string.Empty);
+
       // If the source is null..
       if (source is null)
         // throw an exception
@@ -157,10 +162,18 @@ namespace MarkDoc.Members.Dnlib
         // throw an exception
         throw new NotSupportedException(Resources.sourceNotTypeSignature);
 
+      // Get the type name
+      var key = GetKey(signature);
+
       // If the type was cached..
-      if (m_resCache.TryGetValue(signature.FullName, out var resolution))
+      if (m_resCache.TryGetValue(key, out var resolution))
         // return the cached type
         return resolution!;
+
+      // If the type is by reference..
+      if (isByRef)
+        // retrieve the referenced type
+        signature = signature.Next;
 
       // Resolve the type based on what it is
       var result = signature.ElementType switch
@@ -176,7 +189,7 @@ namespace MarkDoc.Members.Dnlib
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics, isByRef),
         ElementType.Boolean => new ResValueType(this, signature, "bool", isByRef),
-        ElementType.Object => new ResValueType(this, signature, "object", isByRef),
+        ElementType.Object => new ResValueType(this, signature, isDynamic ? "dynamic" : "object", isByRef),
         ElementType.String => new ResValueType(this, signature, "string", isByRef),
         ElementType.Char => new ResValueType(this, signature, "char", isByRef),
         ElementType.I1 => new ResValueType(this, signature, "sbyte", isByRef),
@@ -189,13 +202,16 @@ namespace MarkDoc.Members.Dnlib
         ElementType.U8 => new ResValueType(this, signature, "ulong", isByRef),
         ElementType.R4 => new ResValueType(this, signature, "float", isByRef),
         ElementType.R8 => new ResValueType(this, signature, "double", isByRef),
-        ElementType.ByRef => Resolve(signature.Next, generics, true),
-        ElementType.CModReqd => Resolve(signature.Next, generics, true),
+        ElementType.ByRef => Resolve(signature, generics, isDynamic, true),
+        ElementType.CModReqd => Resolve(signature, generics, isDynamic, true),
+        // Decimal type
+        var x when (x is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
+          => new ResValueType(this, signature, "decimal", isByRef),
         _ => new ResType(this, signature),
       };
 
       // Cache the resolved type
-      m_resCache.AddOrUpdate(signature.FullName, result, (x, y) => result);
+      m_resCache.AddOrUpdate(key, result, (x, y) => result);
 
       // Return the resolved type
       return result;

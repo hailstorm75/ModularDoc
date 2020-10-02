@@ -54,9 +54,7 @@ namespace MarkDoc.Members.Dnlib.Members
     }
 
     private static string ResolveRawName(TypeDef source, dnlib.DotNet.MethodDef method)
-    {
-      return source.ReflectionFullName.Replace('+', '.') + $"({string.Join(",", method.Parameters.WhereNotNull(x => x.ParamDef).Select(arg => arg.Type.FullName).Where(item => !string.IsNullOrEmpty(item)))})";
-    }
+      => source.ReflectionFullName.Replace('+', '.') + $"({string.Join(",", method.Parameters.WhereNotNull(x => x.ParamDef).Select(arg => arg.Type.FullName).Where(item => !string.IsNullOrEmpty(item)))})";
 
     private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(TypeDef source, Resolver resolver)
     {
@@ -75,9 +73,9 @@ namespace MarkDoc.Members.Dnlib.Members
         // Initialize the arguments
         .Select(parameter => new ArgumentDef(resolver, parameter, method.ResolveMethodGenerics()));
 
-    private static IResType? ResolveReturn(Resolver resolver, dnlib.DotNet.MethodDef method)
+    private IResType? ResolveReturn(Resolver resolver, dnlib.DotNet.MethodDef method)
       => !method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
-        ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics())
+        ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics(), method.ParamDefs.Count - Arguments.Count == 1)
         : null;
 
     private static AccessorType ResolveAccessor(TypeDef type)

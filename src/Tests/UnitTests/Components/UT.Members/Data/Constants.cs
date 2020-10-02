@@ -229,5 +229,29 @@ namespace UT.Members.Data
     public const string ARGUMENT_MODIFIERS = "ModArgs";
 
     #endregion
+
+    #region ResTypes
+
+    public const string RES_TYPES_NAMESPACE = "TestLibrary.ResTypes";
+    public const string RES_TYPE_CLASS = "ClassResTypesValueTypes";
+    public const string METHOD_RES_BYTE = "MethodByte";
+    public const string METHOD_RES_SBYTE = "MethodSbyte";
+    public const string METHOD_RES_CHAR = "MethodChar";
+    public const string METHOD_RES_BOOL = "MethodBool";
+    public const string METHOD_RES_STRING = "MethodString";
+    public const string METHOD_RES_OBJECT = "MethodObject";
+    public const string METHOD_RES_SHORT = "MethodShort";
+    public const string METHOD_RES_USHORT = "MethodUShort";
+    public const string METHOD_RES_INT = "MethodInt";
+    public const string METHOD_RES_UINT = "MethodUInt";
+    public const string METHOD_RES_LONG = "MethodLong";
+    public const string METHOD_RES_ULONG = "MethodULong";
+    public const string METHOD_RES_FLOAT = "MethodFloat";
+    public const string METHOD_RES_DOUBLE = "MethodDouble";
+    public const string METHOD_RES_DECIMAL = "MethodDecimal";
+    public const string METHOD_RES_DYNAMIC = "MethodDynamic";
+    public const string METHOD_RES_REF_STRING = "MethodRefString";
+
+    #endregion
   }
 }

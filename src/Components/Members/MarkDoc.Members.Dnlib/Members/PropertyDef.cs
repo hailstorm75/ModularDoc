@@ -54,7 +54,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = source.Name;
       RawName = ResolveRawName(source);
       IsStatic = methods.First().IsStatic;
-      Type = Resolver.Resolve(ResolveType(source), generics);
+      Type = Resolver.Resolve(ResolveType(source), generics, IsDynamic(source));
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
@@ -96,6 +96,21 @@ namespace MarkDoc.Members.Dnlib.Members
       if (source.SetMethod != null)
         // retrieve its input argument
         return source.SetMethod.Parameters.Last().Type;
+
+      // Property type was not resolved, thus this is not a valid property
+      throw new NotSupportedException(Resources.notProperty);
+    }
+
+    private static bool IsDynamic(dnlib.DotNet.PropertyDef source)
+    {
+      // If the property has a getter method..
+      if (source.GetMethod != null)
+        // retrieve its return type
+        return source.GetMethod.ParamDefs.Count != 0;
+      // If the property has a setter method..
+      if (source.SetMethod != null)
+        // retrieve its input argument
+        return source.SetMethod.Parameters.Count > 1;
 
       // Property type was not resolved, thus this is not a valid property
       throw new NotSupportedException(Resources.notProperty);
