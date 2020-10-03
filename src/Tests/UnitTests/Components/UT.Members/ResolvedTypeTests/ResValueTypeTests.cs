@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MarkDoc.Members;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
@@ -37,15 +37,12 @@ namespace UT.Members.ResolvedTypeTests
         new object[] {Constants.METHOD_RES_REF_STRING, true},
       };
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value[Constants.RES_TYPES_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.RES_TYPE_CLASS));
-        object?[] typeWrapper = {result};
+        var parent = resolver.FindMemberParent<IClass>(Constants.RES_TYPES_NAMESPACE, Constants.RES_TYPE_CLASS);
+        object?[] typeWrapper = {parent};
         foreach (object?[] entry in data)
           yield return typeWrapper.Concat(entry).ToArray()!;
       }
@@ -74,15 +71,12 @@ namespace UT.Members.ResolvedTypeTests
         new object[] {Constants.METHOD_RES_REF_STRING, "string"},
       };
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value[Constants.RES_TYPES_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.RES_TYPE_CLASS));
-        object?[] typeWrapper = {result};
+        var parent = resolver.FindMemberParent<IClass>(Constants.RES_TYPES_NAMESPACE, Constants.RES_TYPE_CLASS);
+        object?[] typeWrapper = {parent};
         foreach (object?[] entry in data)
           yield return typeWrapper.Concat(entry).ToArray()!;
       }

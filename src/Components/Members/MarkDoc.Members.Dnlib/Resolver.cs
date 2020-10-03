@@ -14,7 +14,6 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using System.Composition;
-using System.Runtime.CompilerServices;
 
 namespace MarkDoc.Members.Dnlib
 {

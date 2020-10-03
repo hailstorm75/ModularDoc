@@ -23,7 +23,7 @@ namespace UT.Members.TypeTests
         foreach (var resolver in new ResolversProvider())
         {
           var collection = new object[1 + data.Count];
-          collection[0] = resolver.First();
+          collection[0] = resolver;
           for (var i = 1; i <= data.Count; i++)
             collection[i] = data[i - 1];
 
@@ -38,7 +38,7 @@ namespace UT.Members.TypeTests
         foreach (var resolver in new ResolversProvider())
         {
           var collection = new object?[2];
-          collection[0] = resolver.First();
+          collection[0] = resolver;
           collection[1] = data;
 
           yield return collection;

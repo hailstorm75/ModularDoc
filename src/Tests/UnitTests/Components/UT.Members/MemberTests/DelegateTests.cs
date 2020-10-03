@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using MarkDoc.Helpers;
 using UT.Members.Data;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
-using MarkDoc.Members;
 using Xunit;
 using MarkDoc.Members.Enums;
 
@@ -19,48 +19,34 @@ namespace UT.Members.MemberTests
       static string FormatRawName(string methodName)
         => string.Format($"{Constants.DELEGATES_NAMESPACE}.{Constants.DELEGATES_CLASS}.{{0}}", methodName);
 
-      var data = new object[]
+      var data = new []
       {
         new object[] { Constants.DELEGATE_PUBLIC, FormatRawName($"{Constants.DELEGATE_PUBLIC}()") },
         new object[] { Constants.DELEGATE_PROTECTED, FormatRawName($"{Constants.DELEGATE_PROTECTED}()") },
         new object[] { Constants.DELEGATE_ARGUMENTS, FormatRawName($"{Constants.DELEGATE_ARGUMENTS}(System.String,System.String)") },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.DELEGATES_NAMESPACE, Constants.DELEGATES_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetDelegateNameData()
     {
-      var filter = new HashSet<string>
-        {Constants.DELEGATES_CLASS, Constants.DELEGATES_STRUCT, Constants.DELEGATES_INTERFACE};
-
-      foreach (var container in new ResolversProvider())
+      var filter = new HashSet<string> {Constants.DELEGATES_CLASS, Constants.DELEGATES_STRUCT, Constants.DELEGATES_INTERFACE};
+      var data = new[]
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        new object[] {Constants.DELEGATE_PUBLIC}
+      };
 
-        var types = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
-          .OfType<IInterface>()
-          .Where(type => filter.Contains(type.Name));
-        foreach (var type in types ?? throw new Exception())
-          yield return new object[] {type, Constants.DELEGATE_PUBLIC};
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParents<IInterface>(Constants.DELEGATES_NAMESPACE, filter),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object?[]> GetDelegateAccessorData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] {Constants.DELEGATE_PUBLIC, AccessorType.Public},
         new object[] {Constants.DELEGATE_INTERNAL, AccessorType.Internal},
@@ -68,29 +54,19 @@ namespace UT.Members.MemberTests
         new object[] {Constants.DELEGATE_PROTECTED_INTERNAL, AccessorType.ProtectedInternal}
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.DELEGATES_NAMESPACE, Constants.DELEGATES_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object?[]> GetDelegateData()
     {
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE].OfType<IClass>();
-        foreach (var type in result ?? throw new Exception())
+        var parents = resolver.FindMemberParents<IClass>(Constants.DELEGATES_NAMESPACE);
+        foreach (var type in parents)
           foreach (var @delegate in type.Delegates)
             yield return new object[] {type, @delegate.Name};
       }
@@ -98,57 +74,32 @@ namespace UT.Members.MemberTests
 
     public static IEnumerable<object[]> GetDelegateGenericsData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] {Constants.DELEGATE_GENERIC, ("TDelegate", new string[] { })},
         new object[] {Constants.DELEGATE_GENERIC_CONSTRAINT, ("TDelegate", new[] {nameof(IDisposable)})}
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS_GENERIC));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.DELEGATES_NAMESPACE, Constants.DELEGATES_CLASS_GENERIC),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetDelegateReturnData()
     {
-      var data = new object[]
+      var data = new []
       {
-        new object?[] {Constants.DELEGATE_PUBLIC, null!},
+        new object[] {Constants.DELEGATE_PUBLIC, null!},
         new object[] {Constants.DELEGATE_STRING, "string"}
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.DELEGATES_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.DELEGATES_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IInterface>(Constants.DELEGATES_NAMESPACE, Constants.DELEGATES_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     private static IDelegate? GetDelegate(IInterface type, string name, bool throwIfNull = false)
-    {
-      var member = type.Delegates.FirstOrDefault(method => method.Name.Equals(name, StringComparison.InvariantCulture));
-
-      if (throwIfNull && member is null)
-        throw new KeyNotFoundException();
-
-      return member;
-    }
+      => type.Delegates.FindMember(name, throwIfNull);
 
     #endregion
 

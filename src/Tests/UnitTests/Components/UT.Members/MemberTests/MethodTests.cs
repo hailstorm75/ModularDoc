@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MarkDoc.Members;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Types;
 using UT.Members.Data;
@@ -41,9 +41,9 @@ namespace UT.Members.MemberTests
         (Constants.METHOD_EXPLICIT, OperatorType.Explicit)
       };
 
-    public static IEnumerable<object?[]> GetMethodAccessorData()
+    public static IEnumerable<object[]> GetMethodAccessorData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] {Constants.METHOD_PUBLIC, AccessorType.Public},
         new object[] {Constants.METHOD_INTERNAL, AccessorType.Internal},
@@ -51,18 +51,9 @@ namespace UT.Members.MemberTests
         new object[] {Constants.METHOD_PROTECTED_INTERNAL, AccessorType.ProtectedInternal}
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodNameData()
@@ -70,73 +61,146 @@ namespace UT.Members.MemberTests
       var operators = GetOperators().ToArray();
       var filter = new HashSet<string> {Constants.METHODS_CLASS, Constants.METHODS_STRUCT, Constants.METHODS_INTERFACE};
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var types = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IInterface>()
-          .Where(type => filter.Contains(type.Name));
-        foreach (var type in types ?? throw new Exception())
+        var parent = resolver.FindMemberParents<IInterface>(Constants.METHODS_NAMESPACE, filter);
+        foreach (var type in parent ?? throw new Exception())
           yield return new object[] {type, Constants.METHOD_PUBLIC};
 
         var classMethod =
-          types.First(type => type.Name.Equals(Constants.METHODS_CLASS, StringComparison.InvariantCulture));
+          parent.First(type => type.Name.Equals(Constants.METHODS_CLASS, StringComparison.InvariantCulture));
         foreach (var @operator in operators)
           yield return new object[] {classMethod, @operator.name};
       }
     }
 
-    public static IEnumerable<object?[]> GetMethodRawNameData()
+    public static IEnumerable<object[]> GetMethodRawNameData()
     {
       static string FormatRawName(string methodName)
         => string.Format($"{Constants.METHODS_NAMESPACE}.{Constants.METHODS_CLASS}.{{0}}", methodName);
 
-      var data = new object[]
+      var data = new []
       {
-        new object[] { Constants.METHOD_PUBLIC, FormatRawName($"{Constants.METHOD_PUBLIC}()") },
-        new object[] { Constants.METHOD_ADDITION, FormatRawName("op_Addition(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_SUBSTRACTION, FormatRawName("op_Subtraction(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_MULTIPLY, FormatRawName("op_Multiply(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_DIVISION, FormatRawName("op_Division(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_MODULUS, FormatRawName("op_Modulus(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_EXCLUSIVEOR, FormatRawName("op_Exclusiveor(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_BITWISEAND, FormatRawName("op_Bitwiseand(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_BITWISEOR, FormatRawName("op_Bitwiseor(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_LOGICALNOT, FormatRawName("op_Logicalnot(TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_LEFTSHIFT, FormatRawName("op_Leftshift(TestLibrary.Members.Methods.ClassMethods,System.Int32)") },
-        new object[] { Constants.METHOD_RIGHTSHIFT, FormatRawName("op_Rightshift(TestLibrary.Members.Methods.ClassMethods,System.Int32)") },
-        new object[] { Constants.METHOD_EQUALITY, FormatRawName("op_Equality(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_INEQUALITY, FormatRawName("op_Inequality(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_GREATERTHAN, FormatRawName("op_Greaterthan(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_LESSTHAN, FormatRawName("op_Lessthan(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_GREATERTHANEQUALS, FormatRawName("op_Greaterthanorequal(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_LESSTHANEQUALS, FormatRawName("op_Lessthanorequal(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_DECREMENT, FormatRawName("op_Decrement(TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_INCREMENT, FormatRawName("op_Increment(TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_ONESCOMPLEMENT, FormatRawName("op_Onescomplement(TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_IMPLICIT, FormatRawName("op_Implicit(TestLibrary.Members.Methods.ClassMethods)") },
-        new object[] { Constants.METHOD_EXPLICIT, FormatRawName("op_Explicit(TestLibrary.Members.Methods.ClassMethods)") },
+        new object[] {Constants.METHOD_PUBLIC, FormatRawName($"{Constants.METHOD_PUBLIC}()")},
+        new object[]
+        {
+          Constants.METHOD_ADDITION,
+          FormatRawName(
+            "op_Addition(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_SUBSTRACTION,
+          FormatRawName(
+            "op_Subtraction(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_MULTIPLY,
+          FormatRawName(
+            "op_Multiply(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_DIVISION,
+          FormatRawName(
+            "op_Division(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_MODULUS,
+          FormatRawName("op_Modulus(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_EXCLUSIVEOR,
+          FormatRawName(
+            "op_Exclusiveor(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_BITWISEAND,
+          FormatRawName(
+            "op_Bitwiseand(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_BITWISEOR,
+          FormatRawName(
+            "op_Bitwiseor(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+          {Constants.METHOD_LOGICALNOT, FormatRawName("op_Logicalnot(TestLibrary.Members.Methods.ClassMethods)")},
+        new object[]
+        {
+          Constants.METHOD_LEFTSHIFT,
+          FormatRawName("op_Leftshift(TestLibrary.Members.Methods.ClassMethods,System.Int32)")
+        },
+        new object[]
+        {
+          Constants.METHOD_RIGHTSHIFT,
+          FormatRawName("op_Rightshift(TestLibrary.Members.Methods.ClassMethods,System.Int32)")
+        },
+        new object[]
+        {
+          Constants.METHOD_EQUALITY,
+          FormatRawName(
+            "op_Equality(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_INEQUALITY,
+          FormatRawName(
+            "op_Inequality(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_GREATERTHAN,
+          FormatRawName(
+            "op_Greaterthan(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_LESSTHAN,
+          FormatRawName(
+            "op_Lessthan(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_GREATERTHANEQUALS,
+          FormatRawName(
+            "op_Greaterthanorequal(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+        {
+          Constants.METHOD_LESSTHANEQUALS,
+          FormatRawName(
+            "op_Lessthanorequal(TestLibrary.Members.Methods.ClassMethods,TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+          {Constants.METHOD_DECREMENT, FormatRawName("op_Decrement(TestLibrary.Members.Methods.ClassMethods)")},
+        new object[]
+          {Constants.METHOD_INCREMENT, FormatRawName("op_Increment(TestLibrary.Members.Methods.ClassMethods)")},
+        new object[]
+        {
+          Constants.METHOD_ONESCOMPLEMENT, FormatRawName("op_Onescomplement(TestLibrary.Members.Methods.ClassMethods)")
+        },
+        new object[]
+          {Constants.METHOD_IMPLICIT, FormatRawName("op_Implicit(TestLibrary.Members.Methods.ClassMethods)")},
+        new object[]
+          {Constants.METHOD_EXPLICIT, FormatRawName("op_Explicit(TestLibrary.Members.Methods.ClassMethods)")},
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodInheritanceData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] {Constants.METHOD_NORMAL, MemberInheritance.Normal},
         new object[] {Constants.METHOD_OVERRIDE, MemberInheritance.Override},
@@ -144,133 +208,77 @@ namespace UT.Members.MemberTests
         new object[] {Constants.METHOD_VIRTUAL, MemberInheritance.Virtual},
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS_ABSTRACT));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS_ABSTRACT),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodIsStaticData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] {Constants.METHOD_PUBLIC, false},
         new object[] {Constants.METHOD_STATIC, true},
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodIsAsyncData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] {Constants.METHOD_PUBLIC, false},
         new object[] {Constants.METHOD_ASYNC, true},
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodGenericsData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] {Constants.METHOD_GENERIC, ("TMethod", new string[] { })},
-        new object[] {Constants.METHOD_GENERIC_CONSTRAINTS, ("TMethod", new [] {nameof(IDisposable)})}
+        new object[] {Constants.METHOD_GENERIC_CONSTRAINTS, ("TMethod", new[] {nameof(IDisposable)})}
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS_GENERIC));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS_GENERIC),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodReturnData()
     {
-      var data = new object[]
+      var data = new[]
       {
-        new object?[] {Constants.METHOD_PUBLIC, null!},
-        new object?[] {Constants.METHOD_STRING, "string"},
+        new object[] {Constants.METHOD_PUBLIC, null!},
+        new object[] {Constants.METHOD_STRING, "string"},
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
-        object?[] typeWrapper = {result};
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetMethodOperatorData()
     {
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var result = resolver?.Types.Value[Constants.METHODS_NAMESPACE]
-          .OfType<IClass>()
-          .First(type => type.Name.Equals(Constants.METHODS_CLASS));
-        object?[] typeWrapper = {result};
+        var parent = resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS);
         foreach (var (name, type) in GetOperators())
-          yield return typeWrapper.Concat(new object[] { name, type }).ToArray()!;
+          yield return parent.WrapItem().Concat(new object[] {name, type}).ToArray()!;
       }
     }
 
     private static IMethod? GetMethod(IInterface type, string name, bool throwIfNull = false)
-    {
-      var member = type.Methods.FirstOrDefault(method => method.Name.Equals(name, StringComparison.InvariantCulture));
-
-      if (throwIfNull && member is null)
-        throw new KeyNotFoundException();
-
-      return member;
-    }
+      => type.Methods.FindMember(name, throwIfNull);
 
     #endregion
 
@@ -357,7 +365,8 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodGenericsData))]
-    public void ValidateMethodGenericNames(IInterface type, string name, (string generic, string[] constraints) generics)
+    public void ValidateMethodGenericNames(IInterface type, string name,
+      (string generic, string[] constraints) generics)
     {
       var members = GetMethod(type, name, true);
       var generic = members?.Generics.First();
@@ -368,7 +377,8 @@ namespace UT.Members.MemberTests
     [Theory]
     [Trait("Category", nameof(IMethod))]
     [MemberData(nameof(GetMethodGenericsData))]
-    public void ValidateMethodGenericConstraints(IInterface type, string name, (string generic, string[] constraints) generics)
+    public void ValidateMethodGenericConstraints(IInterface type, string name,
+      (string generic, string[] constraints) generics)
     {
       var members = GetMethod(type, name, true);
       var generic = members?.Generics.First();

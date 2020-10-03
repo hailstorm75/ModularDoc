@@ -62,10 +62,10 @@ namespace UT.Members.TypeTests
     }
 
     public static IEnumerable<object[]> GetStructWithMembersData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_STRUCT });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_STRUCT });
 
     private static IEnumerable<object[]> GetStructMemberData(string member)
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_STRUCT, member });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_STRUCT, member });
 
     public static IEnumerable<object[]> GetStructPropertiesData()
       => GetStructMemberData("Property");
@@ -138,9 +138,7 @@ namespace UT.Members.TypeTests
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-      return resolver
-        .GetTypes<IStruct>()
-        .FirstOrDefault(type => type.Name.Equals(name));
+      return resolver.FindType<IStruct>(name);
     }
 
     #endregion

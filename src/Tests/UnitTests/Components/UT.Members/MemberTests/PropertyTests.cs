@@ -1,9 +1,8 @@
 ﻿using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
-using MarkDoc.Members;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
 using UT.Members.Data;
 using Xunit;
@@ -17,120 +16,88 @@ namespace UT.Members.MemberTests
     public static IEnumerable<object[]> GetPropertyGettersSettersData()
     {
       var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
-
-      foreach (var container in new ResolversProvider())
+      var data = new[]
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        new object[] { Constants.PROPERTY_GET_SET, true, true },
+        new object[] { Constants.PROPERTY_GET, true, false },
+        new object[] { Constants.PROPERTY_SET, false, true }
+      };
 
-        var types = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE]
-          .OfType<IInterface>()
-          .Where(type => filter.Contains(type.Name));
-        foreach (var type in types ?? throw new Exception())
-        {
-          yield return new object[] { type, Constants.PROPERTY_GET_SET, true, true };
-          yield return new object[] { type, Constants.PROPERTY_GET, true, false };
-          yield return new object[] { type, Constants.PROPERTY_SET, false, true };
-        }
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParents<IInterface>(Constants.PROPERTIES_NAMESPACE, filter),
+        Constants.TEST_ASSEMBLY);
     }
 
-    public static IEnumerable<object?[]> GetPropertyAccessorData()
+    public static IEnumerable<object[]> GetPropertyAccessorData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] { Constants.PROPERTY_PUBLIC, AccessorType.Public, AccessorType.Public, AccessorType.Public },
         new object[] { Constants.PROPERTY_PROTECTED, AccessorType.Protected, AccessorType.Protected, AccessorType.Protected },
         new object[] { Constants.PROPERTY_INTERNAL, AccessorType.Internal, AccessorType.Internal, AccessorType.Internal },
-        new object?[] { Constants.PROPERTY_PRIVATE, null, null, null },
+        new object[] { Constants.PROPERTY_PRIVATE, null!, null!, null! },
         new object[] { Constants.PROPERTY_PUBLIC_GET_PROTECTED, AccessorType.Public, AccessorType.Protected, AccessorType.Public },
         new object[] { Constants.PROPERTY_PUBLIC_GET_INTERNAL, AccessorType.Public, AccessorType.Internal, AccessorType.Public },
-        new object?[] { Constants.PROPERTY_PUBLIC_GET_PRIVATE, AccessorType.Public, null, AccessorType.Public },
+        new object[] { Constants.PROPERTY_PUBLIC_GET_PRIVATE, AccessorType.Public, null!, AccessorType.Public },
         new object[] { Constants.PROPERTY_PUBLIC_SET_PROTECTED, AccessorType.Public, AccessorType.Public, AccessorType.Protected },
         new object[] { Constants.PROPERTY_PUBLIC_SET_INTERNAL, AccessorType.Public, AccessorType.Public, AccessorType.Internal },
-        new object?[] { Constants.PROPERTY_PUBLIC_SET_PRIVATE, AccessorType.Public, AccessorType.Public, null },
+        new object[] { Constants.PROPERTY_PUBLIC_SET_PRIVATE, AccessorType.Public, AccessorType.Public, null! },
         new object[] { Constants.PROPERTY_PROTECTED_INTERNAL, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal },
-        new object?[] { Constants.PROPERTY_PROTECTED_INTERNAL_GET_PRIVATE, AccessorType.ProtectedInternal, null, AccessorType.ProtectedInternal },
-        new object?[] { Constants.PROPERTY_PROTECTED_INTERNAL_SET_PRIVATE, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, null },
+        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL_GET_PRIVATE, AccessorType.ProtectedInternal, null!, AccessorType.ProtectedInternal },
+        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL_SET_PRIVATE, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, null! },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, Constants.PROPERTIES_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetPropertyNameData()
     {
       var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
-
-      foreach (var container in new ResolversProvider())
+      var data = new[]
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        new object[] {Constants.PROPERTY_GET_SET},
+        new object[] {Constants.PROPERTY_GET},
+        new object[] {Constants.PROPERTY_SET}
+      };
 
-        var types = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE]
-          .OfType<IInterface>()
-          .Where(type => filter.Contains(type.Name));
-        foreach (var type in types ?? throw new Exception())
-        {
-          yield return new object[] { type, Constants.PROPERTY_GET_SET };
-          yield return new object[] { type, Constants.PROPERTY_GET };
-          yield return new object[] { type, Constants.PROPERTY_SET };
-        }
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParents<IInterface>(Constants.PROPERTIES_NAMESPACE, filter),
+        Constants.TEST_ASSEMBLY);
     }
 
-    public static IEnumerable<object?[]> GetPropertyStaticData()
+    public static IEnumerable<object[]> GetPropertyStaticData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] { Constants.PROPERTY_PUBLIC, false },
         new object[] { Constants.PROPERTY_STATIC, true },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value["TestLibrary.Members.Properties"].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, Constants.PROPERTIES_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetPropertyValueData()
     {
       var filter = new HashSet<string> { Constants.PROPERTIES_CLASS, Constants.PROPERTIES_STRUCT, Constants.PROPERTIES_INTERFACE };
-
-      foreach (var container in new ResolversProvider())
+      var data = new[]
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        new object[] {Constants.PROPERTY_GET_SET, "string"},
+        new object[] {Constants.PROPERTY_GET, "string"},
+        new object[] {Constants.PROPERTY_SET, "string"}
+      };
 
-        var types = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE]
-          .OfType<IInterface>()
-          .Where(type => filter.Contains(type.Name));
-        foreach (var type in types ?? throw new Exception())
-        {
-          yield return new object[] { type, Constants.PROPERTY_GET_SET, "string" };
-          yield return new object[] { type, Constants.PROPERTY_GET, "string" };
-          yield return new object[] { type, Constants.PROPERTY_SET, "string" };
-        }
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParents<IInterface>(Constants.PROPERTIES_NAMESPACE, filter),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetPropertiesInheritanceData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] { Constants.PROPERTY_NORMAL, MemberInheritance.Normal },
         new object[] { Constants.PROPERTY_OVERRIDE, MemberInheritance.Override },
@@ -138,16 +105,9 @@ namespace UT.Members.MemberTests
         new object[] { Constants.PROPERTY_VIRTUAL, MemberInheritance.Virtual },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.PROPERTIES_CLASS_ABSTRACT));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, Constants.PROPERTIES_CLASS_ABSTRACT),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetPropertyRawNamesData()
@@ -159,29 +119,20 @@ namespace UT.Members.MemberTests
         (Constants.PUBLIC_CLASS_PROPERTY_NESTED2, new object[] { Constants.PROPERTY_PUBLIC_NESTED2, $"{Constants.PROPERTIES_NAMESPACE}.{Constants.PUBLIC_CLASS_PROPERTY_PARENT}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED2}.{Constants.PROPERTY_PUBLIC_NESTED2}" }),
       };
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
         foreach (var (name, objects) in data)
         {
-          var result = resolver?.Types.Value[Constants.PROPERTIES_NAMESPACE].OfType<IClass>().First(x => x.Name.Equals(name));
-          object?[] typeWrapper = { result };
-          yield return typeWrapper.Concat(objects).ToArray()!;
+          var parent = resolver.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, name);
+          yield return parent.WrapItem().Concat(objects).ToArray()!;
         }
       }
     }
 
     private static IProperty? GetProperty(IInterface type, string name, bool throwIfNull = false)
-    {
-      var member = type.Properties.FirstOrDefault(prop => prop.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-
-      if (throwIfNull && member is null)
-        throw new KeyNotFoundException();
-
-      return member;
-    }
+      => type.Properties.FindMember(name, throwIfNull);
 
     #endregion
 

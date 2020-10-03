@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Types;
@@ -25,8 +26,8 @@ namespace UT.Members.TypeTests
       };
 
       foreach (var name in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name };
+        foreach (var resolver in new ResolversProvider().WhereNotNull())
+          yield return new object[] { resolver, name };
     }
 
     public static IEnumerable<object[]> GetEnumAccessorsData()
@@ -42,8 +43,8 @@ namespace UT.Members.TypeTests
       };
 
       foreach (var (name, accessor) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, accessor };
+        foreach (var resolver in new ResolversProvider().WhereNotNull())
+          yield return new object[] { resolver, name, accessor };
     }
 
     public static IEnumerable<object[]> GetEnumFieldsData()
@@ -60,8 +61,8 @@ namespace UT.Members.TypeTests
 
       var fields = new[] { "FieldA", "FieldB" };
       foreach (var name in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, fields };
+        foreach (var resolver in new ResolversProvider().WhereNotNull())
+          yield return new object[] { resolver, name, fields };
     }
 
     public static IEnumerable<object[]> GetEnumNamespaceData()
@@ -78,8 +79,8 @@ namespace UT.Members.TypeTests
       };
 
       foreach (var (name, space) in data)
-        foreach (var resolver in new ResolversProvider())
-          yield return new[] { resolver.First(), name, space };
+        foreach (var resolver in new ResolversProvider().WhereNotNull())
+          yield return new object[] { resolver, name, space };
     }
 
     #endregion
@@ -88,9 +89,7 @@ namespace UT.Members.TypeTests
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-      return resolver
-        .GetTypes<IEnum>()
-        .FirstOrDefault(type => type.Name.Equals(name));
+      return resolver.FindType<IEnum>(name);
     }
 
     [Theory]

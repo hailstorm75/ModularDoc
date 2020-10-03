@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MarkDoc.Members;
 using UT.Members.Data;
 using Xunit;
@@ -21,6 +22,9 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
+    public static IEnumerable<object[]> GetResolvers()
+      => new ResolversProvider().Select(resolver => new object[] { resolver });
+
     public static IEnumerable<object?[]> GetInvalidResolveTypeData()
     {
       var data = new[]
@@ -40,7 +44,7 @@ namespace UT.Members.TypeTests
 
     [Theory]
     [Trait("Category", nameof(IResolver))]
-    [ClassData(typeof(ResolversProvider))]
+    [MemberData(nameof(GetResolvers))]
     public void ResolverAccessTypesBeforeResolve(IResolver resolver)
     {
       var _ = resolver.Types.Value;
@@ -50,7 +54,7 @@ namespace UT.Members.TypeTests
 
     [Theory]
     [Trait("Category", nameof(IResolver))]
-    [ClassData(typeof(ResolversProvider))]
+    [MemberData(nameof(GetResolvers))]
     public void ResolverFindType(IResolver resolver)
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);

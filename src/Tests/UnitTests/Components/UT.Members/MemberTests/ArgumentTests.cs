@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MarkDoc.Members;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
@@ -28,14 +28,11 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, "e"};
       }
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var parent = resolver?.Types.Value[Constants.ARGUMENTS_NAMESPACE]
-          .OfType<IInterface>()
-          .First(type => type.Name.Equals(Constants.ARGUMENTS_CLASS));
+        var parent = resolver.FindMemberParent<IClass>(Constants.ARGUMENTS_NAMESPACE, Constants.ARGUMENTS_CLASS);
         var data = DataProvider(parent, Constants.GetMethod).Concat(DataProvider(parent, Constants.GetDelegate));
         foreach (object?[] item in data)
           yield return item;
@@ -58,14 +55,11 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, intType};
       }
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var parent = resolver?.Types.Value[Constants.ARGUMENTS_NAMESPACE]
-          .OfType<IInterface>()
-          .First(type => type.Name.Equals(Constants.ARGUMENTS_CLASS));
+        var parent = resolver.FindMemberParent<IClass>(Constants.ARGUMENTS_NAMESPACE, Constants.ARGUMENTS_CLASS);
         var data = DataProvider(parent, Constants.GetMethod).Concat(DataProvider(parent, Constants.GetDelegate));
         foreach (object?[] item in data)
           yield return item;
@@ -83,14 +77,11 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, ArgumentType.Optional};
       }
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var parent = resolver?.Types.Value[Constants.ARGUMENTS_NAMESPACE]
-          .OfType<IInterface>()
-          .First(type => type.Name.Equals(Constants.ARGUMENTS_CLASS));
+        var parent = resolver.FindMemberParent<IClass>(Constants.ARGUMENTS_NAMESPACE, Constants.ARGUMENTS_CLASS);
         var data = DataProvider(parent, Constants.GetMethod).Concat(DataProvider(parent, Constants.GetDelegate));
         foreach (object?[] item in data)
           yield return item;
@@ -99,20 +90,10 @@ namespace UT.Members.MemberTests
 
     private static IArgument GetArgument(IInterface type, string name, int index)
     {
-      static T FindMember<T>(IEnumerable<T> members, string memberName)
-        where T : IMember
-      {
-        var member = members.FirstOrDefault(mem => mem.Name.Equals(memberName, StringComparison.InvariantCulture));
-        if (member is null)
-          throw new KeyNotFoundException();
-
-        return member;
-      }
-
       if (name.StartsWith("Method", StringComparison.InvariantCultureIgnoreCase))
-        return FindMember(type.Methods, name).Arguments.ElementAtOrDefault(index) ?? throw new KeyNotFoundException();
+        return type.Methods.FindMember(name).Arguments.ElementAtOrDefault(index) ?? throw new KeyNotFoundException();
       if (name.StartsWith("Delegate", StringComparison.InvariantCultureIgnoreCase))
-        return FindMember(type.Delegates, name).Arguments.ElementAtOrDefault(index) ?? throw new KeyNotFoundException();
+        return type.Delegates.FindMember(name).Arguments.ElementAtOrDefault(index) ?? throw new KeyNotFoundException();
 
       throw new NotSupportedException();
     }

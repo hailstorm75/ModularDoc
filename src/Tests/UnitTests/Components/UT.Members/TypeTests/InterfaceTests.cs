@@ -94,10 +94,10 @@ namespace UT.Members.TypeTests
       => GetInterfaceWithMembersData("Delegate");
 
     public static IEnumerable<object[]> GetInterfaceWithMembersData(string name)
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE, name });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_INTERFACE, name });
 
     public static IEnumerable<object[]> GetInterfaceWithMembersData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INTERFACE });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_INTERFACE });
 
     private static IEnumerable<object[]> GetInterfaceInheritedMembersData(string member)
     {
@@ -130,9 +130,7 @@ namespace UT.Members.TypeTests
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-      return resolver
-        .GetTypes<IInterface>()
-        .FirstOrDefault(type => type.Name.Equals(name));
+      return resolver.FindType<IInterface>(name);
     }
 
     #endregion

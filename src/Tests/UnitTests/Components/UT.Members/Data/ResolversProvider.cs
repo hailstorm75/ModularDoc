@@ -14,12 +14,12 @@ using Microsoft.Extensions.DependencyModel;
 namespace UT.Members.Data
 {
   public class ResolversProvider
-    : IEnumerable<object[]>
+    : IEnumerable<IResolver>
   {
     private bool m_composed;
 
     [ImportMany(AllowRecomposition = true, RequiredCreationPolicy = CreationPolicy.NonShared)]
-    public IReadOnlyCollection<object[]> Resolvers { get; private set; } = new object[][] { };
+    public IReadOnlyCollection<IResolver> Resolvers { get; private set; } = new IResolver[] { };
 
     private void Compose()
     {
@@ -50,13 +50,13 @@ namespace UT.Members.Data
         var configuration = new ContainerConfiguration()
           .WithAssemblies(assemblies);
         using var container = configuration.CreateContainer();
-        Resolvers = container.GetExports<IResolver>().Select(resolver => new[] { resolver }).ToReadOnlyCollection();
+        Resolvers = container.GetExports<IResolver>().ToReadOnlyCollection();
         m_composed = true;
       }
     }
 
     /// <inheritdoc />
-    public IEnumerator<object[]> GetEnumerator()
+    public IEnumerator<IResolver> GetEnumerator()
     {
       if (!m_composed)
         Compose();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MarkDoc.Members;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
@@ -16,24 +16,17 @@ namespace UT.Members.MemberTests
 
     public static IEnumerable<object[]> GetEventNameData()
     {
-      var filter = new HashSet<string> { Constants.EVENTS_CLASS, Constants.EVENTS_STRUCT, Constants.EVENTS_INTERFACE };
+      var filter = new HashSet<string> {Constants.EVENTS_CLASS, Constants.EVENTS_STRUCT, Constants.EVENTS_INTERFACE};
+      var data = new [] {new object[] {Constants.EVENT_PUBLIC}};
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var types = resolver?.Types.Value[Constants.EVENTS_NAMESPACE]
-          .OfType<IInterface>()
-          .Where(type => filter.Contains(type.Name));
-        foreach (var type in types ?? throw new Exception())
-          yield return new object[] { type, Constants.EVENT_PUBLIC };
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParents<IInterface>(Constants.EVENTS_NAMESPACE, filter),
+        Constants.TEST_ASSEMBLY);
     }
 
-    public static IEnumerable<object?[]> GetEventAccessorData()
+    public static IEnumerable<object[]> GetEventAccessorData()
     {
-      var data = new object[]
+      var data = new[]
       {
         new object[] {Constants.EVENT_PUBLIC, AccessorType.Public},
         new object[] {Constants.EVENT_INTERNAL, AccessorType.Internal},
@@ -41,21 +34,14 @@ namespace UT.Members.MemberTests
         new object[] {Constants.EVENT_PROTECTED_INTERNAL, AccessorType.ProtectedInternal}
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray();
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, Constants.EVENTS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetEventInheritanceData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] { Constants.EVENT_NORMAL, MemberInheritance.Normal },
         new object[] { Constants.EVENT_OVERRIDE, MemberInheritance.Override },
@@ -63,55 +49,34 @@ namespace UT.Members.MemberTests
         new object[] { Constants.EVENT_VIRTUAL, MemberInheritance.Virtual },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS_ABSTRACT));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, Constants.EVENTS_CLASS_ABSTRACT),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetEventStaticData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] { Constants.EVENT_PUBLIC, false },
         new object[] { Constants.EVENT_STATIC, true },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, Constants.EVENTS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetEventTypeData()
     {
-      var data = new object[]
+      var data = new []
       {
         new object[] { Constants.EVENT_PUBLIC, nameof(EventHandler) },
       };
 
-      foreach (var container in new ResolversProvider())
-      {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
-
-        var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(type => type.Name.Equals(Constants.EVENTS_CLASS));
-        object?[] typeWrapper = { result };
-        foreach (object?[] entry in data)
-          yield return typeWrapper.Concat(entry).ToArray()!;
-      }
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, Constants.EVENTS_CLASS),
+        Constants.TEST_ASSEMBLY);
     }
 
     public static IEnumerable<object[]> GetEventRawNameData()
@@ -123,29 +88,20 @@ namespace UT.Members.MemberTests
         (Constants.PUBLIC_CLASS_EVENT_NESTED2, new object[] { Constants.EVENT_PUBLIC_NESTED2, $"{Constants.EVENTS_NAMESPACE}.{Constants.PUBLIC_CLASS_EVENT_PARENT}.{Constants.PUBLIC_CLASS_EVENT_NESTED}.{Constants.PUBLIC_CLASS_EVENT_NESTED2}.{Constants.EVENT_PUBLIC_NESTED2}" }),
       };
 
-      foreach (var container in new ResolversProvider())
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
-        var resolver = container.First() as IResolver;
-        resolver?.Resolve(Constants.TEST_ASSEMBLY);
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
 
         foreach (var (name, objects) in data)
         {
-          var result = resolver?.Types.Value[Constants.EVENTS_NAMESPACE].OfType<IClass>().First(x => x.Name.Equals(name));
-          object?[] typeWrapper = { result };
-          yield return typeWrapper.Concat(objects).ToArray()!;
+          var parent = resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, name);
+          yield return parent.WrapItem().Concat(objects).ToArray()!;
         }
       }
     }
 
     private static IEvent? GetEvent(IInterface type, string name, bool throwIfNull = false)
-    {
-      var member = type.Events.FirstOrDefault(ev => ev.Name.Equals(name, StringComparison.InvariantCulture));
-
-      if (throwIfNull && member is null)
-        throw new KeyNotFoundException();
-
-      return member;
-    }
+      => type.Events.FindMember(name, throwIfNull);
 
     #endregion
 

@@ -176,13 +176,13 @@ namespace UT.Members.TypeTests
       => GetClassInheritedMembersData("Method");
 
     public static IEnumerable<object[]> GetClassWithMembersData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_CLASS });
 
     public static IEnumerable<object[]> GetClassWithInterfacesData()
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_INHERITING_CLASS });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_INHERITING_CLASS });
 
     public static IEnumerable<object[]> GetClassWithMembersData(string name)
-      => new ResolversProvider().Select(resolver => new[] { resolver.First(), Constants.PUBLIC_CLASS, name });
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_CLASS, name });
 
     public static IEnumerable<object[]> GetClassPropertiesData()
       => GetClassWithMembersData("Property");
@@ -211,9 +211,7 @@ namespace UT.Members.TypeTests
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-      return resolver
-        .GetTypes<IClass>()
-        .FirstOrDefault(type => type.Name.Equals(name));
+      return resolver.FindType<IClass>(name);
     }
 
     #endregion
