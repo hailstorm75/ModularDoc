@@ -65,8 +65,8 @@ namespace UT.Members.MemberTests
       {
         resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-        var parent = resolver.FindMemberParents<IInterface>(Constants.METHODS_NAMESPACE, filter);
-        foreach (var type in parent ?? throw new Exception())
+        var parent = resolver.FindMemberParents<IInterface>(Constants.METHODS_NAMESPACE, filter).ToArray();
+        foreach (var type in parent)
           yield return new object[] {type, Constants.METHOD_PUBLIC};
 
         var classMethod =

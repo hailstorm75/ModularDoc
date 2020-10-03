@@ -227,6 +227,7 @@ namespace UT.Members.Data
     public const string ARGUMENT_ONE = "OneArg";
     public const string ARGUMENT_TWO = "TwoArg";
     public const string ARGUMENT_MODIFIERS = "ModArgs";
+    public const string ARGUMENT_PARAMATERS = "ParamArg";
 
     #endregion
 

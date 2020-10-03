@@ -26,6 +26,7 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 2, "c"};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 3, "d"};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, "e"};
+        yield return new object?[] {type, getter(Constants.ARGUMENT_PARAMATERS), 0, "a"};
       }
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -53,6 +54,7 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 2, intType};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 3, intType};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, intType};
+        yield return new object?[] {type, getter(Constants.ARGUMENT_PARAMATERS), 0, intType};
       }
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -75,6 +77,7 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 2, ArgumentType.Out};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 3, ArgumentType.Ref};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, ArgumentType.Optional};
+        yield return new object?[] {type, getter(Constants.ARGUMENT_PARAMATERS), 0, ArgumentType.Param};
       }
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())

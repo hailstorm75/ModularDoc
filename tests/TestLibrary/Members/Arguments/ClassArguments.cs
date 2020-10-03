@@ -10,5 +10,8 @@
 
     public void MethodModArgs(int a, in int b, out int c, ref int d, int e = 0) => c = 0;
     public delegate void DelegateModArgs(int a, in int b, out int c, ref int d, int e = 0);
+
+    public void MethodParamArg(params int[] a) { }
+    public delegate void DelegateParamArg(params int[] a);
   }
 }
