@@ -25,5 +25,9 @@
     /// Argument is optional
     /// </summary>
     Optional,
+    /// <summary>
+    /// Argument is variadic
+    /// </summary>
+    Param,
   }
 }

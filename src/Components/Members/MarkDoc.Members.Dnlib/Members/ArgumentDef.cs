@@ -68,7 +68,8 @@ namespace MarkDoc.Members.Dnlib.Members
         return ArgumentType.Optional;
       if (source.Type.ElementType == ElementType.ByRef)
         return ArgumentType.Ref;
-
+      if (def.CustomAttributes.Any(param => param.TypeFullName.Equals("System.ParamArrayAttribute", StringComparison.InvariantCultureIgnoreCase)))
+        return ArgumentType.Param;
       return ArgumentType.Normal;
     }
 
