@@ -122,7 +122,7 @@ namespace MarkDoc.Members.Dnlib.Types
         .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                             && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
                             // && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
-                            // && !methodDef.IsPrivate
+                            && !methodDef.IsPrivate
                             && !methodDef.IsConstructor
                             && !eventMethods.Contains(methodDef.Name.String))
         // Initialize methods
