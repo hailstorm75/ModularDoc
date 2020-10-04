@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using MarkDoc.Helpers;
-using UT.Members.Data;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
-using Xunit;
 using MarkDoc.Members.Enums;
+using MarkDoc.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using UT.Members.Data;
+using Xunit;
 
 namespace UT.Members.MemberTests
 {

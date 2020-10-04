@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
@@ -88,16 +86,9 @@ namespace UT.Members.MemberTests
         (Constants.PUBLIC_CLASS_EVENT_NESTED2, new object[] { Constants.EVENT_PUBLIC_NESTED2, $"{Constants.EVENTS_NAMESPACE}.{Constants.PUBLIC_CLASS_EVENT_PARENT}.{Constants.PUBLIC_CLASS_EVENT_NESTED}.{Constants.PUBLIC_CLASS_EVENT_NESTED2}.{Constants.EVENT_PUBLIC_NESTED2}" }),
       };
 
-      foreach (var resolver in new ResolversProvider().WhereNotNull())
-      {
-        resolver.Resolve(Constants.TEST_ASSEMBLY);
-
-        foreach (var (name, objects) in data)
-        {
-          var parent = resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, name);
-          yield return parent.WrapItem().Concat(objects).ToArray()!;
-        }
-      }
+      return data.ComposeData(
+        x => x.resolver!.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, x.typeName!),
+        Constants.TEST_ASSEMBLY);
     }
 
     private static IEvent? GetEvent(IInterface type, string name, bool throwIfNull = false)

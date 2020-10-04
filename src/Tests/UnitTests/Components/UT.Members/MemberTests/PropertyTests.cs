@@ -1,9 +1,7 @@
 ﻿using MarkDoc.Members.Members;
 using MarkDoc.Members.Types;
-using System.Collections.Generic;
-using System.Linq;
-using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
+using System.Collections.Generic;
 using UT.Members.Data;
 using Xunit;
 
@@ -119,16 +117,9 @@ namespace UT.Members.MemberTests
         (Constants.PUBLIC_CLASS_PROPERTY_NESTED2, new object[] { Constants.PROPERTY_PUBLIC_NESTED2, $"{Constants.PROPERTIES_NAMESPACE}.{Constants.PUBLIC_CLASS_PROPERTY_PARENT}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED}.{Constants.PUBLIC_CLASS_PROPERTY_NESTED2}.{Constants.PROPERTY_PUBLIC_NESTED2}" }),
       };
 
-      foreach (var resolver in new ResolversProvider().WhereNotNull())
-      {
-        resolver.Resolve(Constants.TEST_ASSEMBLY);
-
-        foreach (var (name, objects) in data)
-        {
-          var parent = resolver.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, name);
-          yield return parent.WrapItem().Concat(objects).ToArray()!;
-        }
-      }
+      return data.ComposeData(
+        x => x.resolver!.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, x.typeName!),
+        Constants.TEST_ASSEMBLY);
     }
 
     private static IProperty? GetProperty(IInterface type, string name, bool throwIfNull = false)

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MarkDoc.Members.Members;
+using MarkDoc.Members.Types;
+using MarkDoc.Members;
+using MarkDoc.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using MarkDoc.Helpers;
-using MarkDoc.Members;
-using MarkDoc.Members.Members;
-using MarkDoc.Members.Types;
+using System;
 using UT.Members.TypeTests;
 
 namespace UT.Members.Data
@@ -14,8 +14,23 @@ namespace UT.Members.Data
     public static IEnumerable<object> WrapItem(this object item)
       => new[] {item};
 
-    public static IEnumerable<object[]> ComposeData<T>(this object[][] data, Func<IResolver, T> parent,
-      params string[] assemblies)
+    public static IEnumerable<object[]> ComposeData<T>(this (string name, object[] data)[] data, Func<(IResolver resolver, string typeName), T> parent, params string[] assemblies)
+      where T : class, IType
+    {
+      foreach (var assembly in assemblies)
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
+      {
+        resolver.Resolve(assembly);
+
+        foreach (var (name, objects) in data)
+        {
+          var result = parent((resolver, name));
+          yield return result.WrapItem().Concat(objects).ToArray();
+        }
+      }
+    }
+
+    public static IEnumerable<object[]> ComposeData<T>(this object[][] data, Func<IResolver, T> parent, params string[] assemblies)
       where T : class, IType
     {
       foreach (var assembly in assemblies)
@@ -29,8 +44,7 @@ namespace UT.Members.Data
       }
     }
 
-    public static IEnumerable<object[]> ComposeData<T>(this object[][] data, Func<IResolver, IEnumerable<T>> parent,
-      params string[] assemblies)
+    public static IEnumerable<object[]> ComposeData<T>(this object[][] data, Func<IResolver, IEnumerable<T>> parent, params string[] assemblies)
       where T : class, IType
     {
       foreach (var assembly in assemblies)

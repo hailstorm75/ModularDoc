@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MarkDoc.Members.Members;
+using MarkDoc.Members.Enums;
+using MarkDoc.Members.Types;
 using MarkDoc.Helpers;
 using MarkDoc.Members;
-using MarkDoc.Members.Enums;
-using MarkDoc.Members.Members;
-using MarkDoc.Members.Types;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 using UT.Members.Data;
 using Xunit;
 
