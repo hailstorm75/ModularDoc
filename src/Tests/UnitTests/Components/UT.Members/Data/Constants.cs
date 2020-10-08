@@ -257,6 +257,13 @@ namespace UT.Members.Data
     public const string METHOD_RES_OBJR_MIXA = "MethodObjRetMixArgs";
     public const string METHOD_RES_DYNR_MIXA = "MethodDynRetMixArgs";
 
+    public const string RES_TYPE_ARRAY_CLASS = "ClassResTypesArrays";
+    public const string METHOD_RES_1D_ARRAY = "Method1DArray";
+    public const string METHOD_RES_2D_ARRAY = "Method2DArray";
+    public const string METHOD_RES_3D_ARRAY = "Method3DArray";
+    public const string METHOD_RES_2D_JAGGED_ARRAY = "Method2DJaggedArray";
+    public const string METHOD_RES_3D_JAGGED_ARRAY = "Method3DJaggedArray";
+
     #endregion
   }
 }
