@@ -15,7 +15,7 @@ namespace TestLibrary.ResTypes
     public char MethodChar() => default;
     public bool MethodBool() => default;
     public string MethodString() => "";
-    public object MethodObject(int a) => new object();
+    public object MethodObject() => new object();
     public short MethodShort() => default;
     public ushort MethodUShort() => default;
     public int MethodInt() => default;
@@ -25,6 +25,11 @@ namespace TestLibrary.ResTypes
     public float MethodFloat() => default;
     public double MethodDouble() => default;
     public decimal MethodDecimal() => default;
-    public dynamic MethodDynamic(int a) => "";
+    public dynamic MethodDynamic() => "";
+    
+    public object MethodObjRetDynArg(dynamic a) => new object();
+    public object MethodObjRetMixArgs(object a, dynamic b) => new object();
+    public dynamic MethodDynRetObjArg(object a) => new object();
+    public dynamic MethodDynRetMixArgs(object a, dynamic b) => new object();
   }
 }

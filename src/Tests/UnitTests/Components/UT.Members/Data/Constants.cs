@@ -252,6 +252,10 @@ namespace UT.Members.Data
     public const string METHOD_RES_DECIMAL = "MethodDecimal";
     public const string METHOD_RES_DYNAMIC = "MethodDynamic";
     public const string METHOD_RES_REF_STRING = "MethodRefString";
+    public const string METHOD_RES_OBJR_DYNA = "MethodObjRetDynArg";
+    public const string METHOD_RES_DYNR_OBJA = "MethodDynRetObjArg";
+    public const string METHOD_RES_OBJR_MIXA = "MethodObjRetMixArgs";
+    public const string METHOD_RES_DYNR_MIXA = "MethodDynRetMixArgs";
 
     #endregion
   }
