@@ -50,8 +50,7 @@ namespace MarkDoc.Documentation.Xml
       void CacheType(string key, XElement element)
       {
         // Prepare the type to cache
-        var toAdd =
-          (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
+        var toAdd = (new DocElement(key, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
         // Cache the type
         m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
       }
@@ -74,7 +73,7 @@ namespace MarkDoc.Documentation.Xml
           string ProcessName()
           {
             // Get the member name without the identifier key
-            var memberNameRaw = name[(3 + key.Length)..];
+            var memberNameRaw = name[2..];
 
             // If the member is not a method..
             if (!name.First().Equals('M'))
@@ -108,15 +107,15 @@ namespace MarkDoc.Documentation.Xml
           // If the member is cached..
           if (m_documentation.ContainsKey(key))
             // add the member to the cache
-            m_documentation[key].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
+            m_documentation[key[2..]].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
           // Otherwise..
           else
           {
             var dict = new ConcurrentDictionary<string, IDocMember>();
-            dict.TryAdd(ProcessName(), toAdd);
+            dict.TryAdd(toAdd.Name, toAdd);
 
             // Cache the member
-            m_documentation.AddOrUpdate(key, (null, dict), (_, y) => Update(y, (null, dict)));
+            m_documentation.AddOrUpdate(key[2..], (null, dict), (_, y) => Update(y, (null, dict)));
           }
         }
 
@@ -142,14 +141,14 @@ namespace MarkDoc.Documentation.Xml
           if (brace != -1)
           {
             // cache the method
-            Cache(name[2..ReverseIndexOf(name, '.', brace)]);
+            Cache(name[..ReverseIndexOf(name, '.', brace)]);
             // exit
             return;
           }
         }
 
         // Cache the member
-        Cache(name[2..name.LastIndexOf('.')]);
+        Cache(name[..name.LastIndexOf('.')]);
       }
 
       // Open the XML documentation file

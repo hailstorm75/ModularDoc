@@ -50,11 +50,19 @@ module internal SignatureHelpers =
     // Otherwise..
     else
       let format = "where {0} : {1}"
+      // Get all generic constraints
       let constraints = seq [
         for i in Option.get generics do
           yield String.Format(format, i.Key, String.Join(", ", i.Value |> Seq.map (fun c -> c.DisplayName)))
       ]
-      Environment.NewLine + String.Join(Environment.NewLine, constraints)
+      // If there are no constraints..
+      if Seq.isEmpty constraints then
+        // return nothing
+        ""
+      // Otherwise..
+      else
+        // return the constraints
+        Environment.NewLine + String.Join(Environment.NewLine, constraints)
 
   /// <summary>
   /// Gets the accessor from the given <paramref name="input"/> member
