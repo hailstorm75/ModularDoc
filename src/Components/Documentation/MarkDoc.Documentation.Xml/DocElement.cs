@@ -102,14 +102,14 @@ namespace MarkDoc.Documentation.Xml
         if (items.Key && typeResolver.TryFindType(Name, out var type) && type is IInterface interfaceDef)
         {
           // prepare a temporary cache for the inheritdoc items
-          var temps = items.ToDictionary(pair => pair.Key, pair => new Dictionary<TagType, LinkedList<ITag>>());
+          var temps = items.ToDictionary(pair => pair.Value.DisplayName, pair => (pair.Key, new Dictionary<TagType, LinkedList<ITag>>()));
           // resolve the items inheritdoc
           ProcessInheritDoc(temps, interfaceDef, temps.Select(pair => pair.Key).ToArray(), memberDocs, docResolver);
 
           // for every temporarily cached documentation..
-          foreach (var (key, value) in temps)
+          foreach (var (_, (key, tags)) in temps)
             // move it to the main cache
-            result.Add(key, value.ToDictionary(pair => pair.Key, pair => pair.Value.ToReadOnlyCollection()));
+            result.Add(key, tags.ToDictionary(pair => pair.Key, pair => pair.Value.ToReadOnlyCollection()));
         }
         // otherwise..
         else
@@ -128,28 +128,57 @@ namespace MarkDoc.Documentation.Xml
           var member = memberDocs[key];
 
           // return the prepared member
-          yield return new DocMember(member.Name, member.Type, new DocumentationContent(value));
+          yield return new DocMember(member.RawName, member.DisplayName, member.Type, new DocumentationContent(value));
         }
       }
 
       // Materialize the processed cache to a dictionary
-      return ProcessCache(result).ToDictionary(x => x.Name);
+      return ProcessCache(result).ToDictionary(x => x.RawName);
     }
 
-    private static void ProcessInheritDoc(IReadOnlyDictionary<string, Dictionary<TagType, LinkedList<ITag>>> cache, IInterface type, string[] names, IReadOnlyDictionary<string, IDocMember> memberDocs, IDocResolver docResolver)
+    private static void ProcessInheritDoc(IReadOnlyDictionary<string, (string rawName, Dictionary<TagType, LinkedList<ITag>> tags)> cache, IInterface type, string[] names, IReadOnlyDictionary<string, IDocMember> memberDocs, IDocResolver docResolver)
     {
       void CacheTags(IEnumerable<string> keys, IReadOnlyDictionary<string, IDocMember> members)
       {
+        var reCached = members.ToDictionary(x => x.Value.DisplayName, x => x.Value);
+
+        static string ProcessName(string input)
+        {
+          static int ReverseIndexOf(string value, char search, int from)
+          {
+            // For every character in reverse order..
+            for (var i = from - 1; i >= 0; i--)
+              // if the character is matched..
+              if (value[i].Equals(search))
+                // return its index
+                return i;
+
+            // Not found
+            return -1;
+          }
+
+          var brace = input.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
+          var max = brace == -1
+            ? input.Length - 1
+            : brace;
+
+          var dot = ReverseIndexOf(input, '.', max);
+          if (dot == -1 || dot >= max)
+            return input;
+          var res = input.Substring(dot + 1);
+          return res;
+        }
+
         // For every name..
-        foreach (var name in keys)
+        foreach (var name in keys.Select(ProcessName))
         {
           // if there is no matching member by name..
-          if (!members.TryGetValue(name, out var member))
+          if (!reCached.TryGetValue(name, out var member))
             // continue to the next member name
             continue;
 
           // select the previously cached tags
-          var cachedTags = cache[name];
+          var cachedTags = cache[name].tags;
           // select the previously cached tags of the same tag type
           var except = new HashSet<TagType>(cachedTags.Select(x => x.Key).Where(x => SINGLE.Contains(x)));
 

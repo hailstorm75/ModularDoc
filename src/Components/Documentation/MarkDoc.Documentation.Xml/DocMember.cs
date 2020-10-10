@@ -13,7 +13,10 @@ namespace MarkDoc.Documentation.Xml
     #region Properties
 
     /// <inheritdoc />
-    public string Name { get; }
+    public string RawName { get; }
+
+    /// <inheritdoc />
+    public string DisplayName { get; }
 
     /// <inheritdoc />
     public MemberType Type { get; }
@@ -28,17 +31,19 @@ namespace MarkDoc.Documentation.Xml
     /// <summary>
     /// Default constructor
     /// </summary>
-    /// <param name="name">Member name</param>
+    /// <param name="rawName">Member raw name</param>
+    /// <param name="displayName">Member display name</param>
     /// <param name="typeKey">Member type key</param>
     /// <param name="source">Documentation source</param>
-    internal DocMember(string name, char typeKey, XElement source)
+    internal DocMember(string rawName, string displayName, char typeKey, XElement source)
     {
       // If the source is null..
       if (source is null)
         // throw an exception
         throw new ArgumentNullException(nameof(source));
 
-      Name = name.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
+      RawName = rawName.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
+      DisplayName = displayName;
       Type = (MemberType)typeKey;
       Documentation = new DocumentationContent(source);
     }
@@ -46,12 +51,14 @@ namespace MarkDoc.Documentation.Xml
     /// <summary>
     /// Explicit constructor
     /// </summary>
-    /// <param name="name">Member name</param>
+    /// <param name="rawName">Member name</param>
+    /// <param name="displayName">Member display name</param>
     /// <param name="type">Member type</param>
     /// <param name="documentation">Documentation source</param>
-    internal DocMember(string name, MemberType type, IDocumentation documentation)
+    internal DocMember(string rawName, string displayName, MemberType type, IDocumentation documentation)
     {
-      Name = name;
+      RawName = rawName;
+      DisplayName = displayName;
       Type = type;
       Documentation = documentation;
     }
@@ -62,7 +69,7 @@ namespace MarkDoc.Documentation.Xml
 
     /// <inheritdoc />
     public bool Equals(DocMember other)
-      => Name == other.Name && Type == other.Type && Documentation.Equals(other.Documentation);
+      => RawName == other.RawName && Type == other.Type && Documentation.Equals(other.Documentation);
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
@@ -70,7 +77,7 @@ namespace MarkDoc.Documentation.Xml
 
     /// <inheritdoc />
     public override int GetHashCode()
-      => HashCode.Combine(Name, (int)Type, Documentation);
+      => HashCode.Combine(RawName, (int)Type, Documentation);
 
     public static bool operator ==(DocMember left, DocMember right)
       => left.Equals(right);

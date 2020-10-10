@@ -70,11 +70,8 @@ namespace MarkDoc.Documentation.Xml
 
         void Cache(string key)
         {
-          string ProcessName()
+          string ProcessName(string memberNameRaw)
           {
-            // Get the member name without the identifier key
-            var memberNameRaw = name[2..];
-
             // If the member is not a method..
             if (!name.First().Equals('M'))
               // return the member name
@@ -103,16 +100,16 @@ namespace MarkDoc.Documentation.Xml
           }
 
           // Prepare the member to cache
-          var toAdd = new DocMember(ProcessName(), key[0], element);
+          var toAdd = new DocMember(ProcessName(name[2..]), ProcessName(name[(1 + key.Length)..]), key[0], element);
           // If the member is cached..
           if (m_documentation.ContainsKey(key[2..]))
             // add the member to the cache
-            m_documentation[key[2..]].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
+            m_documentation[key[2..]].members?.AddOrUpdate(toAdd.RawName, toAdd, (_, y) => y ?? toAdd);
           // Otherwise..
           else
           {
             var dict = new ConcurrentDictionary<string, IDocMember>();
-            dict.TryAdd(toAdd.Name, toAdd);
+            dict.TryAdd(toAdd.RawName, toAdd);
 
             // Cache the member
             m_documentation.AddOrUpdate(key[2..], (null, dict), (_, y) => Update(y, (null, dict)));

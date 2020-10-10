@@ -31,9 +31,13 @@
     #region Properties
 
     /// <summary>
-    /// Member name
+    /// Member raw name
     /// </summary>
-    string Name { get; }
+    string RawName { get; }
+    /// <summary>
+    /// Member display name
+    /// </summary>
+    string DisplayName { get; }
     /// <summary>
     /// Member type
     /// </summary>
