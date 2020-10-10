@@ -105,7 +105,7 @@ namespace MarkDoc.Documentation.Xml
           // Prepare the member to cache
           var toAdd = new DocMember(ProcessName(), key[0], element);
           // If the member is cached..
-          if (m_documentation.ContainsKey(key))
+          if (m_documentation.ContainsKey(key[2..]))
             // add the member to the cache
             m_documentation[key[2..]].members?.AddOrUpdate(toAdd.Name, toAdd, (_, y) => y ?? toAdd);
           // Otherwise..
