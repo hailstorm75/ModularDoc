@@ -81,19 +81,19 @@ namespace MarkDoc.Documentation.Xml
               // and empty braces to the raw name
               memberNameRaw += "()";
             // otherwise..
-            else
-            {
-              // find the method braces
-              var braceIndex = memberNameRaw.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
-              // get the method name
-              var memberName = memberNameRaw.Remove(braceIndex);
-              // find the generics
-              var genericIndex = memberName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
-              // if there are no generics..
-              if (genericIndex != -1)
-                // remove the generics
-                memberNameRaw = memberName.Remove(genericIndex) + memberNameRaw.Substring(braceIndex);
-            }
+            // else
+            // {
+            //   // find the method braces
+            //   var braceIndex = memberNameRaw.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
+            //   // get the method name
+            //   var memberName = memberNameRaw.Remove(braceIndex);
+            //   // find the generics
+            //   var genericIndex = memberName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
+            //   // if there are no generics..
+            //   if (genericIndex != -1)
+            //     // remove the generics
+            //     memberNameRaw = memberName.Remove(genericIndex) + memberNameRaw.Substring(braceIndex);
+            // }
 
             // Return the processed name
             return memberNameRaw;

@@ -62,7 +62,10 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = name;
       IsStatic = source.IsStatic;
       Arguments = ResolveArguments(resolver, source).ToReadOnlyCollection();
-      RawName = source.FullName.Substring(source.FullName.IndexOf(' ', StringComparison.InvariantCulture) + 1).Replace("::", ".", StringComparison.InvariantCulture); //$"{(source.IsConstructor ? "#ctor" : name.Replace("/", ".", StringComparison.InvariantCultureIgnoreCase))}({string.Join(",", Arguments.Select(x => x.Type.DocumentationName))})";
+      var rawName = source.FullName.Substring(source.FullName.IndexOf(' ', StringComparison.InvariantCulture) + 1).Replace("::", ".", StringComparison.InvariantCulture);
+      RawName = source.IsConstructor
+        ? rawName.Replace(".ctor(", "#ctor(", StringComparison.InvariantCulture)
+        : rawName;
       Accessor = ResolveAccessor(source);
     }
 
