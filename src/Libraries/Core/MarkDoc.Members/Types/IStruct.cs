@@ -13,5 +13,10 @@ namespace MarkDoc.Members.Types
     /// Struct constructors
     /// </summary>
     IReadOnlyCollection<IConstructor> Constructors { get; }
+
+    /// <summary>
+    /// Determines whether the struct is readonly
+    /// </summary>
+    bool IsReadOnly { get; }
   }
 }

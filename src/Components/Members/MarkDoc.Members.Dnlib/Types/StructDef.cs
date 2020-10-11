@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
@@ -23,6 +24,9 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <inheritdoc />
     public IReadOnlyCollection<IConstructor> Constructors { get; }
 
+    /// <inheritdoc />
+    public bool IsReadOnly { get; }
+
     #endregion
 
     #region Constructors
@@ -36,6 +40,9 @@ namespace MarkDoc.Members.Dnlib.Types
     internal StructDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
       : base(resolver, source, parent, ResolveGenericStructs(resolver, source, parent), Enumerable.Empty<IResType>())
     {
+      IsReadOnly = source
+        .CustomAttributes
+        .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase));
       // Initialize the constructors
       Constructors = source.Methods
         // Select valid constructors
