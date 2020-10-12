@@ -2,6 +2,5 @@
 {
   internal struct StructTypeInternal
   {
-
   }
 }

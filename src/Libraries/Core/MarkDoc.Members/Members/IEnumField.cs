@@ -3,6 +3,5 @@
   public interface IEnumField
     : IMember
   {
-
   }
 }

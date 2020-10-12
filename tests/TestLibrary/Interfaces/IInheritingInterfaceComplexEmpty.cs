@@ -3,6 +3,5 @@
   public interface IInheritingInterfaceComplexEmpty
     : IInheritingAndInheritedInterface
   {
-
   }
 }
