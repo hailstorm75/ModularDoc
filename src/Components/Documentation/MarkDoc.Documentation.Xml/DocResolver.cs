@@ -42,11 +42,6 @@ namespace MarkDoc.Documentation.Xml
     /// <inheritdoc />
     public async Task Resolve(string path)
     {
-      static (TA?, TB?) Update<TA, TB>((TA? a, TB? b) existing, (TA? a, TB? b) toAdd)
-        where TA : class
-        where TB : class
-        => (existing.a ?? toAdd.a, existing.b ?? toAdd.b);
-
       void CacheType(string key, XElement element)
       {
         // Prepare the type to cache
@@ -55,79 +50,10 @@ namespace MarkDoc.Documentation.Xml
         m_documentation.AddOrUpdate(key, toAdd, (_, y) => Update(y, toAdd));
       }
 
-      static string RetrieveName(XElement element)
-        => element.Attributes()
-          .First(x => x.Name.LocalName.Equals("name", StringComparison.InvariantCultureIgnoreCase))
-          .Value;
-
-      static bool TypeGrouper(XElement element)
-        => RetrieveName(element).First().Equals('T');
-
       void CacheMember(XElement element)
       {
         // Get the member name
         var name = RetrieveName(element);
-
-        void Cache(string key)
-        {
-          string ProcessName(string memberNameRaw)
-          {
-            // If the member is not a method..
-            if (!name.First().Equals('M'))
-              // return the member name
-              return memberNameRaw;
-            // if the method has no arguments..
-            if (!memberNameRaw.EndsWith(')'))
-              // and empty braces to the raw name
-              memberNameRaw += "()";
-            // otherwise..
-            // else
-            // {
-            //   // find the method braces
-            //   var braceIndex = memberNameRaw.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
-            //   // get the method name
-            //   var memberName = memberNameRaw.Remove(braceIndex);
-            //   // find the generics
-            //   var genericIndex = memberName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
-            //   // if there are no generics..
-            //   if (genericIndex != -1)
-            //     // remove the generics
-            //     memberNameRaw = memberName.Remove(genericIndex) + memberNameRaw.Substring(braceIndex);
-            // }
-
-            // Return the processed name
-            return memberNameRaw;
-          }
-
-          // Prepare the member to cache
-          var toAdd = new DocMember(ProcessName(name[2..]), ProcessName(name[(1 + key.Length)..]), key[0], element);
-          // If the member is cached..
-          if (m_documentation.ContainsKey(key[2..]))
-            // add the member to the cache
-            m_documentation[key[2..]].members?.AddOrUpdate(toAdd.RawName, toAdd, (_, y) => y ?? toAdd);
-          // Otherwise..
-          else
-          {
-            var dict = new ConcurrentDictionary<string, IDocMember>();
-            dict.TryAdd(toAdd.RawName, toAdd);
-
-            // Cache the member
-            m_documentation.AddOrUpdate(key[2..], (null, dict), (_, y) => Update(y, (null, dict)));
-          }
-        }
-
-        static int ReverseIndexOf(string value, char search, int from)
-        {
-          // For every character in reverse order..
-          for (var i = from - 1; i >= 0; i--)
-            // if the character is matched..
-            if (value[i].Equals(search))
-              // return its index
-              return i;
-
-          // Not found
-          return -1;
-        }
 
         // If the member is a method..
         if (name[0].Equals('M'))
@@ -138,14 +64,14 @@ namespace MarkDoc.Documentation.Xml
           if (brace != -1)
           {
             // cache the method
-            Cache(name[..ReverseIndexOf(name, '.', brace)]);
+            Cache(name[..ReverseIndexOf(name, '.', brace)], name, element);
             // exit
             return;
           }
         }
 
         // Cache the member
-        Cache(name[..name.LastIndexOf('.')]);
+        Cache(name[..name.LastIndexOf('.')], name, element);
       }
 
       // Open the XML documentation file
@@ -173,6 +99,65 @@ namespace MarkDoc.Documentation.Xml
             break;
         }
     }
+
+    private static bool TypeGrouper(XElement element)
+      => RetrieveName(element).First().Equals('T');
+
+    private static string RetrieveName(XElement element)
+      => element.Attributes()
+        .First(x => x.Name.LocalName.Equals("name", StringComparison.InvariantCultureIgnoreCase))
+        .Value;
+
+    private void Cache(string key, string name, XElement element)
+    {
+      string ProcessName(string memberNameRaw)
+      {
+        // If the member is not a method..
+        if (!name.First().Equals('M'))
+          // return the member name
+          return memberNameRaw;
+        // if the method has no arguments..
+        if (!memberNameRaw.EndsWith(')'))
+          // and empty braces to the raw name
+          memberNameRaw += "()";
+
+        // Return the processed name
+        return memberNameRaw;
+      }
+
+      // Prepare the member to cache
+      var toAdd = new DocMember(ProcessName(name[2..]), ProcessName(name[(1 + key.Length)..]), key[0], element);
+      // If the member is cached..
+      if (m_documentation.ContainsKey(key[2..]))
+        // add the member to the cache
+        m_documentation[key[2..]].members?.AddOrUpdate(toAdd.RawName, toAdd, (_, y) => y ?? toAdd);
+      // Otherwise..
+      else
+      {
+        var dict = new ConcurrentDictionary<string, IDocMember>();
+        dict.TryAdd(toAdd.RawName, toAdd);
+
+        // Cache the member
+        m_documentation.AddOrUpdate(key[2..], (null, dict), (_, y) => Update(y, (null, dict)));
+      }
+    }
+
+    private static int ReverseIndexOf(string value, char search, int @from)
+    {
+      // For every character in reverse order..
+      for (var i = @from - 1; i >= 0; i--)
+        // if the character is matched..
+        if (value[i].Equals(search))
+          // return its index
+          return i;
+
+      // Not found
+      return -1;
+    }
+
+    private static (TA?, TB?) Update<TA, TB>((TA? a, TB? b) existing, (TA? a, TB? b) toAdd)
+      where TA : class where TB : class
+      => (existing.a ?? toAdd.a, existing.b ?? toAdd.b);
 
     /// <inheritdoc />
     public bool TryFindType(IType type, out IDocElement? resultType)

@@ -30,7 +30,6 @@ namespace TestLibrary.Structs
 
     public void Method()
     {
-
     }
   }
 }

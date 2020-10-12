@@ -89,21 +89,12 @@ namespace MarkDoc.Members.Dnlib.Members
           return "&";
         case "OP_BITWISEOR":
           return "|";
-        // case "OP_LOGICALAND":
-        //   return "&&";
-        // case "OP_LOGICALOR":
-        //   return "||";
         case "OP_LOGICALNOT":
           return "!";
-        // case "OP_ASSIGN":
-        //   return "=";
         case "OP_LEFTSHIFT":
           return "<<";
         case "OP_RIGHTSHIFT":
           return ">>";
-        // case "OP_SIGNEDRIGHTSHIFT":
-        // case "OP_UNSIGNEDRIGHTSHIFT":
-        //   return "";
         case "OP_EQUALITY":
           return "==";
         case "OP_GREATERTHAN":
@@ -116,26 +107,6 @@ namespace MarkDoc.Members.Dnlib.Members
           return ">=";
         case "OP_LESSTHANOREQUAL":
           return "<=";
-        // case "OP_MULTIPLICATIONASSIGNMENT":
-        //   return "*=";
-        // case "OP_SUBTRACTIONASSIGNMENT":
-        //   return "-=";
-        // case "OP_EXCLUSIVEORASSIGNMENT":
-        //   return "^=";
-        // case "OP_LEFTSHIFTASSIGNMENT":
-        //   return "<<=";
-        // case "OP_MODULUSASSIGNMENT":
-        //   return "%=";
-        // case "OP_ADDITIONASSIGNMENT":
-        //   return "+=";
-        // case "OP_BITWISEANDASSIGNMENT":
-        //   return "&=";
-        // case "OP_BITWISEORASSIGNMENT":
-        //   return "|=";
-        // case "OP_COMMA":
-        //   return ",";
-        // case "OP_DIVISIONASSIGNMENT":
-        //   return "/=";
         case "OP_DECREMENT":
           return "--";
         case "OP_INCREMENT":

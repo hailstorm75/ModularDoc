@@ -27,6 +27,7 @@ namespace MarkDoc.Documentation.Xml
       TagType.Returns,
       TagType.Example
     };
+
     private static readonly HashSet<TagType> MULTIPLE = new HashSet<TagType>
     {
       TagType.Exception,
@@ -66,7 +67,8 @@ namespace MarkDoc.Documentation.Xml
 
       Name = name;
       Documentation = new DocumentationContent(source);
-      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.PublicationOnly);
+      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver),
+        LazyThreadSafetyMode.PublicationOnly);
     }
 
     /// <summary>
@@ -79,7 +81,8 @@ namespace MarkDoc.Documentation.Xml
     {
       Name = name;
       Documentation = new DocumentationContent(new Dictionary<TagType, IReadOnlyCollection<ITag>>());
-      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver), LazyThreadSafetyMode.PublicationOnly);
+      Members = new Lazy<IReadOnlyDictionary<string, IDocMember>>(() => RetrieveMembers(docResolver, typeResolver),
+        LazyThreadSafetyMode.PublicationOnly);
     }
 
     #endregion
@@ -89,7 +92,8 @@ namespace MarkDoc.Documentation.Xml
     private IReadOnlyDictionary<string, IDocMember> RetrieveMembers(DocResolver docResolver, IResolver typeResolver)
     {
       // If there is no documentation for this element..
-      if (!docResolver.TryFindMembers(Name, out var memberDocs) || memberDocs is null)
+      if (!docResolver.TryFindMembers(Name, out var memberDocs)
+          || memberDocs is null)
         // return empty members
         return new Dictionary<string, IDocMember>();
 
@@ -99,10 +103,13 @@ namespace MarkDoc.Documentation.Xml
       foreach (var items in memberDocs.GroupBy(x => x.Value.Documentation.HasInheritDoc))
       {
         // if the items have inheritdoc and the type is known and the type is not an enum..
-        if (items.Key && typeResolver.TryFindType(Name, out var type) && type is IInterface interfaceDef)
+        if (items.Key
+            && typeResolver.TryFindType(Name, out var type)
+            && type is IInterface interfaceDef)
         {
           // prepare a temporary cache for the inheritdoc items
-          var temps = items.ToDictionary(pair => pair.Value.DisplayName, pair => (pair.Key, new Dictionary<TagType, LinkedList<ITag>>()));
+          var temps = items.ToDictionary(pair => pair.Value.DisplayName,
+            pair => (pair.Key, new Dictionary<TagType, LinkedList<ITag>>()));
           // resolve the items inheritdoc
           ProcessInheritDoc(temps, interfaceDef, temps.Select(pair => pair.Key).ToArray(), memberDocs, docResolver);
 
@@ -138,90 +145,7 @@ namespace MarkDoc.Documentation.Xml
 
     private static void ProcessInheritDoc(IReadOnlyDictionary<string, (string rawName, Dictionary<TagType, LinkedList<ITag>> tags)> cache, IInterface type, string[] names, IReadOnlyDictionary<string, IDocMember> memberDocs, IDocResolver docResolver)
     {
-      void CacheTags(IEnumerable<string> keys, IReadOnlyDictionary<string, IDocMember> members)
-      {
-        var reCached = members.ToDictionary(x => x.Value.DisplayName, x => x.Value);
-
-        static string ProcessName(string input)
-        {
-          static int ReverseIndexOf(string value, char search, int from)
-          {
-            // For every character in reverse order..
-            for (var i = from - 1; i >= 0; i--)
-              // if the character is matched..
-              if (value[i].Equals(search))
-                // return its index
-                return i;
-
-            // Not found
-            return -1;
-          }
-
-          var brace = input.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
-          var max = brace == -1
-            ? input.Length - 1
-            : brace;
-
-          var dot = ReverseIndexOf(input, '.', max);
-          if (dot == -1 || dot >= max)
-            return input;
-          var res = input.Substring(dot + 1);
-          return res;
-        }
-
-        // For every name..
-        foreach (var name in keys.Select(ProcessName))
-        {
-          // if there is no matching member by name..
-          if (!reCached.TryGetValue(name, out var member))
-            // continue to the next member name
-            continue;
-
-          // select the previously cached tags
-          var cachedTags = cache[name].tags;
-          // select the previously cached tags of the same tag type
-          var except = new HashSet<TagType>(cachedTags.Select(x => x.Key).Where(x => SINGLE.Contains(x)));
-
-          bool Filter(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
-            => tag.Key != TagType.Inheritdoc && !except.Contains(tag.Key);
-
-          (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
-          {
-            // If the tag type cannot have multiple occurrences or isn't cached yet..
-            if (!MULTIPLE.Contains(tag.Key) || !cachedTags.TryGetValue(tag.Key, out var existing))
-              // return new tags to cache
-              return (tag.Key, tag.Value);
-
-            // Create a filter based on existing tag references
-            var filter = new HashSet<string>(existing!.Select(x => x.Reference));
-            // Create a list of tags to add which contain unique references
-            var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
-
-            // Return new tags to cache
-            return (tag.Key, toAdd);
-          }
-
-          // Prepare the sequence of tags to be cached
-          var tags = member!.Documentation.Tags
-            // Filter out unwanted tags
-            .Where(Filter)
-            // Select the tags to cache
-            .Select(Process);
-
-          // For every tag..
-          foreach (var (key, enumerable) in tags)
-            // if its type is already cached..
-            if (cachedTags.ContainsKey(key))
-              // append it to the existing cached collection
-              cachedTags[key].AddRange(enumerable);
-            // otherwise..
-            else
-              // cache it
-              cachedTags.Add(key, enumerable.ToLinkedList());
-        }
-      }
-
-      CacheTags(names, memberDocs);
+      CacheTags(names, memberDocs, cache);
 
       static string ProcessReferences(KeyValuePair<string, IDocMember> input)
       {
@@ -245,7 +169,7 @@ namespace MarkDoc.Documentation.Xml
       // If a base class exists..
       var baseClass = type is IClass classDef && classDef.BaseClass?.Reference.Value != null
         // return it
-        ? new[] { classDef.BaseClass.Reference.Value }
+        ? new[] {classDef.BaseClass.Reference.Value}
         // otherwise return an empty
         : Enumerable.Empty<IType>();
 
@@ -265,12 +189,98 @@ namespace MarkDoc.Documentation.Xml
       foreach (var (key, value) in sources)
       {
         // if the inherited type is unknown..
-        if (!docResolver.TryFindType(value, out var sourceType) || sourceType is null)
+        if (!docResolver.TryFindType(value, out var sourceType)
+            || sourceType is null)
           // continue to the next source
           continue;
 
         // Otherwise cache the source members
-        CacheTags(names.Except(withReferences.Except(withReferencesTable[key])), sourceType.Members.Value);
+        CacheTags(names.Except(withReferences.Except(withReferencesTable[key])), sourceType.Members.Value, cache);
+      }
+    }
+
+    private static string ProcessName(string input)
+    {
+      static int ReverseIndexOf(string value, char search, int from)
+      {
+        // For every character in reverse order..
+        for (var i = @from - 1; i >= 0; i--)
+          // if the character is matched..
+          if (value[i].Equals(search))
+            // return its index
+            return i;
+
+        // Not found
+        return -1;
+      }
+
+      var brace = input.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
+      var max = brace == -1
+        ? input.Length - 1
+        : brace;
+
+      var dot = ReverseIndexOf(input, '.', max);
+      if (dot == -1
+          || dot >= max)
+        return input;
+      var res = input.Substring(dot + 1);
+      return res;
+    }
+
+    private static void CacheTags(IEnumerable<string> keys, IReadOnlyDictionary<string, IDocMember> members, IReadOnlyDictionary<string, (string rawName, Dictionary<TagType, LinkedList<ITag>> tags)> cache)
+    {
+      var reCached = members.ToDictionary(x => x.Value.DisplayName, x => x.Value);
+
+      // For every name..
+      foreach (var name in keys.Select(ProcessName))
+      {
+        // if there is no matching member by name..
+        if (!reCached.TryGetValue(name, out var member))
+          // continue to the next member name
+          continue;
+
+        // select the previously cached tags
+        var cachedTags = cache[name].tags;
+        // select the previously cached tags of the same tag type
+        var except = new HashSet<TagType>(cachedTags.Select(x => x.Key).Where(x => SINGLE.Contains(x)));
+
+        bool Filter(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag) =>
+          tag.Key != TagType.Inheritdoc && !except.Contains(tag.Key);
+
+        (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
+        {
+          // If the tag type cannot have multiple occurrences or isn't cached yet..
+          if (!MULTIPLE.Contains(tag.Key)
+              || !cachedTags.TryGetValue(tag.Key, out var existing))
+            // return new tags to cache
+            return (tag.Key, tag.Value);
+
+          // Create a filter based on existing tag references
+          var filter = new HashSet<string>(existing!.Select(x => x.Reference));
+          // Create a list of tags to add which contain unique references
+          var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
+
+          // Return new tags to cache
+          return (tag.Key, toAdd);
+        }
+
+        // Prepare the sequence of tags to be cached
+        var tags = member!.Documentation.Tags
+          // Filter out unwanted tags
+          .Where(Filter)
+          // Select the tags to cache
+          .Select(Process);
+
+        // For every tag..
+        foreach (var (key, enumerable) in tags)
+          // if its type is already cached..
+          if (cachedTags.ContainsKey(key))
+            // append it to the existing cached collection
+            cachedTags[key].AddRange(enumerable);
+          // otherwise..
+          else
+            // cache it
+            cachedTags.Add(key, enumerable.ToLinkedList());
       }
     }
 

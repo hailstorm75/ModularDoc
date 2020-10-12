@@ -32,7 +32,6 @@ namespace TestLibrary.Classes
 
     public void Method()
     {
-
     }
   }
 }

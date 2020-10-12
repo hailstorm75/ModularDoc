@@ -23,9 +23,8 @@ jobs:
       run: dotnet build src/MarkDoc.sln --configuration Release --no-restore
 
   test:
-    
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -47,4 +46,3 @@ jobs:
         file: "src/Tests/*/TestResults/*/*.xml"
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
-    
