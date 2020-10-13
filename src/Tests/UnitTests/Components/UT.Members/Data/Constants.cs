@@ -37,7 +37,9 @@ namespace UT.Members.Data
 
     #region Struct
 
+    public const string STRUCT_NAMESPACE = "TestLibrary.Structs";
     public const string PUBLIC_STRUCT = "StructTypePublic";
+    public const string PUBLIC_STRUCT_READONLY = "StructReadonlyType";
     public const string INTERNAL_STRUCT = "StructTypeInternal";
     public const string PUBLIC_NESTED_STRUCT = "NestedStructPublic";
     public const string PROTECTED_NESTED_STRUCT = "NestedStructProtected";

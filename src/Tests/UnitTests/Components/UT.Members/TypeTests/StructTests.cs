@@ -47,15 +47,25 @@ namespace UT.Members.TypeTests
 
     public static IEnumerable<object[]> GetStructNamespaceData()
     {
-      const string interfaceNameSpace = "TestLibrary.Structs";
       var data = new[]
       {
-        new object[] {Constants.PUBLIC_STRUCT, interfaceNameSpace},
-        new object[] {Constants.INTERNAL_STRUCT, interfaceNameSpace},
-        new object[] {Constants.PUBLIC_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
-        new object[] {Constants.PROTECTED_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
-        new object[] {Constants.PROTECTED_INTERNAL_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
-        new object[] {Constants.INTERNAL_NESTED_STRUCT, $"{interfaceNameSpace}.StructParent"},
+        new object[] {Constants.PUBLIC_STRUCT, Constants.STRUCT_NAMESPACE},
+        new object[] {Constants.INTERNAL_STRUCT, Constants.STRUCT_NAMESPACE},
+        new object[] {Constants.PUBLIC_NESTED_STRUCT, $"{Constants.STRUCT_NAMESPACE}.StructParent"},
+        new object[] {Constants.PROTECTED_NESTED_STRUCT, $"{Constants.STRUCT_NAMESPACE}.StructParent"},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_STRUCT, $"{Constants.STRUCT_NAMESPACE}.StructParent"},
+        new object[] {Constants.INTERNAL_NESTED_STRUCT, $"{Constants.STRUCT_NAMESPACE}.StructParent"},
+      };
+
+      return data.ComposeData();
+    }
+
+    public static IEnumerable<object[]> GetStructIsReadonlyData()
+    {
+      var data = new[]
+      {
+        new object[] {Constants.PUBLIC_STRUCT, false},
+        new object[] {Constants.PUBLIC_STRUCT_READONLY, true},
       };
 
       return data.ComposeData();
@@ -151,6 +161,16 @@ namespace UT.Members.TypeTests
       var query = GetStruct(resolver, name);
 
       Assert.NotNull(query);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IStruct))]
+    [MemberData(nameof(GetStructIsReadonlyData))]
+    public void ValidateStructIsReadonly(IResolver resolver, string name, bool isReadonly)
+    {
+      var query = GetStruct(resolver, name);
+
+      Assert.Equal(isReadonly, query?.IsReadOnly);
     }
 
     [Theory]
