@@ -116,6 +116,9 @@ namespace UT.Members.Data
     public const string PROPERTY_PUBLIC_NESTED = "PropertyNested";
     public const string PUBLIC_CLASS_PROPERTY_NESTED2  = "ClassPropertiesNestedNested";
     public const string PROPERTY_PUBLIC_NESTED2 = "PropertyNestedNested";
+    public const string PROPERTY_READONLY = "PropertyReadonly";
+    public const string PROPERTY_FULL_READONLY = "PropertyFullReadonly";
+    public const string PROPERTY_FULL_READONLY_GET = "PropertyFullReadonlyGet";
 
     #endregion
 

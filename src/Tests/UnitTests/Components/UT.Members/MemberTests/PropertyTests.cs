@@ -93,6 +93,23 @@ namespace UT.Members.MemberTests
         Constants.TEST_ASSEMBLY);
     }
 
+    public static IEnumerable<object[]> GetPropertyIsReadonlyData()
+    {
+      var data = new[]
+      {
+        new object[] {Constants.PROPERTY_GET_SET, false},
+        new object[] {Constants.PROPERTY_GET, false},
+        new object[] {Constants.PROPERTY_SET, false},
+        new object[] {Constants.PROPERTY_READONLY, true},
+        new object[] {Constants.PROPERTY_FULL_READONLY, true},
+        new object[] {Constants.PROPERTY_FULL_READONLY_GET, true}
+      };
+
+      return data.ComposeData(
+        resolver => resolver.FindMemberParent<IInterface>(Constants.PROPERTIES_NAMESPACE, Constants.PROPERTIES_STRUCT),
+        Constants.TEST_ASSEMBLY);
+    }
+
     public static IEnumerable<object[]> GetPropertiesInheritanceData()
     {
       var data = new[]
@@ -165,6 +182,16 @@ namespace UT.Members.MemberTests
       var member = GetProperty(type, name);
 
       Assert.NotNull(member);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertyIsReadonlyData))]
+    public void ValidatePropertyIsReadonly(IInterface type, string name, bool isReadonly)
+    {
+      var member = GetProperty(type, name, true);
+
+      Assert.Equal(isReadonly, member?.IsReadOnly);
     }
 
     [Theory]
