@@ -1,5 +1,6 @@
 ﻿using MarkDoc.Members.Enums;
 using MarkDoc.Members.ResolvedTypes;
+using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members.Members
 {
@@ -18,6 +19,14 @@ namespace MarkDoc.Members.Members
     /// Property type
     /// </summary>
     IResType Type { get; }
+
+    /// <summary>
+    /// Determines whether the property is readonly
+    /// </summary>
+    /// <remarks>
+    /// Applicable only for <see cref="IStruct"/> properties
+    /// </remarks>
+    bool IsReadOnly { get; }
 
     /// <summary>
     /// Property get accessor type

@@ -31,6 +31,9 @@ namespace MarkDoc.Members.Dnlib.Members
     public IResType Type { get; }
 
     /// <inheritdoc />
+    public bool IsReadOnly { get; }
+
+    /// <inheritdoc />
     public override AccessorType Accessor { get; }
 
     /// <inheritdoc />
@@ -59,6 +62,9 @@ namespace MarkDoc.Members.Dnlib.Members
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
       SetAccessor = ResolveAccessor(source.SetMethod);
+      IsReadOnly = source.GetMethod?
+        .CustomAttributes
+        .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false;
     }
 
     #region Methods
