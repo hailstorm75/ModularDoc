@@ -233,9 +233,10 @@ namespace UT.Members.Data
 
     #endregion
 
+    public const string RES_TYPES_NAMESPACE = "TestLibrary.ResTypes";
+
     #region ResTypes
 
-    public const string RES_TYPES_NAMESPACE = "TestLibrary.ResTypes";
     public const string RES_TYPE_CLASS = "ClassResTypesValueTypes";
     public const string METHOD_RES_BYTE = "MethodByte";
     public const string METHOD_RES_SBYTE = "MethodSbyte";
@@ -265,6 +266,13 @@ namespace UT.Members.Data
     public const string METHOD_RES_3D_ARRAY = "Method3DArray";
     public const string METHOD_RES_2D_JAGGED_ARRAY = "Method2DJaggedArray";
     public const string METHOD_RES_3D_JAGGED_ARRAY = "Method3DJaggedArray";
+
+    #endregion
+
+    #region ResGenericTypes
+
+    public const string RES_TYPE_GENERIC_CLASS = "ClassRestTypeGenerics";
+    public const string METHOD_RES_GEN_ENUMSTRING = "MethodGenericString";
 
     #endregion
   }
