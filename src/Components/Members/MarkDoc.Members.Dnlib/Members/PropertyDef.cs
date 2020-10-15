@@ -62,9 +62,12 @@ namespace MarkDoc.Members.Dnlib.Members
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
       SetAccessor = ResolveAccessor(source.SetMethod);
-      IsReadOnly = source.GetMethod?
-        .CustomAttributes
-        .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false;
+      IsReadOnly = (source.GetMethod?
+                     .CustomAttributes
+                     .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false)
+                && (source.GetMethod?
+                     .CustomAttributes
+                     .All(x => !x.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false);
     }
 
     #region Methods
