@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Dnlib.Members;
 using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;

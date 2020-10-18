@@ -114,12 +114,13 @@ namespace MarkDoc.Members.Dnlib
     /// </summary>
     /// <param name="source">Type to resolve</param>
     /// <param name="generics">Dictionary of type generics</param>
-    /// <param name="isDynamic"></param>
     /// <param name="isByRef">Is the resolved type a reference type</param>
+    /// <param name="isDynamic"></param>
     /// <returns>Resolved type</returns>
     /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
-    internal IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isDynamic = false, bool isByRef = false)
+    internal IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false,
+      IReadOnlyList<bool>? isDynamic = null)
     {
       static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
       {
@@ -149,7 +150,7 @@ namespace MarkDoc.Members.Dnlib
         => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
 
       string GetKey(TypeSig sig)
-        => sig.FullName + (isDynamic ? "dynamic" : string.Empty);
+        => sig.FullName + (isDynamic?[0] ?? false ? "dynamic" : string.Empty);
 
       // If the source is null..
       if (source is null)
@@ -183,12 +184,12 @@ namespace MarkDoc.Members.Dnlib
         // Generic instances and tuples
         var x when x is ElementType.GenericInst && IsGeneric(signature)
           => IsTuple(signature, out var valueTuple)
-            ? new ResTuple(this, signature, valueTuple, isByRef)
-            : new ResGeneric(this, signature, generics, isByRef) as IResType,
+            ? new ResTuple(this, signature, valueTuple, isDynamic, isByRef)
+            : new ResGeneric(this, signature, generics, isDynamic, isByRef) as IResType,
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics, isByRef),
         ElementType.Boolean => new ResValueType(this, signature, "bool", isByRef),
-        ElementType.Object => new ResValueType(this, signature, isDynamic ? "dynamic" : "object", isByRef),
+        ElementType.Object => new ResValueType(this, signature, isDynamic?[0] ?? false ? "dynamic" : "object", isByRef),
         ElementType.String => new ResValueType(this, signature, "string", isByRef),
         ElementType.Char => new ResValueType(this, signature, "char", isByRef),
         ElementType.I1 => new ResValueType(this, signature, "sbyte", isByRef),
@@ -201,8 +202,8 @@ namespace MarkDoc.Members.Dnlib
         ElementType.U8 => new ResValueType(this, signature, "ulong", isByRef),
         ElementType.R4 => new ResValueType(this, signature, "float", isByRef),
         ElementType.R8 => new ResValueType(this, signature, "double", isByRef),
-        ElementType.ByRef => Resolve(signature, generics, isDynamic, true),
-        ElementType.CModReqd => Resolve(signature, generics, isDynamic, true),
+        ElementType.ByRef => Resolve(signature, generics, true, isDynamic),
+        ElementType.CModReqd => Resolve(signature, generics, true, isDynamic),
         // Decimal type
         var x when (x is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
           => new ResValueType(this, signature, "decimal", isByRef),

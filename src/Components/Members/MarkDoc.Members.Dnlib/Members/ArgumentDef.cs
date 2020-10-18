@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
@@ -54,7 +55,7 @@ namespace MarkDoc.Members.Dnlib.Members
     #region Methods
 
     private IResType ResolveType(Parameter source, IReadOnlyDictionary<string, string> generics)
-      => Resolver.Resolve(source.Type, generics, source.ParamDef.CustomAttributes.Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.DynamicAttribute", StringComparison.InvariantCultureIgnoreCase)));
+      => Resolver.Resolve(source.Type, generics, isDynamic: source.ParamDef.GetDynamicTypes());
 
     private static ArgumentType ResolveKeyword(Parameter source)
     {

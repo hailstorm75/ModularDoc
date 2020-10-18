@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;

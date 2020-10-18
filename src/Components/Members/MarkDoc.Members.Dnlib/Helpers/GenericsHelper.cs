@@ -1,10 +1,10 @@
-﻿using dnlib.DotNet;
-using MarkDoc.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using dnlib.DotNet;
+using MarkDoc.Helpers;
 
-namespace MarkDoc.Members.Dnlib
+namespace MarkDoc.Members.Dnlib.Helpers
 {
   /// <summary>
   /// Helper methods for extracting generics

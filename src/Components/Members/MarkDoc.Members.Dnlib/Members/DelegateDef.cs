@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
@@ -75,7 +76,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private IResType? ResolveReturn(Resolver resolver, dnlib.DotNet.MethodDef method)
       => !method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
-        ? resolver.Resolve(method.ReturnType, method.ResolveMethodGenerics(), method.ParamDefs.Count - Arguments.Count == 1)
+        ? resolver.Resolve(method.ReturnType, isDynamic: method.ParamDefs.Count - Arguments.Count == 1 ? method.ParamDefs.First().GetDynamicTypes() : null, generics: method.ResolveMethodGenerics())
         : null;
 
     private static AccessorType ResolveAccessor(TypeDef type)

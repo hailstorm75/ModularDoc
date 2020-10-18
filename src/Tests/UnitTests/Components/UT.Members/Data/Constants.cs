@@ -276,6 +276,9 @@ namespace UT.Members.Data
 
     public const string RES_TYPE_GENERIC_CLASS = "ClassRestTypeGenerics";
     public const string METHOD_RES_GEN_ENUMSTRING = "MethodGenericString";
+    public const string METHOD_RES_GEN_DYNOBJ = "MethodGenericDynObj";
+    public const string METHOD_RES_GEN_OBJDYN = "MethodGenericObjDyn";
+    public const string METHOD_RES_GEN_INTSTRBOOL = "MethodGenericIntStringBool";
 
     #endregion
   }

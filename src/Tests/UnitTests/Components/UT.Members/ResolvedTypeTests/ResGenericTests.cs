@@ -19,6 +19,9 @@ namespace UT.Members.ResolvedTypeTests
       var data = new object[]
       {
         new object[] { Constants.METHOD_RES_GEN_ENUMSTRING, nameof(IEnumerable) },
+        new object[] { Constants.METHOD_RES_GEN_DYNOBJ, "IReadOnlyDictionary" },
+        new object[] { Constants.METHOD_RES_GEN_OBJDYN, "IReadOnlyDictionary" },
+        new object[] { Constants.METHOD_RES_GEN_INTSTRBOOL, "Func" }
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -37,6 +40,9 @@ namespace UT.Members.ResolvedTypeTests
       var data = new object[]
       {
         new object[] { Constants.METHOD_RES_GEN_ENUMSTRING, new [] { "string" } },
+        new object[] { Constants.METHOD_RES_GEN_DYNOBJ, new [] { "dynamic", "object" } },
+        new object[] { Constants.METHOD_RES_GEN_OBJDYN, new [] { "object", "dynamic" } },
+        new object[] { Constants.METHOD_RES_GEN_INTSTRBOOL, new [] { "int", "string", "bool" } }
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -49,7 +55,7 @@ namespace UT.Members.ResolvedTypeTests
           yield return typeWrapper.Concat(entry).ToArray()!;
       }
     }
-    
+
     private static IMethod? GetMethod(IInterface type, string name, bool throwIfNull = false)
       => type.Methods.FindMember(name, throwIfNull);
 

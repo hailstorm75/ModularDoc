@@ -32,22 +32,24 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="isValueTuple">Is the given tuple a value tuple</param>
+    /// <param name="isDynamic"></param>
     /// <param name="isByRef"></param>
-    internal ResTuple(Resolver resolver, TypeSig source, bool isValueTuple, bool isByRef = false)
-      : base(resolver, source, ResolveName(resolver, source, isValueTuple, out var fields), ResolveDocName(source), source.FullName, isByRef)
+    internal ResTuple(Resolver resolver, TypeSig source, bool isValueTuple, IReadOnlyList<bool>? isDynamic,
+      bool isByRef = false)
+      : base(resolver, source, ResolveName(resolver, source, isValueTuple, isDynamic, out var fields), ResolveDocName(source), source.FullName, isByRef)
     {
       IsValueTuple = isValueTuple;
       Fields = fields;
     }
 
-    private static string ResolveName(Resolver resolver, TypeSig source, bool isValueTuple, out IReadOnlyCollection<(string, IResType)> fields)
+    private static string ResolveName(Resolver resolver, TypeSig source, bool isValueTuple, IReadOnlyList<bool>? isDynamic, out IReadOnlyCollection<(string, IResType)> fields)
     {
       // If the source is not a generic instance..
       if (!(source is GenericInstSig token))
         // throw an exception
         throw new NotSupportedException(Resources.notTuple);
 
-      fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", resolver.Resolve(x))).ToReadOnlyCollection();
+      fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", resolver.Resolve(x, isDynamic: new[] { isDynamic?[i] ?? false }))).ToReadOnlyCollection();
       return isValueTuple
         ? $"({string.Join(", ", fields.Select(field => $"{field.Item2.DisplayName} {field.Item1}"))})"
         : $"Tuple<{string.Join(",", fields.Select(field => field.Item2.DisplayName))}>";

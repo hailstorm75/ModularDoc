@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.ResolvedTypes;
 using IMethod = MarkDoc.Members.Members.IMethod;
@@ -130,7 +131,7 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       if (source.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase))
         return null;
-      return Resolver.Resolve(source.ReturnType, source.ResolveMethodGenerics(), source.ParamDefs.Count - Arguments.Count == 1);
+      return Resolver.Resolve(source.ReturnType, isDynamic: source.ParamDefs.Count - Arguments.Count == 1 ? source.ParamDefs.First().GetDynamicTypes() : null, generics: source.ResolveMethodGenerics());
     }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)

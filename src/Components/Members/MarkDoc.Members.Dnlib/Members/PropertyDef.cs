@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
@@ -57,7 +58,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = source.Name;
       RawName = ResolveRawName(source);
       IsStatic = methods.First().IsStatic;
-      Type = Resolver.Resolve(ResolveType(source), generics, IsDynamic(source));
+      Type = Resolver.Resolve(ResolveType(source), generics, isDynamic: IsDynamic(source));
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
@@ -110,16 +111,20 @@ namespace MarkDoc.Members.Dnlib.Members
       throw new NotSupportedException(Resources.notProperty);
     }
 
-    private static bool IsDynamic(dnlib.DotNet.PropertyDef source)
+    private static IReadOnlyList<bool>? IsDynamic(dnlib.DotNet.PropertyDef source)
     {
       // If the property has a getter method..
       if (source.GetMethod != null)
         // retrieve its return type
-        return source.GetMethod.ParamDefs.Count != 0;
+        return source.GetMethod.ParamDefs.Count != 0
+          ? source.GetMethod.ParamDefs.First().GetDynamicTypes()
+          : null;
       // If the property has a setter method..
       if (source.SetMethod != null)
         // retrieve its input argument
-        return source.SetMethod.Parameters.Count > 1;
+        return source.SetMethod.Parameters.Count > 1
+          ? source.SetMethod.ParamDefs.First().GetDynamicTypes()
+          : null;
 
       // Property type was not resolved, thus this is not a valid property
       throw new NotSupportedException(Resources.notProperty);

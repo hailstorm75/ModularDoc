@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Dnlib.Members;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
