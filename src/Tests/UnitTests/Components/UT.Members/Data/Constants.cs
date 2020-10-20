@@ -279,6 +279,14 @@ namespace UT.Members.Data
     public const string METHOD_RES_GEN_DYNOBJ = "MethodGenericDynObj";
     public const string METHOD_RES_GEN_OBJDYN = "MethodGenericObjDyn";
     public const string METHOD_RES_GEN_INTSTRBOOL = "MethodGenericIntStringBool";
+    public const string METHOD_RES_GEN_COMPLEX_A = "MethodGenericComplexAReturn";
+    public const string METHOD_RES_GEN_COMPLEX_B = "MethodGenericComplexBReturn";
+    public const string METHOD_RES_GEN_COMPLEX_C = "MethodGenericComplexCReturn";
+    public const string METHOD_RES_GEN_COMPLEX_D = "MethodGenericComplexDReturn";
+    public const string METHOD_RES_GEN_COMPLEX_E = "MethodGenericComplexEReturn";
+    public const string METHOD_RES_GEN_COMPLEX_F = "MethodGenericComplexFReturn";
+    public const string METHOD_RES_GEN_COMPLEX_G = "MethodGenericComplexGReturn";
+    public const string METHOD_RES_GEN_COMPLEX_H = "MethodGenericComplexHReturn";
 
     #endregion
   }

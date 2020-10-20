@@ -117,13 +117,13 @@ namespace MarkDoc.Members.Dnlib.Members
       if (source.GetMethod != null)
         // retrieve its return type
         return source.GetMethod.ParamDefs.Count != 0
-          ? source.GetMethod.ParamDefs.First().GetDynamicTypes()
+          ? source.GetMethod.ParamDefs.First().GetDynamicTypes(source.GetMethod.ReturnType)
           : null;
       // If the property has a setter method..
       if (source.SetMethod != null)
         // retrieve its input argument
         return source.SetMethod.Parameters.Count > 1
-          ? source.SetMethod.ParamDefs.First().GetDynamicTypes()
+          ? source.SetMethod.ParamDefs.First().GetDynamicTypes(source.SetMethod.Parameters.First().Type)
           : null;
 
       // Property type was not resolved, thus this is not a valid property

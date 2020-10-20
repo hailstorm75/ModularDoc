@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
-using MarkDoc.Members.Dnlib.Properties;
+using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Dnlib.ResolvedTypes
@@ -33,31 +33,11 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="isByRef"></param>
     internal ResGeneric(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics,
       IReadOnlyList<bool>? isDynamic, bool isByRef = false)
-      : base(resolver, source, ResolveName(source), ResolveRawName(resolver, source, isDynamic, generics),
-        source.FullName, isByRef)
-    {
-      // If the source is not generic..
-      if (!(source is GenericInstSig token))
-        // throw an exception
-        throw new NotSupportedException(Resources.notGeneric);
+      : base(resolver, source, ResolveName(source),
+        ResolveRawName(resolver, source, isDynamic, generics, out var genericsProcessed), source.FullName, isByRef)
+      => Generics = genericsProcessed;
 
-      var totalGenerics = token.GenericArguments.Count;
-      IReadOnlyList<bool>? GetGenerics(int index)
-      {
-        if (isDynamic is null)
-          return null;
-
-        return totalGenerics == index + 1
-          ? isDynamic.Skip(index - 1).ToArray()
-          : new[] {isDynamic[index]};
-      }
-
-      Generics = token.GenericArguments.Select((x, i) => Resolver.Resolve(x, generics, isDynamic: GetGenerics(i)))
-        .ToReadOnlyCollection();
-    }
-
-    private static string ResolveRawName(Resolver resolver, TypeSig source, IReadOnlyList<bool>? isDynamic,
-      IReadOnlyDictionary<string, string>? generics)
+    private static string ResolveRawName(Resolver resolver, TypeSig source, IReadOnlyList<bool>? isDynamic, IReadOnlyDictionary<string, string>? generics, out IReadOnlyCollection<IResType> genericsProcessed)
     {
       static string ResolveGenerics(string type, IReadOnlyDictionary<string, string>? generics)
       {
@@ -70,29 +50,35 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         return type;
       }
 
-      // If the source is not generic..
-      if (!(source is GenericInstSig token))
-        // throw an exception
-        throw new NotSupportedException(Resources.notGeneric);
+      var token = source.GetGenericSignature();
 
       // Find type generics
       var index = source.FullName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
       // Remove the generics
       var name = source.FullName.Remove(index);
 
-      var totalGenerics = token.GenericArguments.Count;
-      IReadOnlyList<bool>? GetGenerics(int index)
+      var parametersTree = token.CountTypes();
+
+      IReadOnlyList<bool> GetGenerics(int i)
       {
         if (isDynamic is null)
-          return null;
+          return new bool[parametersTree[i]];
 
-        return totalGenerics == index + 1
-          ? isDynamic.Skip(index - 1).ToArray()
-          : new[] {isDynamic[index]};
+        var skip = i == 0
+          ? 0
+          : parametersTree.Take(i).Sum();
+
+        var result = isDynamic.Skip(skip).Take(parametersTree[i]).ToArray();
+        return result;
       }
 
+      genericsProcessed = token.GenericArguments
+        .Select((x, i) => resolver.Resolve(x, generics, isDynamic: GetGenerics(i)))
+        .ToReadOnlyCollection();
+
       // Return the reformatted documentation name
-      return $"{name}{{{string.Join(",", token.GenericArguments.Select((x, i) => ResolveGenerics(resolver.Resolve(x, generics, isDynamic: GetGenerics(i)).DocumentationName, generics)))}}}";
+      return
+        $"{name}{{{string.Join(",", genericsProcessed.Select((x, i) => ResolveGenerics(x.DocumentationName, generics)))}}}";
     }
   }
 }

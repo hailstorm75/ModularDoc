@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using dnlib.DotNet;
 using MarkDoc.Helpers;
+using MarkDoc.Members.Dnlib.Properties;
 
 namespace MarkDoc.Members.Dnlib.Helpers
 {
@@ -120,6 +121,16 @@ namespace MarkDoc.Members.Dnlib.Helpers
       foreach (var parameter in type.GenericParameters)
         // and return it
         yield return parameter;
+    }
+
+    public static GenericInstSig GetGenericSignature(this TypeSig type)
+    {
+      // If the source is not generic..
+      if (!(type is GenericInstSig token))
+        // throw an exception
+        throw new NotSupportedException(Resources.notGeneric);
+
+      return token;
     }
   }
 }

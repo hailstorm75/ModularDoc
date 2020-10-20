@@ -165,10 +165,10 @@ namespace MarkDoc.Members.Dnlib
       // Get the type name
       var key = GetKey(signature);
 
-      // If the type was cached..
-      if (m_resCache.TryGetValue(key, out var resolution))
-        // return the cached type
-        return resolution!;
+      //// If the type was cached..
+      //if (m_resCache.TryGetValue(key, out var resolution))
+      //  // return the cached type
+      //  return resolution!;
 
       // If the type is by reference..
       if (isByRef)
