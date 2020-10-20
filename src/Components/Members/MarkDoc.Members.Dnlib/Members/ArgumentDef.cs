@@ -55,7 +55,7 @@ namespace MarkDoc.Members.Dnlib.Members
     #region Methods
 
     private IResType ResolveType(Parameter source, IReadOnlyDictionary<string, string> generics)
-      => Resolver.Resolve(source.Type, generics, isDynamic: source.ParamDef.GetDynamicTypes(source.Type));
+      => Resolver.Resolve(source.Type, generics, dynamicsMap: source.ParamDef.GetDynamicTypes(source.Type));
 
     private static ArgumentType ResolveKeyword(Parameter source)
     {

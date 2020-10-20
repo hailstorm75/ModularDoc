@@ -109,8 +109,8 @@ namespace UT.Members.ResolvedTypeTests
       var a = types?.First()
         .Generics
         .Select(x => x.DisplayName)
-        .Concat(types?.Last().Generics.OfType<IResGeneric>().First().Generics.Select(x => x.DisplayName) ?? Enumerable.Empty<string>())
-        .Concat(new[] { types?.Last().Generics.OfType<IResGeneric>().Last().Generics.Last().DisplayName })
+        .Concat(types.Last().Generics.OfType<IResGeneric>().First().Generics.Select(x => x.DisplayName) ?? Enumerable.Empty<string>())
+        .Concat(new[] { types.Last().Generics.Last().DisplayName })
         .ToArray();
 
       Assert.Equal(generics, a);

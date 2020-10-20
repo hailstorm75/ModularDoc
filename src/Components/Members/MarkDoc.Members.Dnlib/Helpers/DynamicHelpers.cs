@@ -11,49 +11,83 @@ namespace MarkDoc.Members.Dnlib.Helpers
 
     public static IReadOnlyList<bool>? GetDynamicTypes(this ParamDef parameter, TypeSig source)
     {
+      // If the parameter is null..
       if (parameter is null)
+        // throw an exception
         throw new ArgumentNullException(nameof(parameter));
 
-      var dynamicAttribute = parameter.CustomAttributes.FirstOrDefault(attribute => attribute.TypeFullName.Equals(DYNAMIC_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
+      // Find the custom attribute indicating the dynamic type(s)
+      var dynamicAttribute = parameter.CustomAttributes
+        .FirstOrDefault(attribute => attribute.TypeFullName.Equals(DYNAMIC_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
+      // Extract metadata from the custom attribute
       var arguments = (List<CAArgument>?)dynamicAttribute?.ConstructorArguments.FirstOrDefault().Value;
-      var argument = arguments?.Select(x => x.Value).Skip(1).Cast<bool>().ToArray();
+      // Extract the dynamic type indicators map
+      var argument = arguments?
+        // Select the indicator
+        .Select(x => x.Value)
+        // Skip the first one to remove the dummy indicator for the start of a generic type
+        .Skip(1)
+        // Cast the indicator values to booleans
+        .Cast<bool>()
+        // Materialize the collection
+        .ToArray();
 
-      if (argument is null
-          && dynamicAttribute != null)
-        return new[] { true };
-
-      if (argument is null)
+      // If there is no attribute..
+      if (dynamicAttribute is null)
+        // there are no dynamic types
         return null;
 
-      var index = 0;
-      bool[] map = new bool[argument.Length];
+      // If there is no attribute metadata; however, there is an attribute..
+      if (argument is null)
+        // there is a single dynamic type
+        return new[] { true };
 
-      void Process(GenericInstSig token)
+      var index = 0;
+      var map = new bool[argument.Length];
+
+      void GenerateDummyMap(GenericInstSig token)
       {
+        // For each generic arguments branch..
         foreach (var genericArgument in token.GenericArguments)
-          if (map[index++] = genericArgument.IsGenericInstanceType)
-            Process(genericArgument.GetGenericSignature());
+        {
+          // Set the map with the node type - dummy = true = indicator for generic type
+          map[index++] = genericArgument.IsGenericInstanceType;
+          // If the node has children..
+          if (genericArgument.IsGenericInstanceType)
+            // Process its branches
+            GenerateDummyMap(genericArgument.GetGenericSignature());
+        }
       }
 
-      Process(source.GetGenericSignature());
+      GenerateDummyMap(source.GetGenericSignature());
 
       return argument
-        .Select((x, i) => (x, i))
+        // Pair indicators with their indices
+        .Select((value, i) => (value, i))
+        // Filter out the dummy indicators
         .Where(x => !map[x.i])
-        .Select(x => x.x).ToArray();
+        // Extract the value
+        .Select(x => x.value)
+        // Materialize the collection
+        .ToArray();
     }
 
-    public static int[] CountTypes(this GenericInstSig source)
+    /// <summary>
+    /// Counts the number of type arguments in each generic arguments branch
+    /// </summary>
+    /// <param name="source">Root source of generic arguments</param>
+    /// <returns>List of the sums of arguments for each generic arguments branch</returns>
+    public static IReadOnlyList<int> CountTypes(this GenericInstSig source)
     {
-      int GetTypes(TypeSig type)
-      {
-        if (!(type is GenericInstSig token))
-          return 1;
+      static int GetTypes(TypeSig type)
+        => type is GenericInstSig token
+          ? token.GenericArguments.Sum(GetTypes)
+          : 1;
 
-        return token.GenericArguments.Sum(GetTypes);
-      }
-
-      return source.GenericArguments.Select(GetTypes).ToArray();
+      return source.GenericArguments
+        .Select(GetTypes)
+        // Materialize the collection
+        .ToArray();
     }
   }
 }

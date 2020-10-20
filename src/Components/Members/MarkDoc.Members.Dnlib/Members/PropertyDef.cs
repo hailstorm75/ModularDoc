@@ -58,7 +58,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = source.Name;
       RawName = ResolveRawName(source);
       IsStatic = methods.First().IsStatic;
-      Type = Resolver.Resolve(ResolveType(source), generics, isDynamic: IsDynamic(source));
+      Type = Resolver.Resolve(ResolveType(source), generics, dynamicsMap: IsDynamic(source));
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);

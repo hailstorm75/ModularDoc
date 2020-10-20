@@ -68,7 +68,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="generics">List of known generics</param>
-    /// <param name="isByRef"></param>
+    /// <param name="isByRef">Indicates whether the type is by references</param>
     internal ResArray(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, bool isByRef = false)
     {
       // If the source is null..

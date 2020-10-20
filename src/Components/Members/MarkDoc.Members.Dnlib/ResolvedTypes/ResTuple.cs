@@ -32,11 +32,11 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="isValueTuple">Is the given tuple a value tuple</param>
-    /// <param name="isDynamic"></param>
-    /// <param name="isByRef"></param>
-    internal ResTuple(Resolver resolver, TypeSig source, bool isValueTuple, IReadOnlyList<bool>? isDynamic,
+    /// <param name="dynamicsMap">Map indicating what types are dynamic</param>
+    /// <param name="isByRef">Indicates whether the type is by references</param>
+    internal ResTuple(Resolver resolver, TypeSig source, bool isValueTuple, IReadOnlyList<bool>? dynamicsMap,
       bool isByRef = false)
-      : base(resolver, source, ResolveName(resolver, source, isValueTuple, isDynamic, out var fields), ResolveDocName(source), source.FullName, isByRef)
+      : base(resolver, source, ResolveName(resolver, source, isValueTuple, dynamicsMap, out var fields), ResolveDocName(source), source.FullName, isByRef)
     {
       IsValueTuple = isValueTuple;
       Fields = fields;
@@ -49,7 +49,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         // throw an exception
         throw new NotSupportedException(Resources.notTuple);
 
-      fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", resolver.Resolve(x, isDynamic: new[] { isDynamic?[i] ?? false }))).ToReadOnlyCollection();
+      fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", resolver.Resolve(x, dynamicsMap: new[] { isDynamic?[i] ?? false }))).ToReadOnlyCollection();
       return isValueTuple
         ? $"({string.Join(", ", fields.Select(field => $"{field.Item2.DisplayName} {field.Item1}"))})"
         : $"Tuple<{string.Join(",", fields.Select(field => field.Item2.DisplayName))}>";

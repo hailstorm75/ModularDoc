@@ -48,7 +48,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// </summary>
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
-    /// <param name="isByRef"></param>
+    /// <param name="isByRef">Indicates whether the type is by references</param>
     internal ResType(Resolver resolver, TypeSig source, bool isByRef = false)
       : this(resolver, source, ResolveName(source), ResolveDocName(source), source.FullName, isByRef) { }
 
@@ -60,7 +60,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="displayName">Type display name</param>
     /// <param name="docName">Type documentation name</param>
     /// <param name="rawName">Type raw name</param>
-    /// <param name="isByRef"></param>
+    /// <param name="isByRef">Indicates whether the type is by references</param>
     protected ResType(Resolver resolver, TypeSig source, string displayName, string docName, string rawName, bool isByRef)
     {
       // If the source is null..

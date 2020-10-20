@@ -131,7 +131,7 @@ namespace MarkDoc.Members.Dnlib.Members
     {
       if (source.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase))
         return null;
-      return Resolver.Resolve(source.ReturnType, isDynamic: source.ParamDefs.Count - Arguments.Count == 1 ? source.ParamDefs.First().GetDynamicTypes(source.ReturnType) : null, generics: source.ResolveMethodGenerics());
+      return Resolver.Resolve(source.ReturnType, dynamicsMap: source.ParamDefs.Count - Arguments.Count == 1 ? source.ParamDefs.First().GetDynamicTypes(source.ReturnType) : null, generics: source.ResolveMethodGenerics());
     }
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)
