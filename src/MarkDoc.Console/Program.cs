@@ -50,11 +50,11 @@ namespace MarkDoc.Console
 
     #region Fields
 
-    private const string OUTPUT = @"C:\Users\Denis\Desktop\MarkDoc";
+    private const string OUTPUT = @"";
 
     private static readonly IReadOnlyCollection<string> DLL_PATHS = new[]
     {
-      @"C:\Users\Denis\Source\Repos\homework\ClassLibrary1\ClassLibrary1\bin\Debug\netcoreapp3.1\ClassLibrary1.dll"
+      @""
     };
 
     private static readonly IReadOnlyCollection<string> XML_PATHS = DLL_PATHS.Select(x => Path.Join(Path.GetDirectoryName(x), Path.GetFileNameWithoutExtension(x) + ".xml")).ToArray();
