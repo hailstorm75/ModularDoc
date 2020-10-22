@@ -125,18 +125,19 @@ namespace MarkDoc.Members.Dnlib.Members
     }
 
     private static bool ResolveAsync(dnlib.DotNet.MethodDef source)
-      => source.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name.String.Equals(nameof(AsyncStateMachineAttribute), StringComparison.InvariantCulture)) != null;
+      => source.CustomAttributes.FirstOrDefault(x =>
+           x.AttributeType.Name.String.Equals(nameof(AsyncStateMachineAttribute), StringComparison.InvariantCulture))
+         != null;
 
     private IResType? ResolveReturn(dnlib.DotNet.MethodDef source)
-    {
-      if (source.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase))
-        return null;
-      return Resolver.Resolve(source.ReturnType, dynamicsMap: source.ParamDefs.Count - Arguments.Count == 1 ? source.ParamDefs.First().GetDynamicTypes(source.ReturnType) : null, generics: source.ResolveMethodGenerics());
-    }
+      => source.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
+        ? null
+        : Resolver.Resolve(source.ReturnType, source.ResolveMethodGenerics(), source.ParamDefs.Count - Arguments.Count == 1 ? source.ParamDefs.First() : null);
 
     private static MemberInheritance ResolveInheritance(dnlib.DotNet.MethodDef source)
     {
-      if (source.IsVirtual && (source.Attributes & MethodAttributes.NewSlot) == 0)
+      if (source.IsVirtual
+          && (source.Attributes & MethodAttributes.NewSlot) == 0)
         return MemberInheritance.Override;
       if (source.IsAbstract)
         return MemberInheritance.Abstract;
@@ -146,13 +147,15 @@ namespace MarkDoc.Members.Dnlib.Members
       return MemberInheritance.Normal;
     }
 
-    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(dnlib.DotNet.MethodDef source, Resolver resolver)
+    private static IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> ResolveGenerics(
+      dnlib.DotNet.MethodDef source, Resolver resolver)
     {
       IResType ResolveType(GenericParamConstraint x)
         => resolver.Resolve(x.Constraint.ToTypeSig());
 
       return source.HasGenericParameters
-        ? source.GenericParameters.ToDictionary(x => x.Name.String, param => param.GenericParamConstraints.Select(ResolveType).ToReadOnlyCollection())
+        ? source.GenericParameters.ToDictionary(x => x.Name.String,
+          param => param.GenericParamConstraints.Select(ResolveType).ToReadOnlyCollection())
         : new Dictionary<string, IReadOnlyCollection<IResType>>();
     }
 

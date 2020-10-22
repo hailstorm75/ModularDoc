@@ -84,7 +84,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
       genericsProcessed = genericType.GenericArguments
         // Process the generic arguments
-        .Select((x, i) => resolver.Resolve(x, generics, dynamicsMap: GetGenerics(i, dynamicsMap, parametersTree)))
+        .Select((x, i) => resolver.Resolve(x, generics, false, GetGenerics(i, dynamicsMap, parametersTree)))
         // Materialize the collection
         .ToReadOnlyCollection();
 

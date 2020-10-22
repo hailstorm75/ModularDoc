@@ -49,7 +49,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         // throw an exception
         throw new NotSupportedException(Resources.notTuple);
 
-      fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", resolver.Resolve(x, dynamicsMap: new[] { isDynamic?[i] ?? false }))).ToReadOnlyCollection();
+      fields = token.GenericArguments.Select((x, i) => ($"Item{i + 1}", resolver.Resolve(x, null, false))).ToReadOnlyCollection();
       return isValueTuple
         ? $"({string.Join(", ", fields.Select(field => $"{field.Item2.DisplayName} {field.Item1}"))})"
         : $"Tuple<{string.Join(",", fields.Select(field => field.Item2.DisplayName))}>";

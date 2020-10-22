@@ -76,7 +76,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private IResType? ResolveReturn(Resolver resolver, dnlib.DotNet.MethodDef method)
       => !method.ReturnType.TypeName.Equals("Void", StringComparison.InvariantCultureIgnoreCase)
-        ? resolver.Resolve(method.ReturnType, dynamicsMap: method.ParamDefs.Count - Arguments.Count == 1 ? method.ParamDefs.First().GetDynamicTypes(method.ReturnType) : null, generics: method.ResolveMethodGenerics())
+        ? resolver.Resolve(method.ReturnType, generics: method.ResolveMethodGenerics(), metadata: method.ParamDefs.Count - Arguments.Count == 1 ? method.ParamDefs.First() : null)
         : null;
 
     private static AccessorType ResolveAccessor(TypeDef type)

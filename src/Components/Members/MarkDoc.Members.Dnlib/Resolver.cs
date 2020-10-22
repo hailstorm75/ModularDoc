@@ -14,6 +14,7 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using System.Composition;
+using MarkDoc.Members.Dnlib.Helpers;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -108,18 +109,21 @@ namespace MarkDoc.Members.Dnlib
       m_groups.Add(group);
     }
 
-#pragma warning disable CA1822 // Mark members as static
+    internal IResType Resolve(TypeSig signature, IReadOnlyDictionary<string, string>? generics = null, ParamDef? metadata = null)
+      => Resolve(signature, generics, false, metadata?.GetDynamicTypes(signature), metadata?.GetValueTupleNames(signature));
+
     /// <summary>
     /// Resolves type to a <see cref="IResType"/>
     /// </summary>
-    /// <param name="source">Type to resolve</param>
+    /// <param name="signature">Type to resolve</param>
     /// <param name="generics">Dictionary of type generics</param>
     /// <param name="isByRef">Is the resolved type a reference type</param>
     /// <param name="dynamicsMap">Map indicating what types are dynamic</param>
+    /// <param name="tupleMap">Map of value tuple names</param>
     /// <returns>Resolved type</returns>
-    /// <exception cref="ArgumentNullException">If the <paramref name="source"/> argument is null</exception>
-    /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
-    internal IResType Resolve(object source, IReadOnlyDictionary<string, string>? generics = null, bool isByRef = false, IReadOnlyList<bool>? dynamicsMap = null)
+    /// <exception cref="ArgumentNullException">If the <paramref name="signature"/> argument is null</exception>
+    /// <exception cref="NotSupportedException">If the <paramref name="signature"/> is not a <see cref="TypeSig"/></exception>
+    internal IResType Resolve(TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap = null, IReadOnlyList<string>? tupleMap = null)
     {
       static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
       {
@@ -151,15 +155,10 @@ namespace MarkDoc.Members.Dnlib
       string GetKey(IFullName sig)
         => sig.FullName + (dynamicsMap is null ? string.Empty : $"${string.Join(string.Empty, dynamicsMap)}");
 
-      // If the source is null..
-      if (source is null)
+      // If the signature is null..
+      if (signature is null)
         // throw an exception
-        throw new ArgumentNullException(nameof(source));
-
-      // If the source is not a supported type..
-      if (!(source is TypeSig signature))
-        // throw an exception
-        throw new NotSupportedException(Resources.sourceNotTypeSignature);
+        throw new ArgumentNullException(nameof(signature));
 
       // Get the type name
       var key = GetKey(signature);
@@ -215,7 +214,6 @@ namespace MarkDoc.Members.Dnlib
       // Return the resolved type
       return result;
     }
-#pragma warning restore CA1822 // Mark members as static
 
     /// <summary>
     /// Links a <paramref name="type"/> instance to a <see name="IType"/> instance
@@ -234,12 +232,12 @@ namespace MarkDoc.Members.Dnlib
     /// <exception cref="NotSupportedException">If the <paramref name="source"/> is not a <see cref="TypeSig"/></exception>
     internal IType? FindReference(object source, IResType type)
     {
-      // If the source is null..
+      // If the signature is null..
       if (source is null)
         // throw an exception
         throw new ArgumentNullException(nameof(source));
 
-      // If the source is not a supported type..
+      // If the signature is not a supported type..
       if (!(source is TypeSig signature))
         // throw an exception
         throw new NotSupportedException(Resources.sourceNotTypeSignature);
@@ -373,7 +371,7 @@ namespace MarkDoc.Members.Dnlib
         if (source.IsInterface)
           return new InterfaceDef(resolver, source, null);
 
-        // The provided source is not supported
+        // The provided signature is not supported
         throw new NotSupportedException(Resources.subjectNotSupported);
       }
 

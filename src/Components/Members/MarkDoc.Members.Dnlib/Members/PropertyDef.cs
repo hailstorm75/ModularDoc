@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using dnlib.DotNet;
 using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Dnlib.Properties;
 using MarkDoc.Members.Enums;
@@ -58,7 +59,7 @@ namespace MarkDoc.Members.Dnlib.Members
       Name = source.Name;
       RawName = ResolveRawName(source);
       IsStatic = methods.First().IsStatic;
-      Type = Resolver.Resolve(ResolveType(source), generics, dynamicsMap: IsDynamic(source));
+      Type = Resolver.Resolve(ResolveType(source), generics, GetMetadata(source));
       Inheritance = ResolveInheritance(methods);
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
@@ -96,7 +97,7 @@ namespace MarkDoc.Members.Dnlib.Members
         .Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
     }
 
-    private static dnlib.DotNet.TypeSig ResolveType(dnlib.DotNet.PropertyDef source)
+    private static TypeSig ResolveType(dnlib.DotNet.PropertyDef source)
     {
       // If the property has a getter method..
       if (source.GetMethod != null)
@@ -111,19 +112,19 @@ namespace MarkDoc.Members.Dnlib.Members
       throw new NotSupportedException(Resources.notProperty);
     }
 
-    private static IReadOnlyList<bool>? IsDynamic(dnlib.DotNet.PropertyDef source)
+    private static ParamDef? GetMetadata(dnlib.DotNet.PropertyDef source)
     {
       // If the property has a getter method..
       if (source.GetMethod != null)
         // retrieve its return type
         return source.GetMethod.ParamDefs.Count != 0
-          ? source.GetMethod.ParamDefs.First().GetDynamicTypes(source.GetMethod.ReturnType)
+          ? source.GetMethod.ParamDefs.First()
           : null;
       // If the property has a setter method..
       if (source.SetMethod != null)
         // retrieve its input argument
         return source.SetMethod.Parameters.Count > 1
-          ? source.SetMethod.ParamDefs.First().GetDynamicTypes(source.SetMethod.Parameters.First().Type)
+          ? source.SetMethod.ParamDefs.First()
           : null;
 
       // Property type was not resolved, thus this is not a valid property
@@ -140,10 +141,10 @@ namespace MarkDoc.Members.Dnlib.Members
       // Map the property method accessor
       return method.Access switch
       {
-        dnlib.DotNet.MethodAttributes.Public => AccessorType.Public,
-        dnlib.DotNet.MethodAttributes.Family => AccessorType.Protected,
-        dnlib.DotNet.MethodAttributes.Assembly => AccessorType.Internal,
-        dnlib.DotNet.MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
+        MethodAttributes.Public => AccessorType.Public,
+        MethodAttributes.Family => AccessorType.Protected,
+        MethodAttributes.Assembly => AccessorType.Internal,
+        MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
         // Unresolved accessor
         _ => null
       };
@@ -183,7 +184,7 @@ namespace MarkDoc.Members.Dnlib.Members
       return (method.IsVirtual, method.IsAbstract) switch
       {
         (_, true) => MemberInheritance.Abstract,
-        (true, false) => (method.Attributes & dnlib.DotNet.MethodAttributes.NewSlot) == 0
+        (true, false) => (method.Attributes & MethodAttributes.NewSlot) == 0
           ? MemberInheritance.Override
           : MemberInheritance.Virtual,
         _ => MemberInheritance.Normal
