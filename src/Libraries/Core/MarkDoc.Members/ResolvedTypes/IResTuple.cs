@@ -11,7 +11,7 @@ namespace MarkDoc.Members.ResolvedTypes
     /// <summary>
     /// Tuple fields
     /// </summary>
-    IReadOnlyCollection<(string, IResType)> Fields { get; }
+    IReadOnlyCollection<(string name, IResType type)> Fields { get; }
     /// <summary>
     /// Determines whether the tuple is a value tuple
     /// </summary>

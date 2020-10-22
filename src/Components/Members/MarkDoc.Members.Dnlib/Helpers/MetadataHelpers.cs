@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using dnlib.DotNet;
-using MarkDoc.Helpers;
 
 namespace MarkDoc.Members.Dnlib.Helpers
 {
@@ -30,9 +29,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
       // Extract the dynamic type indicators map
       var argument = arguments?
         // Select the indicator
-        .Select(x => x.Value?.ToString())
-        // Cast the indicator values to booleans
-        .WhereNotNull()
+        .Select(x => x.Value?.ToString() ?? string.Empty)
         // Materialize the collection
         .ToArray();
 

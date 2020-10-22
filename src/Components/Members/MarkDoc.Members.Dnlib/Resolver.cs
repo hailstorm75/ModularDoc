@@ -166,7 +166,7 @@ namespace MarkDoc.Members.Dnlib
         // Generic instances and tuples
         var x when x is ElementType.GenericInst && IsGeneric(signature)
           => IsTuple(signature, out var valueTuple)
-            ? new ResTuple(this, signature, valueTuple, dynamicsMap, isByRef)
+            ? new ResTuple(this, signature, valueTuple, generics, dynamicsMap, tupleMap, isByRef)
             : new ResGeneric(this, signature, generics, dynamicsMap, isByRef) as IResType,
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics, isByRef),
