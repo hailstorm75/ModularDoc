@@ -37,7 +37,7 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
 
   let printDetailed (input: IType) tools =
     let sections =
-      // Define the section types to be included in the documnetation
+      // Define the section types to be included in the documentation
       seq [
         TypeSummary;
         TypeRemarks;

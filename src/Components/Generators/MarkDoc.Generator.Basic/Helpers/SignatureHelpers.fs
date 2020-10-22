@@ -76,6 +76,12 @@ module internal SignatureHelpers =
     // Ensure the string is lowercase
     |> StringConverters.toLower
 
+  let getIsReadonly (input: IMember) =
+    match input with
+    | :? IProperty as prop ->
+      if prop.IsReadOnly then " readonly" else ""
+    | _ -> ""
+  
   /// <summary>
   /// Gets the operator keyword from the given <paramref name="input"/> member
   /// </summary>

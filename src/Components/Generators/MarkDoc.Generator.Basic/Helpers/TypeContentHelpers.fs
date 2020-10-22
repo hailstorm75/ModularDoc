@@ -440,7 +440,8 @@ module TypeContentHelpers =
     let processProperty (_, property: IProperty) =
       let signature =
         SignatureHelpers.generateSignature "{0}{1}{2} {3} {4} {{ {5} }}" (seq [
-          SignatureHelpers.getAccessor;
+          SignatureHelpers.getAccessor
+          SignatureHelpers.getIsReadonly
           SignatureHelpers.getStatic;
           SignatureHelpers.getInheritance;
           SignatureHelpers.getReturn;
