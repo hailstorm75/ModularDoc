@@ -162,7 +162,7 @@ namespace MarkDoc.Members.Dnlib
       {
         // Arrays
         var x when x is ElementType.SZArray || x is ElementType.Array
-          => new ResArray(this, signature, generics, isByRef),
+          => new ResArray(this, signature, generics, dynamicsMap, tupleMap, isByRef),
         // Generic instances and tuples
         var x when x is ElementType.GenericInst && IsGeneric(signature)
           => IsTuple(signature, out var valueTuple)

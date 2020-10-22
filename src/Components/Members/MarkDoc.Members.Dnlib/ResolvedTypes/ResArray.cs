@@ -68,8 +68,10 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="generics">List of known generics</param>
+    /// <param name="dynamicsMap"></param>
+    /// <param name="tupleMap"></param>
     /// <param name="isByRef">Indicates whether the type is by references</param>
-    internal ResArray(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, bool isByRef = false)
+    internal ResArray(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap, bool isByRef = false)
     {
       // If the source is null..
       if (source is null)
@@ -86,7 +88,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       IsJagged = source.ElementType == ElementType.SZArray;
 
       var arrayType = ResolveArrayType(source, IsJagged);
-      ArrayType = Resolver.Resolve(arrayType, generics);
+      ArrayType = Resolver.Resolve(arrayType, generics, isByRef, dynamicsMap, tupleMap);
       Dimension = ResolveDimension(source, arrayType);
       Reference = new Lazy<IType?>(() => Resolver.FindReference(source, this), LazyThreadSafetyMode.PublicationOnly);
     }
