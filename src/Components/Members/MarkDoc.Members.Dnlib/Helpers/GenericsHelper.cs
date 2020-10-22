@@ -85,6 +85,27 @@ namespace MarkDoc.Members.Dnlib.Helpers
     }
 
     /// <summary>
+    /// Counts the number of type arguments in each generic arguments branch
+    /// </summary>
+    /// <param name="source">Root source of generic arguments</param>
+    /// <returns>List of the sums of arguments for each generic arguments branch</returns>
+    public static IReadOnlyList<int> CountTypes(this GenericInstSig source)
+    {
+      static int GetTypes(TypeSig type)
+        => type is GenericInstSig token
+          ? token.GenericArguments.Sum(GetTypes)
+          : 1;
+
+      if (source is null)
+        throw new ArgumentNullException(nameof(source));
+
+      return source.GenericArguments
+        .Select(GetTypes)
+        // Materialize the collection
+        .ToArray();
+    }
+
+    /// <summary>
     /// Resolves generics for given <paramref name="source"/>
     /// </summary>
     /// <param name="source">Type to process</param>

@@ -32,8 +32,11 @@ namespace MarkDoc.Members.Dnlib
     private const string ID = "D43E13A1-2A96-4D08-86EB-E05544100DB1";
     private const string NAME = "Dnlib Resolver";
 
-    private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> { "System", "Microsoft" };
-    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
+    private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> {"System", "Microsoft"};
+
+    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups =
+      new ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>>();
+
     private readonly ConcurrentDictionary<string, IResType> m_resCache = new ConcurrentDictionary<string, IResType>();
     private readonly Lazy<TrieNamespace> m_namespaces;
 
@@ -59,8 +62,10 @@ namespace MarkDoc.Members.Dnlib
           // Create a dictionary of types grouped by their namespaces
           .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
 
-      Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes, LazyThreadSafetyMode.PublicationOnly);
-      m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys), LazyThreadSafetyMode.PublicationOnly);
+      Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes,
+        LazyThreadSafetyMode.PublicationOnly);
+      m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys),
+        LazyThreadSafetyMode.PublicationOnly);
     }
 
     #region Methods
@@ -109,8 +114,10 @@ namespace MarkDoc.Members.Dnlib
       m_groups.Add(group);
     }
 
-    internal IResType Resolve(TypeSig signature, IReadOnlyDictionary<string, string>? generics = null, ParamDef? metadata = null)
-      => Resolve(signature, generics, false, metadata?.GetDynamicTypes(signature), metadata?.GetValueTupleNames(signature));
+    internal IResType Resolve(TypeSig signature,
+      IReadOnlyDictionary<string, string>? generics = null,
+      ParamDef? metadata = null)
+      => Resolve(signature, generics, false, metadata?.GetDynamicTypes(signature), metadata?.GetValueTupleNames());
 
     /// <summary>
     /// Resolves type to a <see cref="IResType"/>
@@ -123,35 +130,12 @@ namespace MarkDoc.Members.Dnlib
     /// <returns>Resolved type</returns>
     /// <exception cref="ArgumentNullException">If the <paramref name="signature"/> argument is null</exception>
     /// <exception cref="NotSupportedException">If the <paramref name="signature"/> is not a <see cref="TypeSig"/></exception>
-    internal IResType Resolve(TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap = null, IReadOnlyList<string>? tupleMap = null)
+    internal IResType Resolve(TypeSig signature,
+      IReadOnlyDictionary<string, string>? generics,
+      bool isByRef,
+      IReadOnlyList<bool>? dynamicsMap = null,
+      IReadOnlyList<string>? tupleMap = null)
     {
-      static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
-      {
-        isValueTuple = default;
-        // Extract the type name
-        var name = source.ReflectionName.Remove(source.ReflectionName.IndexOf('`', StringComparison.InvariantCulture));
-
-        // If the type is a tuple..
-        if (name.Equals(nameof(Tuple), StringComparison.InvariantCulture))
-          // return true
-          return true;
-
-        // If the type is a ValueTuple..
-        if (name.Equals(nameof(ValueTuple), StringComparison.InvariantCulture))
-        {
-          // note that it is a value tuple
-          isValueTuple = true;
-          // return true
-          return true;
-        }
-
-        // The type is not a tuple
-        return false;
-      }
-
-      static bool IsGeneric(dnlib.DotNet.IType source)
-        => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
-
       string GetKey(IFullName sig)
         => sig.FullName + (dynamicsMap is null ? string.Empty : $"${string.Join(string.Empty, dynamicsMap)}");
 
@@ -203,7 +187,8 @@ namespace MarkDoc.Members.Dnlib
         ElementType.ByRef => Resolve(signature, generics, true, dynamicsMap),
         ElementType.CModReqd => Resolve(signature, generics, true, dynamicsMap),
         // Decimal type
-        var x when (x is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
+        var x when (x is ElementType.ValueType
+                    && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
           => new ResValueType(this, signature, "decimal", isByRef),
         _ => new ResType(this, signature),
       };
@@ -213,6 +198,42 @@ namespace MarkDoc.Members.Dnlib
 
       // Return the resolved type
       return result;
+    }
+
+    private static bool IsGeneric(dnlib.DotNet.IType source)
+      => source.ReflectionName.Contains('`', StringComparison.InvariantCulture);
+
+    private static bool IsTuple(dnlib.DotNet.IType source, out bool isValueTuple)
+    {
+      isValueTuple = default;
+      // Extract the type name
+      var name = source.ReflectionName.Remove(source.ReflectionName.IndexOf('`', StringComparison.InvariantCulture));
+
+      // If the type is a tuple..
+      if (name.Equals(nameof(Tuple), StringComparison.InvariantCulture))
+        // return true
+        return true;
+
+      // If the type is a ValueTuple..
+      if (name.Equals(nameof(ValueTuple), StringComparison.InvariantCulture))
+      {
+        // note that it is a value tuple
+        isValueTuple = true;
+        // return true
+        return true;
+      }
+
+      // The type is not a tuple
+      return false;
+    }
+
+    private static TypeDef? ResolveParent(object? parent)
+    {
+      if (parent is null) return null;
+      if (!(parent is TypeDef type))
+        throw new InvalidOperationException($"Argument type of {parent} is not {nameof(TypeDef)}.");
+
+      return type;
     }
 
     /// <summary>
@@ -243,14 +264,16 @@ namespace MarkDoc.Members.Dnlib
         throw new NotSupportedException(Resources.sourceNotTypeSignature);
 
       // If there are no resolved types..
-      if (!Types.IsValueCreated || Types.Value.Count == 0)
+      if (!Types.IsValueCreated
+          || Types.Value.Count == 0)
         // throw an exception
         throw new InvalidOperationException(Resources.linkBeforeAllResolvedForbidden);
 
       // If a type is matched by namespace..
       if (Types.Value.ContainsKey(signature.Namespace))
         // find and return a matching link by name
-        return Types.Value[signature.Namespace].FirstOrDefault(x => x.RawName.Equals(type.RawName, StringComparison.InvariantCulture));
+        return Types.Value[signature.Namespace]
+          .FirstOrDefault(x => x.RawName.Equals(type.RawName, StringComparison.InvariantCulture));
 
       // Return null if link is not resolved
       return null;
@@ -266,16 +289,6 @@ namespace MarkDoc.Members.Dnlib
     /// <exception cref="NotSupportedException">If the <paramref name="subject"/> is not a <see cref="TypeSig"/></exception>
     internal IType ResolveType(object subject, object? parent = null)
     {
-      static TypeDef? ResolveParent(object? parent)
-      {
-        if (parent is null)
-          return null;
-        if (!(parent is TypeDef type))
-          throw new InvalidOperationException($"Argument type of {parent} is not {nameof(TypeDef)}.");
-
-        return type;
-      }
-
       // If the subject is null..
       if (subject is null)
         // throw an exception
@@ -313,7 +326,8 @@ namespace MarkDoc.Members.Dnlib
         throw new ArgumentNullException(nameof(fullname));
 
       // If there are no resolved types..
-      if (!Types.IsValueCreated || Types.Value.Count == 0)
+      if (!Types.IsValueCreated
+          || Types.Value.Count == 0)
         // throw an exception
         throw new InvalidOperationException(Resources.linkBeforeAllResolvedForbidden);
 
@@ -322,8 +336,8 @@ namespace MarkDoc.Members.Dnlib
 
       // If either the namespace is unknown..
       if (!m_namespaces.Value.TryFindKnownNamespace(fullname, out var ns)
-      // or the type does not exist..
-      || !Types.Value.TryGetValue(ns, out var types))
+          // or the type does not exist..
+          || !Types.Value.TryGetValue(ns, out var types))
         // Return false
         return false;
 
