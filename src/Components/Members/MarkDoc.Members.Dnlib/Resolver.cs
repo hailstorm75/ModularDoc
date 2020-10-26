@@ -184,11 +184,10 @@ namespace MarkDoc.Members.Dnlib
         ElementType.U8 => new ResValueType(this, signature, "ulong", isByRef),
         ElementType.R4 => new ResValueType(this, signature, "float", isByRef),
         ElementType.R8 => new ResValueType(this, signature, "double", isByRef),
-        ElementType.ByRef => Resolve(signature, generics, true, dynamicsMap),
-        ElementType.CModReqd => Resolve(signature, generics, true, dynamicsMap),
+        ElementType.ByRef => Resolve(signature, generics, true, dynamicsMap, tupleMap),
+        ElementType.CModReqd => Resolve(signature, generics, true, dynamicsMap, tupleMap),
         // Decimal type
-        var x when (x is ElementType.ValueType
-                    && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
+        var x when (x is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
           => new ResValueType(this, signature, "decimal", isByRef),
         _ => new ResType(this, signature),
       };
