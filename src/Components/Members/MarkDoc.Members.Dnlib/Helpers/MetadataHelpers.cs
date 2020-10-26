@@ -24,19 +24,20 @@ namespace MarkDoc.Members.Dnlib.Helpers
       // Find the custom attribute indicating the dynamic type(s)
       var customAttribute = parameter.CustomAttributes
         .FirstOrDefault(attribute => attribute.TypeFullName.Equals(TUPLES_NAMES_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
+
+      // If there is no attribute..
+      if (customAttribute is null)
+        // there are no dynamic types
+        return null;
+
       // Extract metadata from the custom attribute
-      var arguments = (List<CAArgument>?)customAttribute?.ConstructorArguments.FirstOrDefault().Value;
+      var arguments = (List<CAArgument>?) customAttribute.ConstructorArguments.FirstOrDefault().Value;
       // Extract the dynamic type indicators map
       var argument = arguments?
         // Select the indicator
         .Select(x => x.Value?.ToString() ?? string.Empty)
         // Materialize the collection
         .ToArray();
-
-      // If there is no attribute..
-      if (customAttribute is null)
-        // there are no dynamic types
-        return null;
 
       return argument;
     }
@@ -51,8 +52,14 @@ namespace MarkDoc.Members.Dnlib.Helpers
       // Find the custom attribute indicating the dynamic type(s)
       var dynamicAttribute = parameter.CustomAttributes
         .FirstOrDefault(attribute => attribute.TypeFullName.Equals(DYNAMIC_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
+
+      // If there is no attribute..
+      if (dynamicAttribute is null)
+        // there are no dynamic types
+        return null;
+
       // Extract metadata from the custom attribute
-      var arguments = (List<CAArgument>?)dynamicAttribute?.ConstructorArguments.FirstOrDefault().Value;
+      var arguments = (List<CAArgument>?) dynamicAttribute.ConstructorArguments.FirstOrDefault().Value;
       // Extract the dynamic type indicators map
       var argument = arguments?
         // Select the indicator
@@ -64,15 +71,10 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // Materialize the collection
         .ToArray();
 
-      // If there is no attribute..
-      if (dynamicAttribute is null)
-        // there are no dynamic types
-        return null;
-
       // If there is no attribute metadata; however, there is an attribute..
       if (argument is null)
         // there is a single dynamic type
-        return new[] { true };
+        return new[] {true};
 
       var index = 0;
       var map = new bool[argument.Length];

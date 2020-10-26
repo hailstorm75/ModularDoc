@@ -263,16 +263,16 @@ namespace UT.Members.Data
     public const string METHOD_RES_OBJR_MIXA = "MethodObjRetMixArgs";
     public const string METHOD_RES_DYNR_MIXA = "MethodDynRetMixArgs";
 
+    public const string RES_TYPES_CLASS = "ClassResTypes";
+    public const string METHOD_RES_NESTED_GENERIC_RET = "MethodNestedGenericRet";
+    public const string METHOD_RES_NESTED_RET = "MethodNestedRet";
+
     public const string RES_TYPE_ARRAY_CLASS = "ClassResTypesArrays";
     public const string METHOD_RES_1D_ARRAY = "Method1DArray";
     public const string METHOD_RES_2D_ARRAY = "Method2DArray";
     public const string METHOD_RES_3D_ARRAY = "Method3DArray";
     public const string METHOD_RES_2D_JAGGED_ARRAY = "Method2DJaggedArray";
     public const string METHOD_RES_3D_JAGGED_ARRAY = "Method3DJaggedArray";
-
-    #endregion
-
-    #region ResGenericTypes
 
     public const string RES_TYPE_GENERIC_CLASS = "ClassRestTypeGenerics";
     public const string METHOD_RES_GEN_ENUMSTRING = "MethodGenericString";
@@ -287,7 +287,7 @@ namespace UT.Members.Data
     public const string METHOD_RES_GEN_COMPLEX_F = "MethodGenericComplexFReturn";
     public const string METHOD_RES_GEN_COMPLEX_G = "MethodGenericComplexGReturn";
     public const string METHOD_RES_GEN_COMPLEX_H = "MethodGenericComplexHReturn";
-
+    
     #endregion
   }
 }

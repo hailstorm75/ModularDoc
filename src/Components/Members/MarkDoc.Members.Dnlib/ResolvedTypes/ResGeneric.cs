@@ -77,7 +77,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       // Find type generics
       var index = source.FullName.IndexOf('`', StringComparison.InvariantCultureIgnoreCase);
       // Remove the generics
-      var name = source.FullName.Remove(index);
+      var name = source.FullName.Remove(index).Replace('/', '.');
 
       // Count the number of types in each generic arguments branch
       var parametersTree = genericType.CountTypes();

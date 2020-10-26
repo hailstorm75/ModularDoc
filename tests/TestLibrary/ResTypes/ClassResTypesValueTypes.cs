@@ -1,6 +1,8 @@
 ﻿// ReSharper disable All
 
+using System.IO;
 using System.Runtime.Remoting;
+using TestLibrary.Classes;
 
 #pragma warning disable 8618
 
