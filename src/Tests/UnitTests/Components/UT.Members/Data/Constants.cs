@@ -287,7 +287,18 @@ namespace UT.Members.Data
     public const string METHOD_RES_GEN_COMPLEX_F = "MethodGenericComplexFReturn";
     public const string METHOD_RES_GEN_COMPLEX_G = "MethodGenericComplexGReturn";
     public const string METHOD_RES_GEN_COMPLEX_H = "MethodGenericComplexHReturn";
-    
+
+    public const string RES_TYPE_TUPLE_CLASS = "ClassResTuples";
+    public const string METHOD_RES_TUPLE_ONE = "MethodOneTuple";
+    public const string METHOD_RES_TUPLE_TWO = "MethodTwoTuple";
+    public const string METHOD_RES_TUPLE_THREE = "MethodThreeTuple";
+    public const string METHOD_RES_TUPLE_FOUR = "MethodFourTuple";
+    public const string METHOD_RES_VALUE_TUPLE_TWO = "MethodTwoValueTuple";
+    public const string METHOD_RES_VALUE_TUPLE_THREE = "MethodThreeValueTuple";
+    public const string METHOD_RES_VALUE_TUPLE_FOUR = "MethodFourValueTuple";
+    public const string METHOD_RES_VALUE_TUPLE_COMPLEX = "MethodComplexValueTuple";
+    public const string METHOD_RES_TUPLE_COMPLEX = "MethodComplexTuple";
+
     #endregion
   }
 }

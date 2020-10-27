@@ -168,6 +168,7 @@ namespace MarkDoc.Members.Dnlib
           => IsTuple(signature, out var valueTuple)
             ? new ResTuple(this, signature, valueTuple, generics, dynamicsMap, tupleMap, isByRef)
             : new ResGeneric(this, signature, generics, dynamicsMap, isByRef) as IResType,
+        // Generic parameter types such as T in MyMethod<T>
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics, isByRef),
         ElementType.Boolean => new ResValueType(this, signature, "bool", isByRef),
