@@ -54,7 +54,8 @@ namespace MarkDoc.Members.Dnlib.Helpers
     /// <param name="source">Property to process</param>
     /// <param name="methods">Property methods</param>
     /// <returns>Resolved pairs for generic display names and raw names</returns>
-    public static IReadOnlyDictionary<string, string> ResolvePropertyGenerics(this PropertyDef source, IReadOnlyCollection<MethodDef> methods)
+    public static IReadOnlyDictionary<string, string> ResolvePropertyGenerics(this PropertyDef source,
+      IReadOnlyCollection<MethodDef> methods)
     {
       // If the source is null..
       if (source is null)
@@ -65,7 +66,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // Distinct by name
         .DistinctBy(x => x.Name)
         // Pair generics with their display name and raw name
-        .Select((x, i) => new { Type = x.Name, Name = $"`{i}" });
+        .Select((x, i) => new {Type = x.Name, Name = $"`{i}"});
 
       var thisArgs = methods
         // Retrieve the generic parameters
@@ -75,7 +76,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // Distinct by name
         .DistinctBy(x => x.Name)
         // Pair generics with their display name and raw name
-        .Select((x, i) => new { Type = x.Name, Name = $"``{i}" });
+        .Select((x, i) => new {Type = x.Name, Name = $"``{i}"});
 
       return outerArgs
         // Join collections
@@ -123,7 +124,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // Distinct generics by their name
         .DistinctBy(x => x.Name)
         // Pair generics with their display name and raw name
-        .Select((x, i) => new { Type = x.Name, Name = $"`{i}" })
+        .Select((x, i) => new {Type = x.Name, Name = $"`{i}"})
         // Convert the result to a dictionary
         .ToDictionary(x => x.Type.String, x => x.Name);
     }
@@ -143,6 +144,22 @@ namespace MarkDoc.Members.Dnlib.Helpers
       foreach (var parameter in type.GenericParameters)
         // and return it
         yield return parameter;
+    }
+
+    public static TypeSig ExtractIfArray(this TypeSig type, ref int arrayDepth)
+    {
+      if (type is null)
+        throw new ArgumentNullException(nameof(type));
+
+      switch (type.ElementType)
+      {
+        case ElementType.Array:
+        case ElementType.SZArray:
+          ++arrayDepth;
+          return type.Next.ExtractIfArray(ref arrayDepth);
+        default:
+          return type;
+      }
     }
 
     public static GenericInstSig GetGenericSignature(this TypeSig type)

@@ -23,7 +23,8 @@ namespace MarkDoc.Members.Dnlib.Helpers
 
       // Find the custom attribute indicating the dynamic type(s)
       var customAttribute = parameter.CustomAttributes
-        .FirstOrDefault(attribute => attribute.TypeFullName.Equals(TUPLES_NAMES_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
+        .FirstOrDefault(attribute =>
+          attribute.TypeFullName.Equals(TUPLES_NAMES_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
 
       // If there is no attribute..
       if (customAttribute is null)
@@ -51,7 +52,8 @@ namespace MarkDoc.Members.Dnlib.Helpers
 
       // Find the custom attribute indicating the dynamic type(s)
       var dynamicAttribute = parameter.CustomAttributes
-        .FirstOrDefault(attribute => attribute.TypeFullName.Equals(DYNAMIC_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
+        .FirstOrDefault(attribute =>
+          attribute.TypeFullName.Equals(DYNAMIC_ATTRIBUTE_NAME, StringComparison.InvariantCultureIgnoreCase));
 
       // If there is no attribute..
       if (dynamicAttribute is null)
@@ -79,13 +81,21 @@ namespace MarkDoc.Members.Dnlib.Helpers
       var index = 0;
       var map = new bool[argument.Length];
 
-      void GenerateDummyMap(GenericInstSig token)
+      void GenerateDummyMap(TypeSig token)
       {
+        var arraySkip = 0;
+        // Extract the generic type from the array and count the array depth
+        var genericSource = token.ExtractIfArray(ref arraySkip).GetGenericSignature();
+        // For every level deep the type was inside the array..
+        for (var i = 0; i < arraySkip; ++i)
+          // set the map to ignore given position
+          map![index++] = true;
+
         // For each generic arguments branch..
-        foreach (var genericArgument in token.GenericArguments)
+        foreach (var genericArgument in genericSource.GenericArguments)
         {
-          // Set the map with the node type - dummy = true = indicator for generic type
-          map[index++] = genericArgument.IsGenericInstanceType;
+          // Set whether the position is to be ignored based on whether the type is generic or not
+          map![index++] = genericArgument.IsGenericInstanceType;
           // If the node has children..
           if (genericArgument.IsGenericInstanceType)
             // Process its branches
@@ -93,7 +103,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
         }
       }
 
-      GenerateDummyMap(source.GetGenericSignature());
+      GenerateDummyMap(source);
 
       return argument
         // Pair indicators with their indices
