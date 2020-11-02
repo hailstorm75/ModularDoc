@@ -273,7 +273,19 @@ namespace UT.Members.Data
     public const string METHOD_RES_3D_ARRAY = "Method3DArray";
     public const string METHOD_RES_2D_JAGGED_ARRAY = "Method2DJaggedArray";
     public const string METHOD_RES_3D_JAGGED_ARRAY = "Method3DJaggedArray";
-
+    public const string METHOD_RES_GEN_ARR_ENUMSTRING = "MethodGenericStringArr";
+    public const string METHOD_RES_GEN_ARR_DYNOBJ = "MethodGenericDynObjArr";
+    public const string METHOD_RES_GEN_ARR_OBJDYN = "MethodGenericObjDynArr";
+    public const string METHOD_RES_GEN_ARR_INTSTRBOOL = "MethodGenericIntStringBoolArr";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_A = "MethodGenericComplexArrAReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_B = "MethodGenericComplexArrBReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_C = "MethodGenericComplexArrCReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_D = "MethodGenericComplexArrDReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_E = "MethodGenericComplexArrEReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_F = "MethodGenericComplexArrFReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_G = "MethodGenericComplexArrGReturn";
+    public const string METHOD_RES_GEN_ARR_COMPLEX_H = "MethodGenericComplexArrHReturn";
+    
     public const string RES_TYPE_GENERIC_CLASS = "ClassRestTypeGenerics";
     public const string METHOD_RES_GEN_ENUMSTRING = "MethodGenericString";
     public const string METHOD_RES_GEN_DYNOBJ = "MethodGenericDynObj";

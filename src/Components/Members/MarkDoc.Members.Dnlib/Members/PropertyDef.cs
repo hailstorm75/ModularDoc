@@ -67,9 +67,11 @@ namespace MarkDoc.Members.Dnlib.Members
       IsReadOnly = (source.GetMethod?
                      .CustomAttributes
                      .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false)
-                && (source.GetMethod?
-                     .CustomAttributes
-                     .All(x => !x.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false);
+                   && (source.GetMethod?
+                       .CustomAttributes
+                       // ReSharper disable once ConstantNullCoalescingCondition
+                       .All(x => !x.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false
+                   );
     }
 
     #region Methods
@@ -89,7 +91,8 @@ namespace MarkDoc.Members.Dnlib.Members
 
     private static string ResolveRawName(dnlib.DotNet.PropertyDef source)
     {
-      var rawName = source.FullName.AsSpan(source.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
+      var rawName =
+        source.FullName.AsSpan(source.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
       rawName = rawName.Slice(0, rawName.LastIndexOf("(", StringComparison.InvariantCultureIgnoreCase));
 
       return rawName.ToString()
