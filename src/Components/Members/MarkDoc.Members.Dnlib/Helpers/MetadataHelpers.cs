@@ -94,8 +94,26 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // For each generic arguments branch..
         foreach (var genericArgument in genericSource.GenericArguments)
         {
-          // Set whether the position is to be ignored based on whether the type is generic or not
-          map![index++] = genericArgument.IsGenericInstanceType;
+          // If the type is generic..
+          if (genericArgument.IsGenericInstanceType)
+            // ignore the identifier
+            map![index++] = true;
+          // Otherwise if the type is an array..
+          else if (genericArgument.ElementType == ElementType.Array || genericArgument.ElementType == ElementType.SZArray)
+          {
+            arraySkip = 0;
+            // Extract the generic type from the array and count the array depth
+            genericArgument.ExtractIfArray(ref arraySkip);
+            // For every level deep the type was inside the array..
+            for (var i = 0; i < arraySkip; ++i)
+              // set the map to ignore given position
+              map![index++] = true;
+          }
+          // Otherwise..
+          else
+            // increase the index of the identifier position
+            index++;
+
           // If the node has children..
           if (genericArgument.IsGenericInstanceType)
             // Process its branches
