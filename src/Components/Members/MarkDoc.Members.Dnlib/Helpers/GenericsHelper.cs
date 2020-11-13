@@ -94,17 +94,26 @@ namespace MarkDoc.Members.Dnlib.Helpers
     public static IReadOnlyList<int> CountTypes(this GenericInstSig source, bool onlyChildren = false)
     {
       int GetTypes(TypeSig type)
-        => type is GenericInstSig token
-          ? token.GenericArguments.Sum(GetTypes) + (onlyChildren ? 1 : 0)
-          : 1;
+      {
+        var unused = 0;
+        return type switch
+        {
+          GenericInstSig token => token.GenericArguments.Sum(GetTypes) + (onlyChildren ? 1 : 0),
+          SZArraySig token => GetTypes(token.ExtractIfArray(ref unused)),
+          ArraySig token => GetTypes(token.ExtractIfArray(ref unused)),
+          _ => 1
+        };
+      }
 
       if (source is null)
         throw new ArgumentNullException(nameof(source));
 
-      return source.GenericArguments
+      var result = source.GenericArguments
         .Select(x => GetTypes(x) - (onlyChildren ? 1 : 0))
         // Materialize the collection
         .ToArray();
+
+      return result;
     }
 
     /// <summary>

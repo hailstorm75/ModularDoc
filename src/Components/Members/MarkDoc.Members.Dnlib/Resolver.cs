@@ -172,7 +172,7 @@ namespace MarkDoc.Members.Dnlib
         var x when (x is ElementType.Var || x is ElementType.MVar)
           => new ResGenericValueType(this, signature, generics, isByRef),
         ElementType.Boolean => new ResValueType(this, signature, "bool", isByRef),
-        ElementType.Object => new ResValueType(this, signature, dynamicsMap?[0] ?? false ? "dynamic" : "object", isByRef),
+        ElementType.Object => new ResValueType(this, signature, dynamicsMap?.FirstOrDefault() ?? false ? "dynamic" : "object", isByRef),
         ElementType.String => new ResValueType(this, signature, "string", isByRef),
         ElementType.Char => new ResValueType(this, signature, "char", isByRef),
         ElementType.I1 => new ResValueType(this, signature, "sbyte", isByRef),

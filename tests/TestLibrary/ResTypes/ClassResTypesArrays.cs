@@ -29,6 +29,9 @@ namespace TestLibrary.ResTypes
     public (object a1, (dynamic a2, object b2) b1, dynamic c1)[] MethodComplexValueArrTuple() => default!;
     public Tuple<object, Tuple<dynamic, object>, dynamic>[] MethodComplexArrTuple() => default!;
 
+    public (object[] a1, (dynamic[] a2, object[] b2)[] b1, dynamic[] c1)[] MethodComplexValueArrTuple2() => default!;
+    public Tuple<object[], Tuple<dynamic[], object[]>[], dynamic[]>[] MethodComplexArrTuple2() => default!;
+
     #endregion
 
     #region Generics

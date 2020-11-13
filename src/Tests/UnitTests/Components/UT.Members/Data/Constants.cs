@@ -310,6 +310,10 @@ namespace UT.Members.Data
     public const string METHOD_RES_VALUE_TUPLE_FOUR = "MethodFourValueTuple";
     public const string METHOD_RES_VALUE_TUPLE_COMPLEX = "MethodComplexValueTuple";
     public const string METHOD_RES_TUPLE_COMPLEX = "MethodComplexTuple";
+    public const string METHOD_RES_ARR_VALUE_TUPLE_COMPLEX = "MethodComplexValueArrTuple";
+    public const string METHOD_RES_ARR_TUPLE_COMPLEX = "MethodComplexArrTuple";
+    public const string METHOD_RES_ARR_VALUE_TUPLE_COMPLEX2 = "MethodComplexValueArrTuple2";
+    public const string METHOD_RES_ARR_TUPLE_COMPLEX2 = "MethodComplexArrTuple2";
 
     #endregion
   }

@@ -103,11 +103,22 @@ namespace MarkDoc.Members.Dnlib.Helpers
           {
             arraySkip = 0;
             // Extract the generic type from the array and count the array depth
-            genericArgument.ExtractIfArray(ref arraySkip);
+            var extracted = genericArgument.ExtractIfArray(ref arraySkip);
             // For every level deep the type was inside the array..
             for (var i = 0; i < arraySkip; ++i)
               // set the map to ignore given position
               map![index++] = true;
+
+            // If the node has children..
+            if (extracted.IsGenericInstanceType)
+            {
+              // ignore the identifier
+              map![index++] = true;
+              // Process its branches
+              GenerateDummyMap(extracted.GetGenericSignature());
+            }
+            else
+              index++;
           }
           // Otherwise..
           else

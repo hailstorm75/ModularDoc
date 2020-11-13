@@ -17,11 +17,11 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_1D_ARRAY, null! },
-        new object[] { Constants.METHOD_RES_2D_ARRAY, null! },
-        new object[] { Constants.METHOD_RES_3D_ARRAY, null! },
-        new object[] { Constants.METHOD_RES_2D_JAGGED_ARRAY, null! },
-        new object[] { Constants.METHOD_RES_3D_JAGGED_ARRAY, null! },
+        new object[] {Constants.METHOD_RES_1D_ARRAY, null!},
+        new object[] {Constants.METHOD_RES_2D_ARRAY, null!},
+        new object[] {Constants.METHOD_RES_3D_ARRAY, null!},
+        new object[] {Constants.METHOD_RES_2D_JAGGED_ARRAY, null!},
+        new object[] {Constants.METHOD_RES_3D_JAGGED_ARRAY, null!},
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -39,11 +39,11 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_1D_ARRAY, false },
-        new object[] { Constants.METHOD_RES_2D_ARRAY, false },
-        new object[] { Constants.METHOD_RES_3D_ARRAY, false },
-        new object[] { Constants.METHOD_RES_2D_JAGGED_ARRAY, false },
-        new object[] { Constants.METHOD_RES_3D_JAGGED_ARRAY, false },
+        new object[] {Constants.METHOD_RES_1D_ARRAY, false},
+        new object[] {Constants.METHOD_RES_2D_ARRAY, false},
+        new object[] {Constants.METHOD_RES_3D_ARRAY, false},
+        new object[] {Constants.METHOD_RES_2D_JAGGED_ARRAY, false},
+        new object[] {Constants.METHOD_RES_3D_JAGGED_ARRAY, false},
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -61,11 +61,11 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_1D_ARRAY, "string" },
-        new object[] { Constants.METHOD_RES_2D_ARRAY, "string" },
-        new object[] { Constants.METHOD_RES_3D_ARRAY, "string" },
-        new object[] { Constants.METHOD_RES_2D_JAGGED_ARRAY, "string" },
-        new object[] { Constants.METHOD_RES_3D_JAGGED_ARRAY, "string" }
+        new object[] {Constants.METHOD_RES_1D_ARRAY, "string"},
+        new object[] {Constants.METHOD_RES_2D_ARRAY, "string"},
+        new object[] {Constants.METHOD_RES_3D_ARRAY, "string"},
+        new object[] {Constants.METHOD_RES_2D_JAGGED_ARRAY, "string"},
+        new object[] {Constants.METHOD_RES_3D_JAGGED_ARRAY, "string"}
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -83,11 +83,11 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_1D_ARRAY, "System.String[]" },
-        new object[] { Constants.METHOD_RES_2D_ARRAY, "System.String[,]" },
-        new object[] { Constants.METHOD_RES_3D_ARRAY, "System.String[,,]" },
-        new object[] { Constants.METHOD_RES_2D_JAGGED_ARRAY, "System.String[][]" },
-        new object[] { Constants.METHOD_RES_3D_JAGGED_ARRAY, "System.String[][][]" }
+        new object[] {Constants.METHOD_RES_1D_ARRAY, "System.String[]"},
+        new object[] {Constants.METHOD_RES_2D_ARRAY, "System.String[,]"},
+        new object[] {Constants.METHOD_RES_3D_ARRAY, "System.String[,,]"},
+        new object[] {Constants.METHOD_RES_2D_JAGGED_ARRAY, "System.String[][]"},
+        new object[] {Constants.METHOD_RES_3D_JAGGED_ARRAY, "System.String[][][]"}
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -105,11 +105,32 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_1D_ARRAY, "System.String[]" },
-        new object[] { Constants.METHOD_RES_2D_ARRAY, "System.String[0...,0...]" },
-        new object[] { Constants.METHOD_RES_3D_ARRAY, "System.String[0...,0...,0...]" },
-        new object[] { Constants.METHOD_RES_2D_JAGGED_ARRAY, "System.String[][]" },
-        new object[] { Constants.METHOD_RES_3D_JAGGED_ARRAY, "System.String[][][]" }
+        new object[] {Constants.METHOD_RES_1D_ARRAY, "System.String[]"},
+        new object[] {Constants.METHOD_RES_2D_ARRAY, "System.String[0...,0...]"},
+        new object[] {Constants.METHOD_RES_3D_ARRAY, "System.String[0...,0...,0...]"},
+        new object[] {Constants.METHOD_RES_2D_JAGGED_ARRAY, "System.String[][]"},
+        new object[] {Constants.METHOD_RES_3D_JAGGED_ARRAY, "System.String[][][]"}
+      };
+
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
+      {
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
+
+        var parent = resolver.FindMemberParent<IClass>(Constants.RES_TYPES_NAMESPACE, Constants.RES_TYPE_ARRAY_CLASS);
+        object?[] typeWrapper = {parent};
+        foreach (object?[] entry in data)
+          yield return typeWrapper.Concat(entry).ToArray()!;
+      }
+    }
+
+    public static IEnumerable<object[]> GetResTupleArrayReturnComplexGenericArgumentsData()
+    {
+      var data = new object[]
+      {
+        new object[] {Constants.METHOD_RES_ARR_TUPLE_COMPLEX, new[] {"object", "dynamic", "object", "dynamic"}},
+        new object[] {Constants.METHOD_RES_ARR_VALUE_TUPLE_COMPLEX, new[] {"object", "dynamic", "object", "dynamic"}},
+        new object[] {Constants.METHOD_RES_ARR_TUPLE_COMPLEX2, new[] {"object", "dynamic", "object", "dynamic"}},
+        new object[] {Constants.METHOD_RES_ARR_VALUE_TUPLE_COMPLEX2, new[] {"object", "dynamic", "object", "dynamic"}},
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -127,10 +148,10 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_GEN_ARR_ENUMSTRING, new [] { "string" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_DYNOBJ, new [] { "dynamic", "object" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_OBJDYN, new [] { "object", "dynamic" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_INTSTRBOOL, new [] { "int", "string", "bool" } }
+        new object[] {Constants.METHOD_RES_GEN_ARR_ENUMSTRING, new[] {"string"}},
+        new object[] {Constants.METHOD_RES_GEN_ARR_DYNOBJ, new[] {"dynamic", "object"}},
+        new object[] {Constants.METHOD_RES_GEN_ARR_OBJDYN, new[] {"object", "dynamic"}},
+        new object[] {Constants.METHOD_RES_GEN_ARR_INTSTRBOOL, new[] {"int", "string", "bool"}}
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -148,14 +169,21 @@ namespace UT.Members.ResolvedTypeTests
     {
       var data = new object[]
       {
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_A, new [] { "object", "object", "object", "object", "dynamic" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_B, new [] { "dynamic", "dynamic", "dynamic", "dynamic", "dynamic" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_C, new [] { "object", "dynamic", "object", "dynamic", "dynamic" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_D, new [] { "dynamic", "object", "dynamic", "object", "dynamic" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_E, new [] { "object", "object", "object", "object", "object" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_F, new [] { "dynamic", "dynamic", "dynamic", "dynamic", "object" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_G, new [] { "object", "dynamic", "object", "dynamic", "object" } },
-        new object[] { Constants.METHOD_RES_GEN_ARR_COMPLEX_H, new [] { "dynamic", "object", "dynamic", "object", "object" } },
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_A, new[] {"object", "object", "object", "object", "dynamic"}},
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_B, new[] {"dynamic", "dynamic", "dynamic", "dynamic", "dynamic"}},
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_C, new[] {"object", "dynamic", "object", "dynamic", "dynamic"}},
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_D, new[] {"dynamic", "object", "dynamic", "object", "dynamic"}},
+        new object[] {Constants.METHOD_RES_GEN_ARR_COMPLEX_E, new[] {"object", "object", "object", "object", "object"}},
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_F, new[] {"dynamic", "dynamic", "dynamic", "dynamic", "object"}},
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_G, new[] {"object", "dynamic", "object", "dynamic", "object"}},
+        new object[]
+          {Constants.METHOD_RES_GEN_ARR_COMPLEX_H, new[] {"dynamic", "object", "dynamic", "object", "object"}},
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())
@@ -167,6 +195,36 @@ namespace UT.Members.ResolvedTypeTests
         foreach (object?[] entry in data)
           yield return typeWrapper.Concat(entry).ToArray()!;
       }
+    }
+
+    private static IEnumerable<string> ExtractGenericTypeNames(IEnumerable<IResType> types)
+    {
+      var actualGenerics = new LinkedList<string>();
+      void Process(IResType resType)
+      {
+        switch (resType)
+        {
+          case IResArray arr:
+            Process(arr.ArrayType);
+            break;
+          case IResTuple tup:
+            foreach (var field in tup.Fields.Select(x => x.type))
+              Process(field!);
+            break;
+          case IResGeneric gen:
+            foreach (var field in gen.Generics)
+              Process(field!);
+            break;
+          default:
+            actualGenerics!.AddLast(resType!.DisplayName);
+            break;
+        }
+      }
+
+      foreach (var type in types)
+        Process(type);
+
+      return actualGenerics;
     }
 
     private static IMethod? GetMethod(IInterface type, string name, bool throwIfNull = false)
@@ -237,13 +295,28 @@ namespace UT.Members.ResolvedTypeTests
 
     [Theory]
     [Trait("Category", nameof(IResArray))]
+    [Trait("Category", nameof(IResTuple))]
+    [MemberData(nameof(GetResTupleArrayReturnComplexGenericArgumentsData))]
+    public void ValidateTupleArrayComplexReturnGenericParameters(IInterface type, string name, string[] generics)
+    {
+      var member = GetMethod(type, name, true);
+      var returns = (IResArray) member?.Returns!;
+      var wrappedType = (IResTuple) returns!.ArrayType!;
+
+      var actualGenerics = ExtractGenericTypeNames(wrappedType.Fields.Select(x => x.type));
+
+      Assert.Equal(generics, actualGenerics);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IResArray))]
     [Trait("Category", nameof(IResGeneric))]
     [MemberData(nameof(GetResGenericArrayReturnGenericArgumentsData))]
     public void ValidateGenericArrayNames(IInterface type, string name, string[] generics)
     {
       var member = GetMethod(type, name, true);
-      var returns = (IResArray)member?.Returns!;
-      var wrappedType = (IResGeneric)returns!.ArrayType!;
+      var returns = (IResArray) member?.Returns!;
+      var wrappedType = (IResGeneric) returns!.ArrayType!;
 
       Assert.Equal(generics, wrappedType!.Generics.Select(x => x.DisplayName));
     }
@@ -255,19 +328,12 @@ namespace UT.Members.ResolvedTypeTests
     public void ValidateGenericsArrayComplexReturnGenericParameters(IInterface type, string name, string[] generics)
     {
       var member = GetMethod(type, name, true);
-      var returns = (IResArray)member?.Returns!;
-      var wrappedType = (IResGeneric)returns!.ArrayType!;
+      var returns = (IResArray) member?.Returns!;
+      var wrappedType = (IResGeneric) returns!.ArrayType!;
 
-      var types = wrappedType?.Generics.OfType<IResGeneric>().ToArray();
-      var a = types?.First()
-        .Generics
-        .Select(x => x.DisplayName)
-        .Concat(types.Last().Generics.OfType<IResGeneric>().First().Generics.Select(x => x.DisplayName))
-        .Concat(new[] { types.Last().Generics.Last().DisplayName })
-        .ToArray();
+      var actualGenerics = ExtractGenericTypeNames(wrappedType.Generics.OfType<IResGeneric>());
 
-      Assert.Equal(generics, a);
-
+      Assert.Equal(generics, actualGenerics);
     }
   }
 }

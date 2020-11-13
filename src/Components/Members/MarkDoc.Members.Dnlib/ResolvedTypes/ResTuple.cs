@@ -64,13 +64,17 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       // Cast the source to a generic type
       var genericType = source.GetGenericSignature();
       var childrenCount = genericType.CountTypes(true);
-      var topNames = tupleMap?.Take(Math.Abs(childrenCount.Count - tupleMap.Count)).ToArray();
+      var topNames = tupleMap?.Take(childrenCount.Count).ToArray();
       var children = tupleMap?.Skip(childrenCount.Count).ToArray() ?? Enumerable.Empty<string>();
-      var childrenNames = new List<string[]>(childrenCount
-        .Select((t, j) => children
-          .Skip(j == 0 ? 0 : childrenCount.Take(j).Sum())
-          .Take(t)
-          .ToArray()));
+      var childrenNames = childrenCount
+        .Select((x, i) => children
+          // Skip the previously selected names
+          .Skip(childrenCount.Take(i).Sum())
+          // Take the children node names
+          .Take(x)
+          // Materialize the collection
+          .ToArray()
+        ).ToArray();
 
       static IReadOnlyList<bool>? GetGenerics(int i, IEnumerable<bool>? map, IReadOnlyList<int> tree)
       {
@@ -96,12 +100,12 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       }
 
       IReadOnlyList<string>? GetTupleNames(int i)
-        => topNames is null
+        => topNames is null || topNames.Length == 0
           ? null
           : childrenNames![i];
 
       fields = token.GenericArguments
-        .Select((x, i) => (isValueTuple && tupleMap != null
+        .Select((x, i) => (isValueTuple && tupleMap != null && tupleMap.Count != 0
             ? tupleMap[i]
             : $"Item{i + 1}",
           resolver.Resolve(x, generics, false, GetGenerics(i, dynamicsMap, genericType.CountTypes()), GetTupleNames(i))))
