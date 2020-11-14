@@ -59,7 +59,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationTests", "Applica
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{DFC3A90F-146C-4D40-B2D1-130B007063E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UT.Members", "Tests\UnitTests\Components\UT.Members\UT.Members.csproj", "{28682CC5-A142-422D-AFE5-E22D26C866C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UT.Members", "Tests\UnitTests\Components\UT.Members\UT.Members.csproj", "{28682CC5-A142-422D-AFE5-E22D26C866C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UT.Documentation", "Tests\UnitTests\Components\UT.Documentation\UT.Documentation.csproj", "{6EF35B63-D581-40C2-ACD1-F9C522E3B996}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,10 @@ Global
 		{28682CC5-A142-422D-AFE5-E22D26C866C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28682CC5-A142-422D-AFE5-E22D26C866C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28682CC5-A142-422D-AFE5-E22D26C866C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF35B63-D581-40C2-ACD1-F9C522E3B996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF35B63-D581-40C2-ACD1-F9C522E3B996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF35B63-D581-40C2-ACD1-F9C522E3B996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF35B63-D581-40C2-ACD1-F9C522E3B996}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +163,7 @@ Global
 		{FBA962E0-313E-4752-BAD5-E5E7223AA3A3} = {CE769081-BFA5-405D-B63A-B60E2B91638D}
 		{DFC3A90F-146C-4D40-B2D1-130B007063E2} = {53B8BF49-2ED1-40DF-974F-71A8AEA9D997}
 		{28682CC5-A142-422D-AFE5-E22D26C866C6} = {DFC3A90F-146C-4D40-B2D1-130B007063E2}
+		{6EF35B63-D581-40C2-ACD1-F9C522E3B996} = {DFC3A90F-146C-4D40-B2D1-130B007063E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42D5A311-9CA5-468F-9811-B2FBB27315D9}
