@@ -19,6 +19,8 @@ namespace UT.Members.ResolvedTypeTests
       {
         new object[] { Constants.METHOD_RES_NESTED_GENERIC_RET, "TestLibrary.Classes.ClassParent.NestedGenericClass{System.Int32,System.IO.StreamReader}" },
         new object[] { Constants.METHOD_RES_NESTED_RET, "TestLibrary.Classes.ClassParent.NestedClassPublic" },
+        new object[] { Constants.METHOD_RES_NESTED_GENERIC_VALUE_TYPES_RET, "TestLibrary.Classes.ClassParent.NestedGenericClass{`0,`1}" },
+        new object[] { Constants.METHOD_RES_NESTED_GENERIC_PARENT_RET, "TestLibrary.ResTypes.ClassResTypes.NestedResTypesGeneric{`0}.NestedNestedResTypesGeneric" },
       };
 
       foreach (var resolver in new ResolversProvider().WhereNotNull())

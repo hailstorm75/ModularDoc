@@ -266,6 +266,8 @@ namespace UT.Members.Data
     public const string RES_TYPES_CLASS = "ClassResTypes";
     public const string METHOD_RES_NESTED_GENERIC_RET = "MethodNestedGenericRet";
     public const string METHOD_RES_NESTED_RET = "MethodNestedRet";
+    public const string METHOD_RES_NESTED_GENERIC_VALUE_TYPES_RET = "MethodNestedGenericOwnValueTypes";
+    public const string METHOD_RES_NESTED_GENERIC_PARENT_RET = "MethodNestedGenericParent";
 
     public const string RES_TYPE_ARRAY_CLASS = "ClassResTypesArrays";
     public const string METHOD_RES_1D_ARRAY = "Method1DArray";
@@ -286,7 +288,7 @@ namespace UT.Members.Data
     public const string METHOD_RES_GEN_ARR_COMPLEX_G = "MethodGenericComplexArrGReturn";
     public const string METHOD_RES_GEN_ARR_COMPLEX_H = "MethodGenericComplexArrHReturn";
     
-    public const string RES_TYPE_GENERIC_CLASS = "ClassRestTypeGenerics";
+    public const string RES_TYPE_GENERIC_CLASS = "ClassResTypeGenerics";
     public const string METHOD_RES_GEN_ENUMSTRING = "MethodGenericString";
     public const string METHOD_RES_GEN_DYNOBJ = "MethodGenericDynObj";
     public const string METHOD_RES_GEN_OBJDYN = "MethodGenericObjDyn";
@@ -314,6 +316,11 @@ namespace UT.Members.Data
     public const string METHOD_RES_ARR_TUPLE_COMPLEX = "MethodComplexArrTuple";
     public const string METHOD_RES_ARR_VALUE_TUPLE_COMPLEX2 = "MethodComplexValueArrTuple2";
     public const string METHOD_RES_ARR_TUPLE_COMPLEX2 = "MethodComplexArrTuple2";
+
+    public const string RES_TYPE_GENERIC_VALUE_TYPE_CLASS = "ClassResGenericValueTypes";
+    public const string METHOD_RES_GENERIC_VALUE_TYPES = "MethodGenericValueTypes";
+    public const string METHOD_RES_GENERIC_OWN_VALUE_TYPES = "MethodGenericOwnValueTypes";
+    public const string METHOD_RES_GENERIC_MIXED_VALUE_TYPES = "MethodGenericMixedValueTypes";
 
     #endregion
   }

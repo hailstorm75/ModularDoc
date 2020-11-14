@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TestLibrary.ResTypes
 {
-  public class ClassRestTypeGenerics
+  public class ClassResTypeGenerics
   {
     public IEnumerable<string> MethodGenericString() => Enumerable.Empty<string>();
     public IReadOnlyDictionary<object, dynamic> MethodGenericObjDyn() => new Dictionary<object, dynamic>();
