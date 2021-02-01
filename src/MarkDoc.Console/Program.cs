@@ -85,7 +85,7 @@ namespace MarkDoc.Console
       var docResolver = container.Resolve<IDocResolver>();
 
       var tasks = XML_PATHS
-        .Select(docResolver.Resolve)
+        .Select(docResolver.ResolveAsync)
         .Concat(new[] { Task.Run(() => Parallel.ForEach(DLL_PATHS, resolver.Resolve)) });
 
       await Task.WhenAll(tasks).ConfigureAwait(false);

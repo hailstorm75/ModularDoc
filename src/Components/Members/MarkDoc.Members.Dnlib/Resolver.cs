@@ -13,7 +13,6 @@ using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
-using System.Composition;
 using MarkDoc.Members.Dnlib.Helpers;
 
 namespace MarkDoc.Members.Dnlib
@@ -21,9 +20,6 @@ namespace MarkDoc.Members.Dnlib
   /// <summary>
   /// Resolves assembly types using Dnlib library reflection
   /// </summary>
-  [Export(typeof(IResolver)),
-   ExportMetadata(nameof(IComponentMetadata.Id), ID),
-   ExportMetadata(nameof(IComponentMetadata.Name), NAME)]
   public class Resolver
     : IResolver
   {

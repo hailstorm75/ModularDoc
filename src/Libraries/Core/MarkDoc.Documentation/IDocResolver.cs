@@ -12,7 +12,7 @@ namespace MarkDoc.Documentation
     /// Resolve xml documentation on given <paramref name="path"/>
     /// </summary>
     /// <param name="path">Path to documentation</param>
-    Task Resolve(string path);
+    Task ResolveAsync(string path);
 
     /// <summary>
     /// Tries to find a given <paramref name="type"/>

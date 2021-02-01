@@ -40,7 +40,7 @@ namespace MarkDoc.Documentation.Xml
     #region Methods
 
     /// <inheritdoc />
-    public async Task Resolve(string path)
+    public async Task ResolveAsync(string path)
     {
       void CacheType(string key, XElement element)
       {
