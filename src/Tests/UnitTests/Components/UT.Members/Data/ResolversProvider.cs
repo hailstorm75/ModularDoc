@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
-using MarkDoc.Helpers;
 using MarkDoc.Members;
 
 namespace UT.Members.Data

@@ -25,9 +25,6 @@ namespace MarkDoc.Members.Dnlib
   {
     #region Fields
 
-    private const string ID = "D43E13A1-2A96-4D08-86EB-E05544100DB1";
-    private const string NAME = "Dnlib Resolver";
-
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> {"System", "Microsoft"};
 
     private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups =
@@ -346,45 +343,6 @@ namespace MarkDoc.Members.Dnlib
 
     private IEnumerable<IType> ResolveTypes(TypeDef subject)
     {
-      // Processes nested types of a given type
-      static IEnumerable<IType> IterateNested(IInterface type)
-      {
-        // If there are no nested types..
-        if (!type.NestedTypes.Any())
-          // exit
-          yield break;
-
-        // For each nested type..
-        foreach (var nested in type.NestedTypes)
-        {
-          // Return the type
-          yield return nested;
-          // If the nested type can't have its own nested types..
-          if (!(nested is IInterface nestedType))
-            // continue to the next nested type
-            continue;
-
-          // Otherwise for nested types within the given nested type..
-          foreach (var nestedNested in IterateNested(nestedType))
-            // return them
-            yield return nestedNested;
-        }
-      }
-
-      // Returns types which can have nested types
-      static IInterface GetTypeWithNested(Resolver resolver, TypeDef source)
-      {
-        if (source.IsValueType)
-          return new StructDef(resolver, source, null);
-        if (source.IsClass)
-          return new ClassDef(resolver, source, null);
-        if (source.IsInterface)
-          return new InterfaceDef(resolver, source, null);
-
-        // The provided signature is not supported
-        throw new NotSupportedException(Resources.subjectNotSupported);
-      }
-
       // If the subject is an enum..
       if (subject.IsEnum)
       {
@@ -402,6 +360,40 @@ namespace MarkDoc.Members.Dnlib
       foreach (var item in IterateNested(type))
         // return them
         yield return item;
+    }
+
+    private static IInterface GetTypeWithNested(Resolver resolver, TypeDef source)
+    {
+      if (source.IsValueType) return new StructDef(resolver, source, null);
+      if (source.IsClass) return new ClassDef(resolver, source, null);
+      if (source.IsInterface) return new InterfaceDef(resolver, source, null);
+
+      // The provided signature is not supported
+      throw new NotSupportedException(Resources.subjectNotSupported);
+    }
+
+    private static IEnumerable<IType> IterateNested(IInterface type)
+    {
+      // If there are no nested types..
+      if (!type.NestedTypes.Any())
+        // exit
+        yield break;
+
+      // For each nested type..
+      foreach (var nested in type.NestedTypes)
+      {
+        // Return the type
+        yield return nested;
+        // If the nested type can't have its own nested types..
+        if (!(nested is IInterface nestedType))
+          // continue to the next nested type
+          continue;
+
+        // Otherwise for nested types within the given nested type..
+        foreach (var nestedNested in IterateNested(nestedType))
+          // return them
+          yield return nestedNested;
+      }
     }
 
     #endregion

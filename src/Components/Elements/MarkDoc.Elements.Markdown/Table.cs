@@ -87,6 +87,12 @@ namespace MarkDoc.Elements.Markdown
         yield return $" {DEL_HORIZONTAL}{DEL_HORIZONTAL}{DEL_HORIZONTAL} {DEL_VERTICAL}";
 
       // For every row..
+      foreach (var p in ProcessContentRows())
+        yield return p;
+    }
+
+    private IEnumerable<string> ProcessContentRows()
+    {
       foreach (var row in Content)
       {
         // break to a new line
@@ -112,15 +118,15 @@ namespace MarkDoc.Elements.Markdown
         }
 
         // if there are more headings than there are row items..
-        if (Headings.Count > colCount)
-          // for every missing row item for a heading..
-          for (var i = 0; i < Headings.Count - colCount; i++)
-          {
-            // print an empty row item
-            yield return "   ";
-            // finish the row item with a vertical line
-            yield return DEL_VERTICAL;
-          }
+        if (Headings.Count <= colCount)
+          continue;
+        for (var i = 0; i < Headings.Count - colCount; i++)
+        {
+          // print an empty row item
+          yield return "   ";
+          // finish the row item with a vertical line
+          yield return DEL_VERTICAL;
+        }
       }
 
       // print a line break

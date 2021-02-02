@@ -62,10 +62,16 @@ namespace MarkDoc.Elements.Markdown
         yield return Environment.NewLine;
       }
 
+      // For every element in the content
+      foreach (var p in ProcessListElements(indent))
+        yield return p;
+    }
+
+    private IEnumerable<string> ProcessListElements(int indent)
+    {
       // Initialize the start index for the first list element
       var index = 0;
 
-      // For every element in the content
       foreach (var item in Content)
       {
         // If the element is a list..
@@ -82,18 +88,10 @@ namespace MarkDoc.Elements.Markdown
 
         // Print out the indentation
         yield return $"{new string(' ', indent * 2 - 1)}";
-        // Depending on the type of this list..
-        switch (Type)
-        {
-          // either print the element with an index
-          case ListType.Numbered:
-            yield return $"{++index}. ";
-            break;
-          // or print with a dot
-          case ListType.Dotted:
-            yield return "- ";
-            break;
-        }
+        if (Type == ListType.Numbered)
+          yield return $"{++index}. ";
+        else if (Type == ListType.Dotted)
+          yield return "- ";
 
         // For every part of the element..
         foreach (var line in item.Print())

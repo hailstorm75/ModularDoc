@@ -78,8 +78,23 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // there is a single dynamic type
         return new[] {true};
 
+      var map = GenerateDummyMap(argument.Length, source);
+
+      return argument
+        // Pair indicators with their indices
+        .Select((value, i) => (value, i))
+        // Filter out the dummy indicators
+        .Where(x => !map[x.i])
+        // Extract the value
+        .Select(x => x.value)
+        // Materialize the collection
+        .ToArray();
+    }
+
+    private static IReadOnlyList<bool> GenerateDummyMap(int argumentsLength, TypeSig source)
+    {
       var index = 0;
-      var map = new bool[argument.Length];
+      var map = new bool[argumentsLength];
 
       void GenerateDummyMap(TypeSig token)
       {
@@ -134,15 +149,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
 
       GenerateDummyMap(source);
 
-      return argument
-        // Pair indicators with their indices
-        .Select((value, i) => (value, i))
-        // Filter out the dummy indicators
-        .Where(x => !map[x.i])
-        // Extract the value
-        .Select(x => x.value)
-        // Materialize the collection
-        .ToArray();
+      return map;
     }
   }
 }
