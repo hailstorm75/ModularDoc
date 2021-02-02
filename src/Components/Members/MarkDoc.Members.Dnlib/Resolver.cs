@@ -23,8 +23,11 @@ namespace MarkDoc.Members.Dnlib
   public class Resolver
     : IResolver
   {
+    private delegate IResType ResTypeInitializer(Resolver resolver, TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap);
+
     #region Fields
 
+    private static readonly IReadOnlyDictionary<ElementType, ResTypeInitializer> ELEMENT_RES_TYPES;
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new HashSet<string> {"System", "Microsoft"};
 
     private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups =
@@ -41,6 +44,8 @@ namespace MarkDoc.Members.Dnlib
     public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
 
     #endregion
+
+    #region Constructors
 
     /// <summary>
     /// Default constructor
@@ -60,6 +65,105 @@ namespace MarkDoc.Members.Dnlib
       m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys),
         LazyThreadSafetyMode.PublicationOnly);
     }
+
+    static Resolver()
+    {
+      ELEMENT_RES_TYPES = new Dictionary<ElementType, ResTypeInitializer>
+      {
+        {
+          ElementType.SZArray,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResArray(resolver, signature, generics, dynamicsMap, tupleMap, isByRef)
+        },
+        {
+          ElementType.Array,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResArray(resolver, signature, generics, dynamicsMap, tupleMap, isByRef)
+        },
+        {
+          ElementType.Var,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResGenericValueType(resolver, signature, generics, isByRef)
+        },
+        {
+          ElementType.MVar,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResGenericValueType(resolver, signature, generics, isByRef)
+        },
+        {
+          ElementType.Boolean,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "bool", isByRef)
+        },
+        {
+          ElementType.Object,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, dynamicsMap?.FirstOrDefault() ?? false ? "dynamic" : "object", isByRef)
+        },
+        {
+          ElementType.String,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "string", isByRef)
+        },
+        {
+          ElementType.Char,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "char", isByRef)
+        },
+        {
+          ElementType.I1,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "sbyte", isByRef)
+        },
+        {
+          ElementType.U1,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "byte", isByRef)
+        },
+        {
+          ElementType.I2,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "short", isByRef)
+        },
+        {
+          ElementType.U2,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "ushort", isByRef)
+        },
+        {
+          ElementType.I4,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "int", isByRef)
+        },
+        {
+          ElementType.U4,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "uint", isByRef)
+        },
+        {
+          ElementType.I8,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "long", isByRef)
+        },
+        {
+          ElementType.U8,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "ulong", isByRef)
+        },
+        {
+          ElementType.R4,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "float", isByRef)
+        },
+        {
+          ElementType.R8,
+          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+            => new ResValueType(resolver, signature, "double", isByRef)
+        },
+      };
+    }
+
+    #endregion
 
     #region Methods
 
@@ -151,46 +255,30 @@ namespace MarkDoc.Members.Dnlib
         signature = signature.Next;
 
       // Resolve the type based on what it is
-      var result = signature.ElementType switch
-      {
-        // Arrays
-        var x when x is ElementType.SZArray || x is ElementType.Array
-          => new ResArray(this, signature, generics, dynamicsMap, tupleMap, isByRef),
-        // Generic instances and tuples
-        var x when x is ElementType.GenericInst && IsGeneric(signature)
-          => IsTuple(signature, out var valueTuple)
-            ? new ResTuple(this, signature, valueTuple, generics, dynamicsMap, tupleMap, isByRef)
-            : new ResGeneric(this, signature, generics, dynamicsMap, isByRef) as IResType,
-        // Generic parameter types such as T in MyMethod<T>
-        var x when (x is ElementType.Var || x is ElementType.MVar)
-          => new ResGenericValueType(this, signature, generics, isByRef),
-        ElementType.Boolean => new ResValueType(this, signature, "bool", isByRef),
-        ElementType.Object => new ResValueType(this, signature, dynamicsMap?.FirstOrDefault() ?? false ? "dynamic" : "object", isByRef),
-        ElementType.String => new ResValueType(this, signature, "string", isByRef),
-        ElementType.Char => new ResValueType(this, signature, "char", isByRef),
-        ElementType.I1 => new ResValueType(this, signature, "sbyte", isByRef),
-        ElementType.U1 => new ResValueType(this, signature, "byte", isByRef),
-        ElementType.I2 => new ResValueType(this, signature, "short", isByRef),
-        ElementType.U2 => new ResValueType(this, signature, "ushort", isByRef),
-        ElementType.I4 => new ResValueType(this, signature, "int", isByRef),
-        ElementType.U4 => new ResValueType(this, signature, "uint", isByRef),
-        ElementType.I8 => new ResValueType(this, signature, "long", isByRef),
-        ElementType.U8 => new ResValueType(this, signature, "ulong", isByRef),
-        ElementType.R4 => new ResValueType(this, signature, "float", isByRef),
-        ElementType.R8 => new ResValueType(this, signature, "double", isByRef),
-        ElementType.ByRef => Resolve(signature, generics, true, dynamicsMap, tupleMap),
-        ElementType.CModReqd => Resolve(signature, generics, true, dynamicsMap, tupleMap),
-        // Decimal type
-        var x when (x is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
-          => new ResValueType(this, signature, "decimal", isByRef),
-        _ => new ResType(this, signature),
-      };
+      var result = ProcessElementByType(signature, generics, isByRef, dynamicsMap, tupleMap);
 
       // Cache the resolved type
       m_resCache.AddOrUpdate(key, result, (x, y) => result);
 
       // Return the resolved type
       return result;
+    }
+
+    private IResType ProcessElementByType(TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap)
+    {
+      if (ELEMENT_RES_TYPES.TryGetValue(signature.ElementType, out var resType))
+        return resType!(this, signature, generics, isByRef, dynamicsMap, tupleMap);
+
+      if (signature.ElementType is ElementType.GenericInst && IsGeneric(signature))
+        return IsTuple(signature, out var valueTuple)
+          ? new ResTuple(this, signature, valueTuple, generics, dynamicsMap, tupleMap, isByRef)
+          : new ResGeneric(this, signature, generics, dynamicsMap, isByRef) as IResType;
+      if (signature.ElementType is ElementType.ByRef || signature.ElementType is ElementType.CModReqd)
+        return Resolve(signature, generics, true, dynamicsMap, tupleMap);
+      if (signature.ElementType is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
+        return new ResValueType(this, signature, "decimal", isByRef);
+
+      return new ResType(this, signature);
     }
 
     private static bool IsGeneric(dnlib.DotNet.IType source)

@@ -67,6 +67,7 @@ namespace MarkDoc.Elements.Markdown
         yield return p;
     }
 
+    // ReSharper disable once CognitiveComplexity
     private IEnumerable<string> ProcessListElements(int indent)
     {
       // Initialize the start index for the first list element

@@ -91,11 +91,13 @@ namespace MarkDoc.Members.Dnlib.Helpers
         .ToArray();
     }
 
+    // ReSharper disable once CognitiveComplexity
     private static IReadOnlyList<bool> GenerateDummyMap(int argumentsLength, TypeSig source)
     {
       var index = 0;
       var map = new bool[argumentsLength];
 
+      // ReSharper disable once LocalFunctionHidesMethod
       void GenerateDummyMap(TypeSig token)
       {
         var arraySkip = 0;

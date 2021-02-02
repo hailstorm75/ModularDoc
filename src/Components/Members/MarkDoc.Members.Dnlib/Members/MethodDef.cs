@@ -58,6 +58,7 @@ namespace MarkDoc.Members.Dnlib.Members
 
     #region Methods
 
+    // ReSharper disable once CyclomaticComplexity
     private static string ResolveOperator(dnlib.DotNet.MethodDef source, Resolver resolver, out OperatorType @operator)
     {
       // Assume that the source is a normal operator

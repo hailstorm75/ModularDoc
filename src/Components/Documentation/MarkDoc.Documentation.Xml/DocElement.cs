@@ -89,6 +89,7 @@ namespace MarkDoc.Documentation.Xml
 
     #region Methods
 
+    // ReSharper disable once CognitiveComplexity
     private IReadOnlyDictionary<string, IDocMember> RetrieveMembers(DocResolver docResolver, IResolver typeResolver)
     {
       // If there is no documentation for this element..
@@ -244,32 +245,15 @@ namespace MarkDoc.Documentation.Xml
         // select the previously cached tags of the same tag type
         var except = new HashSet<TagType>(cachedTags.Select(x => x.Key).Where(x => SINGLE.Contains(x)));
 
-        bool Filter(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag) =>
-          tag.Key != TagType.Inheritdoc && !except.Contains(tag.Key);
-
-        (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
-        {
-          // If the tag type cannot have multiple occurrences or isn't cached yet..
-          if (!MULTIPLE.Contains(tag.Key)
-              || !cachedTags.TryGetValue(tag.Key, out var existing))
-            // return new tags to cache
-            return (tag.Key, tag.Value);
-
-          // Create a filter based on existing tag references
-          var filter = new HashSet<string>(existing!.Select(x => x.Reference));
-          // Create a list of tags to add which contain unique references
-          var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
-
-          // Return new tags to cache
-          return (tag.Key, toAdd);
-        }
+        bool Filter(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag)
+          => tag.Key != TagType.Inheritdoc && !except.Contains(tag.Key);
 
         // Prepare the sequence of tags to be cached
         var tags = member!.Documentation.Tags
           // Filter out unwanted tags
           .Where(Filter)
           // Select the tags to cache
-          .Select(Process);
+          .Select(x => Process(x, cachedTags));
 
         // For every tag..
         foreach (var (key, enumerable) in tags)
@@ -282,6 +266,23 @@ namespace MarkDoc.Documentation.Xml
             // cache it
             cachedTags.Add(key, enumerable.ToLinkedList());
       }
+    }
+
+    private static (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag, Dictionary<TagType, LinkedList<ITag>> cachedTags)
+    {
+      // If the tag type cannot have multiple occurrences or isn't cached yet..
+      if (!MULTIPLE.Contains(tag.Key)
+          || !cachedTags.TryGetValue(tag.Key, out var existing))
+        // return new tags to cache
+        return (tag.Key, tag.Value);
+
+      // Create a filter based on existing tag references
+      var filter = new HashSet<string>(existing!.Select(x => x.Reference));
+      // Create a list of tags to add which contain unique references
+      var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
+
+      // Return new tags to cache
+      return (tag.Key, toAdd);
     }
 
     #endregion
