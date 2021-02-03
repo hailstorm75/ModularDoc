@@ -45,6 +45,9 @@ namespace MarkDoc.Members.Dnlib.Members
     public AccessorType? SetAccessor { get; }
 
     /// <inheritdoc />
+    public bool IsSetInit { get; }
+
+    /// <inheritdoc />
     public override string RawName { get; }
 
     #endregion
@@ -64,6 +67,8 @@ namespace MarkDoc.Members.Dnlib.Members
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
       SetAccessor = ResolveAccessor(source.SetMethod);
+      // TODO
+      IsSetInit = false;
       IsReadOnly = (source.GetMethod?
                      .CustomAttributes
                      .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false)

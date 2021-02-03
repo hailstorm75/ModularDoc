@@ -20,6 +20,6 @@
     /// <summary>
     /// Override member
     /// </summary>
-    Override,
+    Override
   }
 }

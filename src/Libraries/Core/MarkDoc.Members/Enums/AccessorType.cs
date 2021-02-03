@@ -20,6 +20,6 @@
     /// <summary>
     /// Visible to children within the library
     /// </summary>
-    ProtectedInternal,
+    ProtectedInternal
   }
 }

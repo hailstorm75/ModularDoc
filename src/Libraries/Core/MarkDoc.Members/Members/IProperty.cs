@@ -37,5 +37,10 @@ namespace MarkDoc.Members.Members
     /// Property set accessor type
     /// </summary>
     AccessorType? SetAccessor { get; }
+
+    /// <summary>
+    /// Is the property setter an init type
+    /// </summary>
+    bool IsSetInit { get; }
   }
 }
