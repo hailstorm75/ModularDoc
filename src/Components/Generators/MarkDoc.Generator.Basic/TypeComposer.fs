@@ -63,6 +63,11 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
     // If there are no sections return nothing
     |> SomeHelpers.emptyToNone
 
+  let composeLink =
+    let link = ("MarkDoc" |> Italic, "https://github.com/hailstorm75/MarkDoc.Core") |> LinkElement
+    let text = "Generated with" |> Italic |> TextElement
+    ([ text; link ] |> Seq.map ElementHelpers.initialize) |> Some
+
   let composeContent input tools =
     let applyTools input = input tools
 
@@ -71,6 +76,7 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
                     (printIntroduction input tools, "Description");
                     (printMemberTables input tools, "Members");
                     (printDetailed input tools, "Details")
+                    (composeLink, "");
                   ]
                   // Filter out invalid items
                   |> SomeHelpers.whereSome2
