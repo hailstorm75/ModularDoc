@@ -439,7 +439,7 @@ module TypeContentHelpers =
       | _ -> LinkedList<IProperty>() :> IReadOnlyCollection<IProperty>
     let processProperty (_, property: IProperty) =
       let signature =
-        SignatureHelpers.generateSignature "{0}{1}{2} {3} {4} {{ {5} }}" (seq [
+        SignatureHelpers.generateSignature "{0}{1}{2} {3} {4} {5} {{ {6} }}" (seq [
           SignatureHelpers.getAccessor
           SignatureHelpers.getIsReadonly
           SignatureHelpers.getStatic;
