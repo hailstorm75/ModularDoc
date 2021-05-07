@@ -159,7 +159,7 @@ module internal TypeHelpers =
   /// <param name="source">Resolved type referencing source</param>
   /// <param name="item">Resolved type to process</param>
   /// <param name="tools">Tools for processing the resolved type</param>
-  /// <returns>Formated display name of the processed <paramref namee="item"/></returns>
+  /// <returns>Formatted display name of the processed <paramref name="item"/></returns>
   let processResType source (item: IResType) tools =
     let tryLink (item: IResType) =
       // Link to the known resolved type
@@ -167,7 +167,7 @@ module internal TypeHelpers =
       // If the link is valid..
       if not (String.IsNullOrEmpty link) then
         // return the name wrapped into a link
-        (InlineCode item.DisplayName, lazy(link)) |> LinkContent
+        (InlineCode item.DisplayName, lazy link) |> LinkContent
       // Otherwise..
       else
         // return without a link
