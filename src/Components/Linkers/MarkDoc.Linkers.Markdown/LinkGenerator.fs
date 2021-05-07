@@ -28,23 +28,26 @@ module private Link =
             yield foldersSource.[i].Equals(foldersTarget.[i], StringComparison.Ordinal)
         ]
         |> Seq.findIndex not
+        
+      if foldersSource.Length = foldersTarget.Length && index = foldersSource.Length - 1 then
+        "./" + foldersTarget.[index]
+      else
+        // Create parts for the new link
+        let link =
+          seq [
+            // For every non-matching part of the source..
+            for _ in 0 .. foldersSource.Length - index - 2 do
+              // go up a level
+              yield ".."
 
-      // Create parts for the new link
-      let link =
-        seq [
-          // For every non-matching part of the source..
-          for _ in 0 .. foldersSource.Length - index - 2 do
-            // go up a level
-            yield ".."
+            // For every non-matching part of the target
+            for i in index .. foldersTarget.Length - 1 do
+              // go down a level
+              yield foldersTarget.[i]
+          ]
 
-          // For every non-matching part of the target
-          for i in index .. foldersTarget.Length - 1 do
-            // go down a level
-            yield foldersTarget.[i]
-        ]
-
-      // Compose the link
-      String.Join('/', link)
+        // Compose the link
+        String.Join('/', link)
 
   /// <summary>
   /// Creates a link for given <paramref name="target"/>
