@@ -66,7 +66,8 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
   let composeLink =
     let link = ("MarkDoc" |> Italic, "https://github.com/hailstorm75/MarkDoc.Core") |> LinkElement
     let text = "Generated with" |> Italic |> TextElement
-    ([ text; link ] |> Seq.map ElementHelpers.initialize) |> Some
+    let res tools = tools.creator.JoinTextContent([ text; link ] |> Seq.map (fun x -> ElementHelpers.initialize x tools :?> ITextContent), " ") :> IElement
+    seq [ res ] |> Some
 
   let composeContent input tools =
     let applyTools input = input tools
