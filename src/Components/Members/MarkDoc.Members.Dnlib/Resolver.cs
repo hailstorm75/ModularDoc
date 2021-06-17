@@ -23,7 +23,9 @@ namespace MarkDoc.Members.Dnlib
   public class Resolver
     : IResolver
   {
-    private delegate IResType ResTypeInitializer(Resolver resolver, TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap);
+    private delegate IResType ResTypeInitializer(Resolver resolver, TypeSig signature,
+      IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap,
+      IReadOnlyList<string>? tupleMap);
 
     #region Fields
 
@@ -35,6 +37,12 @@ namespace MarkDoc.Members.Dnlib
 
     private readonly ConcurrentDictionary<string, IResType> m_resCache = new ConcurrentDictionary<string, IResType>();
     private readonly Lazy<TrieNamespace> m_namespaces;
+
+    private static readonly HashSet<string> RECORD_ATTRIBUTES = new HashSet<string>
+    {
+      "System.Runtime.CompilerServices.NullableAttribute",
+      "System.Runtime.CompilerServices.NullableContextAttribute"
+    };
 
     #endregion
 
@@ -98,7 +106,8 @@ namespace MarkDoc.Members.Dnlib
         {
           ElementType.Object,
           (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
-            => new ResValueType(resolver, signature, dynamicsMap?.FirstOrDefault() ?? false ? "dynamic" : "object", isByRef)
+            => new ResValueType(resolver, signature, dynamicsMap?.FirstOrDefault() ?? false ? "dynamic" : "object",
+              isByRef)
         },
         {
           ElementType.String,
@@ -264,7 +273,8 @@ namespace MarkDoc.Members.Dnlib
       return result;
     }
 
-    private IResType ProcessElementByType(TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap)
+    private IResType ProcessElementByType(TypeSig signature, IReadOnlyDictionary<string, string>? generics,
+      bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap)
     {
       if (ELEMENT_RES_TYPES.TryGetValue(signature.ElementType, out var resType))
         return resType!(this, signature, generics, isByRef, dynamicsMap, tupleMap);
@@ -275,7 +285,8 @@ namespace MarkDoc.Members.Dnlib
           : new ResGeneric(this, signature, generics, dynamicsMap, isByRef) as IResType;
       if (signature.ElementType is ElementType.ByRef || signature.ElementType is ElementType.CModReqd)
         return Resolve(signature, generics, true, dynamicsMap, tupleMap);
-      if (signature.ElementType is ElementType.ValueType && signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
+      if (signature.ElementType is ElementType.ValueType &&
+          signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
         return new ResValueType(this, signature, "decimal", isByRef);
 
       return new ResType(this, signature);
@@ -388,7 +399,10 @@ namespace MarkDoc.Members.Dnlib
       if (subjectSig.IsValueType)
         return new StructDef(this, subjectSig, nestedParent);
       if (subjectSig.IsClass)
+      {
         return new ClassDef(this, subjectSig, nestedParent);
+      }
+
       if (subjectSig.IsInterface)
         return new InterfaceDef(this, subjectSig, nestedParent);
 
@@ -453,7 +467,24 @@ namespace MarkDoc.Members.Dnlib
     private static IInterface GetTypeWithNested(Resolver resolver, TypeDef source)
     {
       if (source.IsValueType) return new StructDef(resolver, source, null);
-      if (source.IsClass) return new ClassDef(resolver, source, null);
+      if (source.IsClass)
+      {
+        var interfaces = source.Interfaces.FirstOrDefault();
+        if (interfaces == null || !interfaces.Interface.Name.Equals("IEquatable`1"))
+          return new ClassDef(resolver, source, null);
+
+        var genericParameters = interfaces.Interface.ToTypeSig().GetGenericSignature().GenericArguments;
+
+        if (genericParameters.Count == 1
+            && genericParameters.First().FullName.Equals(source.FullName)
+            && source.CustomAttributes
+              .Select(x => x.TypeFullName)
+              .All(x => RECORD_ATTRIBUTES.Contains(x)))
+          return new RecordDef(resolver, source, null);
+
+        return new ClassDef(resolver, source, null);
+      }
+
       if (source.IsInterface) return new InterfaceDef(resolver, source, null);
 
       // The provided signature is not supported
