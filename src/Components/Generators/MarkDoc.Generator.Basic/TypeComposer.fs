@@ -84,7 +84,23 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
                   |> Seq.map (fun (x, y) -> (x |> Seq.map applyTools |> Some, y))
     // Compose the content
     composeSections content 1 |> Seq.map applyTools
+    
+  let getTypeName (input: IType) =
+    let name = TypeHelpers.getTypeName input
+    let tName = match input with
+                | :? IStruct as x ->
+                  if x.IsReadOnly then "readonly struct" else "struct"
+                | :? IClass -> "class"
+                | :? IInterface -> "interface"
+                | :? IEnum -> "enum"
+                | _ -> ""
+                |> InlineCode
+                |> TextHelpers.processText
+                <| m_tools
 
+    let content = tName.Print () |> Seq.head
+    name + " " + content
+    
   interface ITypeComposer with
     /// <inheritdoc />
     member __.Compose input =
@@ -95,6 +111,6 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
       // Otherwise..
       else
         // compose the page
-        let page = Page(composeContent input m_tools, TypeHelpers.getTypeName input, 0)
+        let page = Page(composeContent input m_tools, getTypeName input, 0)
         // return the composed type page
         ElementHelpers.initialize page m_tools :?> IPage
