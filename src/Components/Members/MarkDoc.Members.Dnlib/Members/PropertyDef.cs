@@ -67,8 +67,12 @@ namespace MarkDoc.Members.Dnlib.Members
       Accessor = ResolveAccessor(methods);
       GetAccessor = ResolveAccessor(source.GetMethod);
       SetAccessor = ResolveAccessor(source.SetMethod);
-      // TODO
-      IsSetInit = false;
+      if (SetAccessor != null)
+      {
+        var modifierSig = source.SetMethods.First().MethodSig.RetType as ModifierSig;
+        IsSetInit = modifierSig?.Modifier.FullName.Equals("System.Runtime.CompilerServices.IsExternalInit") ?? false;
+      }
+
       IsReadOnly = (source.GetMethod?
                      .CustomAttributes
                      .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false)
