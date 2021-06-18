@@ -23,7 +23,7 @@ type Linker(memberResolver) =
 
   let createResLink (source: IType, target: IResType) =
     // If the target reference is not null..
-    if isNull target.Reference.Value |> not then
+    if target.Reference.Value |> (isNull >> not) then
       // create a link
       createLink(source, target.Reference.Value)
     // Otherwise..

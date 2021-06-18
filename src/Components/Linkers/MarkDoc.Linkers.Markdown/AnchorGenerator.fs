@@ -28,7 +28,8 @@ module private Anchor =
     lazy("#" + normalizeAnchor input.Value) |> Some
 
   let private azureAnchor (_: string Lazy, _: string) =
-    lazy("?anchor=") |> Some
+    None
+//    lazy "?anchor=" |> Some
 
   /// <summary>
   /// Creates an anchor for a given <paramref name="input"/> and <paramref name="platform"/>
@@ -37,11 +38,11 @@ module private Anchor =
   /// <param name="pageName">Page link</param>
   /// <param name="platform">Platform for which the structure is to be generated for</param>
   let createAnchor(input: string Lazy, pageName: string, platform: GitPlatform) =
-    let creator = match platform with
-                  | GitPlatform.BitBucket -> bitbucketAnchor
-                  | GitPlatform.GitHub -> githubAnchor
-                  | GitPlatform.GitLab -> gitlabAnchor
-                  | GitPlatform.Azure -> azureAnchor
-                  | _ -> (fun _ -> None)
-    (input, pageName) |> creator
+    match platform with
+    | GitPlatform.BitBucket -> bitbucketAnchor
+    | GitPlatform.GitHub -> githubAnchor
+    | GitPlatform.GitLab -> gitlabAnchor
+    | GitPlatform.Azure -> azureAnchor
+    | _ -> (fun _ -> None)
+    <| (input, pageName)
 

@@ -55,7 +55,6 @@ module private Link =
   /// <param name="source">Link from</param>
   /// <param name="target">Link to</param>
   /// <param name="structure">Type structure</param>
-  /// <param name="platform">Platform for which the link is designated for</param>
   let createLink(source: IType, target: IType, structure: IReadOnlyDictionary<IType, string>, _: GitPlatform) =
     let mutable resultTarget, resultSource = null, null
     if structure.TryGetValue(target, &resultTarget) && structure.TryGetValue(source, &resultSource) then
