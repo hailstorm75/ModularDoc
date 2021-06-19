@@ -47,7 +47,7 @@ module internal ElementHelpers =
   /// <summary>
   /// Gets the content of the provided sequence of text elements
   /// </summary>
-  /// <param name="input">Text for processing</param>
+  /// <param name="text">Text for processing</param>
   /// <typeparam name="M">Wraped text type</typeparam>
   /// <returns>Extracted text content</returns>
   let getTextContent (text: 'M Element seq when 'M :> ITextContent) =
@@ -72,10 +72,10 @@ module internal ElementHelpers =
   let toElement (input: 'M when 'M :> IElement) = input :> IElement
 
   /// <summary>
-  /// Initializes given sequence of <paramref name="elements"/>
+  /// Initializes given sequence of <paramref name="element"/>
   /// </summary>
-  /// <param name="elements"></param>
-  /// <param name="tools"></param>
+  /// <param name="element">Element instance to initialize</param>
+  /// <param name="tools">Tools for creating the text element</param>
   /// <returns>Initialized element</returns>
   let initialize element tools =
     // Initializes given element based on its type

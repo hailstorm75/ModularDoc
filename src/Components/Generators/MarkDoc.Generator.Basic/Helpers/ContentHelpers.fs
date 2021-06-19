@@ -192,8 +192,8 @@ module internal ContentHelpers =
   /// <summary>
   /// Composes <paramref name="content"/> for given member
   /// </summary>
-  /// <param name="content">Content to generate<param/>
-  /// <param name="input">Declaring type of the documented member<param/>
+  /// <param name="content">Content to generate</param>
+  /// <param name="input">Declaring type of the documented member</param>
   /// <returns>Composed content</returns>
   let processContents content input =
     let processContent content =

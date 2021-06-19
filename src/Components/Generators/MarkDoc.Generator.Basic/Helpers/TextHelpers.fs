@@ -84,9 +84,9 @@ module internal TextHelpers =
     | _ -> ""
 
   /// <summary>
-  /// Process the given text <paramref name="input"/> into a text content element
+  /// Process the given text <paramref name="textType"/> into a text content element
   /// </summary>
-  /// <param name="input">Text type input</param>
+  /// <param name="textType">Text type input</param>
   /// <param name="tools">Tools for creating the text element</param>
   /// <typeparam name="M">Generic type for text wrappers</typeparam>
   /// <returns>Text content element</returns>
