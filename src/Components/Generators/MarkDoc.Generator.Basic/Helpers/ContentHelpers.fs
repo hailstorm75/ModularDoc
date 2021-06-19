@@ -49,7 +49,7 @@ type ContentType =
   | Inheritance
 
 module internal ContentHelpers =
-  let private getSingleTag (input: IType) tag (typeMember: IMember) tools =
+  let private getSingleTag tag (input: IType) (typeMember: IMember) tools =
     let single tag =
       // Compose the tag if it exists into an element sequence
       match tag with
@@ -199,15 +199,16 @@ module internal ContentHelpers =
     let processContent content =
       // Composes content based on its type
       match content with
-      | Summary -> (getSingleTag input ITag.TagType.Summary, "Summary")
-      | Remarks -> (getSingleTag input ITag.TagType.Remarks, "Remarks")
-      | Example -> (getSingleTag input ITag.TagType.Example, "Example")
-      | Value -> (getSingleTag input ITag.TagType.Value, "Value")
-      | Returns -> (getSingleTag input ITag.TagType.Returns, "Returns")
-      | Exceptions -> (getExceptions input, "Exceptions")
-      | SeeAlso -> (getSeeAlso input, "See also")
-      | Arguments -> (getArguments input, "Arguments")
-      | Inheritance -> (getInheritedFrom input, "Inherited from")
+      | Summary -> (getSingleTag ITag.TagType.Summary, "Summary")
+      | Remarks -> (getSingleTag ITag.TagType.Remarks, "Remarks")
+      | Example -> (getSingleTag ITag.TagType.Example, "Example")
+      | Value -> (getSingleTag ITag.TagType.Value, "Value")
+      | Returns -> (getSingleTag ITag.TagType.Returns, "Returns")
+      | Exceptions -> (getExceptions, "Exceptions")
+      | SeeAlso -> (getSeeAlso, "See also")
+      | Arguments -> (getArguments, "Arguments")
+      | Inheritance -> (getInheritedFrom, "Inherited from")
+      |> (fun (x,y) -> (x input, y))
 
     content
     // Compose the requested content
