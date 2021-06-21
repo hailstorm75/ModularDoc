@@ -200,7 +200,7 @@ module internal SignatureHelpers =
         // If the property has a setter..
         if property.SetAccessor.HasValue then
           // return it
-          yield (accessor property.SetAccessor.Value) + "set"
+          yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init" else "set")
       ])
     | _ -> ""
 
