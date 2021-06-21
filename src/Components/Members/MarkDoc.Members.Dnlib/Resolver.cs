@@ -400,7 +400,9 @@ namespace MarkDoc.Members.Dnlib
         return new StructDef(this, subjectSig, nestedParent);
       if (subjectSig.IsClass)
       {
-        return new ClassDef(this, subjectSig, nestedParent);
+        return IsRecord(subjectSig)
+          ? new RecordDef(this, subjectSig, nestedParent)
+          : new ClassDef(this, subjectSig, nestedParent);
       }
 
       if (subjectSig.IsInterface)
@@ -464,26 +466,38 @@ namespace MarkDoc.Members.Dnlib
         yield return item;
     }
 
+    private static bool IsRecord(TypeDef type)
+    {
+      if (!type.IsClass)
+        return false;
+
+      // var interfaces = type.Interfaces.FirstOrDefault();
+      // if (interfaces == null || !interfaces.Interface.Name.Equals("IEquatable`1"))
+      //   return false;
+      //
+      // var genericParameters = interfaces.Interface.ToTypeSig().GetGenericSignature().GenericArguments;
+
+       if (//genericParameters.Count == 1
+      //     && genericParameters.First().FullName.Equals(type.FullName)
+           (type.CustomAttributes
+                .Select(x => x.TypeFullName)
+                .All(x => RECORD_ATTRIBUTES.Contains(x))
+              || type.Properties.FirstOrDefault(prop => prop.Name.Equals("EqualityContract"))
+                ?.GetMethod.CustomAttributes.FirstOrDefault(attr =>
+                  attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) != null
+              || type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) != null))
+        return true;
+
+      return false;
+    }
+
     private static IInterface GetTypeWithNested(Resolver resolver, TypeDef source)
     {
       if (source.IsValueType) return new StructDef(resolver, source, null);
       if (source.IsClass)
-      {
-        var interfaces = source.Interfaces.FirstOrDefault();
-        if (interfaces == null || !interfaces.Interface.Name.Equals("IEquatable`1"))
-          return new ClassDef(resolver, source, null);
-
-        var genericParameters = interfaces.Interface.ToTypeSig().GetGenericSignature().GenericArguments;
-
-        if (genericParameters.Count == 1
-            && genericParameters.First().FullName.Equals(source.FullName)
-            && source.CustomAttributes
-              .Select(x => x.TypeFullName)
-              .All(x => RECORD_ATTRIBUTES.Contains(x)))
-          return new RecordDef(resolver, source, null);
-
-        return new ClassDef(resolver, source, null);
-      }
+        return IsRecord(source)
+          ? new RecordDef(resolver, source, null)
+          : new ClassDef(resolver, source, null);
 
       if (source.IsInterface) return new InterfaceDef(resolver, source, null);
 

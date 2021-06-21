@@ -26,6 +26,20 @@ namespace UT.Members.MemberTests
         Constants.TEST_ASSEMBLY);
     }
 
+    public static IEnumerable<object[]> GetPropertyInitsData()
+    {
+      var filter = new HashSet<string> {Constants.PROPERTIES_RECORD};
+      var data = new[]
+      {
+        new object[] {Constants.PROPERTY_GET_SET, false},
+        new object[] {Constants.PROPERTY_GET_INIT, true}
+      };
+
+      return data.ComposeData(
+        resolver => resolver.FindMemberParents<IRecord>(Constants.PROPERTIES_NAMESPACE, filter),
+        Constants.TEST_ASSEMBLY);
+    }
+
     public static IEnumerable<object[]> GetPropertyAccessorData()
     {
       var data = new[]
@@ -151,7 +165,17 @@ namespace UT.Members.MemberTests
     {
       var member = GetProperty(type, name, true);
 
-      Assert.True((member?.GetAccessor != null) == hasGet && (member?.SetAccessor != null) == hasSet);
+      Assert.True(member?.GetAccessor != null == hasGet && member?.SetAccessor != null == hasSet);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IProperty))]
+    [MemberData(nameof(GetPropertyInitsData))]
+    public void ValidatePropertyInit(IRecord record, string name, bool isInit)
+    {
+      var member = GetProperty(record, name, true);
+
+      Assert.True(member?.SetAccessor != null && member.IsSetInit == isInit);
     }
 
     [Theory]

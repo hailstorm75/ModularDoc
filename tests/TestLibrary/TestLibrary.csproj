@@ -4,9 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Denis Akopyan</Authors>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,6 +20,10 @@
   <ItemGroup>
     <Folder Include="Members\Methods\" />
     <Folder Include="Members\Delegates\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IsExternalInit.System.Runtime.CompilerServices" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

@@ -86,6 +86,7 @@ namespace UT.Members.Data
 
     public const string PROPERTIES_NAMESPACE = "TestLibrary.Members.Properties";
     public const string PROPERTIES_CLASS = "ClassProperties";
+    public const string PROPERTIES_RECORD = "RecordProperties";
     public const string PROPERTIES_CLASS_ABSTRACT = "ClassPropertiesAbstract";
     public const string PROPERTY_NORMAL = "PropertyNormal";
     public const string PROPERTY_VIRTUAL = "PropertyVirtual";
@@ -94,6 +95,7 @@ namespace UT.Members.Data
     public const string PROPERTIES_STRUCT = "StructProperties";
     public const string PROPERTIES_INTERFACE = "IInterfaceProperties";
     public const string PROPERTY_STATIC = "PropertyStatic";
+    public const string PROPERTY_GET_INIT = "PropertyGetInit";
     public const string PROPERTY_GET_SET = "PropertyGetSet";
     public const string PROPERTY_GET = "PropertyGet";
     public const string PROPERTY_SET = "PropertySet";
