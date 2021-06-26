@@ -55,6 +55,27 @@ namespace UT.Members.Data
     public const string PUBLIC_STRUCT_EMPTY_CTOR = "StructEmptyConstructor";
 
     #endregion
+    
+    #region Record
+    
+    public const string RECORD_NAMESPACE = "TestLibrary.Records";
+    public const string PUBLIC_RECORD = "RecordTypePublic";
+    public const string PUBLIC_RECORD_READONLY = "RecordReadonlyType";
+    public const string INTERNAL_RECORD = "RecordTypeInternal";
+    public const string PUBLIC_NESTED_RECORD = "NestedRecordPublic";
+    public const string PROTECTED_NESTED_RECORD = "NestedRecordProtected";
+    public const string PROTECTED_INTERNAL_NESTED_RECORD = "NestedRecordProtectedInternal";
+    public const string INTERNAL_NESTED_RECORD = "NestedRecordInternal";
+    public const string PUBLIC_GENERIC_RECORD = "GenericRecord";
+    public const string PUBLIC_NESTED_GENERIC_RECORD = "NestedGenericRecord";
+    public const string PUBLIC_INHERITING_RECORD = "InheritingRecord";
+    public const string PUBLIC_INHERITING_RECORD_EMPTY = "InheritingRecordEmpty";
+    public const string PUBLIC_INHERITING_COMPLEX_RECORD = "InheritingRecordComplex";
+    public const string PUBLIC_INHERITING_COMPLEX_RECORD_EMPTY = "InheritingRecordComplexEmpty";
+    public const string PUBLIC_RECORD_PARAM_CTOR = "RecordWithParamConstructor";
+    public const string PUBLIC_RECORD_EMPTY_CTOR = "RecordEmptyConstructor";
+    
+    #endregion
 
     #region Class
 

@@ -1,11 +1,11 @@
 ﻿// ReSharper disable All
-#pragma warning disable 67
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
 using System;
 
-namespace TestLibrary.Classes
+#pragma warning disable 67
+namespace TestLibrary.Records
 {
-  public class ClassTypePublic
+  public record RecordTypePublic
   {
     public enum MyEnum
     {
@@ -32,7 +32,7 @@ namespace TestLibrary.Classes
 
     public event EventHandler Event;
 
-    public string Property { get; set; } = string.Empty;
+    public string Property { get; set; }
 
     public void Method()
     {

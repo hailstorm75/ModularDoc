@@ -471,21 +471,13 @@ namespace MarkDoc.Members.Dnlib
       if (!type.IsClass)
         return false;
 
-      // var interfaces = type.Interfaces.FirstOrDefault();
-      // if (interfaces == null || !interfaces.Interface.Name.Equals("IEquatable`1"))
-      //   return false;
-      //
-      // var genericParameters = interfaces.Interface.ToTypeSig().GetGenericSignature().GenericArguments;
-
-       if (//genericParameters.Count == 1
-      //     && genericParameters.First().FullName.Equals(type.FullName)
-           (type.CustomAttributes
-                .Select(x => x.TypeFullName)
-                .All(x => RECORD_ATTRIBUTES.Contains(x))
-              || type.Properties.FirstOrDefault(prop => prop.Name.Equals("EqualityContract"))
-                ?.GetMethod.CustomAttributes.FirstOrDefault(attr =>
-                  attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) != null
-              || type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) != null))
+      if (type.CustomAttributes
+            .Select(x => x.TypeFullName)
+            .All(x => RECORD_ATTRIBUTES.Contains(x))
+          || type.Properties.FirstOrDefault(prop => prop.Name.Equals("EqualityContract"))
+            ?.GetMethod.CustomAttributes.FirstOrDefault(attr =>
+              attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) != null
+          || type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) != null)
         return true;
 
       return false;

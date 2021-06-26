@@ -22,6 +22,10 @@ namespace TestLibrary.Structs
     {
     }
 
+    public record MyRecord
+    {
+    }
+
     public delegate string Delegate(int arg);
 
     public event EventHandler Event;

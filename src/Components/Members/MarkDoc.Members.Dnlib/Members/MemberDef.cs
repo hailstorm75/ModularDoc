@@ -33,6 +33,7 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <summary>
     /// Default constructor
     /// </summary>
+    // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
     protected internal MemberDef(Resolver resolver, dnlib.DotNet.IMemberDef source)
     {
       // If the source is null..

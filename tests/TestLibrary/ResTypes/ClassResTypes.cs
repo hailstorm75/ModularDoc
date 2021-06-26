@@ -1,4 +1,6 @@
-﻿using System;
+﻿// ReSharper disable All
+#pragma warning disable 67
+using System;
 using System.IO;
 using TestLibrary.Classes;
 
