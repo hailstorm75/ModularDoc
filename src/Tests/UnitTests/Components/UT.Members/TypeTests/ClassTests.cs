@@ -477,7 +477,7 @@ namespace UT.Members.TypeTests
 
       var classCount = query?.NestedTypes.OfType<IClass>().Count() ?? 0;
 
-      Assert.True(classCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested classes.");
+      Assert.True(classCount == 2, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of nested classes.");
     }
 
     [Theory]
