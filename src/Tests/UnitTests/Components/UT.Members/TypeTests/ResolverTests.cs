@@ -55,11 +55,45 @@ namespace UT.Members.TypeTests
     [Theory]
     [Trait("Category", nameof(IResolver))]
     [MemberData(nameof(GetResolvers))]
-    public void ResolverFindType(IResolver resolver)
+    public void ResolverFindTypeNull(IResolver resolver)
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
-      Assert.ThrowsAny<Exception>(() => resolver.TryFindType(null!, out var _));
+      Assert.ThrowsAny<Exception>(() => resolver.TryFindType(null!, out _));
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IResolver))]
+    [MemberData(nameof(GetResolvers))]
+    public void ResolverFindTypeNotResolved(IResolver resolver)
+    {
+      resolver.Resolve(Constants.TEST_ASSEMBLY);
+
+      Assert.ThrowsAny<InvalidOperationException>(() => resolver.TryFindType("UnknownType", out _));
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IResolver))]
+    [MemberData(nameof(GetResolvers))]
+    public void ResolverFindUnknownType(IResolver resolver)
+    {
+      resolver.Resolve(Constants.TEST_ASSEMBLY);
+
+      var unused = resolver.Types.Value;
+
+      Assert.False(resolver.TryFindType("UnknownType", out _));
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IResolver))]
+    [MemberData(nameof(GetResolvers))]
+    public void ResolverFindKnownType(IResolver resolver)
+    {
+      resolver.Resolve(Constants.TEST_ASSEMBLY);
+
+      var unused = resolver.Types.Value;
+
+      Assert.True(resolver.TryFindType($"TestLibrary.Classes.{Constants.PUBLIC_CLASS}", out _));
     }
   }
 }
