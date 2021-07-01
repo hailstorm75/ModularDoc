@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MarkDoc.Members;
+using MarkDoc.Members.Enums;
 using MarkDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
@@ -44,6 +45,45 @@ namespace UT.Members.TypeTests
       return data.ComposeData();
     }
 
+    public static IEnumerable<object[]> GetRecordAccessorsData()
+    {
+      var data = new[]
+      {
+        new object[] {Constants.PUBLIC_RECORD, AccessorType.Public},
+        new object[] {Constants.INTERNAL_RECORD, AccessorType.Internal},
+        new object[] {Constants.PUBLIC_NESTED_RECORD, AccessorType.Public},
+        new object[] {Constants.PROTECTED_NESTED_RECORD, AccessorType.Protected},
+        new object[] {Constants.PROTECTED_INTERNAL_NESTED_RECORD, AccessorType.ProtectedInternal},
+        new object[] {Constants.INTERNAL_NESTED_RECORD, AccessorType.Internal},
+      };
+
+      return data.ComposeData();
+    }
+
+    public static IEnumerable<object[]> GetRecordAbstractData()
+    {
+      var data = new[]
+      {
+        new object[] { Constants.PUBLIC_RECORD, false },
+        new object[] { Constants.PUBLIC_RECORD_SEALED, false },
+        new object[] { Constants.PUBLIC_RECORD_ABSTRACT, true }
+      };
+
+      return data.ComposeData();
+    }
+
+    public static IEnumerable<object[]> GetRecordSealedData()
+    {
+      var data = new[]
+      {
+        new object[] {Constants.PUBLIC_RECORD, false},
+        new object[] {Constants.PUBLIC_RECORD_ABSTRACT, false},
+        new object[] {Constants.PUBLIC_RECORD_SEALED, true}
+      };
+
+      return data.ComposeData();
+    }
+
     private static IRecord? GetRecord(IResolver resolver, string name)
     {
       resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -70,35 +110,47 @@ namespace UT.Members.TypeTests
     {
       var query = GetRecord(resolver, name);
 
-      Assert.True(query?.RawName.Equals($"{expected}.{name}"), $"{resolver.GetType().FullName}: The '{name}' raw name is invalid. Expected '{expected}.{name}' != Actual '{query?.RawName}'.");
+      Assert.True(query?.RawName.Equals($"{expected}.{name}"),
+        $"{resolver.GetType().FullName}: The '{name}' raw name is invalid. Expected '{expected}.{name}' != Actual '{query?.RawName}'.");
     }
 
-    // [Theory]
-    // [Trait("Category", nameof(IRecord))]
-    // [MemberData(nameof(GetClassAccessorsData))]
-    // public void ValidateRecordAccessors(IResolver resolver, string name, AccessorType accessor)
-    // {
-    //   
-    // }
-    //
-    // public void ValidateRecordAbstract(IResolver resolver, string name, bool expected)
-    // {
-    //   
-    // }
-    //
-    // public void ValidateRecordSealed(IResolver resolver, string name, bool expected)
-    // {
-    //   
-    // }
-    //
-    // public void ValidateRecordNamespace(IResolver resolver, string name, string expected)
-    // {
-    //   
-    // }
-    //
-    // public void ValidateRecordHasBase(IResolver resolver, string name, bool expected)
-    // {
-    //   
-    // }
+    [Theory]
+    [Trait("Category", nameof(IRecord))]
+    [MemberData(nameof(GetRecordAccessorsData))]
+    public void ValidateRecordAccessors(IResolver resolver, string name, AccessorType accessor)
+    {
+      var query = GetRecord(resolver, name);
+
+      Assert.True(query?.Accessor == accessor,
+        $"{resolver.GetType().FullName}: The '{name}' accessor type is invalid. Expected '{accessor}' != Actual '{query?.Accessor}'");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IRecord))]
+    [MemberData(nameof(GetRecordAbstractData))]
+    public void ValidateRecordAbstract(IResolver resolver, string name, bool expected)
+    {
+      var query = GetRecord(resolver, name);
+
+      Assert.Equal(expected, query?.IsAbstract);
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IRecord))]
+    [MemberData(nameof(GetRecordSealedData))]
+    public void ValidateRecordSealed(IResolver resolver, string name, bool expected)
+    {
+      var query = GetRecord(resolver, name);
+
+      Assert.Equal(expected, query?.IsSealed);
+    }
+
+    public void ValidateRecordNamespace(IResolver resolver, string name, string expected)
+    {
+    }
+
+    public void ValidateRecordHasBase(IResolver resolver, string name, bool expected)
+    {
+    }
   }
 }
