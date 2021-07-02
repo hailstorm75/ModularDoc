@@ -92,8 +92,9 @@ The project is in its early stages of development.
 
 **Legend**
 
-| Icon | Description |
-| :grey_question: | To be processed |
-| :mag: | Analysis phase |
-| :hammer: | Development phase |
-| :heavy_check_mark: | Complete |
+| Icon               | Description       |
+| ------------------ | ----------------- |
+| :grey_question:    | To be processed   |
+| :mag:              | Analysis phase    |
+| :hammer:           | Development phase |
+| :heavy_check_mark: | Complete          |
