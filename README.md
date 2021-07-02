@@ -1,9 +1,13 @@
 [![.NET](https://github.com/hailstorm75/MarkDoc.Core/actions/workflows/dot-core.yml/badge.svg)](https://github.com/hailstorm75/MarkDoc.Core/actions/workflows/dot-core.yml) [![codecov](https://codecov.io/gh/hailstorm75/MarkDoc.Core/branch/unstable/graph/badge.svg)](https://codecov.io/gh/hailstorm75/MarkDoc.Core) [![CodeFactor](https://www.codefactor.io/repository/github/hailstorm75/markdoc.core/badge)](https://www.codefactor.io/repository/github/hailstorm75/markdoc.core) ![GitHub issues](https://img.shields.io/github/issues/hailstorm75/MarkDoc.Core) ![GitHub repo size](https://img.shields.io/github/repo-size/hailstorm75/MarkDoc.Core)
 
 # MarkDoc.Core
-Markdown documentation generator for .NET libraries written in C# 8 and lower.
+Markdown documentation generator for .NET libraries written in C# 9 and lower.
 
-Additional details and a list of supported versions of .NET frameworks will be provided after the [core](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) implementation is complete (see below in roadmap).
+Additional details and a list of supported versions of .NET frameworks will be provided later.
+
+In the current project state, the `Members` library is considered stable with 95% test coverage and can be used as a reflection library outside of this project that makes exploring assembly types much easier thanks a higher level of abstraction.
+The `Documentation` library is still to be tested and is considered to be unstable; nevertheless, the manual tests proved that most common assemblies will have their documentation parsed correctly.
+The biggest task, aside from testing all of the core libraries, is to create a modular UI that is, preferrably, cross-platform.
 
 Like this project idea and would like to see it grow? Give it a star and follow for the latest updates.
 
@@ -80,8 +84,16 @@ The project is in its early stages of development.
 | ----- | -------- | --------- | ----------- |
 | Core  | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create components which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
 | Reorganize | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/2)  | Reorganize the project structure such that the interfaces are separate from the components which implement them. Document the project core and cover it with unit tests |
-| C#9 support | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/6) | Add support for new C#9 features |
+| C# 9 support | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/6) | Add support for new C#9 features |
 | Add unit tests | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/7) | Cover the documentation layer with Unit Tests  |
 | Smart settings   | :mag: |    | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
 | Plugins | :grey_question: |  | Create a MarkDoc plugin composed from __components__ |
 | UI   | :grey_question: |    | Create the application UI |
+
+**Legend**
+
+| Icon | Description |
+| :grey_question: | To be processed |
+| :mag: | Analysis phase |
+| :hammer: | Development phase |
+| :heavy_check_mark: | Complete |

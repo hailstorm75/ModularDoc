@@ -144,13 +144,5 @@ namespace UT.Members.TypeTests
 
       Assert.Equal(expected, query?.IsSealed);
     }
-
-    public void ValidateRecordNamespace(IResolver resolver, string name, string expected)
-    {
-    }
-
-    public void ValidateRecordHasBase(IResolver resolver, string name, bool expected)
-    {
-    }
   }
 }
