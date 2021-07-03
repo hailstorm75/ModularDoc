@@ -48,7 +48,7 @@ namespace MarkDoc.Documentation.Xml
         .ToDictionary(Linq.GroupKey, x => x.GroupValues().ToReadOnlyCollection());
 
       HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var tags);
-      InheritDocRef = tags?.First()?.Reference ?? string.Empty;
+      InheritDocRef = tags?.First().Reference ?? string.Empty;
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace MarkDoc.Documentation.Xml
     {
       Tags = tags ?? throw new ArgumentNullException(nameof(tags));
       HasInheritDoc = Tags.TryGetValue(TagType.Inheritdoc, out var t);
-      InheritDocRef = t?.First()?.Reference ?? string.Empty;
+      InheritDocRef = t?.First().Reference ?? string.Empty;
     }
 
     #region Methods
