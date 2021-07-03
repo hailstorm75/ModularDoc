@@ -3,6 +3,8 @@
 using System;
 
 #pragma warning disable 67
+#pragma warning disable CS0414
+
 namespace TestLibrary.Records
 {
   public record RecordTypePublic
@@ -30,9 +32,9 @@ namespace TestLibrary.Records
 
     public delegate string Delegate(int arg);
 
-    public event EventHandler Event;
+    public event EventHandler Event = null!;
 
-    public string Property { get; set; }
+    public string Property { get; set; } = string.Empty;
 
     public void Method()
     {

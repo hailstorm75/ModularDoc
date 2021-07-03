@@ -1,5 +1,6 @@
 ﻿// ReSharper disable All
 #pragma warning disable 67
+#pragma warning disable CS0414
 
 using System;
 using TestLibrary.Interfaces;
@@ -9,13 +10,13 @@ namespace TestLibrary.Records
   public record InheritingRecordComplex
     : IInheritingAndInheritedInterface
   {
-    public event EventHandler MyEvent;
-    public event EventHandler OtherEvent;
-    public event EventHandler Event;
+    public event EventHandler MyEvent = null!;
+    public event EventHandler OtherEvent = null!;
+    public event EventHandler Event = null!;
 
     public delegate void MyDelegate();
 
-    public string MyProperty { get; set; }
+    public string MyProperty { get; set; } = string.Empty;
 
     public string OtherProperty
     {

@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 67
 using System;
+// ReSharper disable RedundantRecordBody
 
 namespace TestLibrary.Structs
 {
