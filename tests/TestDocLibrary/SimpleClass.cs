@@ -37,7 +37,6 @@ namespace TestDocLibrary
     /// Method return
     /// </returns>
     /// <exception cref="ArgumentException">Argument exception</exception>
-    /// <exception>Unknown exception</exception>
     /// <seealso cref="SimpleClass{TC}"/>
     public int SimpleMethod<T>(int param)
       => throw new NotImplementedException();
