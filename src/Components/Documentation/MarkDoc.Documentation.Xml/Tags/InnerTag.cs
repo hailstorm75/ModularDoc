@@ -30,7 +30,7 @@ namespace MarkDoc.Documentation.Xml.Tags
     /// Default constructor
     /// </summary>
     /// <param name="source">Documentation source</param>
-    public InnerTag(XElement source)
+    internal InnerTag(XElement source)
     {
       // If the source is null..
       if (source is null)

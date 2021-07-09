@@ -31,7 +31,7 @@ namespace MarkDoc.Documentation.Xml.Tags
     /// Default constructor
     /// </summary>
     /// <param name="source">Documentation source</param>
-    public Tag(XElement source)
+    internal Tag(XElement source)
     {
       static TagType ResolveType(XElement source)
         => source.Name.LocalName.ToUpperInvariant() switch

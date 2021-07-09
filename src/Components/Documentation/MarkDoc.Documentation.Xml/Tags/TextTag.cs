@@ -19,7 +19,7 @@ namespace MarkDoc.Documentation.Xml.Tags
     /// Default constructor
     /// </summary>
     /// <param name="text">Content source</param>
-    public TextTag(XText text)
+    internal TextTag(XText text)
     {
       // If the text is null..
       if (text is null)
