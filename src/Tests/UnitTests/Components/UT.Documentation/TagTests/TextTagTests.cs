@@ -88,7 +88,6 @@ namespace UT.Documentation.TagTests
 
       // Assert
       Assert.Equal(expectedContent, content?.Content);
-
     }
 
     [Theory]
