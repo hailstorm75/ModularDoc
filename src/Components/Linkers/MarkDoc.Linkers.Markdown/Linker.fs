@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Linkers.Markdown
 
+open System.Collections.Generic
 open MarkDoc.Members
 open MarkDoc.Linkers
 open MarkDoc.Members.ResolvedTypes
@@ -49,16 +50,19 @@ type Linker(memberResolver) =
 
   let registerAnchor(target: IMember, anchor: Lazy<string>) =
     m_anchors.TryAdd(target, anchor) |> ignore
+    
+  static member CreateSettings platform =
+    LinkerSettings(platform) :> ILinkerSettings
 
   interface ILinker with
     /// <inheritdoc />
-    member __.Paths with get() = structure
+    member _.Paths with get() = structure
 
     /// <inheritdoc />
-    member __.CreateLink(source: IType, target: IType) = createLink(source, target)
+    member _.CreateLink(source: IType, target: IType) = createLink(source, target)
     /// <inheritdoc />
-    member __.CreateLink(source: IType, target: IResType) = createResLink(source, target)
+    member _.CreateLink(source: IType, target: IResType) = createResLink(source, target)
     /// <inheritdoc />
-    member __.RegisterAnchor(target: IMember, anchor: Lazy<string>) = registerAnchor(target, anchor) |> ignore
+    member _.RegisterAnchor(target: IMember, anchor: Lazy<string>) = registerAnchor(target, anchor)
     /// <inheritdoc />
-    member __.CreateAnchor(page: IType, target: IMember) = createAnchor page target
+    member _.CreateAnchor(page: IType, target: IMember) = createAnchor page target

@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Include="TypeHelper.fs" />
     <Compile Include="GitPlatform.fs" />
+    <Compile Include="LinkerSettings.fs" />
     <Compile Include="StructureGenerator.fs" />
     <Compile Include="LinkGenerator.fs" />
     <Compile Include="AnchorGenerator.fs" />
@@ -36,6 +37,7 @@
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members
@@ -15,6 +16,12 @@ namespace MarkDoc.Members
     Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
 
     #region Methods
+
+    /// <summary>
+    /// Resolves all assemblies based on the given settings
+    /// </summary>
+    /// <returns></returns>
+    Task Resolve();
 
     /// <summary>
     /// Resolves <paramref name="assembly"/> types

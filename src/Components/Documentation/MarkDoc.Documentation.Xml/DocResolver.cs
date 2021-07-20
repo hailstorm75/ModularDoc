@@ -24,6 +24,7 @@ namespace MarkDoc.Documentation.Xml
 
     private readonly Cache m_documentation;
     private readonly IResolver m_typeResolver;
+    private readonly IDocSettings m_settings;
 
     #endregion
 
@@ -31,13 +32,21 @@ namespace MarkDoc.Documentation.Xml
     /// Default constructor
     /// </summary>
     /// <param name="typeResolver">Injected type resolver</param>
-    public DocResolver(IResolver typeResolver)
+    /// <param name="settings">Injected </param>
+    public DocResolver(IResolver typeResolver, IDocSettings settings)
     {
       m_typeResolver = typeResolver;
+      m_settings = settings;
       m_documentation = new Cache();
     }
 
     #region Methods
+
+    public static IDocSettings CreateSettings(IEnumerable<string> paths)
+      => new DocSettings(paths);
+
+    public async Task ResolveAsync()
+      => await Task.WhenAll(m_settings.Paths.Select(ResolveAsync)).ConfigureAwait(false);
 
     /// <inheritdoc />
     public async Task ResolveAsync(string path)
