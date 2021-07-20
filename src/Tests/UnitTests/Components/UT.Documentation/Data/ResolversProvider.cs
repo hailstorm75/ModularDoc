@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
+using MarkDoc.Core;
 using MarkDoc.Documentation;
 using MarkDoc.Members;
 using Moq;
@@ -22,7 +23,7 @@ namespace UT.Documentation.Data
       var builder = new ContainerBuilder();
 
       RegisterModules(builder);
-      MockResolver(builder);
+      Mock(builder);
 
       CONTAINER = builder.Build();
     }
@@ -47,11 +48,21 @@ namespace UT.Documentation.Data
       }
     }
 
-    private static void MockResolver(ContainerBuilder builder)
+    private static void Mock(ContainerBuilder builder)
     {
       var resolver = new Mock<IResolver>().Object;
+      var doc = new Mock<IDocSettings>().Object;
+      var global = new Mock<IGlobalSettings>();
+      global.SetupGet(x => x.IgnoredNamespaces)
+        .Returns(Array.Empty<string>);
+      global.SetupGet(x => x.IgnoredTypes)
+        .Returns(Array.Empty<string>);
+      var member = new Mock<IMemberSettings>();
 
+      builder.RegisterInstance(global.Object).As<IGlobalSettings>();
+      builder.RegisterInstance(member.Object).As<IMemberSettings>();
       builder.RegisterInstance(resolver).As<IResolver>();
+      builder.RegisterInstance(doc).As<IDocSettings>();
     }
 
     /// <inheritdoc />
