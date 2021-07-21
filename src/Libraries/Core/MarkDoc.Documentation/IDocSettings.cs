@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MarkDoc.Core;
 
 namespace MarkDoc.Documentation
 {
@@ -6,6 +7,7 @@ namespace MarkDoc.Documentation
   /// Interface for <see cref="IDocResolver"/> settings
   /// </summary>
   public interface IDocSettings
+    : ILibrarySettings
   {
     /// <summary>
     /// Paths to documentation sources

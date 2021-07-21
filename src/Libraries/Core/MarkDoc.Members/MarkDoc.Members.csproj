@@ -17,4 +17,8 @@
     <OutputPath>..\..\..\..\bin\Release\Libraries\Core</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MarkDoc.Core\MarkDoc.Core.csproj" />
+  </ItemGroup>
+
 </Project>
