@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Nullable>enable</Nullable>
+    <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="Avalonia" Version="0.10.6" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
+    <PackageReference Include="ReactiveUI" Version="13.2.10" />
+  </ItemGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Views</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Release\Libraries\Views</OutputPath>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Reference Include="Avalonia.Controls.DataGrid, Version=0.10.6.0, Culture=neutral, PublicKeyToken=c8d484a7012f9a8b">
+      <HintPath>..\..\..\..\..\..\..\.nuget\packages\avalonia.controls.datagrid\0.10.6\lib\netstandard2.0\Avalonia.Controls.DataGrid.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
+  </ItemGroup>
+
+</Project>
