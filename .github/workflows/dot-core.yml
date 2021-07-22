@@ -34,4 +34,4 @@ jobs:
     - name: Build tests
       run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
     - name: Run tests
-      run: dotnet test src/MarkDoc.sln --collect:"XPlat Code Coverage"
+      run: dotnet test src/MarkDoc.sln
