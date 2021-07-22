@@ -159,5 +159,4 @@ namespace MarkDoc.MVVM.Helpers
       return TypeResolver.ResolveView(view!);
     }
   }
-
 }
