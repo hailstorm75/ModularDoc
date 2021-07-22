@@ -4,7 +4,7 @@ using MarkDoc.ViewModels;
 namespace MarkDoc.Views.Main
 {
   public class HomeView
-    : BaseUserControl<IHomeViewModel>
+    : BaseUserControl<IHomeViewModel>, IHomeView
   {
   }
 }

@@ -18,6 +18,8 @@ namespace MarkDoc.App
     public override void Initialize()
     {
       var builder = new ContainerBuilder();
+      builder.RegisterType<SettingsViewModel>().As<ISettingsViewModel>();
+      builder.RegisterType<SettingsView>().As<ISettingsView>();
       builder.RegisterType<StartupViewModel>().As<IStartupViewModel>();
       builder.RegisterType<StartupView>().As<IStartupView>();
       builder.RegisterType<HomeViewModel>().As<IHomeViewModel>();
@@ -25,6 +27,7 @@ namespace MarkDoc.App
 
       var navigator = new NavigationManager();
       builder.RegisterInstance(navigator).SingleInstance();
+      navigator.Register<ISettingsView>(PageNames.SETTINGS);
       navigator.Register<IStartupView>(PageNames.STARTUP);
       navigator.Register<IHomeView>(PageNames.HOME);
 

@@ -4,7 +4,7 @@ using MarkDoc.ViewModels;
 namespace MarkDoc.Views.Main
 {
   public class StartupView
-    : BaseUserControl<IStartupViewModel>
+    : BaseUserControl<IStartupViewModel>, IStartupView
   {
   }
 }
