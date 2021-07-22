@@ -7,7 +7,7 @@ Additional details and a list of supported versions of .NET frameworks will be p
 
 In the current project state, the `Members` library is considered stable with 95% test coverage and can be used as a reflection library outside of this project that makes exploring assembly types much easier thanks a higher level of abstraction.
 The `Documentation` library is still to be tested and is considered to be unstable; nevertheless, the manual tests proved that most common assemblies will have their documentation parsed correctly.
-The biggest task, aside from testing all of the core libraries, is to create a modular UI that is, preferrably, cross-platform.
+The biggest task, aside from testing all of the core libraries, is to create a modular UI that is, preferably, cross-platform.
 
 Like this project idea and would like to see it grow? Give it a star and follow for the latest updates.
 
@@ -86,9 +86,9 @@ The project is in its early stages of development.
 | Reorganize | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/2)  | Reorganize the project structure such that the interfaces are separate from the components which implement them. Document the project core and cover it with unit tests |
 | C# 9 support | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/6) | Add support for new C#9 features |
 | Add unit tests | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/7) | Cover the documentation layer with Unit Tests  |
-| Smart settings   | :mag: |    | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
+| Smart settings   | :hammer: |  [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/8)  | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
 | Plugins | :grey_question: |  | Create a MarkDoc plugin composed from __components__ |
-| UI   | :grey_question: |    | Create the application UI |
+| UI   | :hammer: |  [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/4)  | Create the application UI |
 
 **Legend**
 
