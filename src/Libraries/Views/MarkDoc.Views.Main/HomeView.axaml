@@ -2,8 +2,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
+             mc:Ignorable="d"
              x:Class="MarkDoc.Views.Main.HomeView">
   <Grid Margin="15" RowDefinitions="Auto,*">
+    <Label Grid.Row="0">Plugin selection</Label>
+    <ScrollViewer Grid.Row="1">
+      <ItemsControl Items="{Binding Path=Plugins, Mode=OneTime}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="{x:Type core:IPlugin}">
+            <Border Width="150" Height="100" CornerRadius="3" Padding="5" Margin="5" BoxShadow="5 5 2 10 Gray">
+              <StackPanel>
+                <Image MaxHeight="50"/>
+                <Label Margin="0 5 0 0 " Content="{Binding Path=Name, Mode=OneTime}"/>
+                <ScrollViewer>
+                  <TextBlock Text="{Binding Path=Description, Mode=OneTime}"/>
+                </ScrollViewer>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
   </Grid>
 </UserControl>

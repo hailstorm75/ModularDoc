@@ -1,7 +1,8 @@
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
 using MarkDoc.Constants;
 using MarkDoc.MVVM.Helpers;
 
@@ -11,7 +12,7 @@ namespace MarkDoc.App.Views
     : Window
   {
     private readonly NavigationManager m_navigator;
-    private ContentPresenter? m_mainContent;
+    private TransitioningContentControl? m_mainContent;
 
     public MainWindow()
     {
@@ -31,7 +32,8 @@ namespace MarkDoc.App.Views
     private void InitializeComponent()
     {
       AvaloniaXamlLoader.Load(this);
-      m_mainContent = this.FindControl<ContentPresenter>("MainContent");
+      m_mainContent = this.FindControl<TransitioningContentControl>("MainContent");
+      m_mainContent!.PageTransition = new PageSlide();
     }
   }
 }
