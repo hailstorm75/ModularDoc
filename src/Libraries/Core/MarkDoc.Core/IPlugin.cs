@@ -4,5 +4,6 @@
   {
     string Name { get; }
     string Description { get; }
+    string Image { get; }
   }
 }

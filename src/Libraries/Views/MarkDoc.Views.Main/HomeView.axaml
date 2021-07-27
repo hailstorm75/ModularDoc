@@ -16,15 +16,16 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="{x:Type core:IPlugin}">
-            <Border Width="150" Height="100" CornerRadius="3" Padding="5" Margin="5" BoxShadow="5 5 2 10 Gray">
-              <StackPanel>
-                <Image MaxHeight="50"/>
-                <Label Margin="0 5 0 0 " Content="{Binding Path=Name, Mode=OneTime}"/>
-                <ScrollViewer>
-                  <TextBlock Text="{Binding Path=Description, Mode=OneTime}"/>
-                </ScrollViewer>
-              </StackPanel>
-            </Border>
+            <CardControl Header="{Binding Name}" SecondaryHeader="{Binding Description}">
+              <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="PointerPressed">
+                  <InvokeCommandAction Command="{Binding $parent[1].PluginSelectedCommand}" CommandParameter="{Binding}"></InvokeCommandAction>
+                </EventTriggerBehavior>
+              </Interaction.Behaviors>
+              <Border CornerRadius="3">
+                <Image Source="{Binding Image}"  Stretch="UniformToFill"/>
+              </Border> 
+            </CardControl>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
       </ItemsControl>

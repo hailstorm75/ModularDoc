@@ -20,7 +20,7 @@ namespace MarkDoc.App.Views
       m_navigator.NavigationChanged += OnNavigationChanged;
       InitializeComponent();
 
-      m_navigator.NavigateTo(PageNames.STARTUP);
+      m_navigator.NavigateTo(PageNames.HOME);
 #if DEBUG
       this.AttachDevTools();
 #endif
@@ -33,7 +33,7 @@ namespace MarkDoc.App.Views
     {
       AvaloniaXamlLoader.Load(this);
       m_mainContent = this.FindControl<TransitioningContentControl>("MainContent");
-      m_mainContent!.PageTransition = new PageSlide();
+      // m_mainContent!.PageTransition = new PageSlide();
     }
   }
 }

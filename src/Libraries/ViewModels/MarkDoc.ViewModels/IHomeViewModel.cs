@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using MarkDoc.Core;
 
 namespace MarkDoc.ViewModels
@@ -7,5 +8,7 @@ namespace MarkDoc.ViewModels
     : IViewModel
   {
     IReadOnlyCollection<IPlugin> Plugins { get; }
+
+    ICommand PluginSelectedCommand { get; }
   }
 }
