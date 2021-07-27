@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
              mc:Ignorable="d"
+             Name="HomeView"
              x:Class="MarkDoc.Views.Main.HomeView">
   <Grid Margin="15" RowDefinitions="Auto,*">
-    <Label Grid.Row="0">Plugin selection</Label>
+    <Label FontSize="24" Margin="0 0 0 15" Grid.Row="0">Plugin selection</Label>
     <ScrollViewer Grid.Row="1">
       <ItemsControl Items="{Binding Path=Plugins, Mode=OneTime}">
         <ItemsControl.ItemsPanel>
@@ -19,7 +20,8 @@
             <CardControl Header="{Binding Name}" SecondaryHeader="{Binding Description}">
               <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="PointerPressed">
-                  <InvokeCommandAction Command="{Binding $parent[1].PluginSelectedCommand}" CommandParameter="{Binding}"></InvokeCommandAction>
+                  <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                  <InvokeCommandAction Command="{Binding Path=DataContext.PluginSelectedCommand, ElementName=HomeView}" CommandParameter="{Binding Id}"></InvokeCommandAction>
                 </EventTriggerBehavior>
               </Interaction.Behaviors>
               <Border CornerRadius="3">

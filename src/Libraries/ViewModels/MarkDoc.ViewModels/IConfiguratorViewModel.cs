@@ -3,5 +3,6 @@
   public interface IConfiguratorViewModel
     : IViewModel
   {
+    string Title { get; }
   }
 }

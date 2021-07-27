@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" />
     <ProjectReference Include="..\..\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
     <ProjectReference Include="..\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" />
   </ItemGroup>

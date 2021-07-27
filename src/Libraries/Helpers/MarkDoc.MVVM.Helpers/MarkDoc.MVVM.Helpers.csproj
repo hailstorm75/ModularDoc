@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="Autofac.Extras.Moq" Version="6.0.0" />
     <PackageReference Include="Avalonia" Version="0.10.6" />
     <PackageReference Include="ReactiveUI" Version="13.2.10" />
   </ItemGroup>

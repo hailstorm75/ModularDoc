@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MarkDoc.Helpers;
+using MarkDoc.Views;
 
 namespace MarkDoc.MVVM.Helpers
 {
@@ -151,7 +152,7 @@ namespace MarkDoc.MVVM.Helpers
     /// </summary>
     /// <param name="name">Name of the view to retrieve</param>
     /// <returns>Retrieved view instance</returns>
-    public object ResolveView(string name)
+    public IView ResolveView(string name)
     {
       if (!m_types.TryGetValue(name, out var view))
         throw new KeyNotFoundException($"No views with the name {name} are registered in the manager");
