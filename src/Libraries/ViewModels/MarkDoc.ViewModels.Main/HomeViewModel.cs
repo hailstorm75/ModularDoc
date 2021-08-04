@@ -14,7 +14,7 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public IReadOnlyCollection<IPlugin> Plugins
-      => PluginManagers.Plugins;
+      => PluginManager.Plugins;
 
     /// <inheritdoc />
     public ICommand PluginSelectedCommand { get; }

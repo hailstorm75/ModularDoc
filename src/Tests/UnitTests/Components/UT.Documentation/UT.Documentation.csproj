@@ -36,4 +36,8 @@
     <ProjectReference Include="..\..\..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="TagTests\ListTagTests.cs" />
+  </ItemGroup>
+
 </Project>
