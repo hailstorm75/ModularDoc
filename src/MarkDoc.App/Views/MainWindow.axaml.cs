@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -26,13 +27,18 @@ namespace MarkDoc.App.Views
     }
 
     private void OnNavigationChanged(object? sender, NavigationManager.ViewData data)
-      => m_mainContent!.Content = m_navigator.ResolveView(data.Name);
+    {
+      var view = m_navigator.ResolveView(data.Name);
+      view.SetArguments(data.Arguments);
+      view.SetNamedArguments(data.NamedArguments);
+      m_mainContent!.Content = view;
+    }
 
     private void InitializeComponent()
     {
       AvaloniaXamlLoader.Load(this);
       m_mainContent = this.FindControl<TransitioningContentControl>("MainContent");
-      // m_mainContent!.PageTransition = new PageSlide();
+      m_mainContent!.PageTransition = new PageSlide(TimeSpan.FromMilliseconds(500));
     }
   }
 }

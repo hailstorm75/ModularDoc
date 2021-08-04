@@ -20,7 +20,7 @@
               <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="PointerPressed">
                   <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
-                  <InvokeCommandAction Command="{Binding $parent[1].PluginSelectedCommand}" CommandParameter="{Binding}"></InvokeCommandAction>
+                  <InvokeCommandAction Command="{Binding Path=DataContext.PluginSelectedCommand, ElementName=HomeView}" CommandParameter="{Binding Id}"></InvokeCommandAction>
                 </EventTriggerBehavior>
               </Interaction.Behaviors>
               <Border CornerRadius="3">

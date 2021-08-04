@@ -5,5 +5,6 @@
              mc:Ignorable="d"
              x:Class="MarkDoc.Views.Main.ConfiguratorView">
   <Grid Margin="15" RowDefinitions="Auto,*">
+    <Label FontSize="24" Margin="0 0 0 15" Grid.Row="0" Content="{Binding Title}"/>
   </Grid>
 </UserControl>

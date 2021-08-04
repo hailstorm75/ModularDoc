@@ -1,7 +1,9 @@
-﻿namespace MarkDoc.ViewModels.Main
+﻿using MarkDoc.MVVM.Helpers;
+
+namespace MarkDoc.ViewModels.Main
 {
   public class StartupViewModel
-    : IStartupViewModel
+    : BaseViewModel, IStartupViewModel
   {
   }
 }
