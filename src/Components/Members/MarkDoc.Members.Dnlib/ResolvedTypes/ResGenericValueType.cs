@@ -27,7 +27,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       // If the list of generics is not null and the source is known..
       if (generics != null && generics.TryGetValue(source.FullName, out var result))
         // return the found result
-        return result!;
+        return result;
 
       // Otherwise return the full name
       return source.FullName;

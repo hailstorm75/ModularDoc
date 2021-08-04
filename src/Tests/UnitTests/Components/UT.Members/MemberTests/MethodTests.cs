@@ -273,7 +273,7 @@ namespace UT.Members.MemberTests
 
         var parent = resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS);
         foreach (var (name, type) in GetOperators())
-          yield return parent.WrapItem().Concat(new object[] {name, type}).ToArray()!;
+          yield return parent.WrapItem().Concat(new object[] {name, type}).ToArray();
       }
     }
 

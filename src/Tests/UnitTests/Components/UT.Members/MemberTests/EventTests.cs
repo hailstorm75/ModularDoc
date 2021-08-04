@@ -87,7 +87,7 @@ namespace UT.Members.MemberTests
       };
 
       return data.ComposeData(
-        x => x.resolver!.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, x.typeName!),
+        x => x.resolver.FindMemberParent<IClass>(Constants.EVENTS_NAMESPACE, x.typeName),
         Constants.TEST_ASSEMBLY);
     }
 

@@ -19,6 +19,7 @@
             <CardControl Header="{Binding Name}" SecondaryHeader="{Binding Description}">
               <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="PointerPressed">
+                  <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
                   <InvokeCommandAction Command="{Binding $parent[1].PluginSelectedCommand}" CommandParameter="{Binding}"></InvokeCommandAction>
                 </EventTriggerBehavior>
               </Interaction.Behaviors>

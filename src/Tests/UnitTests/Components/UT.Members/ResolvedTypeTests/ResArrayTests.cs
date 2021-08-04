@@ -213,10 +213,10 @@ namespace UT.Members.ResolvedTypeTests
             break;
           case IResGeneric gen:
             foreach (var field in gen.Generics)
-              Process(field!);
+              Process(field);
             break;
           default:
-            actualGenerics!.AddLast(resType!.DisplayName);
+            actualGenerics.AddLast(resType.DisplayName);
             break;
         }
       }
@@ -301,7 +301,7 @@ namespace UT.Members.ResolvedTypeTests
     {
       var member = GetMethod(type, name, true);
       var returns = (IResArray) member?.Returns!;
-      var wrappedType = (IResTuple) returns!.ArrayType!;
+      var wrappedType = (IResTuple) returns.ArrayType;
 
       var actualGenerics = ExtractGenericTypeNames(wrappedType.Fields.Select(x => x.type));
 
@@ -316,9 +316,9 @@ namespace UT.Members.ResolvedTypeTests
     {
       var member = GetMethod(type, name, true);
       var returns = (IResArray) member?.Returns!;
-      var wrappedType = (IResGeneric) returns!.ArrayType!;
+      var wrappedType = (IResGeneric) returns.ArrayType;
 
-      Assert.Equal(generics, wrappedType!.Generics.Select(x => x.DisplayName));
+      Assert.Equal(generics, wrappedType.Generics.Select(x => x.DisplayName));
     }
 
     [Theory]
@@ -329,7 +329,7 @@ namespace UT.Members.ResolvedTypeTests
     {
       var member = GetMethod(type, name, true);
       var returns = (IResArray) member?.Returns!;
-      var wrappedType = (IResGeneric) returns!.ArrayType!;
+      var wrappedType = (IResGeneric) returns.ArrayType;
 
       var actualGenerics = ExtractGenericTypeNames(wrappedType.Generics.OfType<IResGeneric>());
 

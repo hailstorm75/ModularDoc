@@ -102,7 +102,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
       IReadOnlyList<string>? GetTupleNames(int i)
         => topNames is null || topNames.Length == 0
           ? null
-          : childrenNames![i];
+          : childrenNames[i];
 
       fields = token.GenericArguments
         .Select((x, i) => (isValueTuple && tupleMap != null && tupleMap.Count != 0
@@ -111,8 +111,8 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
           resolver.Resolve(x, generics, false, GetGenerics(i, dynamicsMap, genericType.CountTypes()), GetTupleNames(i))))
         .ToReadOnlyCollection();
       return isValueTuple
-        ? $"({string.Join(", ", fields.Select(field => $"{field.Item2!.DisplayName}{(field.Item1!.Length == 0 ? string.Empty : " ")}{field.Item1}"))})"
-        : $"Tuple<{string.Join(",", fields.Select(field => field.Item2!.DisplayName))}>";
+        ? $"({string.Join(", ", fields.Select(field => $"{field.Item2.DisplayName}{(field.Item1.Length == 0 ? string.Empty : " ")}{field.Item1}"))})"
+        : $"Tuple<{string.Join(",", fields.Select(field => field.Item2.DisplayName))}>";
     }
   }
 }

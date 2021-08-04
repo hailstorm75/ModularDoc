@@ -104,7 +104,6 @@ namespace MarkDoc.MVVM.Helpers
     /// </summary>
     /// <typeparam name="TViewModel">View model interface instance</typeparam>
     /// <returns>Resolved view model instance</returns>
-    [JetBrains.Annotations.NotNull]
     public static TViewModel ResolveViewModel<TViewModel>()
       where TViewModel : IViewModel
     {

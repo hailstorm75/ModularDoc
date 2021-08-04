@@ -13,6 +13,6 @@ namespace MarkDoc.ViewModels.Main
       => PluginManagers.Plugins;
 
     /// <inheritdoc />
-    public ICommand PluginSelectedCommand { get; }
+    public ICommand PluginSelectedCommand { get; } = null!;
   }
 }

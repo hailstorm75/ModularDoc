@@ -106,7 +106,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
         // For every level deep the type was inside the array..
         for (var i = 0; i < arraySkip; ++i)
           // set the map to ignore given position
-          map![index++] = true;
+          map[index++] = true;
 
         // For each generic arguments branch..
         foreach (var genericArgument in genericSource.GenericArguments)
@@ -114,7 +114,7 @@ namespace MarkDoc.Members.Dnlib.Helpers
           // If the type is generic..
           if (genericArgument.IsGenericInstanceType)
             // ignore the identifier
-            map![index++] = true;
+            map[index++] = true;
           // Otherwise if the type is an array..
           else if (genericArgument.ElementType == ElementType.Array || genericArgument.ElementType == ElementType.SZArray)
           {
@@ -124,13 +124,13 @@ namespace MarkDoc.Members.Dnlib.Helpers
             // For every level deep the type was inside the array..
             for (var i = 0; i < arraySkip; ++i)
               // set the map to ignore given position
-              map![index++] = true;
+              map[index++] = true;
 
             // If the node has children..
             if (extracted.IsGenericInstanceType)
             {
               // ignore the identifier
-              map![index++] = true;
+              map[index++] = true;
               // Process its branches
               GenerateDummyMap(extracted.GetGenericSignature());
             }

@@ -43,7 +43,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         if (generics != null
             && generics.TryGetValue(type, out var generic))
           // return the retrieved result
-          return generic!;
+          return generic;
         // Otherwise return as is
         return type;
       }

@@ -122,7 +122,7 @@ namespace MarkDoc.Helpers
     /// <returns>Filtered enumeration</returns>
     public static IEnumerable<T> WhereNotNull<T, TProp>(this IEnumerable<T> input, Func<T, TProp?> predicate)
       where TProp : class
-      => input.Where(x => predicate(x) != null)!;
+      => input.Where(x => predicate(x) != null);
 
     /// <summary>
     /// Filters out null types

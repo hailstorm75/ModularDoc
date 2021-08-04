@@ -149,7 +149,7 @@ namespace UT.Members.MemberTests
       };
 
       return data.ComposeData(
-        x => x.resolver!.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, x.typeName!),
+        x => x.resolver.FindMemberParent<IClass>(Constants.PROPERTIES_NAMESPACE, x.typeName),
         Constants.TEST_ASSEMBLY);
     }
 

@@ -272,7 +272,7 @@ namespace MarkDoc.Members.Dnlib
       // If the type was cached..
       if (m_resCache.TryGetValue(key, out var resolution))
         // return the cached type
-        return resolution!;
+        return resolution;
 
       // If the type is by reference..
       if (isByRef)
@@ -292,7 +292,7 @@ namespace MarkDoc.Members.Dnlib
     private IResType ProcessElementByType(TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap)
     {
       if (ELEMENT_RES_TYPES.TryGetValue(signature.ElementType, out var resType))
-        return resType!(this, signature, generics, isByRef, dynamicsMap, tupleMap);
+        return resType(this, signature, generics, isByRef, dynamicsMap, tupleMap);
 
       if (signature.ElementType is ElementType.GenericInst && IsGeneric(signature))
         return IsTuple(signature, out var valueTuple)
@@ -454,7 +454,7 @@ namespace MarkDoc.Members.Dnlib
         return false;
 
       // Locate the type based on its name
-      result = types!.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
+      result = types.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
 
       // Return true if a type was found
       return result != null;

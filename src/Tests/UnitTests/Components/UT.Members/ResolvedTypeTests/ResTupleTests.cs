@@ -163,7 +163,7 @@ namespace UT.Members.ResolvedTypeTests
 
       var returns = (IResTuple?)member?.Returns;
 
-      Assert.Equal(types, returns?.Fields.Select(field => field.type!.DisplayName));
+      Assert.Equal(types, returns?.Fields.Select(field => field.type.DisplayName));
     }
 
     [Theory]
@@ -212,10 +212,10 @@ namespace UT.Members.ResolvedTypeTests
 
       var parameters = returns?.Fields
         .Take(2)
-        .Concat(((IResTuple) returns!.Fields.ElementAt(1).type!)!.Fields!)
-        .Concat(returns!.Fields.Skip(2)!);
+        .Concat(((IResTuple) returns.Fields.ElementAt(1).type).Fields)
+        .Concat(returns.Fields.Skip(2));
 
-      Assert.Equal(names, parameters?.Select(parameter => parameter.type!.DisplayName));
+      Assert.Equal(names, parameters?.Select(parameter => parameter.type.DisplayName));
     }
 
     [Theory]
@@ -228,8 +228,8 @@ namespace UT.Members.ResolvedTypeTests
 
       var parameters = returns?.Fields
         .Take(2)
-        .Concat(((IResTuple) returns!.Fields.ElementAt(1).type!)!.Fields!)
-        .Concat(returns!.Fields.Skip(2)!);
+        .Concat(((IResTuple) returns.Fields.ElementAt(1).type).Fields)
+        .Concat(returns.Fields.Skip(2));
 
       Assert.Equal(names, parameters?.Select(parameter => parameter.name));
     }
