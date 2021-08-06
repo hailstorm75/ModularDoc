@@ -16,6 +16,7 @@ namespace MarkDoc.MVVM.Helpers
   public class NavigationManager
   {
     private readonly Dictionary<string, Type> m_types;
+    private string m_previousView = string.Empty;
 
     public event EventHandler<ViewData>? NavigationChanged;
 
@@ -57,39 +58,47 @@ namespace MarkDoc.MVVM.Helpers
       /// </summary>
       public IReadOnlyCollection<string> Arguments { get; }
 
+      /// <summary>
+      /// Determines whether the target view is hte previous one
+      /// </summary>
+      public bool IsNavigatingBack { get; }
+
       #endregion
 
       /// <summary>
       /// Constructor for view without arguments
       /// </summary>
-      public ViewData(string name)
+      public ViewData(string name, bool isPrevious = false)
       {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         HasArguments = false;
         NamedArguments = new Dictionary<string, string>();
         Arguments = Array.Empty<string>();
+        IsNavigatingBack = isPrevious;
       }
 
       /// <summary>
       /// Constructor for view with arguments
       /// </summary>
-      public ViewData(string name, IEnumerable<string> arguments)
+      public ViewData(string name, IEnumerable<string> arguments, bool isPrevious = false)
       {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         HasArguments = true;
         NamedArguments = new Dictionary<string, string>();
         Arguments = arguments.ToReadOnlyCollection();
+        IsNavigatingBack = isPrevious;
       }
 
       /// <summary>
       /// Constructor for view with named arguments
       /// </summary>
-      public ViewData(string name, IEnumerable<KeyValuePair<string, string>> arguments)
+      public ViewData(string name, IEnumerable<KeyValuePair<string, string>> arguments, bool isPrevious = false)
       {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         HasArguments = true;
         NamedArguments = arguments.ToDictionary(arg => arg.Key, arg => arg.Value);
         Arguments = Array.Empty<string>();
+        IsNavigatingBack = isPrevious;
       }
     }
 
@@ -119,7 +128,8 @@ namespace MarkDoc.MVVM.Helpers
       if (NavigationChanged is null)
         throw new EntryPointNotFoundException("The application is not configured correctly as there is no-one to send the request to");
 
-      NavigationChanged.Invoke(this, new ViewData(name));
+      NavigationChanged.Invoke(this, new ViewData(name, m_previousView.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
+      m_previousView = CurrentPage;
       CurrentPage = name;
     }
 
@@ -131,7 +141,8 @@ namespace MarkDoc.MVVM.Helpers
       if (NavigationChanged is null)
         throw new EntryPointNotFoundException("The application is not configured correctly as there is no-one to send the request to");
 
-      NavigationChanged.Invoke(this, new ViewData(name, arguments));
+      NavigationChanged.Invoke(this, new ViewData(name, arguments, m_previousView.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
+      m_previousView = CurrentPage;
       CurrentPage = name;
     }
 
@@ -143,7 +154,8 @@ namespace MarkDoc.MVVM.Helpers
       if (NavigationChanged is null)
         throw new EntryPointNotFoundException("The application is not configured correctly as there is no-one to send the request to");
 
-      NavigationChanged.Invoke(this, new ViewData(name, arguments));
+      NavigationChanged.Invoke(this, new ViewData(name, arguments, m_previousView.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
+      m_previousView = CurrentPage;
       CurrentPage = name;
     }
 

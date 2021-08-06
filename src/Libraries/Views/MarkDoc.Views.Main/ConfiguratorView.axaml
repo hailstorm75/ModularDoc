@@ -10,13 +10,13 @@
     <DockPanel Margin="0 0 0 15" Grid.Row="0">
       <Button DockPanel.Dock="Left" Padding="0.5 1 0 0" Margin="0 0 10 0" Height="35" Width="35" Command="{Binding BackCommand}">
         <Button.Content>
-          <i:Icon Value="fa-arrow-left" FontSize="21" />
+          <i:Icon Value="fa-arrow-left" FontSize="18" />
         </Button.Content>
         <Button.Clip>
           <EllipseGeometry RadiusX="17.5" RadiusY="17.5" Center="17.5,17.5"/>
         </Button.Clip>
       </Button>
-      <Label DockPanel.Dock="Right" FontSize="24" Content="{Binding Title}"/>
+      <Label DockPanel.Dock="Right" FontSize="42" Content="{Binding Title}"/>
     </DockPanel>
 
     <!-- Row 1 -->
@@ -25,8 +25,11 @@
     </StackPanel>
     
     <!-- Row 2 -->
-    <Button Grid.Row="2">
-
+    <Button Grid.Row="2" HorizontalAlignment="Right">
+      <DockPanel>
+        <Label DockPanel.Dock="Left" Margin="0 0 5 0">Next</Label>
+        <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
+      </DockPanel>
     </Button>
   </Grid>
 </UserControl>
