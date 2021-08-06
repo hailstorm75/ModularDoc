@@ -1,5 +1,6 @@
 ﻿using MarkDoc.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MarkDoc.Views
 {
@@ -15,7 +16,9 @@ namespace MarkDoc.Views
 
   public interface IView
   {
-    void SetArguments(IReadOnlyCollection<string> arguments);
+    public void SetArguments(IEnumerable<string> arguments)
+      => SetNamedArguments(arguments.ToDictionary(argument => argument, _ => string.Empty));
+
     void SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
   }
 }

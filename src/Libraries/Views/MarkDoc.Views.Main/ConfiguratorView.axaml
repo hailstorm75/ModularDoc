@@ -5,7 +5,8 @@
              xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="MarkDoc.Views.Main.ConfiguratorView">
-  <Grid Margin="15" RowDefinitions="Auto,*">
+  <Grid Margin="15" RowDefinitions="Auto,*,Auto">
+    <!-- Row 0 -->
     <DockPanel Margin="0 0 0 15" Grid.Row="0">
       <Button DockPanel.Dock="Left" Padding="0.5 1 0 0" Margin="0 0 10 0" Height="35" Width="35" Command="{Binding BackCommand}">
         <Button.Content>
@@ -17,5 +18,15 @@
       </Button>
       <Label DockPanel.Dock="Right" FontSize="24" Content="{Binding Title}"/>
     </DockPanel>
+
+    <!-- Row 1 -->
+    <StackPanel Grid.Row="1">
+      
+    </StackPanel>
+    
+    <!-- Row 2 -->
+    <Button Grid.Row="2">
+
+    </Button>
   </Grid>
 </UserControl>

@@ -5,7 +5,7 @@ using MarkDoc.Views;
 
 namespace MarkDoc.MVVM.Helpers
 {
-  public class BaseUserControl<TViewModel>
+  public abstract class BaseUserControl<TViewModel>
     : UserControl, IView<TViewModel>
     where TViewModel : IViewModel
   {
@@ -15,11 +15,8 @@ namespace MarkDoc.MVVM.Helpers
     /// <summary>
     /// Default constructor
     /// </summary>
-    public BaseUserControl()
+    protected BaseUserControl()
       => DataContext = ViewModel;
-
-    public void SetArguments(IReadOnlyCollection<string> arguments)
-      => ViewModel.SetArguments(arguments);
 
     public void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
       => ViewModel.SetNamedArguments(arguments);

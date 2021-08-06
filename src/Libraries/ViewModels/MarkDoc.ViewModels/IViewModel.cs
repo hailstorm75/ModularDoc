@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace MarkDoc.ViewModels
 {
@@ -8,9 +7,6 @@ namespace MarkDoc.ViewModels
   /// </summary>
   public interface IViewModel
   {
-    public void SetArguments(IEnumerable<string> arguments)
-      => SetNamedArguments(arguments.ToDictionary(arg => arg, _ => string.Empty));
-
     void SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
   }
 }
