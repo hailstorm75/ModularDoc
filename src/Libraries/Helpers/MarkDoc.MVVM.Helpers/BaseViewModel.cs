@@ -8,9 +8,6 @@ namespace MarkDoc.MVVM.Helpers
     : ReactiveObject, IViewModel
   {
     /// <inheritdoc />
-    public virtual void SetArguments(IReadOnlyCollection<string> arguments) {}
-
-    /// <inheritdoc />
     public virtual void SetNamedArguments(IReadOnlyDictionary<string, string> arguments) {}
   }
 }

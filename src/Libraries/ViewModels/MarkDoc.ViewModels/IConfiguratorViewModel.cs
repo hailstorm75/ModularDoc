@@ -1,8 +1,14 @@
 ﻿namespace MarkDoc.ViewModels
 {
+  /// <summary>
+  /// Interface for configurator view models
+  /// </summary>
   public interface IConfiguratorViewModel
-    : IViewModel
+    : IViewModel, ICanGoBack
   {
+    /// <summary>
+    /// Plugin title
+    /// </summary>
     string Title { get; }
   }
 }

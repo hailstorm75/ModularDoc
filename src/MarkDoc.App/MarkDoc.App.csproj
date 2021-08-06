@@ -20,6 +20,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.10.6" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.6" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Update="Assets\Resources.Designer.cs">

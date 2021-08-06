@@ -2,9 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="MarkDoc.Views.Main.ConfiguratorView">
   <Grid Margin="15" RowDefinitions="Auto,*">
-    <Label FontSize="24" Margin="0 0 0 15" Grid.Row="0" Content="{Binding Title}"/>
+    <DockPanel Margin="0 0 0 15" Grid.Row="0">
+      <Button DockPanel.Dock="Left" Padding="0.5 1 0 0" Margin="0 0 10 0" Height="35" Width="35" Command="{Binding BackCommand}">
+        <Button.Content>
+          <i:Icon Value="fa-arrow-left" FontSize="21" />
+        </Button.Content>
+        <Button.Clip>
+          <EllipseGeometry RadiusX="17.5" RadiusY="17.5" Center="17.5,17.5"/>
+        </Button.Clip>
+      </Button>
+      <Label DockPanel.Dock="Right" FontSize="24" Content="{Binding Title}"/>
+    </DockPanel>
   </Grid>
 </UserControl>

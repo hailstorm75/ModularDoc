@@ -14,6 +14,7 @@
     <PackageReference Include="Avalonia" Version="0.10.6" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.6" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.6.10" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.1.0" />
     <PackageReference Include="ReactiveUI" Version="13.2.10" />
   </ItemGroup>
   

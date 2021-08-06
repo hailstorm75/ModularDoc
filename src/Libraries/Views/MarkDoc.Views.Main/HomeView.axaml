@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
              mc:Ignorable="d"
+             Name="HomeView"
              x:Class="MarkDoc.Views.Main.HomeView">
-  <Grid Margin="15" RowDefinitions="Auto,*">
-    <Label Grid.Row="0">Plugin selection</Label>
-    <ScrollViewer Grid.Row="1">
+  <Grid Margin="15" RowDefinitions="Auto,*" >
+    <Label Grid.Row="0" FontSize="24">Plugin selection</Label>
+    <ScrollViewer Grid.Row="1" HorizontalAlignment="Center">
       <ItemsControl Items="{Binding Path=Plugins, Mode=OneTime}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
