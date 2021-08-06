@@ -85,9 +85,9 @@ The project is in its early stages of development.
 | Core  | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create components which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
 | Reorganize | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/2)  | Reorganize the project structure such that the interfaces are separate from the components which implement them. Document the project core and cover it with unit tests |
 | C# 9 support | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/6) | Add support for new C#9 features |
-| Add unit tests | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/7) | Cover the documentation layer with Unit Tests  |
+| Add unit tests | :snowflake: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/7) | Cover the documentation layer with Unit Tests  |
 | Smart settings   | :hammer: |  [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/8)  | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
-| Plugins | :grey_question: |  | Create a MarkDoc plugin composed from __components__ |
+| Plugins | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/3) | Create a MarkDoc plugin composed from __components__ |
 | UI   | :hammer: |  [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/4)  | Create the application UI |
 
 **Legend**
@@ -97,4 +97,5 @@ The project is in its early stages of development.
 | :grey_question:    | To be processed   |
 | :mag:              | Analysis phase    |
 | :hammer:           | Development phase |
+| :snowflake:        | Postponed         |
 | :heavy_check_mark: | Complete          |
