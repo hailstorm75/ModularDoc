@@ -20,8 +20,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.1.0" />
-    <PackageReference Include="dnlib" Version="3.3.3" />
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="dnlib" Version="3.3.4" />
   </ItemGroup>
   
   <ItemGroup>
