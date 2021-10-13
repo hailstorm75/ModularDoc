@@ -19,9 +19,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extras.Moq" Version="6.0.0" />
-    <PackageReference Include="Avalonia" Version="0.10.7" />
+    <PackageReference Include="Avalonia" Version="0.10.8" />
     <PackageReference Include="ReactiveUI" Version="16.2.6" />
   </ItemGroup>
 
