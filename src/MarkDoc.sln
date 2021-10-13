@@ -83,6 +83,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkDoc.ViewModels.Main", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkDoc.Views.Main", "Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj", "{00071DB3-1262-45AA-9E91-2ED38DB7AC5D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{3726E733-6BFC-4A74-86F1-88B4AC2DD917}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkDoc.Plugins.GitMarkdown", "Plugins\MarkDoc.Plugins.GitMarkdown\MarkDoc.Plugins.GitMarkdown.csproj", "{2BB0DF2F-B517-45AC-96D5-F766823F917C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +189,10 @@ Global
 		{00071DB3-1262-45AA-9E91-2ED38DB7AC5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00071DB3-1262-45AA-9E91-2ED38DB7AC5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00071DB3-1262-45AA-9E91-2ED38DB7AC5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BB0DF2F-B517-45AC-96D5-F766823F917C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BB0DF2F-B517-45AC-96D5-F766823F917C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BB0DF2F-B517-45AC-96D5-F766823F917C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BB0DF2F-B517-45AC-96D5-F766823F917C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,6 +233,7 @@ Global
 		{B22E889E-8007-418A-A528-B08534993008} = {8BA67762-0F26-4685-9210-F8937F9F967A}
 		{C5C5F8F1-8177-4DEF-997F-4603E70F4852} = {5EEC711D-3D0C-458A-8BFE-793952A37878}
 		{00071DB3-1262-45AA-9E91-2ED38DB7AC5D} = {E85FA7E6-7A53-4A3F-ACD1-E4CD4F3D42ED}
+		{2BB0DF2F-B517-45AC-96D5-F766823F917C} = {3726E733-6BFC-4A74-86F1-88B4AC2DD917}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42D5A311-9CA5-468F-9811-B2FBB27315D9}

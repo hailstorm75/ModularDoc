@@ -1,10 +1,12 @@
-﻿namespace MarkDoc.Core
+﻿using System.IO;
+
+namespace MarkDoc.Core
 {
   public interface IPlugin
   {
     string Id { get; }
     string Name { get; }
     string Description { get; }
-    string Image { get; }
+    Stream? Image { get; }
   }
 }
