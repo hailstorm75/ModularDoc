@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Aura.UI" Version="0.1.4" />
+    <PackageReference Include="Aura.UI.FluentTheme" Version="0.1.4" />
     <PackageReference Include="Avalonia" Version="0.10.8" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.8" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.8" />
