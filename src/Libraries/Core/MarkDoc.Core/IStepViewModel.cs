@@ -1,6 +1,6 @@
 ﻿namespace MarkDoc.Core
 {
-  public interface IStepViewModel<TSettings>
+  public interface IStepViewModel<in TSettings>
     : IViewModel
     where TSettings : ILibrarySettings
   {

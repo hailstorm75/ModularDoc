@@ -56,6 +56,7 @@ namespace MarkDoc.Plugins.GitMarkdown
 
     protected override void Load(ContainerBuilder builder) => builder.RegisterType<PluginGitMarkdown>().As<IPlugin>();
 
+    /// <inheritdoc />
     public IReadOnlyCollection<IPluginStep> GetPluginSteps() => CONTAINER
       .Resolve<IEnumerable<IPluginStep>>()
       .OrderBy(step => step.StepNumber)
