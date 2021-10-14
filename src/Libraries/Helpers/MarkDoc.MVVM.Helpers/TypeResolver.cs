@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
-using MarkDoc.ViewModels;
-using MarkDoc.Views;
+using MarkDoc.Core;
 
 namespace MarkDoc.MVVM.Helpers
 {

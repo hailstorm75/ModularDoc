@@ -1,15 +1,13 @@
-﻿using MarkDoc.Documentation;
+﻿using MarkDoc.Documentation.Xml;
+using MarkDoc.ViewModels.GitMarkdown;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
-  public sealed class DocumentationStep : BasePluginStep
+  public sealed class DocumentationStep
+    : BasePluginStep<DocSettings, DocumentationStepViewModel>
   {
-    private readonly IDocSettings m_settings;
-
     public override string Name => "Documentation configuration";
 
     public override int StepNumber => 2;
-
-    public DocumentationStep(IDocSettings settings) => m_settings = settings;
   }
 }

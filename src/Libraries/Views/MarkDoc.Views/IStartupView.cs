@@ -1,4 +1,5 @@
-﻿using MarkDoc.ViewModels;
+﻿using MarkDoc.Core;
+using MarkDoc.ViewModels;
 
 namespace MarkDoc.Views
 {

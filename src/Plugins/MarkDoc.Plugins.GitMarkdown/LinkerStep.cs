@@ -1,16 +1,13 @@
-﻿using MarkDoc.Linkers;
-using MarkDoc.Linkers.Markdown;
+﻿using MarkDoc.Linkers.Markdown;
+using MarkDoc.ViewModels.GitMarkdown;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
-  public sealed class LinkerStep : BasePluginStep
+  public sealed class LinkerStep
+    : BasePluginStep<LinkerSettings, LinkerStepViewModel>
   {
-    private readonly LinkerSettings m_settings;
-
     public override string Name => "Linker configuration";
 
     public override int StepNumber => 3;
-
-    public LinkerStep(ILinkerSettings settings) => m_settings = (LinkerSettings) settings;
   }
 }

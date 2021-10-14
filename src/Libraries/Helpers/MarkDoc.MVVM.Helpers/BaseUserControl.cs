@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Controls;
-using MarkDoc.ViewModels;
-using MarkDoc.Views;
+using MarkDoc.Core;
 
 namespace MarkDoc.MVVM.Helpers
 {

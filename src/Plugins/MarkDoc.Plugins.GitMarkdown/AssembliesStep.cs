@@ -1,16 +1,13 @@
-﻿using MarkDoc.Members;
+﻿using MarkDoc.Members.Dnlib;
+using MarkDoc.ViewModels.GitMarkdown;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
   public class AssembliesStep
-    : BasePluginStep
+    : BasePluginStep<MemberSettings, AssemblyStepViewModel>
   {
-    private readonly IMemberSettings m_settings;
-
     public override string Name => "Assemblies configuration";
 
     public override int StepNumber => 1;
-
-    public AssembliesStep(IMemberSettings settings) => m_settings = settings;
   }
 }

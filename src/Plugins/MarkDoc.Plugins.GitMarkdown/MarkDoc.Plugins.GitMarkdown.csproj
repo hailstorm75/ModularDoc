@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
-    <LangVersion>8</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,6 +27,8 @@
     <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
     <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
     <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\Libraries\ViewModels\MarkDoc.ViewModels.GitMarkdown\MarkDoc.ViewModels.GitMarkdown.csproj" />
+    <ProjectReference Include="..\..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
   </ItemGroup>
 
   <ItemGroup>

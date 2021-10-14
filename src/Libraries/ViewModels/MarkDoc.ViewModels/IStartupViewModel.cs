@@ -1,4 +1,6 @@
-﻿namespace MarkDoc.ViewModels
+﻿using MarkDoc.Core;
+
+namespace MarkDoc.ViewModels
 {
   /// <summary>
   /// Interface for startup view models

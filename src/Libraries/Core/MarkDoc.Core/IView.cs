@@ -1,8 +1,7 @@
-﻿using MarkDoc.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MarkDoc.Views
+namespace MarkDoc.Core
 {
   public interface IView<out TViewModel>
     : IView

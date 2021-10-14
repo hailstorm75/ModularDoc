@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MarkDoc.ViewModels
+namespace MarkDoc.Core
 {
   /// <summary>
   /// Interface for view models

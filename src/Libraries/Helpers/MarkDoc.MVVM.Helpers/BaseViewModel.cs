@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MarkDoc.ViewModels;
+using MarkDoc.Core;
 using ReactiveUI;
 
 namespace MarkDoc.MVVM.Helpers
