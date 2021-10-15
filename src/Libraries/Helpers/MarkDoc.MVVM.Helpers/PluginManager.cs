@@ -1,37 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using Autofac.Extras.Moq;
+using System.Reflection;
+using Autofac;
+using Autofac.Core;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 
 namespace MarkDoc.MVVM.Helpers
 {
   public static class PluginManager
   {
-    public static IReadOnlyCollection<IPlugin> Plugins { get; }
+    public static IReadOnlyDictionary<string, IPlugin> Plugins { get; }
 
     /// <summary>
     /// Default constructor
     /// </summary>
     static PluginManager()
     {
-      var plugins = new LinkedList<IPlugin>();
+      var builder = new ContainerBuilder();
 
-      for (var i = 1; i < 5; i++)
-      {
-        using var mock = AutoMock.GetLoose();
-        var plugin = mock.Mock<IPlugin>();
-        plugin.SetupGet(x => x.Id).Returns(Guid.NewGuid().ToString());
-        plugin.SetupGet(x => x.Description).Returns("Description");
-        plugin.SetupGet(x => x.Name).Returns("Name " + i);
+      RegisterModules(builder);
 
-        plugins.AddLast(plugin.Object);
-      }
-
-      Plugins = plugins;
+      var container = builder.Build();
+      Plugins = container.Resolve<IEnumerable<IPlugin>>().ToDictionary(plugin => plugin.Id, Linq.XtoX, StringComparer.InvariantCultureIgnoreCase);
     }
 
-    public static IPlugin? GetPlugin(string id)
-      => Plugins.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+    private static void RegisterModules(ContainerBuilder builder)
+    {
+      var path = Path.GetFullPath("Plugins");
+      var assemblies = Directory
+        .EnumerateFiles(path, "MarkDoc.Plugin.*.dll", SearchOption.TopDirectoryOnly)
+        .Select(Assembly.LoadFrom);
+
+      foreach (var assembly in assemblies)
+      {
+        var modules = assembly.GetTypes()
+          .Where(p => typeof(IModule).IsAssignableFrom(p) && !p.IsAbstract)
+          .Select(Activator.CreateInstance)
+          .OfType<IModule>();
+
+        // Registers each module
+        foreach (var module in modules)
+          builder.RegisterModule(module);
+      }
+    }
+
+    public static IPlugin GetPlugin(string id)
+    {
+      if (Plugins.TryGetValue(id, out var plugin))
+        return plugin!;
+
+      throw new KeyNotFoundException($"Plugin with the Id '{id}' not found.");
+    }
   }
 }

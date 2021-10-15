@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
@@ -14,7 +15,7 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public IReadOnlyCollection<IPlugin> Plugins
-      => PluginManager.Plugins;
+      => PluginManager.Plugins.Values.ToArray();
 
     /// <inheritdoc />
     public ICommand PluginSelectedCommand { get; }
