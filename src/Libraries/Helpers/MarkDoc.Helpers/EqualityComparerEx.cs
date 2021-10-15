@@ -29,7 +29,7 @@ namespace MarkDoc.Helpers
       var length = properties.Length;
       var extractions = new PropertyInfo[length];
 
-      for (int i = 0; i < length; i++)
+      for (var i = 0; i < length; i++)
       {
         var property = properties[i];
         extractions[i] = ExtractProperty(property);
@@ -39,7 +39,7 @@ namespace MarkDoc.Helpers
     }
 
     /// <inheritdoc />
-    public bool Equals(T x, T y)
+    public bool Equals(T? x, T? y)
     {
       if (ReferenceEquals(x, y))
         return true;
@@ -53,9 +53,6 @@ namespace MarkDoc.Helpers
     /// <inheritdoc />
     public int GetHashCode(T obj)
     {
-      if (obj is null)
-        return 0;
-
       var hashes = m_properties.Select(pi => pi.GetValue(obj)?.GetHashCode() ?? 0).ToArray();
       return Combine(hashes);
     }

@@ -249,7 +249,7 @@ namespace MarkDoc.Documentation.Xml
           => tag.Key != TagType.Inheritdoc && !except.Contains(tag.Key);
 
         // Prepare the sequence of tags to be cached
-        var tags = member!.Documentation.Tags
+        var tags = member.Documentation.Tags
           // Filter out unwanted tags
           .Where(Filter)
           // Select the tags to cache
@@ -268,7 +268,7 @@ namespace MarkDoc.Documentation.Xml
       }
     }
 
-    private static (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag, Dictionary<TagType, LinkedList<ITag>> cachedTags)
+    private static (TagType key, IEnumerable<ITag> tags) Process(KeyValuePair<TagType, IReadOnlyCollection<ITag>> tag, IReadOnlyDictionary<TagType, LinkedList<ITag>> cachedTags)
     {
       // If the tag type cannot have multiple occurrences or isn't cached yet..
       if (!MULTIPLE.Contains(tag.Key)
@@ -277,7 +277,7 @@ namespace MarkDoc.Documentation.Xml
         return (tag.Key, tag.Value);
 
       // Create a filter based on existing tag references
-      var filter = new HashSet<string>(existing!.Select(x => x.Reference));
+      var filter = new HashSet<string>(existing.Select(x => x.Reference));
       // Create a list of tags to add which contain unique references
       var toAdd = tag.Value.Where(x => !filter.Contains(x.Reference));
 

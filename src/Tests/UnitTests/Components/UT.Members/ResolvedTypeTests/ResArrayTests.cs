@@ -209,7 +209,7 @@ namespace UT.Members.ResolvedTypeTests
             break;
           case IResTuple tup:
             foreach (var field in tup.Fields.Select(x => x.type))
-              Process(field!);
+              Process(field);
             break;
           case IResGeneric gen:
             foreach (var field in gen.Generics)

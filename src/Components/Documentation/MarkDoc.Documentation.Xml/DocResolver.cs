@@ -137,7 +137,7 @@ namespace MarkDoc.Documentation.Xml
       // If the member is cached..
       if (m_documentation.ContainsKey(key[2..]))
         // add the member to the cache
-        m_documentation[key[2..]].members?.AddOrUpdate(toAdd.RawName, toAdd, (_, y) => y ?? toAdd);
+        m_documentation[key[2..]].members?.AddOrUpdate(toAdd.RawName, toAdd, (_, y) => y);
       // Otherwise..
       else
       {
@@ -188,7 +188,7 @@ namespace MarkDoc.Documentation.Xml
         // prepare an empty type for caching
         var doc = new DocElement(type.RawName, this, m_typeResolver);
         // cache the type
-        m_documentation.AddOrUpdate(type.RawName, (resultType, value.members), (x, y) => (doc, y.members));
+        m_documentation.AddOrUpdate(type.RawName, (resultType, value.members), (_, y) => (doc, y.members));
 
         // Return the empty type
         resultType = doc;

@@ -50,7 +50,7 @@ namespace MarkDoc.MVVM.Helpers
     public static IPlugin GetPlugin(string id)
     {
       if (Plugins.TryGetValue(id, out var plugin))
-        return plugin!;
+        return plugin;
 
       throw new KeyNotFoundException($"Plugin with the Id '{id}' not found.");
     }

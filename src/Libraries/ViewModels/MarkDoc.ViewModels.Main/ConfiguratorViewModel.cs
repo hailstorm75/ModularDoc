@@ -50,8 +50,6 @@ namespace MarkDoc.ViewModels.Main
     public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       var id = arguments.FirstOrDefault().Key;
-      if (id is null)
-        return;
 
       m_plugin = PluginManager.GetPlugin(id);
       this.RaisePropertyChanged(nameof(Title));

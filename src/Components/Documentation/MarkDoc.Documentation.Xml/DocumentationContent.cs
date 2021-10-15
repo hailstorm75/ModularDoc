@@ -68,13 +68,8 @@ namespace MarkDoc.Documentation.Xml
       => source.Select(node => new Tag(node));
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
-    {
-      if (!(obj is DocumentationContent doc))
-        return false;
-
-      return Equals(doc);
-    }
+    public override bool Equals(object? obj)
+      => obj is DocumentationContent doc && Equals(doc);
 
     public static bool operator ==(DocumentationContent left, DocumentationContent right)
       => left.Equals(right);

@@ -80,7 +80,7 @@ namespace MarkDoc.Documentation.Xml.Tags
         .Value;
 
       // Identify and return the list type
-      return type?.ToUpperInvariant() switch
+      return type.ToUpperInvariant() switch
       {
         "BULLET" => IListTag.ListType.Bullet,
         "NUMBER" => IListTag.ListType.Number,
@@ -102,7 +102,7 @@ namespace MarkDoc.Documentation.Xml.Tags
           // Select the element node
           .Select(x => x.FirstNode)
           // Resolve the nodes to documentation elements
-          .Select(ContentResolver.Resolve)
+          .Select(ContentResolver.Resolve!)
           // Flatten the sequence
           .SelectMany(Linq.XtoX)
           // Select the heading
@@ -122,7 +122,7 @@ namespace MarkDoc.Documentation.Xml.Tags
           // Select the element node
           .Select(x => x.FirstNode)
           // Resolve the nodes to documentation elements
-          .Select(ContentResolver.Resolve)
+          .Select(ContentResolver.Resolve!)
           // Flatten the sequence
           .SelectMany(Linq.XtoX)
           // Materialize to a collection
