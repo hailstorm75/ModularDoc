@@ -5,6 +5,10 @@ using MarkDoc.Core;
 
 namespace MarkDoc.MVVM.Helpers
 {
+  /// <summary>
+  /// Base view model for plugin steps
+  /// </summary>
+  /// <typeparam name="TSettings">Step settings type</typeparam>
   public abstract class BaseStepViewModel<TSettings>
     : IStepViewModel<TSettings>
     where TSettings : ILibrarySettings
@@ -28,6 +32,7 @@ namespace MarkDoc.MVVM.Helpers
     public void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
       => throw new NotImplementedException();
 
+    /// <inheritdoc />
     public void SetSettings(TSettings? settings)
       => Settings = settings;
 

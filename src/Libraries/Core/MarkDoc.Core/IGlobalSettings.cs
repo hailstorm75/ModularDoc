@@ -2,6 +2,9 @@
 
 namespace MarkDoc.Core
 {
+  /// <summary>
+  /// Interface for global settings
+  /// </summary>
   public interface IGlobalSettings
   {
     /// <summary>
