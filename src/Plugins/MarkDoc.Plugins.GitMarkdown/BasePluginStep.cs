@@ -10,12 +10,15 @@ namespace MarkDoc.Plugins.GitMarkdown
   {
     #region Properties
 
+    /// <inheritdoc />
     public abstract string Name { get; }
 
+    /// <inheritdoc />
     public abstract int StepNumber { get; }
 
     #endregion
 
+    /// <inheritdoc />
     public IStepView<TStepViewModel, TSettings> GetStepView(TSettings? settings = default)
     {
       throw new NotImplementedException();

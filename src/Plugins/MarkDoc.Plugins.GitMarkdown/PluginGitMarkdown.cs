@@ -29,12 +29,16 @@ namespace MarkDoc.Plugins.GitMarkdown
 
     #region Properties
 
+    /// <inheritdoc />
     public string Id => "34C7AA14-E6FE-4684-BBE3-03C00F567297";
 
+    /// <inheritdoc />
     public string Name => "Markdown for Git";
 
+    /// <inheritdoc />
     public string Description => "Markdown documentation generating plugin for GitHub and GitLab";
 
+    /// <inheritdoc />
     public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("MarkDoc.Plugin.GitMarkdown.icon.png");
 
     #endregion
@@ -54,6 +58,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       CONTAINER = builder.Build();
     }
 
+    /// <inheritdoc />
     protected override void Load(ContainerBuilder builder) => builder.RegisterType<PluginGitMarkdown>().As<IPlugin>();
 
     /// <inheritdoc />
