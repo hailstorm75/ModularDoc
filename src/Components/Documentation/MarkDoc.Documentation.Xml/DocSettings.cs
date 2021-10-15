@@ -12,13 +12,7 @@ namespace MarkDoc.Documentation.Xml
     #region Properties
 
     /// <inheritdoc />
-    public readonly Guid Id { get; }
-
-    /// <inheritdoc />
-    public readonly string Name { get; }
-
-    /// <inheritdoc />
-    public readonly string Description { get; }
+    public Guid Id { get; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<string> Paths
@@ -44,8 +38,6 @@ namespace MarkDoc.Documentation.Xml
 
       m_paths = pathsList;
       Id = new Guid("0D5688E6-AF55-4F06-9786-69C04C5D7674");
-      Name = "XML Documentation parser";
-      Description = "Parses .NET code documentation from XML files";
 
       foreach (var path in paths)
       {

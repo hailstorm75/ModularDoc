@@ -8,18 +8,8 @@ namespace MarkDoc.Core
   public interface ILibrarySettings
   {
     /// <summary>
-    /// Library id
+    /// Settings id
     /// </summary>
     Guid Id { get; }
-
-    /// <summary>
-    /// Library name
-    /// </summary>
-    string Name { get; }
-
-    /// <summary>
-    /// Library description
-    /// </summary>
-    string Description { get; }
   }
 }
