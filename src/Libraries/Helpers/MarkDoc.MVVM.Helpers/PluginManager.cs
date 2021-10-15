@@ -31,8 +31,9 @@ namespace MarkDoc.MVVM.Helpers
     {
       var path = Path.GetFullPath("Plugins");
       var assemblies = Directory
-        .EnumerateFiles(path, "MarkDoc.Plugin.*.dll", SearchOption.TopDirectoryOnly)
-        .Select(Assembly.LoadFrom);
+        .EnumerateFiles(path, "MarkDoc.Plugins.*.dll", SearchOption.TopDirectoryOnly)
+        .Select(Assembly.LoadFrom)
+        .ToArray();
 
       foreach (var assembly in assemblies)
       {
