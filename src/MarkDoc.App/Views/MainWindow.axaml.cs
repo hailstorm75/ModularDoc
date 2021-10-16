@@ -37,8 +37,13 @@ namespace MarkDoc.App.Views
     private void OnNavigationChanged(object? sender, NavigationManager.ViewData data)
     {
       var view = m_navigator.ResolveView(data.Name);
-      view.SetArguments(data.Arguments);
-      view.SetNamedArguments(data.NamedArguments);
+
+      if (data.Arguments.Count != 0)
+        view.SetArguments(data.Arguments);
+
+      if (data.NamedArguments.Count != 0)
+        view.SetNamedArguments(data.NamedArguments);
+
       m_mainContent!.Content = view;
 
       m_mainContent!.PageTransition = m_back;
