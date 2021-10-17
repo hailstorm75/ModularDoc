@@ -1,10 +1,10 @@
-﻿using MarkDoc.Members.Dnlib;
+﻿using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.ViewModels.GitMarkdown
 {
   public sealed class AssemblyStepViewModel
-    : BaseStepViewModel<MemberSettings>
+    : BaseStepViewModel<IMemberSettings>
   {
     /// <inheritdoc />
     public override string Title => "Assembly processing settings";

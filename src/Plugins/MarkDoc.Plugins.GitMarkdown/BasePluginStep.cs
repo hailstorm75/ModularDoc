@@ -1,12 +1,9 @@
-﻿using System;
-using MarkDoc.Core;
+﻿using MarkDoc.Core;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
-  public abstract class BasePluginStep<TSettings, TStepViewModel>
-    : IPluginStep<TSettings, TStepViewModel>
-    where TSettings : ILibrarySettings
-    where TStepViewModel : IStepViewModel<TSettings>
+  public abstract class BasePluginStep
+    : IPluginStep
   {
     #region Properties
 
@@ -19,9 +16,6 @@ namespace MarkDoc.Plugins.GitMarkdown
     #endregion
 
     /// <inheritdoc />
-    public IStepView<TStepViewModel, TSettings> GetStepView(TSettings? settings = default)
-    {
-      throw new NotImplementedException();
-    }
+    public abstract IView GetStepView(ILibrarySettings? settings = default);
   }
 }

@@ -1,10 +1,10 @@
-﻿using MarkDoc.Linkers.Markdown;
+﻿using MarkDoc.Linkers;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.ViewModels.GitMarkdown
 {
   public sealed class LinkerStepViewModel
-    : BaseStepViewModel<LinkerSettings>
+    : BaseStepViewModel<ILinkerSettings>
   {
     /// <inheritdoc />
     public override string Title => "Linking settings";

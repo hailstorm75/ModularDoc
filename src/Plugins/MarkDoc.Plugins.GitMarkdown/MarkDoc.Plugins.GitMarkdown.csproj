@@ -28,6 +28,7 @@
     <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
     <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
     <ProjectReference Include="..\..\Libraries\ViewModels\MarkDoc.ViewModels.GitMarkdown\MarkDoc.ViewModels.GitMarkdown.csproj" />
+    <ProjectReference Include="..\..\Libraries\Views\MarkDoc.Views.GitMarkdown\MarkDoc.Views.GitMarkdown.csproj" />
     <ProjectReference Include="..\..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
   </ItemGroup>
 

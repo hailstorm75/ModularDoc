@@ -1,15 +1,24 @@
-﻿using MarkDoc.Linkers.Markdown;
-using MarkDoc.ViewModels.GitMarkdown;
+﻿using MarkDoc.Core;
+using MarkDoc.Linkers;
+using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
   public sealed class LinkerStep
-    : BasePluginStep<LinkerSettings, LinkerStepViewModel>
+    : BasePluginStep
   {
     /// <inheritdoc />
     public override string Name => "Linker configuration";
 
     /// <inheritdoc />
     public override int StepNumber => 3;
+
+    /// <inheritdoc />
+    public override IView GetStepView(ILibrarySettings? settings = default)
+    {
+      var view = TypeResolver.Resolve<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
+
+      return view;
+    }
   }
 }

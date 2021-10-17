@@ -1,4 +1,5 @@
-﻿using MarkDoc.Core;
+﻿using System.Collections.ObjectModel;
+using MarkDoc.Core;
 
 namespace MarkDoc.ViewModels
 {
@@ -12,5 +13,7 @@ namespace MarkDoc.ViewModels
     /// Plugin title
     /// </summary>
     string Title { get; }
+
+    ObservableCollection<IPluginStep> Steps { get; }
   }
 }

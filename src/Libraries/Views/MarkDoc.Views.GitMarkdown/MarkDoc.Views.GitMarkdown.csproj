@@ -29,6 +29,14 @@
       <DependentUpon>MainWindow.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="DocumentationStepView.axaml.cs">
+      <DependentUpon>SettingsView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LinkerStepView.axaml.cs">
+      <DependentUpon>SettingsView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

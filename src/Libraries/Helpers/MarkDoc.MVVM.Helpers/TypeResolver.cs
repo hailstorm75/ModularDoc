@@ -15,6 +15,7 @@ namespace MarkDoc.MVVM.Helpers
 
     private static bool m_isInitialized;
     private static IContainer? m_container;
+    private static ILifetimeScope? m_scope;
 
     #endregion
 
@@ -29,6 +30,15 @@ namespace MarkDoc.MVVM.Helpers
 
       m_container = container;
       m_isInitialized = true;
+      m_scope = m_container.BeginLifetimeScope();
+    }
+
+    public static void RegisterNewTypes(Action<ContainerBuilder> builder)
+    {
+      if (!m_isInitialized)
+        throw new NotSupportedException("Resolver must be initialized first");
+
+      m_scope = m_scope!.BeginLifetimeScope(builder);
     }
 
     /// <summary>
@@ -45,9 +55,8 @@ namespace MarkDoc.MVVM.Helpers
       if (m_container is null)
         throw new NotSupportedException("Resolver was invalidly initialized");
 
-      using var scope = m_container.BeginLifetimeScope();
 #pragma warning disable 8714
-      return scope.Resolve<T>() ?? throw new InvalidOperationException("Given type is not registered");
+      return m_scope.Resolve<T>() ?? throw new InvalidOperationException("Given type is not registered");
 #pragma warning restore 8714
     }
 
@@ -64,8 +73,7 @@ namespace MarkDoc.MVVM.Helpers
       if (m_container is null)
         throw new NotSupportedException("Resolver was invalidly initialized");
 
-      using var scope = m_container.BeginLifetimeScope();
-      return scope.Resolve(type);
+      return m_scope.Resolve(type);
     }
 
     /// <summary>

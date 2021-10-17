@@ -16,8 +16,11 @@ using MarkDoc.Linkers;
 using MarkDoc.Linkers.Markdown;
 using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
+using MarkDoc.MVVM.Helpers;
 using MarkDoc.Printer;
 using MarkDoc.Printer.Markdown;
+using MarkDoc.ViewModels.GitMarkdown;
+using MarkDoc.Views.GitMarkdown;
 using Module = Autofac.Module;
 
 namespace MarkDoc.Plugins.GitMarkdown
@@ -25,8 +28,6 @@ namespace MarkDoc.Plugins.GitMarkdown
   public sealed class PluginGitMarkdown
     : Module, IPlugin
   {
-    private static readonly IContainer CONTAINER;
-
     #region Properties
 
     /// <inheritdoc />
@@ -43,9 +44,10 @@ namespace MarkDoc.Plugins.GitMarkdown
 
     #endregion
 
-    static PluginGitMarkdown()
+    /// <inheritdoc />
+    protected override void Load(ContainerBuilder builder)
     {
-      var builder = new ContainerBuilder();
+      builder.RegisterType<PluginGitMarkdown>().As<IPlugin>();
       builder.RegisterType<Resolver>().As<IResolver>().SingleInstance();
       builder.RegisterType<DocResolver>().As<IDocResolver>().SingleInstance();
       builder.RegisterType<Creator>().As<IElementCreator>().SingleInstance();
@@ -55,14 +57,17 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<AssembliesStep>().As<IPluginStep>();
       builder.RegisterType<DocumentationStep>().As<IPluginStep>();
       builder.RegisterType<LinkerStep>().As<IPluginStep>();
-      CONTAINER = builder.Build();
+
+      builder.RegisterType<AssemblyStepView>().As<IStepView<IStepViewModel<IMemberSettings>, IMemberSettings>>();
+      builder.RegisterType<AssemblyStepViewModel>().As<IStepViewModel<IMemberSettings>>();
+      builder.RegisterType<DocumentationStepView>().As<IStepView<IStepViewModel<IDocSettings>, IDocSettings>>();
+      builder.RegisterType<DocumentationStepViewModel>().As<IStepViewModel<IDocSettings>>();
+      builder.RegisterType<LinkerStepView>().As<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
+      builder.RegisterType<LinkerStepViewModel>().As<IStepViewModel<ILinkerSettings>>();
     }
 
     /// <inheritdoc />
-    protected override void Load(ContainerBuilder builder) => builder.RegisterType<PluginGitMarkdown>().As<IPlugin>();
-
-    /// <inheritdoc />
-    public IReadOnlyCollection<IPluginStep> GetPluginSteps() => CONTAINER
+    public IReadOnlyCollection<IPluginStep> GetPluginSteps() => TypeResolver
       .Resolve<IEnumerable<IPluginStep>>()
       .OrderBy(step => step.StepNumber)
       .ToReadOnlyCollection();

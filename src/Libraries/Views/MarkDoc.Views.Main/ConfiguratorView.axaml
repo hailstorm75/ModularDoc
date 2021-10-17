@@ -1,33 +1,63 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-             mc:Ignorable="d"
-             x:Class="MarkDoc.Views.Main.ConfiguratorView">
+﻿<UserControl
+  mc:Ignorable="d"
+  x:Class="MarkDoc.Views.Main.ConfiguratorView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Grid Margin="15" RowDefinitions="Auto,*,Auto">
-    <!-- Row 0 -->
-    <DockPanel Margin="0 0 0 15" Grid.Row="0">
-      <Button DockPanel.Dock="Left" Padding="0.5 1 0 0" Margin="0 0 10 0" Height="35" Width="35" Command="{Binding BackCommand}">
+    <!--  Row 0  -->
+    <DockPanel Grid.Row="0" Margin="0,0,0,15">
+      <Button
+        Command="{Binding BackCommand}"
+        DockPanel.Dock="Left"
+        Height="35"
+        Margin="0,0,10,0"
+        Padding="0.5,1,0,0"
+        Width="35">
         <Button.Content>
-          <i:Icon Value="fa-arrow-left" FontSize="18" />
+          <i:Icon FontSize="18" Value="fa-arrow-left" />
         </Button.Content>
         <Button.Clip>
-          <EllipseGeometry RadiusX="17.5" RadiusY="17.5" Center="17.5,17.5"/>
+          <EllipseGeometry
+            Center="17.5,17.5"
+            RadiusX="17.5"
+            RadiusY="17.5" />
         </Button.Clip>
       </Button>
-      <Label DockPanel.Dock="Right" FontSize="42" Content="{Binding Title}"/>
+      <Label
+        Content="{Binding Title}"
+        DockPanel.Dock="Right"
+        FontSize="42" />
     </DockPanel>
 
-    <!-- Row 1 -->
+    <!--  Row 1  -->
     <StackPanel Grid.Row="1">
-      
+      <NavigationView Header="Configuration steps" Items="{Binding Steps}">
+        <NavigationView.ItemTemplate>
+          <DataTemplate DataType="{x:Type core:IPluginStep}">
+            <NavigationViewItem Title="{Binding Name}">
+              <NavigationViewItem.Header>
+                <TextBlock>Test</TextBlock>
+              </NavigationViewItem.Header>
+              <NavigationViewItem.Content>
+                <Label>Bla</Label>
+              </NavigationViewItem.Content>
+            </NavigationViewItem>
+          </DataTemplate>
+        </NavigationView.ItemTemplate>
+      </NavigationView>
     </StackPanel>
-    
-    <!-- Row 2 -->
-    <Button Grid.Row="2" HorizontalAlignment="Right">
+
+    <!--  Row 2  -->
+    <Button
+      Command="{Binding NextStageCommand}"
+      Grid.Row="2"
+      HorizontalAlignment="Right">
       <DockPanel>
-        <Label DockPanel.Dock="Left" Margin="0 0 5 0">Next</Label>
+        <Label DockPanel.Dock="Left" Margin="0,0,5,0">Next</Label>
         <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
       </DockPanel>
     </Button>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using MarkDoc.Constants;
@@ -22,6 +23,8 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public string Title => "Plugin: " + (m_plugin?.Name ?? string.Empty);
+
+    public ObservableCollection<IPluginStep> Steps { get; } = new ();
 
     #endregion
 
@@ -52,6 +55,11 @@ namespace MarkDoc.ViewModels.Main
       var id = arguments.FirstOrDefault().Key;
 
       m_plugin = PluginManager.GetPlugin(id);
+
+      foreach (var view in m_plugin.GetPluginSteps())
+        Steps.Add(view);
+
+      this.RaisePropertyChanged(nameof(Steps));
       this.RaisePropertyChanged(nameof(Title));
     }
 

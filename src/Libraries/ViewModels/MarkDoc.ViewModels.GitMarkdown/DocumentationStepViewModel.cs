@@ -1,10 +1,10 @@
-﻿using MarkDoc.Documentation.Xml;
+﻿using MarkDoc.Documentation;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.ViewModels.GitMarkdown
 {
   public sealed class DocumentationStepViewModel
-    : BaseStepViewModel<DocSettings>
+    : BaseStepViewModel<IDocSettings>
   {
     /// <inheritdoc />
     public override string Title => "Documentation extraction settings";

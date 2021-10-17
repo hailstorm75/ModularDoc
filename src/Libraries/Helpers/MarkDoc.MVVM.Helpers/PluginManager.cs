@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Autofac;
 using Autofac.Core;
 using MarkDoc.Core;
@@ -12,22 +13,15 @@ namespace MarkDoc.MVVM.Helpers
 {
   public static class PluginManager
   {
-    public static IReadOnlyDictionary<string, IPlugin> Plugins { get; }
+    public static Lazy<IReadOnlyDictionary<string, IPlugin>> Plugins { get; }
 
     /// <summary>
     /// Default constructor
     /// </summary>
     static PluginManager()
-    {
-      var builder = new ContainerBuilder();
+      => Plugins = new Lazy<IReadOnlyDictionary<string, IPlugin>>(() => TypeResolver.Resolve<IEnumerable<IPlugin>>().ToDictionary(plugin => plugin.Id, Linq.XtoX, StringComparer.InvariantCultureIgnoreCase), LazyThreadSafetyMode.ExecutionAndPublication);
 
-      RegisterModules(builder);
-
-      var container = builder.Build();
-      Plugins = container.Resolve<IEnumerable<IPlugin>>().ToDictionary(plugin => plugin.Id, Linq.XtoX, StringComparer.InvariantCultureIgnoreCase);
-    }
-
-    private static void RegisterModules(ContainerBuilder builder)
+    public static void RegisterModules(ContainerBuilder builder)
     {
       var path = Path.GetFullPath("Plugins");
       var assemblies = Directory
@@ -50,7 +44,7 @@ namespace MarkDoc.MVVM.Helpers
 
     public static IPlugin GetPlugin(string id)
     {
-      if (Plugins.TryGetValue(id, out var plugin))
+      if (Plugins.Value.TryGetValue(id, out var plugin))
         return plugin;
 
       throw new KeyNotFoundException($"Plugin with the Id '{id}' not found.");

@@ -27,6 +27,8 @@ namespace MarkDoc.App
       builder.RegisterType<HomeViewModel>().As<IHomeViewModel>();
       builder.RegisterType<HomeView>().As<IHomeView>();
 
+      PluginManager.RegisterModules(builder);
+
       var navigator = new NavigationManager();
       builder.RegisterInstance(navigator).SingleInstance();
       navigator.Register<IConfiguratorView>(PageNames.CONFIGURATION);
