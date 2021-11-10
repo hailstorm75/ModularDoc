@@ -9,13 +9,13 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Aura.UI" Version="0.1.4" />
+    <PackageReference Include="Aura.UI" Version="0.1.4.2" />
     <PackageReference Include="Autofac" Version="6.3.0" />
-    <PackageReference Include="Avalonia" Version="0.10.8" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.8" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.8" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.1.4" />
-    <PackageReference Include="ReactiveUI" Version="16.2.6" />
+    <PackageReference Include="Avalonia" Version="0.10.10" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.10" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.4.1" />
+    <PackageReference Include="ReactiveUI" Version="16.3.10" />
   </ItemGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

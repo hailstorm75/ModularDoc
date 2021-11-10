@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aura.UI" Version="0.1.4" />
+    <PackageReference Include="Aura.UI" Version="0.1.4.2" />
   </ItemGroup>
 
   <ItemGroup>

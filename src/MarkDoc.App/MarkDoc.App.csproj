@@ -15,13 +15,13 @@
     <EmbeddedResource Remove="Assets\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aura.UI" Version="0.1.4" />
-    <PackageReference Include="Aura.UI.FluentTheme" Version="0.1.4" />
-    <PackageReference Include="Avalonia" Version="0.10.8" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.8" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.8" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.8" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.1.4" />
+    <PackageReference Include="Aura.UI" Version="0.1.4.2" />
+    <PackageReference Include="Aura.UI.FluentTheme" Version="0.1.4.2" />
+    <PackageReference Include="Avalonia" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.10" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.4.1" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Update="Assets\Resources.Designer.cs">
