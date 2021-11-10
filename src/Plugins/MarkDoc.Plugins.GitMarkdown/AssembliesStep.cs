@@ -8,7 +8,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     : BasePluginStep
   {
     /// <inheritdoc />
-    public override string Name => "Assemblies configuration";
+    public override string Name => "Assemblies";
 
     /// <inheritdoc />
     public override int StepNumber => 1;

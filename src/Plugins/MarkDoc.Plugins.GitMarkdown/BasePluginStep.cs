@@ -13,6 +13,9 @@ namespace MarkDoc.Plugins.GitMarkdown
     /// <inheritdoc />
     public abstract int StepNumber { get; }
 
+    /// <inheritdoc />
+    public bool IsActive { get; set; }
+
     #endregion
 
     /// <inheritdoc />

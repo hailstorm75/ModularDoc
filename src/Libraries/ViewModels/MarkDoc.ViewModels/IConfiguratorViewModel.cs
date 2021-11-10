@@ -15,5 +15,9 @@ namespace MarkDoc.ViewModels
     string Title { get; }
 
     ObservableCollection<IPluginStep> Steps { get; }
+
+    IPluginStep? CurrentStep { get; }
+
+    IView? CurrentView { get; }
   }
 }

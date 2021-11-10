@@ -1,4 +1,5 @@
 ﻿<UserControl
+  Name="Root"
   mc:Ignorable="d"
   x:Class="MarkDoc.Views.Main.ConfiguratorView"
   xmlns="https://github.com/avaloniaui"
@@ -10,7 +11,7 @@
   <Grid Margin="15" RowDefinitions="Auto,*,Auto">
     <!--  Row 0  -->
     <DockPanel Grid.Row="0" Margin="0,0,0,15">
-      <Button
+      <FloatingButton
         Command="{Binding BackCommand}"
         DockPanel.Dock="Left"
         Height="35"
@@ -18,37 +19,52 @@
         Padding="0.5,1,0,0"
         Width="35">
         <Button.Content>
-          <i:Icon FontSize="18" Value="fa-arrow-left" />
+          <i:Icon
+            FontSize="10"
+            Foreground="White"
+            Value="fa-arrow-left" />
         </Button.Content>
-        <Button.Clip>
-          <EllipseGeometry
-            Center="17.5,17.5"
-            RadiusX="17.5"
-            RadiusY="17.5" />
-        </Button.Clip>
-      </Button>
+      </FloatingButton>
       <Label
         Content="{Binding Title}"
         DockPanel.Dock="Right"
-        FontSize="42" />
+        FontSize="28" />
     </DockPanel>
 
-    <!--  Row 1  -->
     <StackPanel Grid.Row="1">
-      <NavigationView Header="Configuration steps" Items="{Binding Steps}">
-        <NavigationView.ItemTemplate>
-          <DataTemplate DataType="{x:Type core:IPluginStep}">
-            <NavigationViewItem Title="{Binding Name}">
-              <NavigationViewItem.Header>
-                <TextBlock>Test</TextBlock>
-              </NavigationViewItem.Header>
-              <NavigationViewItem.Content>
-                <Label>Bla</Label>
-              </NavigationViewItem.Content>
-            </NavigationViewItem>
-          </DataTemplate>
-        </NavigationView.ItemTemplate>
-      </NavigationView>
+      <Panel>
+        <Panel.Styles>
+          <Style Selector="TabControl.sidebar">
+            <Setter Property="TabStripPlacement" Value="Left" />
+          </Style>
+
+          <Style Selector="TabControl.sidebar &gt; TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Width" Value="240" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="(ScrollViewer.HorizontalScrollBarVisibility)" Value="Auto" />
+            <Setter Property="(ScrollViewer.VerticalScrollBarVisibility)" Value="Auto" />
+          </Style>
+        </Panel.Styles>
+
+        <TabControl
+          Classes="sidebar"
+          Items="{Binding Steps}"
+          SelectedItem="{Binding CurrentStep}">
+          <TabControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type core:IPluginStep}">
+              <TabItem Header="{Binding Name}" />
+            </DataTemplate>
+          </TabControl.ItemTemplate>
+          <TabControl.ContentTemplate>
+            <DataTemplate DataType="{x:Type core:IPluginStep}">
+              <ContentControl Content="{Binding DataContext.CurrentView, ElementName=Root, Mode=OneWay}" />
+            </DataTemplate>
+          </TabControl.ContentTemplate>
+        </TabControl>
+      </Panel>
     </StackPanel>
 
     <!--  Row 2  -->

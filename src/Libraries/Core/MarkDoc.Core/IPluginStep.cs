@@ -16,6 +16,11 @@
     int StepNumber { get; }
 
     /// <summary>
+    /// Determines whether this step is used
+    /// </summary>
+    bool IsActive { get; set; }
+
+    /// <summary>
     /// Gets the view for this step
     /// </summary>
     /// <param name="settings">Settings to use</param>

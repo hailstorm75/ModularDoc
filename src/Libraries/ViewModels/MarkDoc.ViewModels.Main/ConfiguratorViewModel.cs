@@ -16,6 +16,8 @@ namespace MarkDoc.ViewModels.Main
 
     private readonly NavigationManager m_navigationManager;
     private IPlugin? m_plugin;
+    private IPluginStep? m_currentStep;
+    private IView? m_currentView;
 
     #endregion
 
@@ -25,6 +27,35 @@ namespace MarkDoc.ViewModels.Main
     public string Title => "Plugin: " + (m_plugin?.Name ?? string.Empty);
 
     public ObservableCollection<IPluginStep> Steps { get; } = new ();
+
+    /// <inheritdoc />
+    public IPluginStep? CurrentStep
+    {
+      get => m_currentStep;
+      set
+      {
+        if (m_currentStep == value)
+          return;
+
+        m_currentStep = value;
+
+        if (value is not null)
+          CurrentView = value.GetStepView();
+
+        this.RaisePropertyChanging(nameof(CurrentStep));
+      }
+    }
+
+    /// <inheritdoc />
+    public IView? CurrentView
+    {
+      get => m_currentView;
+      private set
+      {
+        m_currentView = value;
+        this.RaisePropertyChanging(nameof(CurrentView));
+      }
+    }
 
     #endregion
 
@@ -58,6 +89,8 @@ namespace MarkDoc.ViewModels.Main
 
       foreach (var view in m_plugin.GetPluginSteps())
         Steps.Add(view);
+
+      CurrentStep = Steps.First();
 
       this.RaisePropertyChanged(nameof(Steps));
       this.RaisePropertyChanged(nameof(Title));

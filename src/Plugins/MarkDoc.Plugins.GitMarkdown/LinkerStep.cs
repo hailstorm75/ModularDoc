@@ -8,7 +8,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     : BasePluginStep
   {
     /// <inheritdoc />
-    public override string Name => "Linker configuration";
+    public override string Name => "Linker";
 
     /// <inheritdoc />
     public override int StepNumber => 3;
