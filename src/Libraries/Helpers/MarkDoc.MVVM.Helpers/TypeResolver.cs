@@ -47,7 +47,7 @@ namespace MarkDoc.MVVM.Helpers
     /// <typeparam name="T">Type to resolve</typeparam>
     /// <returns>Resolved type instance</returns>
     /// <exception cref="NotSupportedException">The given type is not registered</exception>
-    [JetBrains.Annotations.NotNull]
+    // ReSharper disable once AnnotateNotNullTypeMember
     public static T Resolve<T>()
     {
       if (!m_isInitialized)
@@ -56,7 +56,7 @@ namespace MarkDoc.MVVM.Helpers
         throw new NotSupportedException("Resolver was invalidly initialized");
 
 #pragma warning disable 8714
-      return m_scope.Resolve<T>() ?? throw new InvalidOperationException("Given type is not registered");
+      return m_scope!.Resolve<T>() ?? throw new InvalidOperationException("Given type is not registered");
 #pragma warning restore 8714
     }
 
@@ -73,7 +73,7 @@ namespace MarkDoc.MVVM.Helpers
       if (m_container is null)
         throw new NotSupportedException("Resolver was invalidly initialized");
 
-      return m_scope.Resolve(type);
+      return m_scope!.Resolve(type);
     }
 
     /// <summary>
@@ -111,6 +111,7 @@ namespace MarkDoc.MVVM.Helpers
     /// </summary>
     /// <typeparam name="TViewModel">View model interface instance</typeparam>
     /// <returns>Resolved view model instance</returns>
+    // ReSharper disable once AnnotateNotNullTypeMember
     public static TViewModel ResolveViewModel<TViewModel>()
       where TViewModel : IViewModel
     {

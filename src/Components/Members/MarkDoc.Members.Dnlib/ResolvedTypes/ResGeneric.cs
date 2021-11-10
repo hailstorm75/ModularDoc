@@ -43,6 +43,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         if (generics != null
             && generics.TryGetValue(type, out var generic))
           // return the retrieved result
+          // ReSharper disable once AssignNullToNotNullAttribute
           return generic;
         // Otherwise return as is
         return type;
@@ -89,7 +90,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
         .ToReadOnlyCollection();
 
       // Return the reformatted documentation name
-      return $"{name}{{{string.Join(",", genericsProcessed.Select((x, i) => ResolveGenerics(x.DocumentationName, generics)))}}}";
+      return $"{name}{{{string.Join(",", genericsProcessed.Select((x, _) => ResolveGenerics(x.DocumentationName, generics)))}}}";
     }
   }
 }

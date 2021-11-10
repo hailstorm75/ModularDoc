@@ -98,83 +98,83 @@ namespace MarkDoc.Members.Dnlib
         },
         {
           ElementType.Var,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, generics, isByRef, _, _)
             => new ResGenericValueType(resolver, signature, generics, isByRef)
         },
         {
           ElementType.MVar,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, generics, isByRef, _, _)
             => new ResGenericValueType(resolver, signature, generics, isByRef)
         },
         {
           ElementType.Boolean,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "bool", isByRef)
         },
         {
           ElementType.Object,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, dynamicsMap, _)
             => new ResValueType(resolver, signature, dynamicsMap?.FirstOrDefault() ?? false ? "dynamic" : "object",
               isByRef)
         },
         {
           ElementType.String,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "string", isByRef)
         },
         {
           ElementType.Char,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "char", isByRef)
         },
         {
           ElementType.I1,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "sbyte", isByRef)
         },
         {
           ElementType.U1,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "byte", isByRef)
         },
         {
           ElementType.I2,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "short", isByRef)
         },
         {
           ElementType.U2,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "ushort", isByRef)
         },
         {
           ElementType.I4,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "int", isByRef)
         },
         {
           ElementType.U4,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "uint", isByRef)
         },
         {
           ElementType.I8,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "long", isByRef)
         },
         {
           ElementType.U8,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "ulong", isByRef)
         },
         {
           ElementType.R4,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "float", isByRef)
         },
         {
           ElementType.R8,
-          (resolver, signature, generics, isByRef, dynamicsMap, tupleMap)
+          (resolver, signature, _, isByRef, _, _)
             => new ResValueType(resolver, signature, "double", isByRef)
         },
       };
@@ -283,7 +283,7 @@ namespace MarkDoc.Members.Dnlib
       var result = ProcessElementByType(signature, generics, isByRef, dynamicsMap, tupleMap);
 
       // Cache the resolved type
-      m_resCache.AddOrUpdate(key, result, (x, y) => result);
+      m_resCache.AddOrUpdate(key, result, (_, _) => result);
 
       // Return the resolved type
       return result;
@@ -297,8 +297,8 @@ namespace MarkDoc.Members.Dnlib
       if (signature.ElementType is ElementType.GenericInst && IsGeneric(signature))
         return IsTuple(signature, out var valueTuple)
           ? new ResTuple(this, signature, valueTuple, generics, dynamicsMap, tupleMap, isByRef)
-          : new ResGeneric(this, signature, generics, dynamicsMap, isByRef) as IResType;
-      if (signature.ElementType is ElementType.ByRef || signature.ElementType is ElementType.CModReqd)
+          : new ResGeneric(this, signature, generics, dynamicsMap, isByRef);
+      if (signature.ElementType is ElementType.ByRef or ElementType.CModReqd)
         return Resolve(signature, generics, true, dynamicsMap, tupleMap);
       if (signature.ElementType is ElementType.ValueType &&
           signature.FullName.Equals("System.Decimal", StringComparison.InvariantCulture))
