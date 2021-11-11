@@ -17,7 +17,6 @@ namespace MarkDoc.ViewModels.Main
     private readonly NavigationManager m_navigationManager;
     private IPlugin? m_plugin;
     private IPluginStep? m_currentStep;
-    private IView? m_currentView;
 
     #endregion
 
@@ -39,21 +38,7 @@ namespace MarkDoc.ViewModels.Main
 
         m_currentStep = value;
 
-        if (value is not null)
-          CurrentView = value.GetStepView();
-
         this.RaisePropertyChanging(nameof(CurrentStep));
-      }
-    }
-
-    /// <inheritdoc />
-    public IView? CurrentView
-    {
-      get => m_currentView;
-      private set
-      {
-        m_currentView = value;
-        this.RaisePropertyChanging(nameof(CurrentView));
       }
     }
 

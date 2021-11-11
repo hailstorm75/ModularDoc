@@ -6,6 +6,7 @@
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+  xmlns:main="clr-namespace:MarkDoc.Views.Main"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Grid Margin="15" RowDefinitions="Auto,*,Auto">
@@ -60,7 +61,15 @@
           </TabControl.ItemTemplate>
           <TabControl.ContentTemplate>
             <DataTemplate DataType="{x:Type core:IPluginStep}">
-              <ContentControl Content="{Binding DataContext.CurrentView, ElementName=Root, Mode=OneWay}" />
+              <ContentControl>
+                <ContentControl.Content>
+                  <Binding>
+                    <Binding.Converter>
+                      <main:PluginStepToViewConverter />
+                    </Binding.Converter>
+                  </Binding>
+                </ContentControl.Content>
+              </ContentControl>
             </DataTemplate>
           </TabControl.ContentTemplate>
         </TabControl>
