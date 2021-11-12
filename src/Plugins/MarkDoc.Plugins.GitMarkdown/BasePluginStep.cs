@@ -1,4 +1,5 @@
-﻿using MarkDoc.Core;
+﻿using System.Collections.Generic;
+using MarkDoc.Core;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
@@ -6,6 +7,9 @@ namespace MarkDoc.Plugins.GitMarkdown
     : IPluginStep
   {
     #region Properties
+
+    /// <inheritdoc />
+    public abstract string Id { get; }
 
     /// <inheritdoc />
     public abstract string Name { get; }
@@ -19,6 +23,6 @@ namespace MarkDoc.Plugins.GitMarkdown
     #endregion
 
     /// <inheritdoc />
-    public abstract IView GetStepView(ILibrarySettings? settings = default);
+    public abstract IView GetStepView(IReadOnlyDictionary<string, string> settings);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using MarkDoc.Core;
@@ -14,7 +15,7 @@ namespace MarkDoc.Views.Main
       if (value is not IPluginStep pluginStep)
         return "ERROR";
 
-      return pluginStep.GetStepView();
+      return pluginStep.GetStepView(new Dictionary<string, string>());
     }
 
     /// <inheritdoc />

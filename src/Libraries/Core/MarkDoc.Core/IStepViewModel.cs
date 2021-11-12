@@ -28,17 +28,5 @@ namespace MarkDoc.Core
     string Description { get; }
 
     #endregion
-
-    /// <summary>
-    /// Passes settings for configuration
-    /// </summary>
-    /// <param name="settings">Settings to configure</param>
-    void SetSettings(TSettings settings);
-
-    /// <summary>
-    /// Extracts the settings configured in this step
-    /// </summary>
-    /// <returns></returns>
-    TSettings GetSettings();
   }
 }

@@ -27,7 +27,7 @@ namespace MarkDoc.Core
     /// </summary>
     /// <param name="arguments">Arguments to set</param>
     public void SetArguments(IEnumerable<string> arguments)
-      => SetNamedArguments(arguments.ToDictionary(argument => argument, _ => string.Empty));
+      => SetNamedArguments(arguments.Select((x, i) => (x, i)).ToDictionary(el => $"{el.i}", el => el.x));
 
     /// <summary>
     /// Sets named <paramref name="arguments"/> for the current view

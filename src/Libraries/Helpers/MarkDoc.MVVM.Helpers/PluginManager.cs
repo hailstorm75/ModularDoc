@@ -45,6 +45,7 @@ namespace MarkDoc.MVVM.Helpers
     public static IPlugin GetPlugin(string id)
     {
       if (Plugins.Value.TryGetValue(id, out var plugin))
+        // ReSharper disable once AssignNullToNotNullAttribute
         return plugin;
 
       throw new KeyNotFoundException($"Plugin with the Id '{id}' not found.");

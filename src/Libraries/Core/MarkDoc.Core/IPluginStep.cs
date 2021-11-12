@@ -1,10 +1,17 @@
-﻿namespace MarkDoc.Core
+﻿using System.Collections.Generic;
+
+namespace MarkDoc.Core
 {
   /// <summary>
   /// Interface for plugin steps
   /// </summary>
   public interface IPluginStep
   {
+    /// <summary>
+    /// Unique identifier of the step
+    /// </summary>
+    string Id { get; }
+
     /// <summary>
     /// Step name
     /// </summary>
@@ -23,8 +30,8 @@
     /// <summary>
     /// Gets the view for this step
     /// </summary>
-    /// <param name="settings">Settings to use</param>
+    /// <param name="settings">Settings to load</param>
     /// <returns>View instance</returns>
-    IView GetStepView(ILibrarySettings? settings = default);
+    IView GetStepView(IReadOnlyDictionary<string, string> settings);
   }
 }

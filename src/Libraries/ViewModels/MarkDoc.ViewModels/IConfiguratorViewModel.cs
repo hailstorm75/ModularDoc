@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using MarkDoc.Core;
 
 namespace MarkDoc.ViewModels
@@ -9,6 +10,9 @@ namespace MarkDoc.ViewModels
   public interface IConfiguratorViewModel
     : IViewModel, ICanGoBack
   {
+    public const string ARGUMENT_ID = "id";
+    public const string ARGUMENT_SETTINGS = "settings";
+
     /// <summary>
     /// Plugin title
     /// </summary>
@@ -16,6 +20,13 @@ namespace MarkDoc.ViewModels
 
     ObservableCollection<IPluginStep> Steps { get; }
 
+    /// <summary>
+    /// Currently active step
+    /// </summary>
     IPluginStep? CurrentStep { get; }
+
+    Dictionary<string, string> CurrentStepSettings { get; }
+
+    IReadOnlyDictionary<string, Dictionary<string, string>> PluginSettings { get; }
   }
 }

@@ -17,8 +17,15 @@ namespace MarkDoc.ViewModels.Main
     public IReadOnlyCollection<IPlugin> Plugins
       => PluginManager.Plugins.Value.Values.ToArray();
 
+    #region Commands
+
     /// <inheritdoc />
-    public ICommand PluginSelectedCommand { get; }
+    public ICommand PluginNewCommand { get; }
+
+    /// <inheritdoc />
+    public ICommand PluginOpenCommand { get; }
+
+    #endregion
 
     /// <summary>
     /// Default constructor
@@ -26,10 +33,15 @@ namespace MarkDoc.ViewModels.Main
     public HomeViewModel(NavigationManager navigationManager)
     {
       m_navigationManager = navigationManager;
-      PluginSelectedCommand = ReactiveCommand.Create<string>(PluginSelected);
+
+      PluginNewCommand = ReactiveCommand.Create<string>(PluginNew);
+      PluginOpenCommand = ReactiveCommand.Create<string>(PluginOpen);
     }
 
-    private void PluginSelected(string pluginId)
+    private void PluginNew(string pluginId)
+      => m_navigationManager.NavigateTo(PageNames.CONFIGURATION, pluginId);
+
+    private void PluginOpen(string pluginId)
       => m_navigationManager.NavigateTo(PageNames.CONFIGURATION, pluginId);
   }
 }

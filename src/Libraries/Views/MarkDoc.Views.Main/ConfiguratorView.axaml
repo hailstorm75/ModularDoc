@@ -9,6 +9,8 @@
   xmlns:main="clr-namespace:MarkDoc.Views.Main"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <UserControl.Resources />
+
   <Grid Margin="15" RowDefinitions="Auto,*,Auto">
     <!--  Row 0  -->
     <DockPanel Grid.Row="0" Margin="5,0,0,15">

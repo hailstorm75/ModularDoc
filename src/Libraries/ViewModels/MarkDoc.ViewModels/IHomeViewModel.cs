@@ -16,8 +16,13 @@ namespace MarkDoc.ViewModels
     IReadOnlyCollection<IPlugin> Plugins { get; }
 
     /// <summary>
-    /// Command for operating when a plugin is selected
+    /// Command for opening a plugin with new settings
     /// </summary>
-    ICommand PluginSelectedCommand { get; }
+    ICommand PluginNewCommand { get; }
+
+    /// <summary>
+    /// Command for opening a plugin with existing settings
+    /// </summary>
+    ICommand PluginOpenCommand { get; }
   }
 }

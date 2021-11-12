@@ -25,7 +25,11 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public string Title => "Plugin: " + (m_plugin?.Name ?? string.Empty);
 
+    /// <inheritdoc />
     public ObservableCollection<IPluginStep> Steps { get; } = new ();
+
+    /// <inheritdoc />
+    public Dictionary<string, string> CurrentStepSettings { get; private set; } = new();
 
     /// <inheritdoc />
     public IPluginStep? CurrentStep
@@ -37,10 +41,20 @@ namespace MarkDoc.ViewModels.Main
           return;
 
         m_currentStep = value;
-
         this.RaisePropertyChanging(nameof(CurrentStep));
+
+        if (value is null)
+          return;
+
+        // ReSharper disable once AssignNullToNotNullAttribute
+        CurrentStepSettings = PluginSettings.TryGetValue(value.Id, out var settings)
+          ? settings
+          : new Dictionary<string, string>();
       }
     }
+
+    /// <inheritdoc />
+    public IReadOnlyDictionary<string, Dictionary<string, string>> PluginSettings { get; private set; } = new Dictionary<string, Dictionary<string, string>>();
 
     #endregion
 
@@ -48,6 +62,8 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public ICommand BackCommand { get; }
+
+    // public ICommand NextStageCommand { get; }
 
     #endregion
 
@@ -68,7 +84,7 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
-      var id = arguments.FirstOrDefault().Key;
+      var (id, _) = ExtractArguments(arguments);
 
       m_plugin = PluginManager.GetPlugin(id);
 
@@ -76,9 +92,33 @@ namespace MarkDoc.ViewModels.Main
         Steps.Add(view);
 
       CurrentStep = Steps.First();
+      // var deserialized = JsonSerializer.Deserialize<IReadOnlyDictionary<string, Dictionary<string, string>>>(settings);
+      // if (deserialized is not null)
+      //   PluginSettings = deserialized;
 
       this.RaisePropertyChanged(nameof(Steps));
       this.RaisePropertyChanged(nameof(Title));
+    }
+
+    private static (string id, string settings) ExtractArguments(IReadOnlyDictionary<string, string> arguments)
+    {
+      if (arguments.Count == 0)
+        return ("", "");
+
+      var result = ("", "");
+      foreach (var (key, value) in arguments)
+        switch (key.ToLowerInvariant())
+        {
+          case "0":
+          case IConfiguratorViewModel.ARGUMENT_ID:
+            result.Item1 = value;
+            break;
+          case IConfiguratorViewModel.ARGUMENT_SETTINGS:
+            result.Item2 = value;
+            break;
+        }
+
+      return result;
     }
 
     #endregion

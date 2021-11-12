@@ -169,6 +169,7 @@ namespace MarkDoc.MVVM.Helpers
       if (!m_types.TryGetValue(name, out var view))
         throw new KeyNotFoundException($"No views with the name {name} are registered in the manager");
 
+      // ReSharper disable once AssignNullToNotNullAttribute
       return TypeResolver.ResolveView(view);
     }
   }

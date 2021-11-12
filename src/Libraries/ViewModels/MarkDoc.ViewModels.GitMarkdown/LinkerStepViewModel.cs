@@ -1,4 +1,5 @@
-﻿using MarkDoc.Linkers;
+﻿using System.Collections.Generic;
+using MarkDoc.Linkers;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.ViewModels.GitMarkdown
@@ -11,5 +12,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
     /// <inheritdoc />
     public override string Description => "";
+
+    /// <inheritdoc />
+    public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+    {
+      // throw new System.NotImplementedException();
+    }
   }
 }

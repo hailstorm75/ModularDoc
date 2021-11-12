@@ -1,18 +1,19 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
-             mc:Ignorable="d"
-             Name="HomeView"
-             x:Class="MarkDoc.Views.Main.HomeView">
-  <Grid Margin="15" RowDefinitions="Auto,*" >
-    <Label Grid.Row="0" FontSize="24">Plugin selection</Label>
+﻿<UserControl
+  Name="HomeView"
+  mc:Ignorable="d"
+  x:Class="MarkDoc.Views.Main.HomeView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid Margin="15" RowDefinitions="Auto,*">
+    <Label FontSize="24" Grid.Row="0">Plugin selection</Label>
     <ScrollViewer Grid.Row="1" HorizontalAlignment="Center">
       <ItemsControl Items="{Binding Path=Plugins, Mode=OneTime}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
-            <WrapPanel/>
+            <WrapPanel />
           </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
@@ -20,13 +21,13 @@
             <CardControl Header="{Binding Name}" SecondaryHeader="{Binding Description}">
               <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="PointerPressed">
-                  <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
-                  <InvokeCommandAction Command="{Binding Path=DataContext.PluginSelectedCommand, ElementName=HomeView}" CommandParameter="{Binding Id}"></InvokeCommandAction>
+                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                  <InvokeCommandAction Command="{Binding Path=DataContext.PluginNewCommand, ElementName=HomeView}" CommandParameter="{Binding Id}" />
                 </EventTriggerBehavior>
               </Interaction.Behaviors>
               <Border CornerRadius="3">
-                <Image Source="{Binding Image}"  Stretch="UniformToFill"/>
-              </Border> 
+                <Image Source="{Binding Image}" Stretch="UniformToFill" />
+              </Border>
             </CardControl>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
