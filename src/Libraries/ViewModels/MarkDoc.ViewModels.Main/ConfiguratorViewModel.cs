@@ -17,6 +17,7 @@ namespace MarkDoc.ViewModels.Main
     private readonly NavigationManager m_navigationManager;
     private IPlugin? m_plugin;
     private IPluginStep? m_currentStep;
+    private readonly Dictionary<string, Dictionary<string, string>> m_pluginSettings = new();
 
     #endregion
 
@@ -54,7 +55,7 @@ namespace MarkDoc.ViewModels.Main
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<string, Dictionary<string, string>> PluginSettings { get; private set; } = new Dictionary<string, Dictionary<string, string>>();
+    public IReadOnlyDictionary<string, Dictionary<string, string>> PluginSettings => m_pluginSettings;
 
     #endregion
 
@@ -88,8 +89,12 @@ namespace MarkDoc.ViewModels.Main
 
       m_plugin = PluginManager.GetPlugin(id);
 
-      foreach (var view in m_plugin.GetPluginSteps())
-        Steps.Add(view);
+      foreach (var step in m_plugin.GetPluginSteps())
+      {
+        Steps.Add(step);
+        // If no settings were deserialized
+        m_pluginSettings.Add(step.Id, new Dictionary<string, string>());
+      }
 
       CurrentStep = Steps.First();
       // var deserialized = JsonSerializer.Deserialize<IReadOnlyDictionary<string, Dictionary<string, string>>>(settings);

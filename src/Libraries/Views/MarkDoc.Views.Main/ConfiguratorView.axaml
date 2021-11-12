@@ -51,7 +51,8 @@
                 <ContentControl.Content>
                   <Binding>
                     <Binding.Converter>
-                      <main:PluginStepToViewConverter />
+                      <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                      <main:PluginStepToViewConverter PluginSettings="{Binding DataContext.PluginSettings, ElementName=Root}" />
                     </Binding.Converter>
                   </Binding>
                 </ContentControl.Content>
