@@ -27,12 +27,6 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Reference Include="Avalonia.Controls.DataGrid, Version=0.10.6.0, Culture=neutral, PublicKeyToken=c8d484a7012f9a8b">
-      <HintPath>..\..\..\..\..\..\..\.nuget\packages\avalonia.controls.datagrid\0.10.6\lib\netstandard2.0\Avalonia.Controls.DataGrid.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\..\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
   </ItemGroup>
 
