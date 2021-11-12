@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MarkDoc.Core;
+using ReactiveUI;
 
 namespace MarkDoc.MVVM.Helpers
 {
@@ -9,7 +10,7 @@ namespace MarkDoc.MVVM.Helpers
   /// </summary>
   /// <typeparam name="TSettings">Step settings type</typeparam>
   public abstract class BaseStepViewModel<TSettings>
-    : IStepViewModel<TSettings>
+    : ReactiveObject, IStepViewModel<TSettings>
     where TSettings : ILibrarySettings
   {
     /// <inheritdoc />

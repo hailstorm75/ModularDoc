@@ -9,8 +9,29 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <StackPanel>
-    <Label>Test</Label>
     <Label Content="{Binding Title}" />
+    <TextBlock Text="{Binding Description}" />
+    <Grid ColumnDefinitions="*,Auto,Auto">
+      <TextBox
+        Text="{Binding PathToAssembly}"
+        UseFloatingWatermark="True"
+        Watermark="Select a .NET assembly" />
+
+      <Button
+        Command="{Binding BrowseCommand}"
+        Content="Browse"
+        Grid.Column="1" />
+      <Button
+        Command="{Binding AddCommand}"
+        Content="Add"
+        Grid.Column="2" />
+    </Grid>
+
+    <DataGrid
+      CanUserReorderColumns="False"
+      CanUserResizeColumns="False"
+      CanUserSortColumns="True"
+      Items="{Binding Paths, Mode=OneWay}" />
   </StackPanel>
 
 </UserControl>
