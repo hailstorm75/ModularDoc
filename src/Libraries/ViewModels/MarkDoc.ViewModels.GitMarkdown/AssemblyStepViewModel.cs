@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
@@ -53,12 +56,20 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <summary>
     /// Command for browsing for assembly files
     /// </summary>
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public ICommand BrowseCommand { get; }
 
     /// <summary>
     /// Command for adding a new path
     /// </summary>
-    public ICommand AddCommand { get; }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public ReactiveCommand<Unit, bool> AddCommand { get; }
+
+    /// <summary>
+    /// Command for removing a path
+    /// </summary>
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public ICommand RemoveCommand { get; }
 
     #endregion
 
@@ -67,12 +78,27 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// </summary>
     public AssemblyStepViewModel(IDialogManager dialogManager)
     {
-      AddCommand = ReactiveCommand.Create(AddPath);
+      var canExecuteChanged = this
+        .WhenAnyValue(viewModel => viewModel.PathToAssembly)
+        .Select(IsValidPath);
+
+      AddCommand = ReactiveCommand.Create(AddPath, canExecuteChanged);
       BrowseCommand = ReactiveCommand.CreateFromTask(BrowseAsync);
+      RemoveCommand = ReactiveCommand.Create<string>(RemovePath);
       m_dialogManager = dialogManager;
     }
 
     #region Methods
+
+    private bool IsValidPath(string? path)
+    {
+      var trimmed = path?.Trim() ?? string.Empty;
+
+      return !string.IsNullOrEmpty(trimmed)
+             && !m_pathsInsensitive.Contains(trimmed)
+             && trimmed.EndsWith(".dll")
+             && File.Exists(trimmed);
+    }
 
     /// <inheritdoc />
     public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
@@ -103,22 +129,22 @@ namespace MarkDoc.ViewModels.GitMarkdown
       m_pathsInsensitive.Add(path);
       Paths.Add(path);
 
+      this.RaisePropertyChanging(nameof(Paths));
       UpdateCanProceed();
 
       return true;
     }
 
-    private bool RemovePath(string path)
+    private void RemovePath(string path)
     {
       if (!m_pathsInsensitive.Contains(path))
-        return false;
+        return;
 
       m_pathsInsensitive.Remove(path);
       Paths.Remove(path);
 
+      this.RaisePropertyChanging(nameof(Paths));
       UpdateCanProceed();
-
-      return true;
     }
 
     private void UpdateCanProceed()

@@ -27,29 +27,30 @@ namespace MarkDoc.App.Managers
       string title,
       IEnumerable<(IEnumerable<string> extensions, string description)> filters,
       bool multiselect = false)
-    {
-      var dialog = new OpenFileDialog
+      => await Task.Run(async () =>
       {
-        Title = title,
-        AllowMultiple = multiselect,
-      };
-
-      foreach (var (extensions, description) in filters)
-      {
-        var dialogFilter = new FileDialogFilter
+        var dialog = new OpenFileDialog
         {
-          Name = description,
+          Title = title,
+          AllowMultiple = multiselect,
         };
-        dialogFilter.Extensions.AddRange(extensions);
 
-        dialog.Filters.Add(dialogFilter);
-      }
+        foreach (var (extensions, description) in filters)
+        {
+          var dialogFilter = new FileDialogFilter
+          {
+            Name = description,
+          };
+          dialogFilter.Extensions.AddRange(extensions);
 
-      var result = await dialog.ShowAsync(m_windowProvider());
-      return result is null
-        ? Option<IReadOnlyCollection<string>>.OfEmpty()
-        : Option<IReadOnlyCollection<string>>.Of(result);
-    }
+          dialog.Filters.Add(dialogFilter);
+        }
+
+        var result = await dialog.ShowAsync(m_windowProvider());
+        return result is null
+          ? Option<IReadOnlyCollection<string>>.OfEmpty()
+          : Option<IReadOnlyCollection<string>>.Of(result);
+      }).ConfigureAwait(false);
 
     /// <inheritdoc />
     public async ValueTask<Option<string>> TrySelectFolderAsync(string title)

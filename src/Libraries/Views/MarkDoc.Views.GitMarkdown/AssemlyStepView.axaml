@@ -1,37 +1,73 @@
 <UserControl
+  Name="AssemblyStepView"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d"
   x:Class="MarkDoc.Views.GitMarkdown.AssemblyStepView"
   xmlns="https://github.com/avaloniaui"
+  xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:system="clr-namespace:System;assembly=System.Runtime"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <StackPanel>
-    <Label Content="{Binding Title}" />
-    <TextBlock Text="{Binding Description}" />
-    <Grid ColumnDefinitions="*,Auto,Auto">
+    <Label
+      Content="{Binding Title}"
+      FontSize="18"
+      Margin="0,0,0,5" />
+    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
+    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
       <TextBox
         Text="{Binding PathToAssembly}"
         UseFloatingWatermark="True"
         Watermark="Select a .NET assembly" />
 
-      <Button
-        Command="{Binding BrowseCommand}"
-        Content="Browse"
-        Grid.Column="1" />
-      <Button
-        Command="{Binding AddCommand}"
-        Content="Add"
-        Grid.Column="2" />
+      <FloatingButton Command="{Binding BrowseCommand}" Grid.Column="1">
+        <FloatingButton.Content>
+          <avalonia:Icon
+            FontSize="10"
+            Foreground="White"
+            Value="fa-search" />
+        </FloatingButton.Content>
+      </FloatingButton>
+      <FloatingButton Command="{Binding AddCommand}" Grid.Column="2">
+        <FloatingButton.Content>
+          <avalonia:Icon
+            FontSize="10"
+            Foreground="White"
+            Value="fa-plus" />
+        </FloatingButton.Content>
+      </FloatingButton>
     </Grid>
 
-    <DataGrid
-      CanUserReorderColumns="False"
-      CanUserResizeColumns="False"
-      CanUserSortColumns="True"
-      Items="{Binding Paths, Mode=OneWay}" />
+    <ListBox Items="{Binding Paths}">
+      <ListBox.ItemTemplate>
+        <DataTemplate DataType="{x:Type system:String}">
+          <DockPanel LastChildFill="True">
+            <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+            <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+            <FloatingButton
+              Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
+              CommandParameter="{Binding}"
+              DockPanel.Dock="Left">
+
+              <Button.Content>
+                <avalonia:Icon
+                  FontSize="10"
+                  Foreground="White"
+                  Value="fa-trash" />
+              </Button.Content>
+            </FloatingButton>
+            <TextBlock
+              DockPanel.Dock="Right"
+              Margin="10,0,0,0"
+              Text="{Binding}"
+              VerticalAlignment="Center" />
+          </DockPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </StackPanel>
 
 </UserControl>

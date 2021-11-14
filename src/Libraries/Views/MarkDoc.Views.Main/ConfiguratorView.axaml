@@ -31,7 +31,7 @@
       <Label
         Content="{Binding Title}"
         DockPanel.Dock="Right"
-        FontSize="28" />
+        FontSize="24" />
     </DockPanel>
 
     <StackPanel Grid.Row="1">

@@ -24,4 +24,9 @@
     <ProjectReference Include="..\..\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DynamicData" Version="7.4.3" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+
 </Project>

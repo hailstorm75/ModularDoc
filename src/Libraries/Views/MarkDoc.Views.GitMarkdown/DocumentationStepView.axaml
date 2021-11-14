@@ -7,8 +7,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <StackPanel>
-    <Label>Test</Label>
-    <Label Content="{Binding Title}" />
+    <Label Content="{Binding Title}" FontSize="18" />
   </StackPanel>
 
 </UserControl>
