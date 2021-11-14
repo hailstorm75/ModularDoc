@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
@@ -17,7 +18,6 @@ namespace MarkDoc.ViewModels.Main
     private readonly NavigationManager m_navigationManager;
     private IPlugin? m_plugin;
     private IPluginStep? m_currentStep;
-    private readonly Dictionary<string, Dictionary<string, string>> m_pluginSettings = new();
 
     #endregion
 
@@ -55,7 +55,7 @@ namespace MarkDoc.ViewModels.Main
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<string, Dictionary<string, string>> PluginSettings => m_pluginSettings;
+    public Dictionary<string, Dictionary<string, string>> PluginSettings { get; private set; } = new();
 
     #endregion
 
@@ -85,21 +85,27 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
-      var (id, _) = ExtractArguments(arguments);
+      var (id, settings) = ExtractArguments(arguments);
 
       m_plugin = PluginManager.GetPlugin(id);
+
+      if (!string.IsNullOrEmpty(settings))
+      {
+        var deserialized = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(settings);
+        if (deserialized is not null)
+          PluginSettings = deserialized;
+      }
 
       foreach (var step in m_plugin.GetPluginSteps())
       {
         Steps.Add(step);
         // If no settings were deserialized
-        m_pluginSettings.Add(step.Id, new Dictionary<string, string>());
+        if (PluginSettings.Count == 0)
+          PluginSettings.Add(step.Id, new Dictionary<string, string>());
       }
 
       CurrentStep = Steps.First();
-      // var deserialized = JsonSerializer.Deserialize<IReadOnlyDictionary<string, Dictionary<string, string>>>(settings);
-      // if (deserialized is not null)
-      //   PluginSettings = deserialized;
+
 
       this.RaisePropertyChanged(nameof(Steps));
       this.RaisePropertyChanged(nameof(Title));

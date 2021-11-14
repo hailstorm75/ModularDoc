@@ -27,6 +27,6 @@ namespace MarkDoc.ViewModels
 
     Dictionary<string, string> CurrentStepSettings { get; }
 
-    IReadOnlyDictionary<string, Dictionary<string, string>> PluginSettings { get; }
+    Dictionary<string, Dictionary<string, string>> PluginSettings { get; }
   }
 }
