@@ -69,7 +69,24 @@
                   Value="fa-trash" />
               </Button.Content>
             </FloatingButton>
-            <DockPanel DockPanel.Dock="Right">
+            <DockPanel
+              DockPanel.Dock="Right"
+              ToolTip.Placement="Pointer"
+              ToolTip.Tip="{Binding}">
+              <DockPanel.ContextMenu>
+                <ContextMenu>
+                  <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                  <MenuItem
+                    Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
+                    CommandParameter="{Binding}"
+                    Header="Delete">
+                    <MenuItem.Icon>
+                      <avalonia:Icon FontSize="10" Value="fa-trash" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                </ContextMenu>
+              </DockPanel.ContextMenu>
               <TextBlock
                 Margin="10,0,0,0"
                 Text="{Binding Converter={StaticResource DirectoryConverter}}"
