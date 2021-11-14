@@ -6,10 +6,15 @@
   x:Class="MarkDoc.Views.GitMarkdown.AssemblyStepView"
   xmlns="https://github.com/avaloniaui"
   xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+  xmlns:converters="clr-namespace:MarkDoc.Views.GitMarkdown.Converters"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:system="clr-namespace:System;assembly=System.Runtime"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <UserControl.Resources>
+    <converters:PathToFileConverter x:Key="FileConverter" />
+    <converters:PathToDirectoryConverter x:Key="DirectoryConverter" />
+  </UserControl.Resources>
 
   <StackPanel>
     <Label
@@ -21,9 +26,13 @@
       <TextBox
         Text="{Binding PathToAssembly}"
         UseFloatingWatermark="True"
+        VerticalContentAlignment="Center"
         Watermark="Select a .NET assembly" />
 
-      <FloatingButton Command="{Binding BrowseCommand}" Grid.Column="1">
+      <FloatingButton
+        Command="{Binding BrowseCommand}"
+        Grid.Column="1"
+        Margin="8,0,0,0">
         <FloatingButton.Content>
           <avalonia:Icon
             FontSize="10"
@@ -48,6 +57,7 @@
             <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
             <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
             <FloatingButton
+              Background="Red"
               Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
               CommandParameter="{Binding}"
               DockPanel.Dock="Left">
@@ -59,11 +69,16 @@
                   Value="fa-trash" />
               </Button.Content>
             </FloatingButton>
-            <TextBlock
-              DockPanel.Dock="Right"
-              Margin="10,0,0,0"
-              Text="{Binding}"
-              VerticalAlignment="Center" />
+            <DockPanel DockPanel.Dock="Right">
+              <TextBlock
+                Margin="10,0,0,0"
+                Text="{Binding Converter={StaticResource DirectoryConverter}}"
+                VerticalAlignment="Center" />
+              <TextBlock
+                FontWeight="Bold"
+                Text="{Binding Converter={StaticResource FileConverter}}"
+                VerticalAlignment="Center" />
+            </DockPanel>
           </DockPanel>
         </DataTemplate>
       </ListBox.ItemTemplate>
