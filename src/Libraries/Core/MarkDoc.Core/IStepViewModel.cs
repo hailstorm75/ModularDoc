@@ -6,6 +6,7 @@ namespace MarkDoc.Core
   /// Interface for view models of plugin steps
   /// </summary>
   /// <typeparam name="TSettings">Step settings type</typeparam>
+  // ReSharper disable once UnusedTypeParameter
   public interface IStepViewModel<TSettings>
     : IViewModel
     where TSettings : ILibrarySettings

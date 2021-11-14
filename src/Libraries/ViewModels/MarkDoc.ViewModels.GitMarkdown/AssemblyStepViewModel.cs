@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
+using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
 using ReactiveUI;
@@ -21,6 +23,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #endregion
 
     private readonly HashSet<string> m_pathsInsensitive = new (StringComparer.InvariantCultureIgnoreCase);
+    private readonly IDialogManager m_dialogManager;
     private string m_pathToAssembly = string.Empty;
 
     #region Properties
@@ -62,10 +65,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <summary>
     /// Default constructor
     /// </summary>
-    public AssemblyStepViewModel()
+    public AssemblyStepViewModel(IDialogManager dialogManager)
     {
       AddCommand = ReactiveCommand.Create(AddPath);
       BrowseCommand = ReactiveCommand.CreateFromTask(BrowseAsync);
+      m_dialogManager = dialogManager;
     }
 
     #region Methods
@@ -82,18 +86,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
     private async Task BrowseAsync()
     {
-      // var dialog = new OpenFileDialog
-      // {
-      //   AllowMultiple = false,
-      //   Title = "Select a .NET assembly"
-      // };
-      // dialog.Filters.Add(FILTER);
-      //
-      // var result = await dialog.ShowAsync().ConfigureAwait(false);
-      // if (result is null)
-      //   return;
-      //
-      // PathToAssembly = result.First();
+      var result = await m_dialogManager.TrySelectFilesAsync("Select a .NET assembly", new [] { (new[] { "dll" } as IEnumerable<string>, "Assembly") });
+      if (result.IsEmpty)
+        return;
+
+      PathToAssembly = result.Get().First();
     }
 
     private bool AddPath()

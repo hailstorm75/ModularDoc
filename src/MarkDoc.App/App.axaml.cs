@@ -1,20 +1,40 @@
 using Autofac;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using MarkDoc.App.Managers;
 using MarkDoc.App.Views;
 using MarkDoc.Constants;
+using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
 using MarkDoc.ViewModels;
 using MarkDoc.ViewModels.Main;
 using MarkDoc.Views;
 using MarkDoc.Views.Main;
+using System;
 
 namespace MarkDoc.App
 {
-  public class App
+  public sealed class App
     : Application
   {
+    private readonly DialogManager m_dialogManager;
+
+    public App()
+    {
+      Window WindowProvider()
+      {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+          return desktop.MainWindow;
+
+        throw new Exception();
+      }
+
+      m_dialogManager = new DialogManager(WindowProvider);
+    }
+
+    /// <inheritdoc />
     public override void Initialize()
     {
       var builder = new ContainerBuilder();
@@ -26,6 +46,8 @@ namespace MarkDoc.App
       builder.RegisterType<StartupView>().As<IStartupView>();
       builder.RegisterType<HomeViewModel>().As<IHomeViewModel>();
       builder.RegisterType<HomeView>().As<IHomeView>();
+
+      builder.RegisterInstance(m_dialogManager).As<IDialogManager>().SingleInstance();
 
       PluginManager.RegisterModules(builder);
 
@@ -42,6 +64,7 @@ namespace MarkDoc.App
       AvaloniaXamlLoader.Load(this);
     }
 
+    /// <inheritdoc />
     public override void OnFrameworkInitializationCompleted()
     {
       if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
