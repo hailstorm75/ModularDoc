@@ -66,6 +66,18 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public ReactiveCommand<Unit, bool> AddCommand { get; }
 
     /// <summary>
+    /// Command for adding multiple new paths
+    /// </summary>
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public ICommand AddMultipleCommand { get; }
+
+    /// <summary>
+    /// Command for validating present commands
+    /// </summary>
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public ICommand ValidateCommand { get; }
+
+    /// <summary>
     /// Command for removing a path
     /// </summary>
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
@@ -78,13 +90,20 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// </summary>
     public AssemblyStepViewModel(IDialogManager dialogManager)
     {
-      var canExecuteChanged = this
+      var canExecuteAddPath = this
         .WhenAnyValue(viewModel => viewModel.PathToAssembly)
         .Select(IsValidPath);
 
-      AddCommand = ReactiveCommand.Create(AddPath, canExecuteChanged);
+      var canExecuteValidatePaths = this
+        .WhenAnyValue(viewModel => viewModel.Paths)
+        .Select(x => x.Count > 0);
+
+      AddCommand = ReactiveCommand.Create(AddPath, canExecuteAddPath);
+      AddMultipleCommand = ReactiveCommand.CreateFromTask(AddMultiplePaths);
+      ValidateCommand = ReactiveCommand.Create(ValidatePaths, canExecuteValidatePaths);
       BrowseCommand = ReactiveCommand.CreateFromTask(BrowseAsync);
       RemoveCommand = ReactiveCommand.Create<string>(RemovePath);
+
       m_dialogManager = dialogManager;
     }
 
@@ -127,12 +146,40 @@ namespace MarkDoc.ViewModels.GitMarkdown
         return false;
 
       m_pathsInsensitive.Add(path);
-      Paths.Add(path);
+      Paths.AddSorted(path);
 
       this.RaisePropertyChanging(nameof(Paths));
       UpdateCanProceed();
 
       return true;
+    }
+
+    private async Task AddMultiplePaths()
+    {
+      var result = await m_dialogManager.TrySelectFilesAsync("Select .NET assemblies", new[] { (new[] { "dll" } as IEnumerable<string>, "Assembly") }, true);
+      if (result.IsEmpty)
+        return;
+
+      foreach (var path in result.Get())
+      {
+        if (m_pathsInsensitive.Contains(path))
+          continue;
+
+        m_pathsInsensitive.Add(path);
+        Paths.AddSorted(path);
+      }
+
+      this.RaisePropertyChanging(nameof(Paths));
+      UpdateCanProceed();
+    }
+
+    private void ValidatePaths()
+    {
+      var toRemove = Paths.Where(path => !File.Exists(path)).ToReadOnlyCollection();
+
+      // TODO: Confirm dialog with list of paths
+      foreach (var path in toRemove)
+        Paths.Remove(path);
     }
 
     private void RemovePath(string path)

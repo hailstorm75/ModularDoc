@@ -7,6 +7,18 @@ namespace MarkDoc.Helpers
 #pragma warning disable CA1724
   public static class Linq
   {
+    public static void AddSorted<T>(this IList<T> list, T item, IComparer<T>? comparer = default)
+    {
+      if (comparer == null)
+        comparer = Comparer<T>.Default;
+
+      var i = 0;
+      while (i < list.Count && comparer.Compare(list[i], item) < 0)
+        ++i;
+
+      list.Insert(i, item);
+    }
+
     /// <summary>
     /// Passes the element forward
     /// </summary>

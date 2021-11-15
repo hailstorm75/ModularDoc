@@ -41,6 +41,13 @@
         </FloatingButton.Content>
       </FloatingButton>
       <FloatingButton Command="{Binding AddCommand}" Grid.Column="2">
+        <FloatingButton.Styles>
+          <Style Selector="FloatingButton:disabled">
+            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+          </Style>
+        </FloatingButton.Styles>
         <FloatingButton.Content>
           <avalonia:Icon
             FontSize="10"
@@ -48,6 +55,28 @@
             Value="fa-plus" />
         </FloatingButton.Content>
       </FloatingButton>
+    </Grid>
+    <Grid ColumnDefinitions="Auto, Auto" Margin="0,0,0,10">
+      <Button Command="{Binding AddMultipleCommand}" Grid.Column="0">
+        <DockPanel LastChildFill="True">
+          <avalonia:Icon
+            DockPanel.Dock="Left"
+            FontSize="10"
+            Margin="0,0,5,0"
+            Value="fa-plus" />
+          <TextBlock DockPanel.Dock="Right">Add multiple</TextBlock>
+        </DockPanel>
+      </Button>
+      <Button Command="{Binding ValidateCommand}" Grid.Column="1">
+        <DockPanel LastChildFill="True">
+          <avalonia:Icon
+            DockPanel.Dock="Left"
+            FontSize="10"
+            Margin="0,0,5,0"
+            Value="fa-check" />
+          <TextBlock DockPanel.Dock="Right">Validate paths</TextBlock>
+        </DockPanel>
+      </Button>
     </Grid>
 
     <ListBox Items="{Binding Paths}">
@@ -61,7 +90,6 @@
               Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
               CommandParameter="{Binding}"
               DockPanel.Dock="Left">
-
               <Button.Content>
                 <avalonia:Icon
                   FontSize="10"
