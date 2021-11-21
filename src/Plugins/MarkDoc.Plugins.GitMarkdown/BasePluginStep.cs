@@ -18,11 +18,14 @@ namespace MarkDoc.Plugins.GitMarkdown
     public abstract int StepNumber { get; }
 
     /// <inheritdoc />
-    public bool IsActive { get; set; }
+    public abstract bool IsLastStep { get; }
 
     #endregion
 
     /// <inheritdoc />
     public abstract IView GetStepView(IReadOnlyDictionary<string, string> settings);
+
+    /// <inheritdoc />
+    public override string ToString() => Name;
   }
 }

@@ -23,9 +23,9 @@ namespace MarkDoc.Core
     int StepNumber { get; }
 
     /// <summary>
-    /// Determines whether this step is used
+    /// Determines whether this step is last in the step sequence
     /// </summary>
-    bool IsActive { get; set; }
+    bool IsLastStep { get; }
 
     /// <summary>
     /// Gets the view for this step
