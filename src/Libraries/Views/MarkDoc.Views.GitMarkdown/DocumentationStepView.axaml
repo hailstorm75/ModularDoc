@@ -2,12 +2,79 @@
   mc:Ignorable="d"
   x:Class="MarkDoc.Views.GitMarkdown.DocumentationStepView"
   xmlns="https://github.com/avaloniaui"
+  xmlns:converters="clr-namespace:MarkDoc.Views.GitMarkdown.Converters"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:system="clr-namespace:System;assembly=System.Runtime"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <UserControl.Resources>
+    <converters:PathToFileConverter x:Key="FileConverter" />
+    <converters:PathToDirectoryConverter x:Key="DirectoryConverter" />
+  </UserControl.Resources>
 
   <StackPanel>
-    <Label Content="{Binding Title}" FontSize="18" />
+    <Label
+      Content="{Binding Title}"
+      FontSize="18"
+      Margin="0,0,0,5" />
+    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
+
+    <Grid RowDefinitions="*,*">
+      <HeaderedContentControl Grid.Row="0" Header="Found documentation">
+        <ScrollViewer>
+          <ListBox Items="{Binding Paths}">
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="{x:Type system:String}">
+                <DockPanel LastChildFill="True">
+                  <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                  <DockPanel
+                    DockPanel.Dock="Right"
+                    ToolTip.Placement="Pointer"
+                    ToolTip.Tip="{Binding}">
+                    <TextBlock
+                      Margin="10,0,0,0"
+                      Text="{Binding Converter={StaticResource DirectoryConverter}}"
+                      VerticalAlignment="Center" />
+                    <TextBlock
+                      FontWeight="Bold"
+                      Text="{Binding Converter={StaticResource FileConverter}}"
+                      VerticalAlignment="Center" />
+                  </DockPanel>
+                </DockPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+      </HeaderedContentControl>
+      <HeaderedContentControl Grid.Row="1" Header="Missing documentation">
+        <ScrollViewer>
+          <ListBox Items="{Binding MissingPaths}">
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="{x:Type system:String}">
+                <DockPanel LastChildFill="True">
+                  <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                  <DockPanel
+                    DockPanel.Dock="Right"
+                    ToolTip.Placement="Pointer"
+                    ToolTip.Tip="{Binding}">
+                    <TextBlock
+                      Margin="10,0,0,0"
+                      Text="{Binding Converter={StaticResource DirectoryConverter}}"
+                      VerticalAlignment="Center" />
+                    <TextBlock
+                      FontWeight="Bold"
+                      Text="{Binding Converter={StaticResource FileConverter}}"
+                      VerticalAlignment="Center" />
+                  </DockPanel>
+                </DockPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </ScrollViewer>
+      </HeaderedContentControl>
+    </Grid>
   </StackPanel>
 
 </UserControl>
