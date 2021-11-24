@@ -66,6 +66,8 @@ namespace MarkDoc.ViewModels.Main
 
     // public ICommand NextStageCommand { get; }
 
+    // public ICommand FinishCommand { get; }
+
     #endregion
 
     /// <summary>

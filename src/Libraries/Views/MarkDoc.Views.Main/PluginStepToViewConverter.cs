@@ -28,12 +28,12 @@ namespace MarkDoc.Views.Main
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
       if (value is not IPluginStep pluginStep
-          || m_pluginSettings is not IReadOnlyDictionary<string, Dictionary<string, string>> pluginSettings
-          || !pluginSettings.TryGetValue(pluginStep.Id, out var settings))
+          || m_pluginSettings is not IReadOnlyDictionary<string, Dictionary<string, string>> pluginSettings)
         return "ERROR";
 
-      // ReSharper disable once AssignNullToNotNullAttribute
-      return pluginStep.GetStepView(settings);
+      pluginSettings.TryGetValue(pluginStep.Id, out var settings);
+
+      return pluginStep.GetStepView(settings ?? new Dictionary<string, string>());
     }
 
     /// <inheritdoc />
