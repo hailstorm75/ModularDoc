@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace MarkDoc.Core
 {
@@ -8,14 +8,9 @@ namespace MarkDoc.Core
   /// <typeparam name="TSettings">Step settings type</typeparam>
   // ReSharper disable once UnusedTypeParameter
   public interface IStepViewModel<TSettings>
-    : IViewModel
+    : IStepViewModel
     where TSettings : ILibrarySettings
   {
-    /// <summary>
-    /// Invoked when if the ability to proceed to the next step changes
-    /// </summary>
-    event EventHandler<bool>? CanProceed;
-
     #region Properties
 
     /// <summary>
@@ -29,5 +24,23 @@ namespace MarkDoc.Core
     string Description { get; }
 
     #endregion
+  }
+
+  /// <summary>
+  /// Interface for view models of plugin steps
+  /// </summary>
+  public interface IStepViewModel
+    : IViewModel
+  {
+    /// <summary>
+    /// Determines whether the step form is filled correctly
+    /// </summary>
+    bool IsValid { get; }
+
+    /// <summary>
+    /// Retrieves current settings
+    /// </summary>
+    /// <returns>Current form settings</returns>
+    IReadOnlyDictionary<string, string> GetSettings();
   }
 }

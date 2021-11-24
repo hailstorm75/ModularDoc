@@ -18,6 +18,7 @@ namespace MarkDoc.ViewModels.Main
     private readonly NavigationManager m_navigationManager;
     private IPlugin? m_plugin;
     private IPluginStep? m_currentStep;
+    private IStepView<IStepViewModel>? m_currentView;
 
     #endregion
 
@@ -30,7 +31,7 @@ namespace MarkDoc.ViewModels.Main
     public ObservableCollection<IPluginStep> Steps { get; } = new ();
 
     /// <inheritdoc />
-    public Dictionary<string, string> CurrentStepSettings { get; private set; } = new();
+    public IReadOnlyDictionary<string, string> CurrentStepSettings { get; private set; } = new Dictionary<string, string>();
 
     /// <inheritdoc />
     public IPluginStep? CurrentStep
@@ -51,11 +52,24 @@ namespace MarkDoc.ViewModels.Main
         CurrentStepSettings = PluginSettings.TryGetValue(value.Id, out var settings)
           ? settings
           : new Dictionary<string, string>();
+
+        CurrentView = value.GetStepView(CurrentStepSettings);
       }
     }
 
     /// <inheritdoc />
-    public Dictionary<string, Dictionary<string, string>> PluginSettings { get; private set; } = new();
+    public IStepView<IStepViewModel>? CurrentView
+    {
+      get => m_currentView;
+      set
+      {
+        m_currentView = value;
+        this.RaisePropertyChanged(nameof(CurrentView));
+      }
+    }
+
+    /// <inheritdoc />
+    public Dictionary<string, IReadOnlyDictionary<string, string>> PluginSettings { get; private set; } = new();
 
     #endregion
 
@@ -64,7 +78,11 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ICommand BackCommand { get; }
 
-    // public ICommand NextStageCommand { get; }
+    /// <inheritdoc />
+    public ICommand PreviousStageCommand { get; }
+
+    /// <inheritdoc />
+    public ICommand NextStageCommand { get; }
 
     // public ICommand FinishCommand { get; }
 
@@ -76,13 +94,39 @@ namespace MarkDoc.ViewModels.Main
     public ConfiguratorViewModel(NavigationManager navigationManager)
     {
       m_navigationManager = navigationManager;
+
+      var canNavigateToNext = this
+        .WhenAnyValue(viewModel => viewModel.CurrentView!.ViewModel.IsValid);
+
       BackCommand = ReactiveCommand.Create(NavigateBack);
+      NextStageCommand = ReactiveCommand.Create(NextStep, canNavigateToNext);
+      PreviousStageCommand = ReactiveCommand.Create(PreviousStep);
     }
 
     #region Methods
 
     private void NavigateBack()
       => m_navigationManager.NavigateTo(PageNames.HOME);
+
+    private void PreviousStep()
+    {
+      if (CurrentStep is null)
+        return;
+
+      CurrentStep = Steps[Steps.IndexOf(CurrentStep) - 1];
+    }
+
+    private void NextStep()
+    {
+      if (CurrentStep is null || CurrentView is null)
+        return;
+
+      var settings = CurrentView.ViewModel.GetSettings();
+      if (!PluginSettings.TryAdd(CurrentStep.Id, CurrentView.ViewModel.GetSettings()))
+        PluginSettings[CurrentStep.Id] = settings;
+
+      CurrentStep = Steps[Steps.IndexOf(CurrentStep) + 1];
+    }
 
     /// <inheritdoc />
     public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
@@ -93,7 +137,7 @@ namespace MarkDoc.ViewModels.Main
 
       if (!string.IsNullOrEmpty(settings))
       {
-        var deserialized = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(settings);
+        var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(settings);
         if (deserialized is not null)
           PluginSettings = deserialized;
       }

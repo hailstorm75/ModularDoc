@@ -62,7 +62,11 @@
                   <Border.IsVisible>
                     <Binding>
                       <Binding.Converter>
+                        <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                        <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
                         <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding Path=DataContext.CurrentStep, ElementName=Root}" />
+                        <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
+                        <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                       </Binding.Converter>
                     </Binding>
                   </Border.IsVisible>
@@ -78,16 +82,10 @@
       </ItemsControl>
     </ScrollViewer>
 
-    <ContentControl Grid.Column="1" Grid.Row="1">
-      <ContentControl.Content>
-        <Binding Path="CurrentStep">
-          <Binding.Converter>
-            <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-            <converters:PluginStepToViewConverter PluginSettings="{Binding DataContext.PluginSettings, ElementName=Root}" />
-          </Binding.Converter>
-        </Binding>
-      </ContentControl.Content>
-    </ContentControl>
+    <ContentControl
+      Content="{Binding Path=CurrentView}"
+      Grid.Column="1"
+      Grid.Row="1" />
 
     <!--  Row 2  -->
     <Grid

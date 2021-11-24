@@ -32,6 +32,6 @@ namespace MarkDoc.Core
     /// </summary>
     /// <param name="settings">Settings to load</param>
     /// <returns>View instance</returns>
-    IView GetStepView(IReadOnlyDictionary<string, string> settings);
+    IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings);
   }
 }

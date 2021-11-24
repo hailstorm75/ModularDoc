@@ -127,7 +127,17 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       // ReSharper disable once PossibleNullReferenceException
       Paths.AddRange(pathsSerialized.Split(PATH_DELIM));
+      UpdateCanProceed();
     }
+
+    /// <inheritdoc />
+    public override IReadOnlyDictionary<string, string> GetSettings()
+      => new Dictionary<string, string>
+      {
+        {
+          SETTINGS_PATHS, string.Join(PATH_DELIM, Paths)
+        }
+      };
 
     private async Task BrowseAsync()
     {
@@ -195,7 +205,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     }
 
     private void UpdateCanProceed()
-      => OnCanProceed(Paths.Count > 0);
+      => IsValid = Paths.Count > 0;
 
     #endregion
   }

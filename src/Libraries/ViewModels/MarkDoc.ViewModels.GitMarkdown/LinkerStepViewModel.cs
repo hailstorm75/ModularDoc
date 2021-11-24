@@ -18,5 +18,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     {
       // throw new System.NotImplementedException();
     }
+
+    /// <inheritdoc />
+    public override IReadOnlyDictionary<string, string> GetSettings()
+      => new Dictionary<string, string>();
   }
 }

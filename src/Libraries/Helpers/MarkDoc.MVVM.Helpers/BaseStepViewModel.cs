@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MarkDoc.Core;
 using ReactiveUI;
 
@@ -13,8 +12,7 @@ namespace MarkDoc.MVVM.Helpers
     : ReactiveObject, IStepViewModel<TSettings>
     where TSettings : ILibrarySettings
   {
-    /// <inheritdoc />
-    public event EventHandler<bool>? CanProceed;
+    private bool m_isValid;
 
     #region Properties
 
@@ -24,12 +22,24 @@ namespace MarkDoc.MVVM.Helpers
     /// <inheritdoc />
     public abstract string Description { get; }
 
+    /// <inheritdoc />
+    public bool IsValid
+    {
+      get => m_isValid;
+      protected set
+      {
+        m_isValid = value;
+        this.RaisePropertyChanged(nameof(IsValid));
+      }
+    }
+
     #endregion
 
     /// <inheritdoc />
     public abstract void SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
 
-    protected void OnCanProceed(bool canProceed)
-      => CanProceed?.Invoke(this, canProceed);
+
+    /// <inheritdoc />
+    public abstract IReadOnlyDictionary<string, string> GetSettings();
   }
 }
