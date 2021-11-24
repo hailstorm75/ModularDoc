@@ -29,5 +29,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Behavior" />
+  </ItemGroup>
 
 </Project>

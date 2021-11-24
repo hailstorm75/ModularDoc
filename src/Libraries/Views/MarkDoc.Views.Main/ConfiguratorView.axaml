@@ -52,34 +52,26 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="{x:Type core:IPluginStep}">
-            <Label
-              BorderBrush="Blue"
-              Margin="5"
-              Name="L"
-              Padding="5,0,0,0">
-              <Interaction.Behaviors>
-                <DataTriggerBehavior
-                  Binding="{Binding Id}"
-                  ComparisonCondition="Equal"
-                  Value="{Binding DataContext.CurrentStep.Id, ElementName=Root}">
-                  <ChangePropertyAction
-                    PropertyName="BorderThickness"
-                    TargetObject="{Binding #L}"
-                    Value="10" />
-                </DataTriggerBehavior>
-                <DataTriggerBehavior
-                  Binding="{Binding Id}"
-                  ComparisonCondition="NotEqual"
-                  Value="{Binding DataContext.CurrentStep.Id, ElementName=Root}">
-                  <ChangePropertyAction
-                    PropertyName="BorderThickness"
-                    TargetObject="{Binding #L}"
-                    Value="0" />
-                </DataTriggerBehavior>
-              </Interaction.Behaviors>
-              <StackPanel>
-                <TextBlock FontSize="16" Text="{Binding Name}" />
-              </StackPanel>
+            <Label Margin="5">
+              <Grid ColumnDefinitions="7,*">
+                <Border
+                  BorderBrush="Blue"
+                  BorderThickness="2,0,0,0"
+                  Grid.Column="0"
+                  Margin="0,0,5,0">
+                  <Border.IsVisible>
+                    <Binding>
+                      <Binding.Converter>
+                        <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding Path=DataContext.CurrentStep, ElementName=Root}" />
+                      </Binding.Converter>
+                    </Binding>
+                  </Border.IsVisible>
+                </Border>
+                <TextBlock
+                  FontSize="16"
+                  Grid.Column="1"
+                  Text="{Binding Name}" />
+              </Grid>
             </Label>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
