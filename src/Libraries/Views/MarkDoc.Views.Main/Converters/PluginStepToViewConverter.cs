@@ -7,7 +7,7 @@ using Avalonia.Collections;
 using Avalonia.Data.Converters;
 using MarkDoc.Core;
 
-namespace MarkDoc.Views.Main
+namespace MarkDoc.Views.Main.Converters
 {
   public class PluginStepToViewConverter
     : AvaloniaObject, IValueConverter
