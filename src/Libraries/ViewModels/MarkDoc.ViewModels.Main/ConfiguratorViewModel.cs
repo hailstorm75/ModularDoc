@@ -108,7 +108,6 @@ namespace MarkDoc.ViewModels.Main
 
       CurrentStep = Steps.First();
 
-
       this.RaisePropertyChanged(nameof(Steps));
       this.RaisePropertyChanged(nameof(Title));
     }
