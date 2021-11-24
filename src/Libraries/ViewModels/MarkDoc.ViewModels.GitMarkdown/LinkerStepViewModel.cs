@@ -8,6 +8,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     : BaseStepViewModel<ILinkerSettings>
   {
     /// <inheritdoc />
+    public override string Id => "91ACE811-A3E5-4C43-9B7F-0721A3365E93";
+
+    /// <inheritdoc />
     public override string Title => "Linking settings";
 
     /// <inheritdoc />

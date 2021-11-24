@@ -11,19 +11,6 @@ namespace MarkDoc.Core
     : IStepViewModel
     where TSettings : ILibrarySettings
   {
-    #region Properties
-
-    /// <summary>
-    /// Step name
-    /// </summary>
-    string Title { get; }
-
-    /// <summary>
-    /// Step description
-    /// </summary>
-    string Description { get; }
-
-    #endregion
   }
 
   /// <summary>
@@ -38,9 +25,33 @@ namespace MarkDoc.Core
     bool IsValid { get; }
 
     /// <summary>
+    /// Step view model Id
+    /// </summary>
+    /// <remarks>
+    /// This Id is required for referencing previous settings
+    /// </remarks>
+    string Id { get; }
+
+    /// <summary>
+    /// Step name
+    /// </summary>
+    string Title { get; }
+
+    /// <summary>
+    /// Step description
+    /// </summary>
+    string Description { get; }
+
+    /// <summary>
     /// Retrieves current settings
     /// </summary>
     /// <returns>Current form settings</returns>
     IReadOnlyDictionary<string, string> GetSettings();
+
+    /// <summary>
+    /// Sets previous step settings
+    /// </summary>
+    /// <param name="settings">Previous settings</param>
+    void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings);
   }
 }

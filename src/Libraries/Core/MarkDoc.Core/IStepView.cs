@@ -1,4 +1,6 @@
-﻿namespace MarkDoc.Core
+﻿using System.Collections.Generic;
+
+namespace MarkDoc.Core
 {
   /// <summary>
   /// Interface for views of plugin steps
@@ -20,5 +22,11 @@
     : IView<TViewModel>
     where TViewModel : IStepViewModel
   {
+    /// <summary>
+    /// Sets previous step settings
+    /// </summary>
+    /// <param name="settings">Previous settings</param>
+    public void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+      => ViewModel.SetPreviousSettings(settings);
   }
 }

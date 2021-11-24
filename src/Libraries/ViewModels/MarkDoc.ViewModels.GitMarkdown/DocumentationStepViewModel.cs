@@ -18,6 +18,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #region Properties
 
     /// <inheritdoc />
+    public override string Id => "C5C5D04A-7975-468A-ACB7-251F20DC4D4C";
+
+    /// <inheritdoc />
     public override string Title => "Documentation extraction settings";
 
     /// <inheritdoc />
@@ -45,6 +48,14 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       // throw new System.NotImplementedException();
+    }
+
+    /// <inheritdoc />
+    public override void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+    {
+      base.SetPreviousSettings(settings);
+      
+      
     }
 
     /// <inheritdoc />

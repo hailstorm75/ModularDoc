@@ -16,6 +16,8 @@ namespace MarkDoc.MVVM.Helpers
 
     #region Properties
 
+    public abstract string Id { get; }
+
     /// <inheritdoc />
     public abstract string Title { get; }
 
@@ -38,6 +40,9 @@ namespace MarkDoc.MVVM.Helpers
     /// <inheritdoc />
     public abstract void SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
 
+    public virtual void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+    {
+    }
 
     /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, string> GetSettings();

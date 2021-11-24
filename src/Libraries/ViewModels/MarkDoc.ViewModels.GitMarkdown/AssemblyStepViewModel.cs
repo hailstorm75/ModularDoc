@@ -32,6 +32,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #region Properties
 
     /// <inheritdoc />
+    public override string Id => "697C851D-54B1-4D84-BFD7-3568F54BB2C5";
+
+    /// <inheritdoc />
     public override string Title => "Assembly processing settings";
 
     /// <inheritdoc />

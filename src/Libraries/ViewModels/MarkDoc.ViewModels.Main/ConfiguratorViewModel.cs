@@ -53,7 +53,18 @@ namespace MarkDoc.ViewModels.Main
           ? settings
           : new Dictionary<string, string>();
 
-        CurrentView = value.GetStepView(CurrentStepSettings);
+        var previousSettings = Steps
+          .Take(Steps.IndexOf(value))
+          .Select(plugin =>
+          {
+            var pluginSettings = PluginSettings.TryGetValue(plugin.Id, out var result)
+              ? result
+              : new Dictionary<string, string>();
+
+            return new KeyValuePair<string, IReadOnlyDictionary<string, string>>("", pluginSettings);
+          })
+          .ToDictionary(x => x.Key, x => x.Value);
+        CurrentView = value.GetStepView(CurrentStepSettings, previousSettings);
       }
     }
 
