@@ -42,7 +42,7 @@ namespace MarkDoc.ViewModels.Main
           return;
 
         m_currentStep = value;
-        this.RaisePropertyChanging(nameof(CurrentStep));
+        this.RaisePropertyChanged(nameof(CurrentStep));
 
         if (value is null)
           return;
