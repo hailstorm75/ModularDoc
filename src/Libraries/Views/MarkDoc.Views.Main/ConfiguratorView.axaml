@@ -63,76 +63,109 @@
     </StackPanel>
 
     <!--  Row 2  -->
-    <!--  <Label  -->
-    <!--  Content="{Binding CurrentStep.Name}"  -->
-    <!--  Grid.Row="2"  -->
-    <!--  Margin="0,0,5,0" />  -->
+    <Grid ColumnDefinitions="*,*" Grid.Row="2">
+      <!--  Back  -->
+      <Button
+        Command="{Binding PreviousStageCommand}"
+        Grid.Column="0"
+        HorizontalAlignment="Left"
+        Name="ButtonBack">
+        <Interaction.Behaviors>
+          <DataTriggerBehavior
+            Binding="{Binding Path=CurrentStep.Id}"
+            ComparisonCondition="Equal"
+            Value="{Binding Steps[0].Id}">
+            <ChangePropertyAction
+              PropertyName="IsVisible"
+              TargetObject="{Binding #ButtonBack}"
+              Value="False" />
+          </DataTriggerBehavior>
+          <DataTriggerBehavior
+            Binding="{Binding Path=CurrentStep.Id}"
+            ComparisonCondition="NotEqual"
+            Value="{Binding Steps[0].Id}">
+            <ChangePropertyAction
+              PropertyName="IsVisible"
+              TargetObject="{Binding #ButtonBack}"
+              Value="True" />
+          </DataTriggerBehavior>
+        </Interaction.Behaviors>
+        <DockPanel>
+          <i:Icon DockPanel.Dock="Left" Value="fa-arrow-left" />
+          <Label
+            Content="Back"
+            DockPanel.Dock="Right"
+            Margin="5,0,0,0" />
+        </DockPanel>
+      </Button>
 
-    <Button
-      Command="{Binding NextStageCommand}"
-      Grid.Row="2"
-      HorizontalAlignment="Right"
-      Name="ButtonNext">
-      <Interaction.Behaviors>
-        <DataTriggerBehavior
-          Binding="{Binding Path=CurrentStep.IsLastStep}"
-          ComparisonCondition="Equal"
-          Value="False">
-          <ChangePropertyAction
-            PropertyName="IsVisible"
-            TargetObject="{Binding #ButtonNext}"
-            Value="True" />
-        </DataTriggerBehavior>
-        <DataTriggerBehavior
-          Binding="{Binding Path=CurrentStep.IsLastStep}"
-          ComparisonCondition="Equal"
-          Value="True">
-          <ChangePropertyAction
-            PropertyName="IsVisible"
-            TargetObject="{Binding #ButtonNext}"
-            Value="False" />
-        </DataTriggerBehavior>
-      </Interaction.Behaviors>
-      <DockPanel>
-        <Label
-          Content="Next"
-          DockPanel.Dock="Left"
-          Margin="0,0,5,0" />
-        <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
-      </DockPanel>
-    </Button>
-    <Button
-      Command="{Binding FinishCommand}"
-      Grid.Row="2"
-      HorizontalAlignment="Right"
-      Name="ButtonFinish">
-      <Interaction.Behaviors>
-        <DataTriggerBehavior
-          Binding="{Binding Path=CurrentStep.IsLastStep}"
-          ComparisonCondition="Equal"
-          Value="False">
-          <ChangePropertyAction
-            PropertyName="IsVisible"
-            TargetObject="{Binding #ButtonFinish}"
-            Value="False" />
-        </DataTriggerBehavior>
-        <DataTriggerBehavior
-          Binding="{Binding Path=CurrentStep.IsLastStep}"
-          ComparisonCondition="Equal"
-          Value="True">
-          <ChangePropertyAction
-            PropertyName="IsVisible"
-            TargetObject="{Binding #ButtonFinish}"
-            Value="True" />
-        </DataTriggerBehavior>
-      </Interaction.Behaviors>
-      <DockPanel>
-        <Label
-          Content="Finish"
-          DockPanel.Dock="Left"
-          Margin="0,0,5,0" />
-        <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
-      </DockPanel>
-    </Button>
+      <!--  Next & Finish  -->
+      <Button
+        Command="{Binding NextStageCommand}"
+        Grid.Column="1"
+        HorizontalAlignment="Right"
+        Name="ButtonNext">
+        <Interaction.Behaviors>
+          <DataTriggerBehavior
+            Binding="{Binding Path=CurrentStep.IsLastStep}"
+            ComparisonCondition="Equal"
+            Value="False">
+            <ChangePropertyAction
+              PropertyName="IsVisible"
+              TargetObject="{Binding #ButtonNext}"
+              Value="True" />
+          </DataTriggerBehavior>
+          <DataTriggerBehavior
+            Binding="{Binding Path=CurrentStep.IsLastStep}"
+            ComparisonCondition="Equal"
+            Value="True">
+            <ChangePropertyAction
+              PropertyName="IsVisible"
+              TargetObject="{Binding #ButtonNext}"
+              Value="False" />
+          </DataTriggerBehavior>
+        </Interaction.Behaviors>
+        <DockPanel>
+          <Label
+            Content="Next"
+            DockPanel.Dock="Left"
+            Margin="0,0,5,0" />
+          <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
+        </DockPanel>
+      </Button>
+      <Button
+        Command="{Binding FinishCommand}"
+        Grid.Column="1"
+        HorizontalAlignment="Right"
+        Name="ButtonFinish">
+        <Interaction.Behaviors>
+          <DataTriggerBehavior
+            Binding="{Binding Path=CurrentStep.IsLastStep}"
+            ComparisonCondition="Equal"
+            Value="False">
+            <ChangePropertyAction
+              PropertyName="IsVisible"
+              TargetObject="{Binding #ButtonFinish}"
+              Value="False" />
+          </DataTriggerBehavior>
+          <DataTriggerBehavior
+            Binding="{Binding Path=CurrentStep.IsLastStep}"
+            ComparisonCondition="Equal"
+            Value="True">
+            <ChangePropertyAction
+              PropertyName="IsVisible"
+              TargetObject="{Binding #ButtonFinish}"
+              Value="True" />
+          </DataTriggerBehavior>
+        </Interaction.Behaviors>
+        <DockPanel>
+          <Label
+            Content="Finish"
+            DockPanel.Dock="Left"
+            Margin="0,0,5,0" />
+          <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
+        </DockPanel>
+      </Button>
+    </Grid>
   </Grid>
 </UserControl>
