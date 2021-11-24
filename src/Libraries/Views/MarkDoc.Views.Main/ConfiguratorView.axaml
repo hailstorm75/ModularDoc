@@ -9,7 +9,6 @@
   xmlns:main="clr-namespace:MarkDoc.Views.Main"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <UserControl.Resources />
 
   <Grid Margin="15" RowDefinitions="Auto,*,Auto">
     <!--  Row 0  -->
@@ -64,14 +63,27 @@
     </StackPanel>
 
     <!--  Row 2  -->
-    <Button
-      Command="{Binding NextStageCommand}"
+    <Label
+      Content="{Binding Steps[0].Name}"
       Grid.Row="2"
-      HorizontalAlignment="Right">
-      <DockPanel>
-        <Label DockPanel.Dock="Left" Margin="0,0,5,0">Next</Label>
-        <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
-      </DockPanel>
-    </Button>
+      Margin="0,0,5,0" />
+
+    <!--  <Button  -->
+    <!--  Command="{Binding NextStageCommand}"  -->
+    <!--  Grid.Row="2"  -->
+    <!--  HorizontalAlignment="Right">  -->
+    <!--   <Interaction.Behaviors> -->
+    <!--     <DataTriggerBehavior Binding="{Binding Path=CurrentStep.IsLastStep}" Value="True"> -->
+    <!--       <ChangePropertyAction PropertyName="IsVisible" Value="False" /> -->
+    <!--     </DataTriggerBehavior> -->
+    <!--   </Interaction.Behaviors> -->
+    <!--   <DockPanel> -->
+    <!--  <Label  -->
+    <!--  Content="{Binding CurrentStep}"  -->
+    <!--  DockPanel.Dock="Left"  -->
+    <!--  Margin="0,0,5,0" />  -->
+    <!--     <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" /> -->
+    <!--   </DockPanel> -->
+    <!-- </Button> -->
   </Grid>
 </UserControl>
