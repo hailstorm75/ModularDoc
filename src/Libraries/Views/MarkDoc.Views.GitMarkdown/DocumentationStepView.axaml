@@ -20,60 +20,56 @@
     <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
 
     <Grid RowDefinitions="*,*">
-      <HeaderedContentControl Grid.Row="0" Header="Found documentation">
-        <ScrollViewer>
-          <ListBox Items="{Binding Paths}">
-            <ListBox.ItemTemplate>
-              <DataTemplate DataType="{x:Type system:String}">
-                <DockPanel LastChildFill="True">
-                  <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
-                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                  <DockPanel
-                    DockPanel.Dock="Right"
-                    ToolTip.Placement="Pointer"
-                    ToolTip.Tip="{Binding}">
-                    <TextBlock
-                      Margin="10,0,0,0"
-                      Text="{Binding Converter={StaticResource DirectoryConverter}}"
-                      VerticalAlignment="Center" />
-                    <TextBlock
-                      FontWeight="Bold"
-                      Text="{Binding Converter={StaticResource FileConverter}}"
-                      VerticalAlignment="Center" />
-                  </DockPanel>
+      <StackPanel Grid.Row="0">
+        <Label>Documentation</Label>
+        <ListBox Items="{Binding Paths}">
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type system:String}">
+              <DockPanel LastChildFill="True">
+                <DockPanel
+                  DockPanel.Dock="Right"
+                  ToolTip.Placement="Pointer"
+                  ToolTip.Tip="{Binding}">
+                  <TextBlock
+                    Margin="10,0,0,0"
+                    Text="{Binding Converter={StaticResource DirectoryConverter}}"
+                    VerticalAlignment="Center" />
+                  <TextBlock
+                    FontWeight="Bold"
+                    Text="{Binding Converter={StaticResource FileConverter}}"
+                    VerticalAlignment="Center" />
                 </DockPanel>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-        </ScrollViewer>
-      </HeaderedContentControl>
-      <HeaderedContentControl Grid.Row="1" Header="Missing documentation">
-        <ScrollViewer>
-          <ListBox Items="{Binding MissingPaths}">
-            <ListBox.ItemTemplate>
-              <DataTemplate DataType="{x:Type system:String}">
-                <DockPanel LastChildFill="True">
-                  <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
-                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                  <DockPanel
-                    DockPanel.Dock="Right"
-                    ToolTip.Placement="Pointer"
-                    ToolTip.Tip="{Binding}">
-                    <TextBlock
-                      Margin="10,0,0,0"
-                      Text="{Binding Converter={StaticResource DirectoryConverter}}"
-                      VerticalAlignment="Center" />
-                    <TextBlock
-                      FontWeight="Bold"
-                      Text="{Binding Converter={StaticResource FileConverter}}"
-                      VerticalAlignment="Center" />
-                  </DockPanel>
+              </DockPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+      <StackPanel Grid.Row="1">
+        <Label>Missing documentation</Label>
+        <ListBox Items="{Binding MissingPaths}">
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type system:String}">
+              <DockPanel LastChildFill="True">
+                <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+                <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                <DockPanel
+                  DockPanel.Dock="Right"
+                  ToolTip.Placement="Pointer"
+                  ToolTip.Tip="{Binding}">
+                  <TextBlock
+                    Margin="10,0,0,0"
+                    Text="{Binding Converter={StaticResource DirectoryConverter}}"
+                    VerticalAlignment="Center" />
+                  <TextBlock
+                    FontWeight="Bold"
+                    Text="{Binding Converter={StaticResource FileConverter}}"
+                    VerticalAlignment="Center" />
                 </DockPanel>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-        </ScrollViewer>
-      </HeaderedContentControl>
+              </DockPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
     </Grid>
   </StackPanel>
 
