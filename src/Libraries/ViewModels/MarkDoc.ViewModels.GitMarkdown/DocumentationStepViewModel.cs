@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using MarkDoc.Documentation;
 using MarkDoc.MVVM.Helpers;
 
@@ -54,8 +55,29 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
     {
       base.SetPreviousSettings(settings);
-      
-      
+
+      if (!settings.TryGetValue(AssemblyStepViewModel.ID, out var pluginSettings))
+        return;
+
+      // ReSharper disable once AssignNullToNotNullAttribute
+      LoadDocumentationPaths(pluginSettings);
+    }
+
+    private void LoadDocumentationPaths(IReadOnlyDictionary<string, string> settings)
+    {
+      if (!settings.TryGetValue(AssemblyStepViewModel.SETTINGS_PATHS, out var data))
+        return;
+
+      var paths = data.Split(AssemblyStepViewModel.PATH_DELIM);
+      foreach (var path in paths)
+      {
+        var documentation = path.Remove(path.Length - 3) + "xml";
+        if (File.Exists(documentation))
+          Paths.Add(documentation);
+        // Otherwise..
+        else
+          MissingPaths.Add(documentation);
+      }
     }
 
     /// <inheritdoc />
@@ -68,6 +90,6 @@ namespace MarkDoc.ViewModels.GitMarkdown
       };
 
     private void UpdateCanProceed()
-      => IsValid = MissingPaths.Count > 0;
+      => IsValid = MissingPaths.Count == 0;
   }
 }

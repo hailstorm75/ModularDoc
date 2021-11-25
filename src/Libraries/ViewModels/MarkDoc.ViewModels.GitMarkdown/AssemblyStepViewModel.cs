@@ -20,8 +20,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
   {
     #region Constants
 
-    private const string SETTINGS_PATHS = "paths";
-    private const char PATH_DELIM = '|';
+    public const string ID = "697C851D-54B1-4D84-BFD7-3568F54BB2C5";
+    public const string SETTINGS_PATHS = "paths";
+    public const char PATH_DELIM = '|';
 
     #endregion
 
@@ -32,7 +33,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #region Properties
 
     /// <inheritdoc />
-    public override string Id => "697C851D-54B1-4D84-BFD7-3568F54BB2C5";
+    public override string Id => ID;
 
     /// <inheritdoc />
     public override string Title => "Assembly processing settings";

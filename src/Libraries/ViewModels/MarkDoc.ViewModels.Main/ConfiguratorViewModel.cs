@@ -61,9 +61,11 @@ namespace MarkDoc.ViewModels.Main
               ? result
               : new Dictionary<string, string>();
 
-            return new KeyValuePair<string, IReadOnlyDictionary<string, string>>("", pluginSettings);
+            return new KeyValuePair<string, IReadOnlyDictionary<string, string>>(plugin.GetViewId(), pluginSettings);
           })
           .ToDictionary(x => x.Key, x => x.Value);
+
+        // ReSharper disable once AssignNullToNotNullAttribute
         CurrentView = value.GetStepView(CurrentStepSettings, previousSettings);
       }
     }

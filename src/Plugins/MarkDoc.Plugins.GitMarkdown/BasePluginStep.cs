@@ -23,6 +23,9 @@ namespace MarkDoc.Plugins.GitMarkdown
     #endregion
 
     /// <inheritdoc />
+    public abstract string GetViewId();
+
+    /// <inheritdoc />
     public abstract IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings,
       IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
 

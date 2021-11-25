@@ -34,5 +34,11 @@ namespace MarkDoc.Core
     /// <param name="previousSettings">Previous step settings</param>
     /// <returns>View instance</returns>
     IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
+
+    /// <summary>
+    /// Retrieves the id of the view
+    /// </summary>
+    /// <returns>View id</returns>
+    string GetViewId();
   }
 }

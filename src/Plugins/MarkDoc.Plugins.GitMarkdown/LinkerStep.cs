@@ -21,6 +21,13 @@ namespace MarkDoc.Plugins.GitMarkdown
     public override bool IsLastStep => true;
 
     /// <inheritdoc />
+    public override string GetViewId()
+    {
+      var view = TypeResolver.Resolve<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
+      return view.Id;
+    }
+
+    /// <inheritdoc />
     public override IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings,
       IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
     {

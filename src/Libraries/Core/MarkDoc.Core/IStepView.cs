@@ -23,6 +23,11 @@ namespace MarkDoc.Core
     where TViewModel : IStepViewModel
   {
     /// <summary>
+    /// Step view Id
+    /// </summary>
+    public string Id => ViewModel.Id;
+
+    /// <summary>
     /// Sets previous step settings
     /// </summary>
     /// <param name="settings">Previous settings</param>
