@@ -44,7 +44,7 @@
       Grid.Column="0"
       Grid.Row="1"
       Margin="0,0,10,0">
-      <ItemsControl Items="{Binding Steps}" Name="ItemsControl">
+      <ItemsControl Items="{Binding Steps}">
         <ItemsControl.ItemsPanel>
           <ItemsPanelTemplate>
             <StackPanel />
@@ -59,17 +59,17 @@
                   BorderThickness="2,0,0,0"
                   Grid.Column="0"
                   Margin="0,0,5,0">
+                  <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                  <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
                   <Border.IsVisible>
-                    <Binding>
+                    <Binding ElementName="Root" Path="DataContext.CurrentStep">
                       <Binding.Converter>
-                        <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                        <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
-                        <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding Path=DataContext.CurrentStep, ElementName=Root}" />
-                        <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
-                        <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
+                        <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding}" />
                       </Binding.Converter>
                     </Binding>
                   </Border.IsVisible>
+                  <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
+                  <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
                 </Border>
                 <TextBlock
                   FontSize="16"
