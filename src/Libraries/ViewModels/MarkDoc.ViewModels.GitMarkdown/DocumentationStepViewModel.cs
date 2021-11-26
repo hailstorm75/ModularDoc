@@ -54,9 +54,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
     }
 
     /// <inheritdoc />
-    public override void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+    public override async ValueTask SetPreviousSettings(
+      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
     {
-      base.SetPreviousSettings(settings);
+      await base.SetPreviousSettings(settings).ConfigureAwait(false);
 
       if (!settings.TryGetValue(AssemblyStepViewModel.ID, out var pluginSettings))
         return;

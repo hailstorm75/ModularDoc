@@ -25,6 +25,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override string Description => "Settings used by multiple components";
 
     /// <summary>
+    /// Namespaces inside the libraries
+    /// </summary>
+    public ObservableCollection<string> AvailableNamespaces { get; } = new();
+
+    /// <summary>
     /// Collection of ignored namespaces
     /// </summary>
     public ObservableCollection<string> IgnoredNamespaces { get; } = new();
@@ -61,9 +66,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments) => Task.CompletedTask;
 
     /// <inheritdoc />
-    public override void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+    public override async ValueTask SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
     {
-      base.SetPreviousSettings(settings);
+      await base.SetPreviousSettings(settings).ConfigureAwait(false);
 
       if (!settings.TryGetValue(AssemblyStepViewModel.ID, out var data))
         return;
@@ -73,7 +78,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
       globalSettings.SetupProperty(x => x.IgnoredNamespaces, Array.Empty<string>());
       globalSettings.SetupProperty(x => x.IgnoredTypes, Array.Empty<string>());
 
-      var result = m_resolver.Resolve(memberSettings, globalSettings.Object);
+      await m_resolver.Resolve(memberSettings, globalSettings.Object).ConfigureAwait(false);
+
+      foreach (var entry in m_resolver.Types.Value)
+        AvailableNamespaces.Add(entry.Key);
     }
   }
 }

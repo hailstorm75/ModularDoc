@@ -42,9 +42,9 @@ namespace MarkDoc.MVVM.Helpers
     /// <inheritdoc />
     public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
 
-    public virtual void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
-    {
-    }
+    public virtual ValueTask SetPreviousSettings(
+      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+      => ValueTask.CompletedTask;
 
     /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, string> GetSettings();
