@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MarkDoc.Helpers;
 
 namespace MarkDoc.Members.Dnlib
 {

@@ -1,42 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarkDoc.Core;
-using MarkDoc.Linkers;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
-  public sealed class LinkerStep
+  public sealed class GlobalStep
     : BasePluginStep
   {
     /// <inheritdoc />
-    public override string Id => "B05E71DB-7CB9-4855-8B4D-9A334677FEEB";
+    public override string Id => "12452BF9-2863-4AB6-8742-056F124CE409";
 
     /// <inheritdoc />
-    public override string Name => "Linker";
+    public override string Name => "Global step";
 
     /// <inheritdoc />
-    public override int StepNumber => 3;
+    public override int StepNumber => 4;
 
     /// <inheritdoc />
-    public override bool IsLastStep => false;
-
-    /// <inheritdoc />
-    public override string GetViewId()
-    {
-      var view = TypeResolver.Resolve<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
-      return view.Id;
-    }
+    public override bool IsLastStep => true;
 
     /// <inheritdoc />
     public override async Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
       IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
     {
-      var view = TypeResolver.Resolve<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
+      var view = TypeResolver.Resolve<IStepView<IStepViewModel<IGlobalSettings>, IGlobalSettings>>();
       await view.SetNamedArguments(settings);
       view.SetPreviousSettings(previousSettings);
 
       return view;
+    }
+
+    /// <inheritdoc />
+    public override string GetViewId()
+    {
+      var view = TypeResolver.Resolve<IStepView<IStepViewModel<IGlobalSettings>, IGlobalSettings>>();
+      return view.Id;
     }
   }
 }

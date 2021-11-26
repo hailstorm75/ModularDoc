@@ -54,9 +54,11 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<Linker>().As<ILinker>().SingleInstance();
       builder.RegisterType<TypeComposer>().As<ITypeComposer>().SingleInstance();
       builder.RegisterType<PrinterMarkdown>().As<IPrinter>().SingleInstance();
+
       builder.RegisterType<AssembliesStep>().As<IPluginStep>();
       builder.RegisterType<DocumentationStep>().As<IPluginStep>();
       builder.RegisterType<LinkerStep>().As<IPluginStep>();
+      builder.RegisterType<GlobalStep>().As<IPluginStep>();
 
       builder.RegisterType<AssemblyStepView>().As<IStepView<IStepViewModel<IMemberSettings>, IMemberSettings>>();
       builder.RegisterType<AssemblyStepViewModel>().As<IStepViewModel<IMemberSettings>>();
@@ -64,8 +66,10 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<DocumentationStepViewModel>().As<IStepViewModel<IDocSettings>>();
       builder.RegisterType<LinkerStepView>().As<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
       builder.RegisterType<LinkerStepViewModel>().As<IStepViewModel<ILinkerSettings>>();
-
+      builder.RegisterType<GlobalStepView>().As<IStepView<IStepViewModel<IGlobalSettings>, IGlobalSettings>>();
       builder.RegisterType<GlobalStepViewModel>().As<IStepViewModel<IGlobalSettings>>();
+
+      builder.RegisterType<SettingsCreator>().As<ISettingsCreator>();
     }
 
     /// <inheritdoc />
