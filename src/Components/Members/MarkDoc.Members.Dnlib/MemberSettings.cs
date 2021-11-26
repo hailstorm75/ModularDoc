@@ -20,10 +20,15 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public MemberSettings(IEnumerable<string> paths)
+    public MemberSettings(IReadOnlyDictionary<string, string> data)
     {
       Id = new Guid();
-      Paths = paths.ToReadOnlyCollection();
+      if (!data.TryGetValue(IMemberSettings.ENTRY_PATHS, out var paths))
+        // TODO
+        throw new ArgumentException();
+
+      // ReSharper disable once PossibleNullReferenceException
+      Paths = paths.Split(IMemberSettings.PATH_DELIMITER);
     }
   }
 }

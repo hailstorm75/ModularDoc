@@ -9,6 +9,9 @@ namespace MarkDoc.Members
   public interface IMemberSettings
     : ILibrarySettings
   {
+    public const string ENTRY_PATHS = "assemblyPaths";
+    public const string PATH_DELIMITER = "|";
+
     /// <summary>
     /// Paths to member sources
     /// </summary>

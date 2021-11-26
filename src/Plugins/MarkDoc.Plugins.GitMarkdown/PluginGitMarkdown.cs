@@ -64,6 +64,8 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<DocumentationStepViewModel>().As<IStepViewModel<IDocSettings>>();
       builder.RegisterType<LinkerStepView>().As<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
       builder.RegisterType<LinkerStepViewModel>().As<IStepViewModel<ILinkerSettings>>();
+
+      builder.RegisterType<GlobalStepViewModel>().As<IStepViewModel<IGlobalSettings>>();
     }
 
     /// <inheritdoc />
@@ -71,6 +73,21 @@ namespace MarkDoc.Plugins.GitMarkdown
       .Resolve<IEnumerable<IPluginStep>>()
       .OrderBy(step => step.StepNumber)
       .ToReadOnlyCollection();
+
+    internal sealed class SettingsCreator
+      : ISettingsCreator
+    {
+      /// <inheritdoc />
+      public T CreateSettings<T>(IReadOnlyDictionary<string, string> data)
+        where T : ILibrarySettings
+        => typeof(T).Name switch
+        {
+          "IMemberSettings" => new MemberSettings(data) as dynamic,
+          // "IDocSettings" => new DocSettings(data),
+          // "ILinkerSettings" => new LinkerSettings(data),
+          _ => throw new NotSupportedException(nameof(T))
+        };
+    }
 
     internal sealed class Creator : IElementCreator
     {

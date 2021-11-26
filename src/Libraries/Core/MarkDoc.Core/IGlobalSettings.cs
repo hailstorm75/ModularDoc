@@ -6,6 +6,7 @@ namespace MarkDoc.Core
   /// Interface for global settings
   /// </summary>
   public interface IGlobalSettings
+    : ILibrarySettings
   {
     /// <summary>
     /// Globally ignored namespaces
