@@ -73,6 +73,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       if (!settings.TryGetValue(AssemblyStepViewModel.ID, out var data))
         return;
 
+      // ReSharper disable once RedundantSuppressNullableWarningExpression
       var memberSettings = m_settingsCreator.CreateSettings<IMemberSettings>(data!);
       var globalSettings = new Mock<IGlobalSettings>();
       globalSettings.SetupProperty(x => x.IgnoredNamespaces, Array.Empty<string>());

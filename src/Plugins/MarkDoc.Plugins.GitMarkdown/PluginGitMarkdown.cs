@@ -82,6 +82,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       : ISettingsCreator
     {
       /// <inheritdoc />
+      // ReSharper disable once AnnotateNotNullTypeMember
       public T CreateSettings<T>(IReadOnlyDictionary<string, string> data)
         where T : ILibrarySettings
         => typeof(T).Name switch

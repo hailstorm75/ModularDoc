@@ -38,7 +38,7 @@ namespace MarkDoc.Members.Dnlib
     private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new();
 
     private readonly ConcurrentDictionary<string, IResType> m_resCache = new();
-    private Lazy<TrieNamespace> m_namespaces;
+    private Lazy<TrieNamespace> m_namespaces = null!;
 
     private static readonly HashSet<string> RECORD_ATTRIBUTES = new()
     {
@@ -51,7 +51,7 @@ namespace MarkDoc.Members.Dnlib
     #region Properties
 
     /// <inheritdoc />
-    public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; }
+    public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; } = null!;
 
     #endregion
 
@@ -466,6 +466,7 @@ namespace MarkDoc.Members.Dnlib
         return false;
 
       // Locate the type based on its name
+      // ReSharper disable once AssignNullToNotNullAttribute
       result = types.FirstOrDefault(x => x.RawName.Equals(fullname, StringComparison.InvariantCulture));
 
       // Return true if a type was found
