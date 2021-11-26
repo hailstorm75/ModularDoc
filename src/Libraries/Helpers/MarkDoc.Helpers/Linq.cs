@@ -7,6 +7,12 @@ namespace MarkDoc.Helpers
 #pragma warning disable CA1724
   public static class Linq
   {
+    public static void AddRange<T>(this ISet<T> set, IEnumerable<T> items)
+    {
+      foreach (var item in items)
+        set.Add(item!);
+    }
+
     public static void AddSorted<T>(this IList<T> list, T item, IComparer<T>? comparer = default)
     {
       if (comparer == null)

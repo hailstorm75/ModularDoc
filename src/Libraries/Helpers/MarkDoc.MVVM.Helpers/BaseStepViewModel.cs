@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using MarkDoc.Core;
 using ReactiveUI;
 
@@ -46,5 +47,8 @@ namespace MarkDoc.MVVM.Helpers
 
     /// <inheritdoc />
     public abstract IReadOnlyDictionary<string, string> GetSettings();
+
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+      => this.RaisePropertyChanged(propertyName);
   }
 }

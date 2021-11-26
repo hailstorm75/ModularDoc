@@ -47,7 +47,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       set
       {
         m_pathToAssembly = value;
-        this.RaisePropertyChanged(nameof(PathToAssembly));
+        OnPropertyChanged();
       }
     }
 
@@ -131,6 +131,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       // ReSharper disable once PossibleNullReferenceException
       Paths.AddRange(pathsSerialized.Split(PATH_DELIM));
+      m_pathsInsensitive.AddRange(Paths);
+
       UpdateCanProceed();
     }
 
@@ -162,7 +164,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       m_pathsInsensitive.Add(path);
       Paths.AddSorted(path);
 
-      this.RaisePropertyChanging(nameof(Paths));
+      OnPropertyChanged(nameof(Paths));
       UpdateCanProceed();
 
       return true;
@@ -183,7 +185,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
         Paths.AddSorted(path);
       }
 
-      this.RaisePropertyChanging(nameof(Paths));
+      OnPropertyChanged(nameof(Paths));
       UpdateCanProceed();
     }
 
@@ -204,7 +206,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       m_pathsInsensitive.Remove(path);
       Paths.Remove(path);
 
-      this.RaisePropertyChanging(nameof(Paths));
+      OnPropertyChanged(nameof(Paths));
       UpdateCanProceed();
     }
 

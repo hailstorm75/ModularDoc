@@ -68,6 +68,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       if (!settings.TryGetValue(AssemblyStepViewModel.SETTINGS_PATHS, out var data))
         return;
 
+      // ReSharper disable once PossibleNullReferenceException
       var paths = data.Split(AssemblyStepViewModel.PATH_DELIM);
       foreach (var path in paths)
       {
@@ -78,6 +79,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
         else
           MissingPaths.Add(documentation);
       }
+
+      UpdateCanProceed();
     }
 
     /// <inheritdoc />

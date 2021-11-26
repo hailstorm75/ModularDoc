@@ -3,11 +3,24 @@
   x:Class="MarkDoc.Views.GitMarkdown.LinkerStepView"
   xmlns="https://github.com/avaloniaui"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:gitMarkdown="clr-namespace:MarkDoc.ViewModels.GitMarkdown;assembly=MarkDoc.ViewModels.GitMarkdown"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <StackPanel>
     <Label Content="{Binding Title}" FontSize="18" />
+    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
+
+    <ComboBox
+      Items="{Binding Options}"
+      SelectedItem="{Binding Selected}"
+      Width="150">
+      <ComboBox.ItemTemplate>
+        <DataTemplate DataType="{x:Type gitMarkdown:Selection}">
+          <Label Content="{Binding DisplayName}" />
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
   </StackPanel>
 
 </UserControl>
