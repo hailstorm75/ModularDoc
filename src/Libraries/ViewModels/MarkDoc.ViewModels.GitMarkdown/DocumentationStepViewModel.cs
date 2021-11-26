@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using MarkDoc.Documentation;
+using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.ViewModels.GitMarkdown
@@ -68,11 +69,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
     private void LoadDocumentationPaths(IReadOnlyDictionary<string, string> settings)
     {
-      if (!settings.TryGetValue(AssemblyStepViewModel.SETTINGS_PATHS, out var data))
+      if (!settings.TryGetValue(IMemberSettings.ENTRY_PATHS, out var data))
         return;
 
       // ReSharper disable once PossibleNullReferenceException
-      var paths = data.Split(AssemblyStepViewModel.PATH_DELIM);
+      var paths = data.Split(IMemberSettings.PATH_DELIMITER);
       foreach (var path in paths)
       {
         var documentation = path.Remove(path.Length - 3) + "xml";

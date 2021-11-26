@@ -78,7 +78,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       globalSettings.SetupProperty(x => x.IgnoredNamespaces, Array.Empty<string>());
       globalSettings.SetupProperty(x => x.IgnoredTypes, Array.Empty<string>());
 
-      await m_resolver.Resolve(memberSettings, globalSettings.Object).ConfigureAwait(false);
+      await m_resolver.ResolveAsync(memberSettings, globalSettings.Object);
 
       foreach (var entry in m_resolver.Types.Value)
         AvailableNamespaces.Add(entry.Key);

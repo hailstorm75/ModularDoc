@@ -21,8 +21,6 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #region Constants
 
     public const string ID = "697C851D-54B1-4D84-BFD7-3568F54BB2C5";
-    public const string SETTINGS_PATHS = "paths";
-    public const char PATH_DELIM = '|';
 
     #endregion
 
@@ -126,11 +124,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <inheritdoc />
     public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
-      if (!arguments.TryGetValue(SETTINGS_PATHS, out var pathsSerialized))
+      if (!arguments.TryGetValue(IMemberSettings.ENTRY_PATHS, out var pathsSerialized))
         return Task.CompletedTask;
 
       // ReSharper disable once PossibleNullReferenceException
-      Paths.AddRange(pathsSerialized.Split(PATH_DELIM));
+      Paths.AddRange(pathsSerialized.Split(IMemberSettings.PATH_DELIMITER));
       m_pathsInsensitive.AddRange(Paths);
 
       UpdateCanProceed();
@@ -142,7 +140,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       => new Dictionary<string, string>
       {
         {
-          SETTINGS_PATHS, string.Join(PATH_DELIM, Paths)
+          IMemberSettings.ENTRY_PATHS, string.Join(IMemberSettings.PATH_DELIMITER, Paths)
         }
       };
 

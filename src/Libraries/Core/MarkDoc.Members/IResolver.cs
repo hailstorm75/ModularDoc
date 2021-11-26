@@ -22,7 +22,7 @@ namespace MarkDoc.Members
     /// Resolves all assemblies based on the given settings
     /// </summary>
     /// <returns></returns>
-    Task Resolve(IMemberSettings memberSettings, IGlobalSettings globalSettings);
+    Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings);
 
     /// <summary>
     /// Resolves <paramref name="assembly"/> types

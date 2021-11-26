@@ -35,11 +35,10 @@ namespace MarkDoc.Members.Dnlib
     private static readonly IReadOnlyDictionary<ElementType, ResTypeInitializer> ELEMENT_RES_TYPES;
     private static readonly HashSet<string> EXCLUDED_NAMESPACES = new() {"System", "Microsoft"};
 
-    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups =
-      new();
+    private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new();
 
     private readonly ConcurrentDictionary<string, IResType> m_resCache = new();
-    private readonly Lazy<TrieNamespace> m_namespaces;
+    private Lazy<TrieNamespace> m_namespaces;
 
     private static readonly HashSet<string> RECORD_ATTRIBUTES = new()
     {
@@ -52,7 +51,7 @@ namespace MarkDoc.Members.Dnlib
     #region Properties
 
     /// <inheritdoc />
-    public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
+    public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; }
 
     #endregion
 
@@ -61,21 +60,7 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Resolver()
-    {
-      // Transforms groupings of types into a dictionary
-      IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
-        => m_groups
-          // Flatten the collection
-          .SelectMany(Linq.XtoX)
-          // Create a dictionary of types grouped by their namespaces
-          .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
-
-      Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes,
-        LazyThreadSafetyMode.PublicationOnly);
-      m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys),
-        LazyThreadSafetyMode.PublicationOnly);
-    }
+    public Resolver() => NewTypes();
 
     static Resolver()
     {
@@ -179,8 +164,31 @@ namespace MarkDoc.Members.Dnlib
 
     #region Methods
 
-    public Task Resolve(IMemberSettings memberSettings, IGlobalSettings globalSettings)
-      => new(() => Parallel.ForEach(memberSettings.Paths, path => Resolve(path, globalSettings)));
+    private void NewTypes()
+    {
+      // Transforms groupings of types into a dictionary
+      IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
+        => m_groups
+          // Flatten the collection
+          .SelectMany(Linq.XtoX)
+          // Create a dictionary of types grouped by their namespaces
+          .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
+
+      Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes,
+        LazyThreadSafetyMode.PublicationOnly);
+      m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys),
+        LazyThreadSafetyMode.PublicationOnly);
+      m_groups.Clear();
+      m_resCache.Clear();
+    }
+
+    public async Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
+    {
+      NewTypes();
+
+      await Task.Run(() => Parallel.ForEach(memberSettings.Paths, path => Resolve(path, globalSettings)))
+        .ConfigureAwait(false);
+    }
 
     /// <inheritdoc />
     public void Resolve(string assembly)
