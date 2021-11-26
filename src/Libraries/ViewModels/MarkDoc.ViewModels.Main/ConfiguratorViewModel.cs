@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
 using ReactiveUI;
 
@@ -171,6 +172,9 @@ namespace MarkDoc.ViewModels.Main
 
       if (!string.IsNullOrEmpty(settings))
       {
+        // var configuration = await Configuration.LoadFromFileAsync(settings).ConfigureAwait(false);
+        // PluginSettings = configuration.GetEditableSettings();
+
         await using var stream = new FileStream(settings, FileMode.Open);
 
         var deserialized = await JsonSerializer.DeserializeAsync<Dictionary<string, IReadOnlyDictionary<string, string>>>(stream);
