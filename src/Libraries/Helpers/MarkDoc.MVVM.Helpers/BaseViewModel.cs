@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MarkDoc.Core;
 using ReactiveUI;
 
@@ -8,6 +9,6 @@ namespace MarkDoc.MVVM.Helpers
     : ReactiveObject, IViewModel
   {
     /// <inheritdoc />
-    public virtual void SetNamedArguments(IReadOnlyDictionary<string, string> arguments) {}
+    public virtual Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments) => Task.CompletedTask;
   }
 }

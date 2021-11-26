@@ -40,6 +40,8 @@ namespace MarkDoc.App
       var builder = new ContainerBuilder();
       builder.RegisterType<ConfiguratorViewModel>().As<IConfiguratorViewModel>();
       builder.RegisterType<ConfiguratorView>().As<IConfiguratorView>();
+      builder.RegisterType<SummaryViewModel>().As<ISummaryViewModel>();
+      builder.RegisterType<SummaryView>().As<ISummaryView>();
       builder.RegisterType<SettingsViewModel>().As<ISettingsViewModel>();
       builder.RegisterType<SettingsView>().As<ISettingsView>();
       builder.RegisterType<StartupViewModel>().As<IStartupViewModel>();
@@ -55,6 +57,7 @@ namespace MarkDoc.App
       builder.RegisterInstance(navigator).SingleInstance();
       navigator.Register<IConfiguratorView>(PageNames.CONFIGURATION);
       navigator.Register<ISettingsView>(PageNames.SETTINGS);
+      navigator.Register<ISummaryView>(PageNames.SUMMARY);
       navigator.Register<IStartupView>(PageNames.STARTUP);
       navigator.Register<IHomeView>(PageNames.HOME);
 

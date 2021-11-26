@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using MarkDoc.Documentation;
 using MarkDoc.MVVM.Helpers;
 
@@ -46,9 +47,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
       => MissingPaths.CollectionChanged += (_, _) => UpdateCanProceed();
 
     /// <inheritdoc />
-    public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+    public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       // throw new System.NotImplementedException();
+      return Task.CompletedTask;
     }
 
     /// <inheritdoc />

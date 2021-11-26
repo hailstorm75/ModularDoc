@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarkDoc.Core
 {
@@ -33,6 +34,6 @@ namespace MarkDoc.Core
     /// Sets named <paramref name="arguments"/> for the current view
     /// </summary>
     /// <param name="arguments">Named arguments to set</param>
-    void SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
+    Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
   }
 }

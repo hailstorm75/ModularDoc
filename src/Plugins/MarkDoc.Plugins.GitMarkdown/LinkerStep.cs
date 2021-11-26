@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MarkDoc.Core;
 using MarkDoc.Linkers;
 using MarkDoc.MVVM.Helpers;
@@ -28,11 +29,11 @@ namespace MarkDoc.Plugins.GitMarkdown
     }
 
     /// <inheritdoc />
-    public override IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings,
+    public override async Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
       IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
     {
       var view = TypeResolver.Resolve<IStepView<IStepViewModel<ILinkerSettings>, ILinkerSettings>>();
-      view.SetNamedArguments(settings);
+      await view.SetNamedArguments(settings);
       view.SetPreviousSettings(previousSettings);
 
       return view;

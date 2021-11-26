@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
@@ -66,7 +68,7 @@ namespace MarkDoc.ViewModels.Main
           .ToDictionary(x => x.Key, x => x.Value);
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        CurrentView = value.GetStepView(CurrentStepSettings, previousSettings);
+        CurrentView = value.GetStepView(CurrentStepSettings, previousSettings).Result;
       }
     }
 
@@ -97,7 +99,8 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ICommand NextStageCommand { get; }
 
-    // public ICommand FinishCommand { get; }
+    /// <inheritdoc />
+    public ICommand FinishCommand { get; }
 
     #endregion
 
@@ -112,6 +115,8 @@ namespace MarkDoc.ViewModels.Main
         .WhenAnyValue(viewModel => viewModel.CurrentView!.ViewModel.IsValid);
 
       BackCommand = ReactiveCommand.Create(NavigateBack);
+      FinishCommand = ReactiveCommand.Create(NavigateSummary);
+
       NextStageCommand = ReactiveCommand.Create(NextStep, canNavigateToNext);
       PreviousStageCommand = ReactiveCommand.Create(PreviousStep);
     }
@@ -120,6 +125,22 @@ namespace MarkDoc.ViewModels.Main
 
     private void NavigateBack()
       => m_navigationManager.NavigateTo(PageNames.HOME);
+
+    private async Task NavigateSummary()
+    {
+      await using var stream = new MemoryStream();
+      await JsonSerializer.SerializeAsync(stream, PluginSettings);
+
+      stream.Position = 0;
+      using var reader = new StreamReader(stream);
+      var settings = await reader.ReadToEndAsync();
+
+      m_navigationManager.NavigateTo(PageNames.SUMMARY, new Dictionary<string, string>
+      {
+        { IConfiguratorViewModel.ARGUMENT_ID, m_plugin!.Id },
+        { IConfiguratorViewModel.ARGUMENT_SETTINGS, settings }
+      });
+    }
 
     private void PreviousStep()
     {
@@ -142,7 +163,7 @@ namespace MarkDoc.ViewModels.Main
     }
 
     /// <inheritdoc />
-    public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+    public override async Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       var (id, settings) = ExtractArguments(arguments);
 
@@ -150,7 +171,9 @@ namespace MarkDoc.ViewModels.Main
 
       if (!string.IsNullOrEmpty(settings))
       {
-        var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(settings);
+        await using var stream = new FileStream(settings, FileMode.Open);
+
+        var deserialized = await JsonSerializer.DeserializeAsync<Dictionary<string, IReadOnlyDictionary<string, string>>>(stream);
         if (deserialized is not null)
           PluginSettings = deserialized;
       }

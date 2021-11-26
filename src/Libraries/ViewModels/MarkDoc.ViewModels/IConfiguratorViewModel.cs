@@ -64,6 +64,11 @@ namespace MarkDoc.ViewModels
     /// </summary>
     ICommand NextStageCommand { get; }
 
+    /// <summary>
+    /// Command for proceeding to the summary
+    /// </summary>
+    ICommand FinishCommand { get; }
+
     #endregion
   }
 }

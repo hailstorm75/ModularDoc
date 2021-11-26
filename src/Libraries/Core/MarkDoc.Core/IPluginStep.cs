@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkDoc.Core
 {
@@ -33,7 +34,8 @@ namespace MarkDoc.Core
     /// <param name="settings">Settings to load</param>
     /// <param name="previousSettings">Previous step settings</param>
     /// <returns>View instance</returns>
-    IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
+    Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
+      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
 
     /// <summary>
     /// Retrieves the id of the view

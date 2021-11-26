@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MarkDoc.Core;
 using ReactiveUI;
 
@@ -39,7 +40,7 @@ namespace MarkDoc.MVVM.Helpers
     #endregion
 
     /// <inheritdoc />
-    public abstract void SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
+    public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
 
     public virtual void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
     {

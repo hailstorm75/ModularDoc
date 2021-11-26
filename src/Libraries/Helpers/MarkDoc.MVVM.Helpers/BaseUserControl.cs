@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using MarkDoc.Core;
 
@@ -17,7 +18,7 @@ namespace MarkDoc.MVVM.Helpers
     protected BaseUserControl()
       => DataContext = ViewModel;
 
-    public void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
-      => ViewModel.SetNamedArguments(arguments);
+    public async Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+      => await ViewModel.SetNamedArguments(arguments);
   }
 }

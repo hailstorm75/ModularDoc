@@ -124,16 +124,17 @@ namespace MarkDoc.ViewModels.GitMarkdown
     }
 
     /// <inheritdoc />
-    public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+    public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       if (!arguments.TryGetValue(SETTINGS_PATHS, out var pathsSerialized))
-        return;
+        return Task.CompletedTask;
 
       // ReSharper disable once PossibleNullReferenceException
       Paths.AddRange(pathsSerialized.Split(PATH_DELIM));
       m_pathsInsensitive.AddRange(Paths);
 
       UpdateCanProceed();
+      return Task.CompletedTask;
     }
 
     /// <inheritdoc />

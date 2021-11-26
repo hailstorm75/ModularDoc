@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using MarkDoc.Linkers;
 using MarkDoc.MVVM.Helpers;
 
@@ -47,9 +48,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
     }
 
     /// <inheritdoc />
-    public override void SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+    public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       // throw new System.NotImplementedException();
+      return Task.CompletedTask;
     }
 
     /// <inheritdoc />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MarkDoc.Core;
@@ -16,14 +17,22 @@ namespace MarkDoc.MVVM.Helpers
   public class NavigationManager
   {
     private readonly Dictionary<string, Type> m_types;
-    private string m_previousView = string.Empty;
 
     public event EventHandler<ViewData>? NavigationChanged;
+
+    #region Properties
 
     /// <summary>
     /// The currently displayed page
     /// </summary>
     public string CurrentPage { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// The previously displayed page
+    /// </summary>
+    public string PreviousPage { get; private set; } = string.Empty;
+
+    #endregion
 
     /// <summary>
     /// Static constructor
@@ -102,6 +111,8 @@ namespace MarkDoc.MVVM.Helpers
       }
     }
 
+    #region Methods
+
     /// <summary>
     /// Register a new view to the manager
     /// </summary>
@@ -123,13 +134,16 @@ namespace MarkDoc.MVVM.Helpers
     public void NavigateTo(string name)
     {
       if (!m_types.ContainsKey(name))
+      {
+        Debug.WriteLine($"Navigation target {name} is unknown. Have you registered it?");
         return;
+      }
 
       if (NavigationChanged is null)
         throw new EntryPointNotFoundException("The application is not configured correctly as there is no-one to send the request to");
 
-      NavigationChanged.Invoke(this, new ViewData(name, m_previousView.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
-      m_previousView = CurrentPage;
+      NavigationChanged.Invoke(this, new ViewData(name, PreviousPage.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
+      PreviousPage = CurrentPage;
       CurrentPage = name;
     }
 
@@ -141,8 +155,8 @@ namespace MarkDoc.MVVM.Helpers
       if (NavigationChanged is null)
         throw new EntryPointNotFoundException("The application is not configured correctly as there is no-one to send the request to");
 
-      NavigationChanged.Invoke(this, new ViewData(name, arguments, m_previousView.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
-      m_previousView = CurrentPage;
+      NavigationChanged.Invoke(this, new ViewData(name, arguments, PreviousPage.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
+      PreviousPage = CurrentPage;
       CurrentPage = name;
     }
 
@@ -154,8 +168,8 @@ namespace MarkDoc.MVVM.Helpers
       if (NavigationChanged is null)
         throw new EntryPointNotFoundException("The application is not configured correctly as there is no-one to send the request to");
 
-      NavigationChanged.Invoke(this, new ViewData(name, arguments, m_previousView.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
-      m_previousView = CurrentPage;
+      NavigationChanged.Invoke(this, new ViewData(name, arguments, PreviousPage.Equals(name, StringComparison.InvariantCultureIgnoreCase)));
+      PreviousPage = CurrentPage;
       CurrentPage = name;
     }
 
@@ -172,5 +186,7 @@ namespace MarkDoc.MVVM.Helpers
       // ReSharper disable once AssignNullToNotNullAttribute
       return TypeResolver.ResolveView(view);
     }
+
+    #endregion
   }
 }

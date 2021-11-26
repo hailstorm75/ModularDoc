@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MarkDoc.Core;
 
 namespace MarkDoc.Plugins.GitMarkdown
@@ -26,7 +27,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     public abstract string GetViewId();
 
     /// <inheritdoc />
-    public abstract IStepView<IStepViewModel> GetStepView(IReadOnlyDictionary<string, string> settings,
+    public abstract Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
       IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
 
     /// <inheritdoc />
