@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
-using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
 using ReactiveUI;
 

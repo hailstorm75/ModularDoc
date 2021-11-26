@@ -13,7 +13,7 @@ namespace MarkDoc.ViewModels
     /// View title
     /// </summary>
     string Title { get; }
-    
+
     /// <summary>
     /// Command for navigating back
     /// </summary>
