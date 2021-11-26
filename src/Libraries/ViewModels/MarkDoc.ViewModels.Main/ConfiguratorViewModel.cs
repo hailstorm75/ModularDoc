@@ -165,18 +165,24 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public override async Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
-      var (id, settings) = ExtractArguments(arguments);
+      var (id, settings, settingsPath) = ExtractArguments(arguments);
 
       m_plugin = PluginManager.GetPlugin(id);
 
-      if (!string.IsNullOrEmpty(settings))
+      if (!string.IsNullOrEmpty(settingsPath))
       {
         // var configuration = await Configuration.LoadFromFileAsync(settings).ConfigureAwait(false);
         // PluginSettings = configuration.GetEditableSettings();
 
-        await using var stream = new FileStream(settings, FileMode.Open);
+        await using var stream = new FileStream(settingsPath, FileMode.Open);
 
         var deserialized = await JsonSerializer.DeserializeAsync<Dictionary<string, IReadOnlyDictionary<string, string>>>(stream);
+        if (deserialized is not null)
+          PluginSettings = deserialized;
+      }
+      else if (!string.IsNullOrEmpty(settings))
+      {
+        var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(settings);
         if (deserialized is not null)
           PluginSettings = deserialized;
       }
@@ -195,12 +201,12 @@ namespace MarkDoc.ViewModels.Main
       this.RaisePropertyChanged(nameof(Title));
     }
 
-    private static (string id, string settings) ExtractArguments(IReadOnlyDictionary<string, string> arguments)
+    private static (string id, string settings, string settingsPath) ExtractArguments(IReadOnlyDictionary<string, string> arguments)
     {
       if (arguments.Count == 0)
-        return ("", "");
+        return ("", "", "");
 
-      var result = ("", "");
+      var result = ("", "", "");
       foreach (var (key, value) in arguments)
         switch (key.ToLowerInvariant())
         {
@@ -210,6 +216,9 @@ namespace MarkDoc.ViewModels.Main
             break;
           case IConfiguratorViewModel.ARGUMENT_SETTINGS:
             result.Item2 = value;
+            break;
+          case IConfiguratorViewModel.ARGUMENT_SETTINGS_PATH:
+            result.Item3 = value;
             break;
         }
 

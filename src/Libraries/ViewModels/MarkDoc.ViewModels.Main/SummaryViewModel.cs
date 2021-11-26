@@ -52,7 +52,7 @@ namespace MarkDoc.ViewModels.Main
           m_navigationManager.NavigateTo(PageNames.HOME);
           break;
         case PageNames.CONFIGURATION:
-          m_navigationManager.NavigateTo(PageNames.HOME, m_pluginSettings);
+          m_navigationManager.NavigateTo(PageNames.CONFIGURATION, m_pluginSettings);
           break;
       }
     }

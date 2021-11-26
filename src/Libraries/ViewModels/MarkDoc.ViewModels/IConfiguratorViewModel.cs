@@ -15,6 +15,7 @@ namespace MarkDoc.ViewModels
 
     public const string ARGUMENT_ID = "id";
     public const string ARGUMENT_SETTINGS = "settings";
+    public const string ARGUMENT_SETTINGS_PATH = "settingsPath";
 
     #endregion
 
