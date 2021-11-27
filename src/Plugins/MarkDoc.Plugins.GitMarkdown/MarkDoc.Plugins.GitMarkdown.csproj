@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\bin\Debug\Plugins</OutputPath>
+    <OutputPath>..\..\..\bin\Debug\Plugins\GitMarkdown</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\bin\Release\Plugins</OutputPath>
+    <OutputPath>..\..\..\bin\Release\Plugins\GitMarkdown</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
