@@ -90,8 +90,22 @@ namespace MarkDoc.Plugins.GitMarkdown
           "IMemberSettings" => new MemberSettings(data) as dynamic,
           // "IDocSettings" => new DocSettings(data),
           "ILinkerSettings" => new LinkerSettings(data),
+          "IGlobalSettings" => new GlobalSettings(),
           _ => throw new NotSupportedException(nameof(T))
         };
+    }
+
+    internal sealed class GlobalSettings
+      : IGlobalSettings
+    {
+      /// <inheritdoc />
+      public Guid Id => Guid.Empty;
+
+      /// <inheritdoc />
+      public IReadOnlyCollection<string> IgnoredNamespaces { get; set; } = Array.Empty<string>();
+
+      /// <inheritdoc />
+      public IReadOnlyCollection<string> IgnoredTypes { get; set; } = Array.Empty<string>();
     }
 
     internal sealed class Creator : IElementCreator
