@@ -182,12 +182,13 @@ namespace MarkDoc.Members.Dnlib
       m_resCache.Clear();
     }
 
-    public async Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
+    public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
     {
       NewTypes();
 
-      await Task.Run(() => Parallel.ForEach(memberSettings.Paths, path => Resolve(path, globalSettings)))
-        .ConfigureAwait(false);
+      Parallel.ForEach(memberSettings.Paths, path => Resolve(path, globalSettings));
+
+      return Task.CompletedTask;
     }
 
     /// <inheritdoc />
