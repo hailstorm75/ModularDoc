@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using MarkDoc.Helpers;
 using MarkDoc.Members;
 using ReactiveUI;
 
@@ -12,9 +12,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #region Fields
 
     private readonly NamespaceNode? m_parent;
-    private bool m_isChecked;
-    private bool m_isExpanded;
+    private bool m_isChecked = true;
     private readonly Dictionary<string, NamespaceNode> m_nodes = new();
+    private bool m_isEnabled = true;
 
     #endregion
 
@@ -44,22 +44,17 @@ namespace MarkDoc.ViewModels.GitMarkdown
     }
 
     /// <summary>
-    /// Determines whether this namespace node is expanded
+    /// Determines whether this node is enabled for editing
     /// </summary>
-    public bool IsExpanded
+    public bool IsEnabled
     {
-      get => m_isExpanded;
+      get => m_isEnabled;
       set
       {
-        m_isExpanded = value;
-        this.RaisePropertyChanged(nameof(IsExpanded));
+        m_isEnabled = value;
+        this.RaisePropertyChanged(nameof(IsEnabled));
       }
     }
-
-    /// <summary>
-    /// Determines whether the parent namespace is enabled
-    /// </summary>
-    public bool IsParentChecked => m_parent?.IsChecked ?? true;
 
     /// <summary>
     /// Child nodes
@@ -71,9 +66,27 @@ namespace MarkDoc.ViewModels.GitMarkdown
     private NamespaceNode(string displayName, string fullNamespace, NamespaceNode? parentNode = default)
     {
       m_parent = parentNode;
+      if (m_parent is not null)
+        m_parent.PropertyChanged += ParentOnPropertyChanged;
 
       DisplayName = displayName;
       FullNamespace = fullNamespace;
+    }
+
+    ~NamespaceNode()
+    {
+      if (m_parent is not null)
+        m_parent.PropertyChanged -= ParentOnPropertyChanged;
+    }
+
+    private void ParentOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+      IsEnabled = e.PropertyName switch
+      {
+        nameof(IsChecked) => m_parent!.IsChecked,
+        nameof(IsEnabled) => m_parent!.IsEnabled,
+        _ => IsEnabled
+      };
     }
 
     private bool TryAdd(NamespaceNode node, out NamespaceNode existing)

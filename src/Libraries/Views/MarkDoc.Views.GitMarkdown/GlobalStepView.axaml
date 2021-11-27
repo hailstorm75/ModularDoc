@@ -7,6 +7,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <StackPanel>
+    <Label>Namespaces to process</Label>
     <TreeView
       Items="{Binding AvailableNamespaces}"
       Name="AvailableNamespacesTree"
@@ -17,7 +18,7 @@
             <CheckBox
               DockPanel.Dock="Left"
               IsChecked="{Binding IsChecked}"
-              IsEnabled="{Binding IsParentChecked}"
+              IsEnabled="{Binding IsEnabled}"
               Margin="0,0,10,0" />
             <Border>
               <ToolTip.Tip>
