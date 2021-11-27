@@ -30,6 +30,6 @@ namespace MarkDoc.Plugins.GitMarkdown
 
     /// <inheritdoc />
     public override async Task<IStepView<IStepViewModel>> GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
-      => await GetStepViewAsync<ILibrarySettings>(settings, previousSettings).ConfigureAwait(false);
+      => await GetStepViewAsync<ILinkerSettings>(settings, previousSettings).ConfigureAwait(false);
   }
 }
