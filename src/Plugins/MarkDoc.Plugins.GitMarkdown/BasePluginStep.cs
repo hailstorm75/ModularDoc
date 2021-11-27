@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarkDoc.Core;
+using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.Plugins.GitMarkdown
 {
@@ -27,8 +28,18 @@ namespace MarkDoc.Plugins.GitMarkdown
     public abstract string GetViewId();
 
     /// <inheritdoc />
-    public abstract Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
-      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
+    public abstract Task<IStepView<IStepViewModel>> GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings);
+
+    protected static async Task<IStepView<IStepViewModel>> GetStepViewAsync<T>(
+      IReadOnlyDictionary<string, string> settings,
+      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
+      where T : ILibrarySettings
+    {
+      var view = TypeResolver.Resolve<IStepView<IStepViewModel<T>, T>>();
+      await Task.WhenAll(view.SetNamedArgumentsAsync(settings), view.SetPreviousSettingsAsync(previousSettings)).ConfigureAwait(false);
+
+      return view;
+    }
 
     /// <inheritdoc />
     public override string ToString() => Name;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MarkDoc.Core
 {
@@ -31,7 +32,7 @@ namespace MarkDoc.Core
     /// Sets previous step settings
     /// </summary>
     /// <param name="settings">Previous settings</param>
-    public void SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
-      => ViewModel.SetPreviousSettings(settings);
+    public async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+      => await ViewModel.SetPreviousSettings(settings).ConfigureAwait(false);
   }
 }

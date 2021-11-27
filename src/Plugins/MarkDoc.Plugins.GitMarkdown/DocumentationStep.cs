@@ -29,14 +29,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     }
 
     /// <inheritdoc />
-    public override async Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
-      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
-    {
-      var view = TypeResolver.Resolve<IStepView<IStepViewModel<IDocSettings>, IDocSettings>>();
-      await view.SetNamedArguments(settings);
-      view.SetPreviousSettings(previousSettings);
-
-      return view;
-    }
+    public override async Task<IStepView<IStepViewModel>> GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
+      => await GetStepViewAsync<IDocSettings>(settings, previousSettings).ConfigureAwait(false);
   }
 }

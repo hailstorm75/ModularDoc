@@ -68,7 +68,7 @@ namespace MarkDoc.ViewModels.Main
           .ToDictionary(x => x.Key, x => x.Value);
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        CurrentView = value.GetStepView(CurrentStepSettings, previousSettings).Result;
+        CurrentView = value.GetStepViewAsync(CurrentStepSettings, previousSettings).Result;
       }
     }
 

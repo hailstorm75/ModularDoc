@@ -34,15 +34,15 @@ namespace MarkDoc.App.Views
 #endif
     }
 
-    private void OnNavigationChanged(object? sender, NavigationManager.ViewData data)
+    private async void OnNavigationChanged(object? sender, NavigationManager.ViewData data)
     {
       var view = m_navigator.ResolveView(data.Name);
 
       if (data.Arguments.Count != 0)
-        view.SetArguments(data.Arguments);
+        await view.SetArguments(data.Arguments).ConfigureAwait(false);
 
       if (data.NamedArguments.Count != 0)
-        view.SetNamedArguments(data.NamedArguments);
+        await view.SetNamedArgumentsAsync(data.NamedArguments).ConfigureAwait(true);
 
       m_mainContent!.Content = view;
 

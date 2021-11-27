@@ -18,7 +18,7 @@ namespace MarkDoc.MVVM.Helpers
     protected BaseUserControl()
       => DataContext = ViewModel;
 
-    public async Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+    public async Task SetNamedArgumentsAsync(IReadOnlyDictionary<string, string> arguments)
       => await ViewModel.SetNamedArguments(arguments);
   }
 }

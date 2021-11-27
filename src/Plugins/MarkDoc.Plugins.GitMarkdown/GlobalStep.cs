@@ -21,15 +21,8 @@ namespace MarkDoc.Plugins.GitMarkdown
     public override bool IsLastStep => true;
 
     /// <inheritdoc />
-    public override async Task<IStepView<IStepViewModel>> GetStepView(IReadOnlyDictionary<string, string> settings,
-      IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
-    {
-      var view = TypeResolver.Resolve<IStepView<IStepViewModel<IGlobalSettings>, IGlobalSettings>>();
-      await view.SetNamedArguments(settings);
-      view.SetPreviousSettings(previousSettings);
-
-      return view;
-    }
+    public override async Task<IStepView<IStepViewModel>> GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
+      => await GetStepViewAsync<IGlobalSettings>(settings, previousSettings).ConfigureAwait(false);
 
     /// <inheritdoc />
     public override string GetViewId()

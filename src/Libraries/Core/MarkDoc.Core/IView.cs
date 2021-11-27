@@ -27,13 +27,13 @@ namespace MarkDoc.Core
     /// Sets <paramref name="arguments"/> for the current view
     /// </summary>
     /// <param name="arguments">Arguments to set</param>
-    public void SetArguments(IEnumerable<string> arguments)
-      => SetNamedArguments(arguments.Select((x, i) => (x, i)).ToDictionary(el => $"{el.i}", el => el.x));
+    public async Task SetArguments(IEnumerable<string> arguments)
+      => await SetNamedArgumentsAsync(arguments.Select((x, i) => (x, i)).ToDictionary(el => $"{el.i}", el => el.x)).ConfigureAwait(false);
 
     /// <summary>
     /// Sets named <paramref name="arguments"/> for the current view
     /// </summary>
     /// <param name="arguments">Named arguments to set</param>
-    Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
+    Task SetNamedArgumentsAsync(IReadOnlyDictionary<string, string> arguments);
   }
 }
