@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using DynamicData;
 using MarkDoc.Core;
-using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
 
@@ -14,6 +13,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
   {
     private readonly IResolver m_resolver;
     private readonly ISettingsCreator m_settingsCreator;
+    private readonly List<NamespaceNode> m_allNodes = new();
 
     /// <inheritdoc />
     public override string Id => "23407B59-027B-43F9-901C-57F3016DE237";
@@ -27,7 +27,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <summary>
     /// Namespaces inside the libraries
     /// </summary>
-    public TrieNamespace AvailableNamespaces { get; } = new();
+    public ObservableCollection<NamespaceNode> AvailableNamespaces { get; } = new();
 
     /// <summary>
     /// Collection of ignored namespaces
@@ -79,8 +79,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       await m_resolver.ResolveAsync(memberSettings, globalSettings);
 
-      AvailableNamespaces.AddRange(m_resolver.Types.Value.Keys);
-      OnPropertyChanged(nameof(AvailableNamespaces));
+      var (roots, allNodes) = NamespaceNode.CreateNodes(m_resolver);
+      m_allNodes.AddRange(allNodes);
+      AvailableNamespaces.AddRange(roots);
     }
   }
 }

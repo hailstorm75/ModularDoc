@@ -11,9 +11,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
   {
     #region Fields
 
-    private NamespaceNode? m_parent;
+    private readonly NamespaceNode? m_parent;
     private bool m_isChecked;
     private bool m_isExpanded;
+    private readonly Dictionary<string, NamespaceNode> m_nodes = new();
 
     #endregion
 
@@ -63,17 +64,29 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <summary>
     /// Child nodes
     /// </summary>
-    public IReadOnlyCollection<NamespaceNode> Nodes { get; }
+    public IReadOnlyCollection<NamespaceNode> Nodes => m_nodes.Values;
 
     #endregion
 
-    private NamespaceNode(string displayName, string fullNamespace, IEnumerable<NamespaceNode> nodes, NamespaceNode? parentNode = default)
+    private NamespaceNode(string displayName, string fullNamespace, NamespaceNode? parentNode = default)
     {
       m_parent = parentNode;
 
       DisplayName = displayName;
       FullNamespace = fullNamespace;
-      Nodes = nodes.ToReadOnlyCollection();
+    }
+
+    private bool TryAdd(NamespaceNode node, out NamespaceNode existing)
+    {
+      if (!m_nodes.TryAdd(node.DisplayName, node))
+      {
+        existing = m_nodes[node.DisplayName];
+        return false;
+      }
+
+      existing = node;
+
+      return true;
     }
 
     public static (IReadOnlyCollection<NamespaceNode> roots, IReadOnlyCollection<NamespaceNode> allNodes) CreateNodes(IResolver resolver)
@@ -84,17 +97,31 @@ namespace MarkDoc.ViewModels.GitMarkdown
       foreach (var @namespace in resolver.Types.Value.Keys)
       {
         var nodes = @namespace.Split('.');
-        var childNodes = new Dictionary<string, NamespaceNode>();
 
-        var root = new NamespaceNode(nodes.First(), nodes.First(), childNodes.Values);
-        roots.TryAdd(nodes.First(), root);
+        var root = new NamespaceNode(nodes.First(), nodes.First());
+        if (roots.TryAdd(nodes.First(), root))
+          allNodes.AddLast(root);
+        // Otherwise..
+        else
+          root = roots[nodes.First()];
 
-        foreach (var childNamespace in nodes.Skip(1))
+        var index = 1;
+        var parent = root;
+        while (true)
         {
-          
-        }
+          if (index == nodes.Length)
+            break;
 
-        allNodes.AddLast(root);
+          var displayName = nodes[index];
+          var fullNamespace = string.Join('.', nodes.Take(index + 1));
+
+          var child = new NamespaceNode(displayName, fullNamespace, parent);
+          if (parent.TryAdd(child, out var existing))
+            allNodes.AddLast(child);
+
+          parent = existing;
+          index++;
+        }
       }
 
       return (roots.Values, allNodes);

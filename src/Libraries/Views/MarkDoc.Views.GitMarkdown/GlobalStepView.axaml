@@ -4,6 +4,7 @@
   xmlns="https://github.com/avaloniaui"
   xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:gitMarkdown="clr-namespace:MarkDoc.ViewModels.GitMarkdown;assembly=MarkDoc.ViewModels.GitMarkdown"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <StackPanel>
@@ -25,18 +26,24 @@
         </FloatingButton.Content>
       </FloatingButton>
     </StackPanel>
-    <TreeView Items="{Binding AvailableNamespaces.Root.Nodes}" SelectionMode="Single">
+    <TreeView Items="{Binding AvailableNamespaces}" SelectionMode="Single">
       <TreeView.ItemTemplate>
-        <TreeDataTemplate ItemsSource="{Binding Value.Nodes}">
+        <TreeDataTemplate DataType="{x:Type gitMarkdown:NamespaceNode}" ItemsSource="{Binding Nodes}">
           <DockPanel LastChildFill="True">
             <CheckBox
               DockPanel.Dock="Left"
-              IsChecked="True"
+              IsChecked="{Binding IsChecked}"
+              IsEnabled="{Binding IsParentChecked}"
               Margin="0,0,10,0" />
-            <Label
-              Content="{Binding Key}"
-              DockPanel.Dock="Right"
-              VerticalAlignment="Center" />
+            <Border>
+              <ToolTip.Tip>
+                <Label Content="{Binding FullNamespace}" />
+              </ToolTip.Tip>
+              <Label
+                Content="{Binding DisplayName}"
+                DockPanel.Dock="Right"
+                VerticalAlignment="Center" />
+            </Border>
           </DockPanel>
         </TreeDataTemplate>
       </TreeView.ItemTemplate>
