@@ -89,7 +89,7 @@ namespace MarkDoc.Plugins.GitMarkdown
         {
           "IMemberSettings" => new MemberSettings(data) as dynamic,
           // "IDocSettings" => new DocSettings(data),
-          // "ILinkerSettings" => new LinkerSettings(data),
+          "ILinkerSettings" => new LinkerSettings(data),
           _ => throw new NotSupportedException(nameof(T))
         };
     }

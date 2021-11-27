@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MarkDoc.Linkers;
+using MarkDoc.Linkers.Markdown;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.ViewModels.GitMarkdown
@@ -40,8 +41,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
     {
       IsValid = true;
 
-      Options.Add(new Selection("GitHub", 0));
-      Options.Add(new Selection("GitLab", 1));
+      Options.Add(new Selection("GitHub", (int)GitPlatform.GitHub));
+      Options.Add(new Selection("GitLab", (int)GitPlatform.GitLab));
 
       Selected = Options.First();
     }
@@ -49,12 +50,20 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <inheritdoc />
     public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
-      // throw new System.NotImplementedException();
+      if (!arguments.TryGetValue(LinkerSettings.ENTRY_PLATFORM, out var data))
+        return Task.CompletedTask;
+
+      Selected = Options.First(x => x.Value.ToString().Equals(data));
       return Task.CompletedTask;
     }
 
     /// <inheritdoc />
     public override IReadOnlyDictionary<string, string> GetSettings()
-      => new Dictionary<string, string>();
+      => new Dictionary<string, string>
+      {
+        {
+          LinkerSettings.ENTRY_PLATFORM, Selected!.Value.Value.ToString()
+        }
+      };
   }
 }
