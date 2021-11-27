@@ -9,7 +9,12 @@ namespace MarkDoc.Helpers
   {
     private readonly TrieNode m_root;
 
-    private class TrieNode
+    /// <summary>
+    /// SUMMARY
+    /// </summary>
+    public TrieNode Root => m_root;
+
+    public class TrieNode
     {
       private readonly Dictionary<string, TrieNode> m_roots;
 

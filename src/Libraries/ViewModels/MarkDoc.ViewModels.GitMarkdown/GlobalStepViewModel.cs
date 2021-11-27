@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
-using Moq;
 
 namespace MarkDoc.ViewModels.GitMarkdown
 {
@@ -27,7 +27,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// <summary>
     /// Namespaces inside the libraries
     /// </summary>
-    public ObservableCollection<string> AvailableNamespaces { get; } = new();
+    public TrieNamespace AvailableNamespaces { get; } = new();
 
     /// <summary>
     /// Collection of ignored namespaces
@@ -79,8 +79,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       await m_resolver.ResolveAsync(memberSettings, globalSettings);
 
-      foreach (var entry in m_resolver.Types.Value)
-        AvailableNamespaces.Add(entry.Key);
+      AvailableNamespaces.AddRange(m_resolver.Types.Value.Keys);
+      OnPropertyChanged(nameof(AvailableNamespaces));
     }
   }
 }
