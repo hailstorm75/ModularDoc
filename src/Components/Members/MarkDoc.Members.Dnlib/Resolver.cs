@@ -285,6 +285,7 @@ namespace MarkDoc.Members.Dnlib
       // If the type was cached..
       if (m_resCache.TryGetValue(key, out var resolution))
         // return the cached type
+        // ReSharper disable once AssignNullToNotNullAttribute
         return resolution;
 
       // If the type is by reference..
@@ -305,6 +306,7 @@ namespace MarkDoc.Members.Dnlib
     private IResType ProcessElementByType(TypeSig signature, IReadOnlyDictionary<string, string>? generics, bool isByRef, IReadOnlyList<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap)
     {
       if (ELEMENT_RES_TYPES.TryGetValue(signature.ElementType, out var resType))
+        // ReSharper disable once PossibleNullReferenceException
         return resType(this, signature, generics, isByRef, dynamicsMap, tupleMap);
 
       if (signature.ElementType is ElementType.GenericInst && IsGeneric(signature))
