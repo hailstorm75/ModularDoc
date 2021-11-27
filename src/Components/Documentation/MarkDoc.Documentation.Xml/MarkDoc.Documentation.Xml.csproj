@@ -23,12 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
 

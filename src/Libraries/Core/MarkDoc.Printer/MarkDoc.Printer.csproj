@@ -19,8 +19,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\MarkDoc.Members\MarkDoc.Members.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
   </ItemGroup>
 

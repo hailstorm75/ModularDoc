@@ -19,25 +19,11 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj">
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj"/>
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj"/>
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj"/>
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj"/>
   </ItemGroup>
 
 </Project>
