@@ -13,8 +13,8 @@
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Avalonia" Version="0.10.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.10" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.10" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.4.1" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.10.4" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.7.0" />
     <PackageReference Include="ReactiveUI" Version="16.3.10" />
   </ItemGroup>
   
