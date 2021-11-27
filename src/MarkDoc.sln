@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkDoc.Console", "MarkDoc.Console\MarkDoc.Console.csproj", "{B9DAE5DE-EC72-4028-8011-DA9192E9D946}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{72046ABF-82AA-495D-A4FC-F3872BEDC247}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CE769081-BFA5-405D-B63A-B60E2B91638D}"
@@ -97,10 +95,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B9DAE5DE-EC72-4028-8011-DA9192E9D946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9DAE5DE-EC72-4028-8011-DA9192E9D946}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9DAE5DE-EC72-4028-8011-DA9192E9D946}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9DAE5DE-EC72-4028-8011-DA9192E9D946}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5370B08C-4B40-460B-A823-ADBA384BA923}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5370B08C-4B40-460B-A823-ADBA384BA923}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5370B08C-4B40-460B-A823-ADBA384BA923}.Release|Any CPU.ActiveCfg = Release|Any CPU
