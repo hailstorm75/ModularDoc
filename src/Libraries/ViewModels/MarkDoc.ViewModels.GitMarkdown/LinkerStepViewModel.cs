@@ -12,7 +12,6 @@ namespace MarkDoc.ViewModels.GitMarkdown
   {
     private Selection? m_selected;
 
-
     /// <inheritdoc />
     public override string Id => "91ACE811-A3E5-4C43-9B7F-0721A3365E93";
 
