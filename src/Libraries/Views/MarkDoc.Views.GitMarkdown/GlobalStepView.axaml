@@ -2,12 +2,37 @@
   mc:Ignorable="d"
   x:Class="MarkDoc.Views.GitMarkdown.GlobalStepView"
   xmlns="https://github.com/avaloniaui"
+  xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:gitMarkdown="clr-namespace:MarkDoc.ViewModels.GitMarkdown;assembly=MarkDoc.ViewModels.GitMarkdown"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <StackPanel>
-    <Label>Namespaces to process</Label>
+    <Label
+      Content="{Binding Title}"
+      FontSize="18"
+      Margin="0,0,0,5" />
+    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
+    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
+      <TextBox
+        Text="{Binding PathToOutput}"
+        UseFloatingWatermark="True"
+        VerticalContentAlignment="Center"
+        Watermark="Output directory" />
+
+      <FloatingButton
+        Command="{Binding BrowseCommand}"
+        Grid.Column="1"
+        Margin="8,0,0,0">
+        <FloatingButton.Content>
+          <avalonia:Icon
+            FontSize="10"
+            Foreground="White"
+            Value="fa-search" />
+        </FloatingButton.Content>
+      </FloatingButton>
+    </Grid>
+
     <TreeView
       Items="{Binding AvailableNamespaces}"
       Name="AvailableNamespacesTree"

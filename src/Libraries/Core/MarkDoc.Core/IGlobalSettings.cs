@@ -9,6 +9,11 @@ namespace MarkDoc.Core
     : ILibrarySettings
   {
     /// <summary>
+    /// Delimiter
+    /// </summary>
+    public const char DELIM = '|';
+
+    /// <summary>
     /// Globally ignored namespaces
     /// </summary>
     IReadOnlyCollection<string> IgnoredNamespaces { get; }
@@ -27,5 +32,10 @@ namespace MarkDoc.Core
     /// Globally ignored but previously selected types
     /// </summary>
     IReadOnlyCollection<string> CheckedIgnoredTypes { get; }
+
+    /// <summary>
+    /// Output directory
+    /// </summary>
+    string OutputPath { get; }
   }
 }

@@ -2,24 +2,35 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MarkDoc.Core;
 using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
+using ReactiveUI;
 
 namespace MarkDoc.ViewModels.GitMarkdown
 {
   public class GlobalStepViewModel
     : BaseStepViewModel<IGlobalSettings>
   {
+    #region Fields
+
     private int m_totalTypes;
     private readonly HashSet<TypeNode> m_disabledTypeNodes = new();
+    private readonly IDialogManager m_dialogManager;
     private readonly IResolver m_resolver;
     private readonly ISettingsCreator m_settingsCreator;
     private readonly List<BaseTrieNode> m_allNodes = new();
     private readonly TaskCompletionSource<IReadOnlyDictionary<string, string>> m_arguments = new();
+    private string m_pathToOutput = string.Empty;
+
+    #endregion
+
+    #region Properties
 
     /// <inheritdoc />
     public override string Id => "23407B59-027B-43F9-901C-57F3016DE237";
@@ -31,16 +42,42 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override string Description => "Settings used by multiple components";
 
     /// <summary>
+    /// Output directory
+    /// </summary>
+    public string PathToOutput
+    {
+      get => m_pathToOutput;
+      set
+      {
+        m_pathToOutput = value;
+        UpdateIsValid();
+        OnPropertyChanged(nameof(PathToOutput));
+      }
+    }
+
+    /// <summary>
     /// Namespaces inside the libraries
     /// </summary>
     public ObservableCollection<NamespaceNode> AvailableNamespaces { get; } = new();
 
+    #endregion
+
+    #region Commands
+
+    public ICommand BrowseCommand { get; }
+
+    #endregion
+
     /// <summary>
     /// Default constructor
     /// </summary>
-    public GlobalStepViewModel(IResolver resolver, ISettingsCreator settingsCreator)
+    public GlobalStepViewModel(IDialogManager dialogManager, IResolver resolver, ISettingsCreator settingsCreator)
     {
       IsValid = true;
+
+      BrowseCommand = ReactiveCommand.CreateFromTask(BrowseFolderAsync);
+
+      m_dialogManager = dialogManager;
       m_resolver = resolver;
       m_settingsCreator = settingsCreator;
     }
@@ -49,6 +86,17 @@ namespace MarkDoc.ViewModels.GitMarkdown
     {
       foreach (var space in AvailableNamespaces)
         space.PropertyChanged -= RootOnPropertyChanged;
+    }
+
+    #region Methods
+
+    private async Task BrowseFolderAsync()
+    {
+      var option = await m_dialogManager.TrySelectFolderAsync("Select output");
+      if (option.IsEmpty)
+        return;
+
+      PathToOutput = option.Get();
     }
 
     /// <inheritdoc />
@@ -65,19 +113,23 @@ namespace MarkDoc.ViewModels.GitMarkdown
       {
         {
           nameof(IGlobalSettings.IgnoredNamespaces),
-          string.Join('|', ignoredNamespaces.Select(node => node.FullName))
+          string.Join(IGlobalSettings.DELIM, ignoredNamespaces.Select(node => node.FullName))
         },
         {
           nameof(IGlobalSettings.IgnoredTypes),
-          string.Join('|', ignoredTypes.Select(node => node.FullName))
+          string.Join(IGlobalSettings.DELIM, ignoredTypes.Select(node => node.FullName))
         },
         {
           nameof(IGlobalSettings.CheckedIgnoredNamespaces),
-          string.Join('|', ignoredNamespaces.Where(node => node.IsChecked).Select(node => node.FullName))
+          string.Join(IGlobalSettings.DELIM, ignoredNamespaces.Where(node => node.IsChecked).Select(node => node.FullName))
         },
         {
           nameof(IGlobalSettings.CheckedIgnoredTypes),
-          string.Join('|', ignoredTypes.Where(node => node.IsChecked).Select(node => node.FullName))
+          string.Join(IGlobalSettings.DELIM, ignoredTypes.Where(node => node.IsChecked).Select(node => node.FullName))
+        },
+        {
+          nameof(IGlobalSettings.OutputPath),
+          PathToOutput
         }
       };
     }
@@ -86,6 +138,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
     {
       m_arguments.TrySetResult(arguments);
+      if (arguments.TryGetValue(nameof(IGlobalSettings.OutputPath), out var outputPath))
+        // ReSharper disable once AssignNullToNotNullAttribute
+        PathToOutput = outputPath;
+
       return Task.CompletedTask;
     }
 
@@ -133,10 +189,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
         return;
 
       arguments.TryGetValue(checkedIgnored, out var checkedIgnoredSettings);
-      var @checked = new HashSet<string>(checkedIgnoredSettings?.Split('|') ?? Array.Empty<string>());
+      var @checked = new HashSet<string>(checkedIgnoredSettings?.Split(IGlobalSettings.DELIM) ?? Array.Empty<string>());
 
       // ReSharper disable once PossibleNullReferenceException
-      var types = ignoredNodes.Split('|').ToHashSet();
+      var types = ignoredNodes.Split(IGlobalSettings.DELIM).ToHashSet();
       var allTypes = m_allNodes.OfType<T>().Where(node => types.Contains(node.FullName));
       foreach (var node in allTypes)
       {
@@ -173,7 +229,12 @@ namespace MarkDoc.ViewModels.GitMarkdown
       }
     }
 
+    private static bool IsValidFolder(string folder)
+      => !string.IsNullOrEmpty(folder) && Directory.Exists(folder);
+
     private void UpdateIsValid()
-      => IsValid = AvailableNamespaces.Any(space => space.IsChecked) && m_totalTypes != m_disabledTypeNodes.Count;
+      => IsValid = IsValidFolder(PathToOutput) && AvailableNamespaces.Any(space => space.IsChecked) && m_totalTypes != m_disabledTypeNodes.Count;
+
+    #endregion
   }
 }

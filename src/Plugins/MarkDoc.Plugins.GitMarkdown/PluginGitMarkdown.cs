@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -90,7 +91,7 @@ namespace MarkDoc.Plugins.GitMarkdown
           "IMemberSettings" => new MemberSettings(data) as dynamic,
           // "IDocSettings" => new DocSettings(data),
           "ILinkerSettings" => new LinkerSettings(data),
-          "IGlobalSettings" => new GlobalSettings(),
+          "IGlobalSettings" => new GlobalSettings(data),
           _ => throw new NotSupportedException(nameof(T))
         };
     }
@@ -98,6 +99,8 @@ namespace MarkDoc.Plugins.GitMarkdown
     internal sealed class GlobalSettings
       : IGlobalSettings
     {
+      #region Properties
+
       /// <inheritdoc />
       public Guid Id => Guid.Empty;
 
@@ -112,6 +115,30 @@ namespace MarkDoc.Plugins.GitMarkdown
 
       /// <inheritdoc />
       public IReadOnlyCollection<string> CheckedIgnoredTypes { get; } = Array.Empty<string>();
+
+      /// <inheritdoc />
+      public string OutputPath { get; } = string.Empty;
+
+      #endregion
+
+      /// <summary>
+      /// Default constructor
+      /// </summary>
+      [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+      [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+      public GlobalSettings(IReadOnlyDictionary<string, string> data)
+      {
+        if (data.TryGetValue(nameof(OutputPath), out var outputPath))
+          OutputPath = outputPath;
+        if (data.TryGetValue(nameof(IgnoredNamespaces), out var ignoredNamespaces))
+          IgnoredNamespaces = ignoredNamespaces.Split(IGlobalSettings.DELIM);
+        if (data.TryGetValue(nameof(CheckedIgnoredNamespaces), out var checkedIgnoredNamespaces))
+          CheckedIgnoredNamespaces = checkedIgnoredNamespaces.Split(IGlobalSettings.DELIM);
+        if (data.TryGetValue(nameof(IgnoredTypes), out var ignoredTypes))
+          IgnoredTypes = ignoredTypes.Split(IGlobalSettings.DELIM);
+        if (data.TryGetValue(nameof(CheckedIgnoredTypes), out var checkedIgnoredTypes))
+          CheckedIgnoredTypes = checkedIgnoredTypes.Split(IGlobalSettings.DELIM);
+      }
     }
 
     internal sealed class Creator : IElementCreator
