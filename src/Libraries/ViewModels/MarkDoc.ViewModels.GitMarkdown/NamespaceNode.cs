@@ -16,7 +16,6 @@ namespace MarkDoc.ViewModels.GitMarkdown
   {
     #region Fields
 
-    private readonly BaseTrieNode? m_parent;
     private bool m_isChecked = true;
     private bool m_isEnabled = true;
 
@@ -65,13 +64,15 @@ namespace MarkDoc.ViewModels.GitMarkdown
       }
     }
 
+    public BaseTrieNode? Parent { get; }
+
     #endregion
 
     protected BaseTrieNode(string displayName, string fullNamespace, BaseTrieNode? parentNode = default)
     {
-      m_parent = parentNode;
-      if (m_parent is not null)
-        m_parent.PropertyChanged += ParentOnPropertyChanged;
+      Parent = parentNode;
+      if (Parent is not null)
+        Parent.PropertyChanged += ParentOnPropertyChanged;
 
       DisplayName = displayName;
       FullNamespace = fullNamespace;
@@ -79,16 +80,16 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
     ~BaseTrieNode()
     {
-      if (m_parent is not null)
-        m_parent.PropertyChanged -= ParentOnPropertyChanged;
+      if (Parent is not null)
+        Parent.PropertyChanged -= ParentOnPropertyChanged;
     }
 
     private void ParentOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
       IsEnabled = e.PropertyName switch
       {
-        nameof(IsChecked) => m_parent!.IsChecked,
-        nameof(IsEnabled) => m_parent!.IsEnabled && m_parent!.IsChecked,
+        nameof(IsChecked) => Parent!.IsChecked,
+        nameof(IsEnabled) => Parent!.IsEnabled && Parent!.IsChecked,
         _ => IsEnabled
       };
     }
@@ -201,7 +202,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
     #endregion
 
-    private NamespaceNode(string displayName, string fullNamespace, IReadOnlyCollection<IType>? types, NamespaceNode? parent = default)
+    private NamespaceNode(string displayName, string fullNamespace, NamespaceNode? parent = default)
       : base(displayName, fullNamespace, parent)
     {
     }
@@ -235,7 +236,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
         resolver.Types.Value.TryGetValue(nodes.First(), out var types);
 
-        var root = new NamespaceNode(nodes.First(), nodes.First(), types);
+        var root = new NamespaceNode(nodes.First(), nodes.First());
         var typeNodes = types is null
           ? Array.Empty<TypeNode>()
           : types.Select(type => new TypeNode(type, root)).ToReadOnlyCollection();
@@ -262,7 +263,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
           var displayName = nodes[index];
           var fullNamespace = string.Join('.', nodes.Take(index + 1));
-          var child = new NamespaceNode(displayName, fullNamespace, types, parent);
+          var child = new NamespaceNode(displayName, fullNamespace, parent);
 
           if (parent.TryAdd(child, out var existing))
           {

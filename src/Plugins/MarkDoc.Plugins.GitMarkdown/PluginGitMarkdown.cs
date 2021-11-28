@@ -102,10 +102,16 @@ namespace MarkDoc.Plugins.GitMarkdown
       public Guid Id => Guid.Empty;
 
       /// <inheritdoc />
-      public IReadOnlyCollection<string> IgnoredNamespaces { get; set; } = Array.Empty<string>();
+      public IReadOnlyCollection<string> IgnoredNamespaces { get; } = Array.Empty<string>();
 
       /// <inheritdoc />
-      public IReadOnlyCollection<string> IgnoredTypes { get; set; } = Array.Empty<string>();
+      public IReadOnlyCollection<string> IgnoredTypes { get; } = Array.Empty<string>();
+
+      /// <inheritdoc />
+      public IReadOnlyCollection<string> CheckedIgnoredNamespaces { get; } = Array.Empty<string>();
+
+      /// <inheritdoc />
+      public IReadOnlyCollection<string> CheckedIgnoredTypes { get; } = Array.Empty<string>();
     }
 
     internal sealed class Creator : IElementCreator

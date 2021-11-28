@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 using MarkDoc.Members;
 using MarkDoc.MVVM.Helpers;
 
@@ -51,17 +53,34 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
     /// <inheritdoc />
     public override IReadOnlyDictionary<string, string> GetSettings()
-      => new Dictionary<string, string>
+    {
+      var ignoredNamespaces = m_allNodes.OfType<NamespaceNode>()
+        .Where(node => !node.IsEnabled || !node.IsChecked)
+        .ToReadOnlyCollection();
+      var ignoredTypes = m_allNodes.OfType<TypeNode>()
+        .Where(node => !node.IsEnabled || !node.IsChecked)
+        .ToReadOnlyCollection();
+
+      return new Dictionary<string, string>
       {
         {
           nameof(IGlobalSettings.IgnoredNamespaces),
-          string.Join('|', m_allNodes.OfType<NamespaceNode>().Where(node => !node.IsEnabled || !node.IsChecked).Select(node => node.FullName))
+          string.Join('|', ignoredNamespaces.Select(node => node.FullName))
         },
         {
           nameof(IGlobalSettings.IgnoredTypes),
-          string.Join('|', m_allNodes.OfType<TypeNode>().Where(node => !node.IsEnabled || !node.IsChecked).Select(node => node.FullName))
+          string.Join('|', ignoredTypes.Select(node => node.FullName))
+        },
+        {
+          nameof(IGlobalSettings.CheckedIgnoredNamespaces),
+          string.Join('|', ignoredNamespaces.Where(node => node.IsChecked).Select(node => node.FullName))
+        },
+        {
+          nameof(IGlobalSettings.CheckedIgnoredTypes),
+          string.Join('|', ignoredTypes.Where(node => node.IsChecked).Select(node => node.FullName))
         }
       };
+    }
 
     /// <inheritdoc />
     public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
@@ -104,20 +123,32 @@ namespace MarkDoc.ViewModels.GitMarkdown
       var arguments = await m_arguments.Task.ConfigureAwait(false);
       if (arguments.TryGetValue(nameof(IGlobalSettings.IgnoredNamespaces), out var ignoredNamespaces))
       {
+        arguments.TryGetValue(nameof(IGlobalSettings.CheckedIgnoredNamespaces), out var checkedIgnoredNamespaces);
+        var @checked = new HashSet<string>(checkedIgnoredNamespaces?.Split('|') ?? Array.Empty<string>());
+
         // ReSharper disable once PossibleNullReferenceException
         var spaces = ignoredNamespaces.Split('|').ToHashSet();
         var allNamespaces = m_allNodes.OfType<NamespaceNode>().Where(node => spaces.Contains(node.FullName));
         foreach (var node in allNamespaces)
-          node.IsChecked = false;
+        {
+          node.IsChecked = @checked.Contains(node.FullName);
+          node.IsEnabled = !node.IsChecked && (node.Parent?.IsChecked ?? false) && (node.Parent?.IsEnabled ?? false);
+        }
       }
 
       if (arguments.TryGetValue(nameof(IGlobalSettings.IgnoredTypes), out var ignoredTypes))
       {
+        arguments.TryGetValue(nameof(IGlobalSettings.CheckedIgnoredTypes), out var checkedIgnoredTypes);
+        var @checked = new HashSet<string>(checkedIgnoredTypes?.Split('|') ?? Array.Empty<string>());
+
         // ReSharper disable once PossibleNullReferenceException
         var types = ignoredTypes.Split('|').ToHashSet();
         var allTypes = m_allNodes.OfType<TypeNode>().Where(node => types.Contains(node.FullName));
         foreach (var node in allTypes)
-          node.IsChecked = false;
+        {
+          node.IsChecked = @checked.Contains(node.FullName);
+          node.IsEnabled = !node.IsChecked && (node.Parent?.IsChecked ?? false) && (node.Parent?.IsEnabled ?? false);
+        }
       }
     }
 
