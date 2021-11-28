@@ -1,19 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
+using MarkDoc.Helpers;
 using MarkDoc.Members;
+using MarkDoc.Members.Types;
 using ReactiveUI;
 
 namespace MarkDoc.ViewModels.GitMarkdown
 {
-  public class NamespaceNode
+  public abstract class BaseTrieNode
     : ReactiveObject
   {
     #region Fields
 
-    private readonly NamespaceNode? m_parent;
+    private readonly BaseTrieNode? m_parent;
     private bool m_isChecked = true;
-    private readonly Dictionary<string, NamespaceNode> m_nodes = new();
     private bool m_isEnabled = true;
 
     #endregion
@@ -56,14 +59,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
       }
     }
 
-    /// <summary>
-    /// Child nodes
-    /// </summary>
-    public IReadOnlyCollection<NamespaceNode> Nodes => m_nodes.Values;
-
     #endregion
 
-    private NamespaceNode(string displayName, string fullNamespace, NamespaceNode? parentNode = default)
+    protected BaseTrieNode(string displayName, string fullNamespace, BaseTrieNode? parentNode = default)
     {
       m_parent = parentNode;
       if (m_parent is not null)
@@ -73,7 +71,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       FullNamespace = fullNamespace;
     }
 
-    ~NamespaceNode()
+    ~BaseTrieNode()
     {
       if (m_parent is not null)
         m_parent.PropertyChanged -= ParentOnPropertyChanged;
@@ -88,12 +86,58 @@ namespace MarkDoc.ViewModels.GitMarkdown
         _ => IsEnabled
       };
     }
+  }
+
+  public class TypeNode
+    : BaseTrieNode
+  {
+    private static readonly Regex GENERICS_REGEX = new Regex(@"`\d+");
+
+    public IReadOnlyCollection<TypeNode> TypeNodes { get; }
+
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    public TypeNode(IType type, BaseTrieNode? parent = default)
+      : base(type.Name, GetFullNamespace(type), parent)
+    {
+      if (type is IInterface interfaceType)
+        TypeNodes = interfaceType.NestedTypes.Select(nestedType => new TypeNode(nestedType, this)).ToReadOnlyCollection();
+      TypeNodes = Array.Empty<TypeNode>();
+    }
+
+    private static string GetFullNamespace(IType child)
+      => GENERICS_REGEX.Replace($"{child.TypeNamespace}.{child.Name}", string.Empty);
+  }
+
+  public class NamespaceNode
+    : BaseTrieNode
+  {
+    #region Fields
+
+    private readonly Dictionary<string, BaseTrieNode> m_nodes = new();
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Child nodes
+    /// </summary>
+    public IEnumerable<BaseTrieNode> Nodes => m_nodes.Values;
+
+    #endregion
+
+    private NamespaceNode(string displayName, string fullNamespace, IReadOnlyCollection<IType>? types, NamespaceNode? parent = default)
+      : base(displayName, fullNamespace, parent)
+    {
+    }
 
     private bool TryAdd(NamespaceNode node, out NamespaceNode existing)
     {
-      if (!m_nodes.TryAdd(node.DisplayName, node))
+      if (!m_nodes.TryAdd(node.DisplayName, node) && m_nodes[node.DisplayName] is NamespaceNode namespaceNode)
       {
-        existing = m_nodes[node.DisplayName];
+        existing = namespaceNode;
         return false;
       }
 
@@ -102,16 +146,29 @@ namespace MarkDoc.ViewModels.GitMarkdown
       return true;
     }
 
-    public static (IReadOnlyCollection<NamespaceNode> roots, IReadOnlyCollection<NamespaceNode> allNodes) CreateNodes(IResolver resolver)
+    private void AddType(TypeNode node)
+    {
+      m_nodes.TryAdd(node.DisplayName, node);
+    }
+
+    public static (IReadOnlyCollection<NamespaceNode> roots, IReadOnlyCollection<BaseTrieNode> allNodes) CreateNodes(IResolver resolver)
     {
       var roots = new Dictionary<string, NamespaceNode>();
-      var allNodes = new LinkedList<NamespaceNode>();
+      var allNodes = new LinkedList<BaseTrieNode>();
 
       foreach (var @namespace in resolver.Types.Value.Keys)
       {
         var nodes = @namespace.Split('.');
 
-        var root = new NamespaceNode(nodes.First(), nodes.First());
+        resolver.Types.Value.TryGetValue(nodes.First(), out var types);
+
+        var root = new NamespaceNode(nodes.First(), nodes.First(), types);
+        var typeNodes = types is null
+          ? Array.Empty<TypeNode>()
+          : types.Select(nestedType => new TypeNode(nestedType, root)).ToReadOnlyCollection();
+        foreach (var typeNode in typeNodes)
+          root.AddType(typeNode);
+
         if (roots.TryAdd(nodes.First(), root))
           allNodes.AddLast(root);
         // Otherwise..
@@ -128,7 +185,14 @@ namespace MarkDoc.ViewModels.GitMarkdown
           var displayName = nodes[index];
           var fullNamespace = string.Join('.', nodes.Take(index + 1));
 
-          var child = new NamespaceNode(displayName, fullNamespace, parent);
+          var child = new NamespaceNode(displayName, fullNamespace, types, parent);
+          resolver.Types.Value.TryGetValue(fullNamespace, out types);
+          typeNodes = types is null
+            ? Array.Empty<TypeNode>()
+            : types.Select(nestedType => new TypeNode(nestedType, child)).ToReadOnlyCollection();
+          foreach (var typeNode in typeNodes)
+            child.AddType(typeNode);
+
           if (parent.TryAdd(child, out var existing))
             allNodes.AddLast(child);
 

@@ -12,7 +12,26 @@
       Items="{Binding AvailableNamespaces}"
       Name="AvailableNamespacesTree"
       SelectionMode="Single">
-      <TreeView.ItemTemplate>
+      <TreeView.DataTemplates>
+        <TreeDataTemplate DataType="{x:Type gitMarkdown:TypeNode}" ItemsSource="{Binding TypeNodes}">
+          <DockPanel LastChildFill="True">
+            <CheckBox
+              DockPanel.Dock="Left"
+              IsChecked="{Binding IsChecked}"
+              IsEnabled="{Binding IsEnabled}"
+              Margin="0,0,10,0" />
+            <Border>
+              <ToolTip.Tip>
+                <Label Content="{Binding FullNamespace}" />
+              </ToolTip.Tip>
+              <Label
+                Content="{Binding DisplayName}"
+                DockPanel.Dock="Right"
+                FontStyle="Italic"
+                VerticalAlignment="Center" />
+            </Border>
+          </DockPanel>
+        </TreeDataTemplate>
         <TreeDataTemplate DataType="{x:Type gitMarkdown:NamespaceNode}" ItemsSource="{Binding Nodes}">
           <DockPanel LastChildFill="True">
             <CheckBox
@@ -31,7 +50,7 @@
             </Border>
           </DockPanel>
         </TreeDataTemplate>
-      </TreeView.ItemTemplate>
+      </TreeView.DataTemplates>
     </TreeView>
   </StackPanel>
 </UserControl>

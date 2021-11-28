@@ -88,7 +88,9 @@
       Grid.Row="1"
       Margin="10"
       Padding="15">
-      <ContentControl Content="{Binding Path=CurrentView}" />
+      <ScrollViewer>
+        <ContentControl Content="{Binding Path=CurrentView}" />
+      </ScrollViewer>
     </Border>
 
     <!--  Row 2  -->

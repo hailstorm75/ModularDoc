@@ -13,7 +13,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
   {
     private readonly IResolver m_resolver;
     private readonly ISettingsCreator m_settingsCreator;
-    private readonly List<NamespaceNode> m_allNodes = new();
+    private readonly List<BaseTrieNode> m_allNodes = new();
 
     /// <inheritdoc />
     public override string Id => "23407B59-027B-43F9-901C-57F3016DE237";
