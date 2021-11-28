@@ -82,7 +82,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       IsEnabled = e.PropertyName switch
       {
         nameof(IsChecked) => m_parent!.IsChecked,
-        nameof(IsEnabled) => m_parent!.IsEnabled,
+        nameof(IsEnabled) => m_parent!.IsEnabled && m_parent!.IsChecked,
         _ => IsEnabled
       };
     }
@@ -103,7 +103,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
     {
       if (type is IInterface interfaceType)
         TypeNodes = interfaceType.NestedTypes.Select(nestedType => new TypeNode(nestedType, this)).ToReadOnlyCollection();
-      TypeNodes = Array.Empty<TypeNode>();
+      else
+        TypeNodes = Array.Empty<TypeNode>();
     }
 
     private static string GetFullNamespace(IType child)
@@ -165,7 +166,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
         var root = new NamespaceNode(nodes.First(), nodes.First(), types);
         var typeNodes = types is null
           ? Array.Empty<TypeNode>()
-          : types.Select(nestedType => new TypeNode(nestedType, root)).ToReadOnlyCollection();
+          : types.Where(type => !type.IsNested).Select(type => new TypeNode(type, root)).ToReadOnlyCollection();
         foreach (var typeNode in typeNodes)
           root.AddType(typeNode);
 
@@ -189,7 +190,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
           resolver.Types.Value.TryGetValue(fullNamespace, out types);
           typeNodes = types is null
             ? Array.Empty<TypeNode>()
-            : types.Select(nestedType => new TypeNode(nestedType, child)).ToReadOnlyCollection();
+            // TODO: Remove nested types
+            : types.Where(type => !type.IsNested).Select(type => new TypeNode(type, child)).ToReadOnlyCollection();
           foreach (var typeNode in typeNodes)
             child.AddType(typeNode);
 

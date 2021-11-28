@@ -24,6 +24,9 @@ namespace MarkDoc.Members.Dnlib.Types
     public string Name { get; }
 
     /// <inheritdoc />
+    public bool IsNested { get; }
+
+    /// <inheritdoc />
     public AccessorType Accessor { get; }
 
     /// <inheritdoc />
@@ -57,6 +60,8 @@ namespace MarkDoc.Members.Dnlib.Types
       RawName = source.ReflectionFullName.Replace('+', '.');
       // Initialize the resolver
       Resolver = resolver;
+      // Initialize the is nested indicator
+      IsNested = parent is not null;
     }
 
     #region Methods

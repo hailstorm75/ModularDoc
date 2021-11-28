@@ -23,6 +23,11 @@ namespace MarkDoc.Members.Types
     string TypeNamespace { get; }
 
     /// <summary>
+    /// Determines whether this type is nested
+    /// </summary>
+    bool IsNested { get; }
+
+    /// <summary>
     /// Type accessor
     /// </summary>
     AccessorType Accessor { get; }
