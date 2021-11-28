@@ -115,7 +115,7 @@ namespace MarkDoc.ViewModels.Main
         .WhenAnyValue(viewModel => viewModel.CurrentView!.ViewModel.IsValid);
 
       BackCommand = ReactiveCommand.Create(NavigateBack);
-      FinishCommand = ReactiveCommand.Create(NavigateSummary);
+      FinishCommand = ReactiveCommand.Create(NavigateSummary, canNavigateToNext);
 
       NextStageCommand = ReactiveCommand.Create(NextStep, canNavigateToNext);
       PreviousStageCommand = ReactiveCommand.Create(PreviousStep);
@@ -128,6 +128,8 @@ namespace MarkDoc.ViewModels.Main
 
     private async Task NavigateSummary()
     {
+      SaveStepSettings();
+
       await using var stream = new MemoryStream();
       await JsonSerializer.SerializeAsync(stream, PluginSettings);
 
@@ -142,10 +144,19 @@ namespace MarkDoc.ViewModels.Main
       });
     }
 
+    private void SaveStepSettings()
+    {
+      var viewSettings = CurrentView!.ViewModel.GetSettings();
+      if (!PluginSettings.TryAdd(CurrentStep!.Id, CurrentView.ViewModel.GetSettings()))
+        PluginSettings[CurrentStep.Id] = viewSettings;
+    }
+
     private void PreviousStep()
     {
       if (CurrentStep is null)
         return;
+
+      SaveStepSettings();
 
       CurrentStep = Steps[Steps.IndexOf(CurrentStep) - 1];
     }
@@ -155,9 +166,7 @@ namespace MarkDoc.ViewModels.Main
       if (CurrentStep is null || CurrentView is null)
         return;
 
-      var settings = CurrentView.ViewModel.GetSettings();
-      if (!PluginSettings.TryAdd(CurrentStep.Id, CurrentView.ViewModel.GetSettings()))
-        PluginSettings[CurrentStep.Id] = settings;
+      SaveStepSettings();
 
       CurrentStep = Steps[Steps.IndexOf(CurrentStep) + 1];
     }

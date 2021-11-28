@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MarkDoc.Helpers;
@@ -11,7 +12,7 @@ using ReactiveUI;
 namespace MarkDoc.ViewModels.GitMarkdown
 {
   public abstract class BaseTrieNode
-    : ReactiveObject
+    : ReactiveObject, IEquatable<BaseTrieNode>, IComparable<BaseTrieNode>, IComparable
   {
     #region Fields
 
@@ -32,6 +33,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// Full namespace path
     /// </summary>
     public string FullNamespace { get; }
+
+    /// <summary>
+    /// Display name with the namespace
+    /// </summary>
+    public abstract string FullName { get; }
 
     /// <summary>
     /// Determines whether this namespace part is enabled
@@ -86,12 +92,69 @@ namespace MarkDoc.ViewModels.GitMarkdown
         _ => IsEnabled
       };
     }
+
+    /// <inheritdoc />
+    public bool Equals(BaseTrieNode? other)
+    {
+      if (ReferenceEquals(null, other)) return false;
+      if (ReferenceEquals(this, other)) return true;
+      return string.Equals(DisplayName, other.DisplayName, StringComparison.InvariantCulture) && string.Equals(FullNamespace, other.FullNamespace, StringComparison.InvariantCulture);
+    }
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj)
+    {
+      if (ReferenceEquals(null, obj)) return false;
+      if (ReferenceEquals(this, obj)) return true;
+      if (obj.GetType() != GetType()) return false;
+      return Equals((BaseTrieNode)obj);
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+      var hashCode = new HashCode();
+      hashCode.Add(DisplayName, StringComparer.InvariantCulture);
+      hashCode.Add(FullNamespace, StringComparer.InvariantCulture);
+      return hashCode.ToHashCode();
+    }
+
+    public static bool operator ==(BaseTrieNode? left, BaseTrieNode? right) => Equals(left, right);
+
+    public static bool operator !=(BaseTrieNode? left, BaseTrieNode? right) => !Equals(left, right);
+
+    /// <inheritdoc />
+    public int CompareTo(BaseTrieNode? other)
+    {
+      if (ReferenceEquals(this, other)) return 0;
+      if (ReferenceEquals(null, other)) return 1;
+      var displayNameComparison = string.Compare(DisplayName, other.DisplayName, StringComparison.InvariantCulture);
+      if (displayNameComparison != 0) return displayNameComparison;
+      return string.Compare(FullNamespace, other.FullNamespace, StringComparison.InvariantCulture);
+    }
+
+    /// <inheritdoc />
+    public int CompareTo(object? obj)
+    {
+      if (ReferenceEquals(null, obj)) return 1;
+      if (ReferenceEquals(this, obj)) return 0;
+      return obj is BaseTrieNode other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(BaseTrieNode)}");
+    }
   }
 
+  [DebuggerDisplay(nameof(TypeNode) + (": {" + nameof(DisplayName) + "}"))]
   public class TypeNode
     : BaseTrieNode
   {
     private static readonly Regex GENERICS_REGEX = new Regex(@"`\d+");
+
+    /// <inheritdoc />
+    public override string FullName => WrappedType.RawName;
+
+    /// <summary>
+    /// Wrapped type instance
+    /// </summary>
+    public IType WrappedType { get; }
 
     public IReadOnlyCollection<TypeNode> TypeNodes { get; }
 
@@ -101,16 +164,22 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public TypeNode(IType type, BaseTrieNode? parent = default)
       : base(type.Name, GetFullNamespace(type), parent)
     {
+      WrappedType = type;
+
       if (type is IInterface interfaceType)
         TypeNodes = interfaceType.NestedTypes.Select(nestedType => new TypeNode(nestedType, this)).ToReadOnlyCollection();
       else
         TypeNodes = Array.Empty<TypeNode>();
     }
 
+    public IEnumerable<TypeNode> GetAllSubNodes()
+      => TypeNodes.Concat(TypeNodes.SelectMany(node => node.GetAllSubNodes()));
+
     private static string GetFullNamespace(IType child)
       => GENERICS_REGEX.Replace($"{child.TypeNamespace}.{child.Name}", string.Empty);
   }
 
+  [DebuggerDisplay(nameof(NamespaceNode) + (": {" + nameof(DisplayName) + "}"))]
   public class NamespaceNode
     : BaseTrieNode
   {
@@ -121,6 +190,9 @@ namespace MarkDoc.ViewModels.GitMarkdown
     #endregion
 
     #region Properties
+
+    /// <inheritdoc />
+    public override string FullName => FullNamespace;
 
     /// <summary>
     /// Child nodes
@@ -166,9 +238,14 @@ namespace MarkDoc.ViewModels.GitMarkdown
         var root = new NamespaceNode(nodes.First(), nodes.First(), types);
         var typeNodes = types is null
           ? Array.Empty<TypeNode>()
-          : types.Where(type => !type.IsNested).Select(type => new TypeNode(type, root)).ToReadOnlyCollection();
+          : types.Select(type => new TypeNode(type, root)).ToReadOnlyCollection();
         foreach (var typeNode in typeNodes)
-          root.AddType(typeNode);
+        {
+          if (!typeNode.WrappedType.IsNested)
+            root.AddType(typeNode);
+
+          allNodes.AddLast(typeNode);
+        }
 
         if (roots.TryAdd(nodes.First(), root))
           allNodes.AddLast(root);
@@ -185,19 +262,29 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
           var displayName = nodes[index];
           var fullNamespace = string.Join('.', nodes.Take(index + 1));
-
           var child = new NamespaceNode(displayName, fullNamespace, types, parent);
-          resolver.Types.Value.TryGetValue(fullNamespace, out types);
-          typeNodes = types is null
-            ? Array.Empty<TypeNode>()
-            // TODO: Remove nested types
-            : types.Where(type => !type.IsNested).Select(type => new TypeNode(type, child)).ToReadOnlyCollection();
-          foreach (var typeNode in typeNodes)
-            child.AddType(typeNode);
 
           if (parent.TryAdd(child, out var existing))
+          {
             allNodes.AddLast(child);
 
+            resolver.Types.Value.TryGetValue(fullNamespace, out types);
+            typeNodes = types is null
+              ? Array.Empty<TypeNode>()
+              : types.Select(type => new TypeNode(type, child)).ToReadOnlyCollection();
+            foreach (var typeNode in typeNodes)
+            {
+              if (typeNode.WrappedType.IsNested)
+                continue;
+
+              child.AddType(typeNode);
+              allNodes.AddLast(typeNode);
+
+              var childSubNodes = typeNode.GetAllSubNodes();
+              foreach (var subNode in childSubNodes)
+                allNodes.AddLast(subNode);
+            }
+          }
           parent = existing;
           index++;
         }
