@@ -239,6 +239,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
         var root = new NamespaceNode(nodes.First(), nodes.First());
         var typeNodes = types is null
           ? Array.Empty<TypeNode>()
+          // ReSharper disable once AccessToModifiedClosure
           : types.Select(type => new TypeNode(type, root)).ToReadOnlyCollection();
         foreach (var typeNode in typeNodes)
         {
