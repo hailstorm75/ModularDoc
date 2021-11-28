@@ -121,34 +121,27 @@ namespace MarkDoc.ViewModels.GitMarkdown
       }
 
       var arguments = await m_arguments.Task.ConfigureAwait(false);
-      if (arguments.TryGetValue(nameof(IGlobalSettings.IgnoredNamespaces), out var ignoredNamespaces))
+
+      UpdateTreeNodeStates<NamespaceNode>(arguments, nameof(IGlobalSettings.IgnoredNamespaces), nameof(IGlobalSettings.CheckedIgnoredNamespaces));
+      UpdateTreeNodeStates<TypeNode>(arguments, nameof(IGlobalSettings.IgnoredTypes), nameof(IGlobalSettings.CheckedIgnoredTypes));
+    }
+
+    private void UpdateTreeNodeStates<T>(IReadOnlyDictionary<string, string> arguments, string ignored, string checkedIgnored)
+      where T : BaseTrieNode
+    {
+      if (!arguments.TryGetValue(ignored, out var ignoredNodes))
+        return;
+
+      arguments.TryGetValue(checkedIgnored, out var checkedIgnoredSettings);
+      var @checked = new HashSet<string>(checkedIgnoredSettings?.Split('|') ?? Array.Empty<string>());
+
+      // ReSharper disable once PossibleNullReferenceException
+      var types = ignoredNodes.Split('|').ToHashSet();
+      var allTypes = m_allNodes.OfType<T>().Where(node => types.Contains(node.FullName));
+      foreach (var node in allTypes)
       {
-        arguments.TryGetValue(nameof(IGlobalSettings.CheckedIgnoredNamespaces), out var checkedIgnoredNamespaces);
-        var @checked = new HashSet<string>(checkedIgnoredNamespaces?.Split('|') ?? Array.Empty<string>());
-
-        // ReSharper disable once PossibleNullReferenceException
-        var spaces = ignoredNamespaces.Split('|').ToHashSet();
-        var allNamespaces = m_allNodes.OfType<NamespaceNode>().Where(node => spaces.Contains(node.FullName));
-        foreach (var node in allNamespaces)
-        {
-          node.IsChecked = @checked.Contains(node.FullName);
-          node.IsEnabled = !node.IsChecked && (node.Parent?.IsChecked ?? false) && (node.Parent?.IsEnabled ?? false);
-        }
-      }
-
-      if (arguments.TryGetValue(nameof(IGlobalSettings.IgnoredTypes), out var ignoredTypes))
-      {
-        arguments.TryGetValue(nameof(IGlobalSettings.CheckedIgnoredTypes), out var checkedIgnoredTypes);
-        var @checked = new HashSet<string>(checkedIgnoredTypes?.Split('|') ?? Array.Empty<string>());
-
-        // ReSharper disable once PossibleNullReferenceException
-        var types = ignoredTypes.Split('|').ToHashSet();
-        var allTypes = m_allNodes.OfType<TypeNode>().Where(node => types.Contains(node.FullName));
-        foreach (var node in allTypes)
-        {
-          node.IsChecked = @checked.Contains(node.FullName);
-          node.IsEnabled = !node.IsChecked && (node.Parent?.IsChecked ?? false) && (node.Parent?.IsEnabled ?? false);
-        }
+        node.IsChecked = @checked.Contains(node.FullName);
+        node.IsEnabled = !node.IsChecked && (node.Parent?.IsChecked ?? false) && (node.Parent?.IsEnabled ?? false);
       }
     }
 
