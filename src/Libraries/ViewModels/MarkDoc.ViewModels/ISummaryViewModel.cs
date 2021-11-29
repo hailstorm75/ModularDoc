@@ -20,7 +20,9 @@ namespace MarkDoc.ViewModels
     /// </summary>
     ICommand BackCommand { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Executes the plugin operation
+    /// </summary>
     Task ExecuteAsync();
   }
 }

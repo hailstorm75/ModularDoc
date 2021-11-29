@@ -30,8 +30,8 @@ namespace MarkDoc.Plugins.GitMarkdown
   public sealed class PluginGitMarkdown
     : Module, IPlugin
   {
-    private ISettingsCreator m_settingsCreator;
-    
+    private readonly ISettingsCreator m_settingsCreator;
+
     #region Properties
 
     /// <inheritdoc />
@@ -89,6 +89,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       .ToReadOnlyCollection();
 
     /// <inheritdoc />
+    // ReSharper disable once AnnotateNotNullTypeMember
     public T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings
     {
       switch (typeof(T).Name)
@@ -123,7 +124,7 @@ namespace MarkDoc.Plugins.GitMarkdown
 
       await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync()).ConfigureAwait(false);
 
-      var linker = new Linker(resolver);
+      var linker = new Linker(resolver, linkerSettings);
       var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
       var printer = new PrinterMarkdown(composer, linker);
 

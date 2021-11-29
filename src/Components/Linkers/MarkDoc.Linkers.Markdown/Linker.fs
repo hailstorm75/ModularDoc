@@ -1,6 +1,5 @@
 ﻿namespace MarkDoc.Linkers.Markdown
 
-open System.Collections.Generic
 open MarkDoc.Members
 open MarkDoc.Linkers
 open MarkDoc.Members.ResolvedTypes
@@ -11,10 +10,13 @@ open System.Collections.Concurrent
 /// <summary>
 /// Markdown linker class
 /// </summary>
-type Linker(memberResolver) =
+type Linker(memberResolver, linkerSettings: ILinkerSettings) =
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = ConcurrentDictionary<IMember, Lazy<string>>()
-  let m_platform = GitPlatform.GitLab
+  let m_platform = match (linkerSettings :?> LinkerSettings).Platform with
+                   | "1" -> GitPlatform.GitLab
+                   | "0" -> GitPlatform.GitHub
+                   | _ -> GitPlatform.GitHub
 
   let structure =
     Structure.generateStructure(m_memberResolver.Types.Value, m_platform)

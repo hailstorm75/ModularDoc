@@ -39,8 +39,18 @@ namespace MarkDoc.Core
     /// <returns></returns>
     IReadOnlyCollection<IPluginStep> GetPluginSteps();
 
+    /// <summary>
+    /// Retrieves settings based on the provided <paramref name="data"/>
+    /// </summary>
+    /// <param name="data">Data to convert</param>
+    /// <typeparam name="T">Settings type</typeparam>
+    /// <returns>Conversion result</returns>
     T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings;
 
+    /// <summary>
+    /// Executes the plugin operation
+    /// </summary>
+    /// <param name="data">Settings for the plugin execution</param>
     Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data);
   }
 }
