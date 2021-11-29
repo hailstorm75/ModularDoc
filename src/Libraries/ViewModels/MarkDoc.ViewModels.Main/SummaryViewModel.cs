@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -49,8 +50,10 @@ namespace MarkDoc.ViewModels.Main
     {
       m_navigationManager = navigationManager;
 
+      var canExecute = this.WhenAnyValue(viewModel => viewModel.Loading).Select(x => !x);
+
       BackCommand = ReactiveCommand.Create(NavigateBack);
-      ExecuteCommand = ReactiveCommand.CreateFromTask(ExecuteAsync);
+      ExecuteCommand = ReactiveCommand.CreateFromTask(ExecuteAsync, canExecute);
     }
 
     /// <inheritdoc />
