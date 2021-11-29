@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
@@ -12,11 +14,22 @@ namespace MarkDoc.ViewModels.Main
   {
     private readonly NavigationManager m_navigationManager;
     private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
+    private bool m_loading;
 
     #region Properties
 
     /// <inheritdoc />
     public string Title => "Summary";
+
+    public bool Loading
+    {
+      get => m_loading;
+      set
+      {
+        m_loading = value;
+        this.RaisePropertyChanged();
+      }
+    }
 
     #endregion
 
@@ -24,6 +37,8 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public ICommand BackCommand { get; }
+
+    public ICommand ExecuteCommand { get; }
 
     #endregion
 
@@ -33,7 +48,27 @@ namespace MarkDoc.ViewModels.Main
     public SummaryViewModel(NavigationManager navigationManager)
     {
       m_navigationManager = navigationManager;
+
       BackCommand = ReactiveCommand.Create(NavigateBack);
+      ExecuteCommand = ReactiveCommand.CreateFromTask(ExecuteAsync);
+    }
+
+    /// <inheritdoc />
+    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
+    public async Task ExecuteAsync()
+    {
+      Loading = true;
+
+      if (!m_pluginSettings.TryGetValue(IConfiguratorViewModel.ARGUMENT_ID, out var pluginId) || !m_pluginSettings.TryGetValue(IConfiguratorViewModel.ARGUMENT_SETTINGS, out var settings))
+        return;
+
+      // ReSharper disable once AssignNullToNotNullAttribute
+      var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(settings);
+      // ReSharper disable once AssignNullToNotNullAttribute
+      var plugin = PluginManager.GetPlugin(pluginId);
+      await plugin.ExecuteAsync(deserialized ?? new Dictionary<string, IReadOnlyDictionary<string, string>>());
+
+      Loading = false;
     }
 
     /// <inheritdoc />

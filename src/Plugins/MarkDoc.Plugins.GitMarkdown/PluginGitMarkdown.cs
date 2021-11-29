@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Autofac;
 using MarkDoc.Core;
 using MarkDoc.Documentation;
@@ -29,6 +30,8 @@ namespace MarkDoc.Plugins.GitMarkdown
   public sealed class PluginGitMarkdown
     : Module, IPlugin
   {
+    private ISettingsCreator m_settingsCreator;
+    
     #region Properties
 
     /// <inheritdoc />
@@ -44,6 +47,12 @@ namespace MarkDoc.Plugins.GitMarkdown
     public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("MarkDoc.Plugin.GitMarkdown.icon.png");
 
     #endregion
+
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    public PluginGitMarkdown()
+      => m_settingsCreator = new SettingsCreator();
 
     /// <inheritdoc />
     protected override void Load(ContainerBuilder builder)
@@ -79,6 +88,48 @@ namespace MarkDoc.Plugins.GitMarkdown
       .OrderBy(step => step.StepNumber)
       .ToReadOnlyCollection();
 
+    /// <inheritdoc />
+    public T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings
+    {
+      switch (typeof(T).Name)
+      {
+        case "IMemberSettings":
+          data.TryGetValue(AssembliesStep.ID, out var assemblyData);
+          return m_settingsCreator.CreateSettings<T>(assemblyData ?? new Dictionary<string, string>());
+        case "IDocSettings":
+          data.TryGetValue(DocumentationStep.ID, out var documentationData);
+          return m_settingsCreator.CreateSettings<T>(documentationData ?? new Dictionary<string, string>());
+        case "ILinkerSettings":
+          data.TryGetValue(LinkerStep.ID, out var linkerData);
+          return m_settingsCreator.CreateSettings<T>(linkerData ?? new Dictionary<string, string>());
+        case "IGlobalSettings":
+          data.TryGetValue(GlobalStep.ID, out var globalData);
+          return m_settingsCreator.CreateSettings<T>(globalData ?? new Dictionary<string, string>());
+        default:
+          throw new NotSupportedException();
+      }
+    }
+
+    /// <inheritdoc />
+    public async Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
+    {
+      var globalSettings = GetSettings<IGlobalSettings>(data);
+      var linkerSettings = GetSettings<ILinkerSettings>(data);
+      var memberSettings = GetSettings<IMemberSettings>(data);
+      var docSettings = GetSettings<IDocSettings>(data);
+
+      var resolver = new Resolver();
+      var docResolver = new DocResolver(resolver, docSettings);
+
+      await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync()).ConfigureAwait(false);
+
+      var linker = new Linker(resolver);
+      var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
+      var printer = new PrinterMarkdown(composer, linker);
+
+      await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath).ConfigureAwait(false);
+    }
+
     internal sealed class SettingsCreator
       : ISettingsCreator
     {
@@ -89,7 +140,7 @@ namespace MarkDoc.Plugins.GitMarkdown
         => typeof(T).Name switch
         {
           "IMemberSettings" => new MemberSettings(data) as dynamic,
-          // "IDocSettings" => new DocSettings(data),
+          "IDocSettings" => new DocSettings(data),
           "ILinkerSettings" => new LinkerSettings(data),
           "IGlobalSettings" => new GlobalSettings(data),
           _ => throw new NotSupportedException(nameof(T))

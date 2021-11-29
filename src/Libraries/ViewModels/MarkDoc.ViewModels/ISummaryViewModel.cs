@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using MarkDoc.Core;
 
 namespace MarkDoc.ViewModels
@@ -18,5 +19,8 @@ namespace MarkDoc.ViewModels
     /// Command for navigating back
     /// </summary>
     ICommand BackCommand { get; }
+
+    /// <inheritdoc />
+    Task ExecuteAsync();
   }
 }

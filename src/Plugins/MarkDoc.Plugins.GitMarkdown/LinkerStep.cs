@@ -9,8 +9,10 @@ namespace MarkDoc.Plugins.GitMarkdown
   public sealed class LinkerStep
     : BasePluginStep
   {
+    public const string ID = "B05E71DB-7CB9-4855-8B4D-9A334677FEEB";
+
     /// <inheritdoc />
-    public override string Id => "B05E71DB-7CB9-4855-8B4D-9A334677FEEB";
+    public override string Id => ID;
 
     /// <inheritdoc />
     public override string Name => "Linker";

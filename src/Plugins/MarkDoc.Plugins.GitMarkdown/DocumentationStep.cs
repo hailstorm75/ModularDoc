@@ -9,8 +9,10 @@ namespace MarkDoc.Plugins.GitMarkdown
   public sealed class DocumentationStep
     : BasePluginStep
   {
+    public const string ID = "A59A49C1-F12E-40D5-AE2B-EFEBFF76B10D";
+
     /// <inheritdoc />
-    public override string Id => "A59A49C1-F12E-40D5-AE2B-EFEBFF76B10D";
+    public override string Id => ID;
 
     /// <inheritdoc />
     public override string Name => "Documentation";

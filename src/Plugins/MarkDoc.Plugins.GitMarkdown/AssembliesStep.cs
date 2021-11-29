@@ -9,8 +9,10 @@ namespace MarkDoc.Plugins.GitMarkdown
   public class AssembliesStep
     : BasePluginStep
   {
+    public const string ID = "99B731AC-941C-42A6-BD77-AFADB3EC156B";
+
     /// <inheritdoc />
-    public override string Id => "99B731AC-941C-42A6-BD77-AFADB3EC156B";
+    public override string Id => ID;
 
     /// <inheritdoc />
     public override string Name => "Assemblies";

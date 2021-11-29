@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MarkDoc.Core
 {
@@ -37,5 +38,9 @@ namespace MarkDoc.Core
     /// </summary>
     /// <returns></returns>
     IReadOnlyCollection<IPluginStep> GetPluginSteps();
+
+    T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings;
+
+    Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data);
   }
 }

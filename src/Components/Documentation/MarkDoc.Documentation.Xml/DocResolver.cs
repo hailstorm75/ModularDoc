@@ -42,9 +42,6 @@ namespace MarkDoc.Documentation.Xml
 
     #region Methods
 
-    public static IDocSettings CreateSettings(IEnumerable<string> paths)
-      => new DocSettings(paths);
-
     public async Task ResolveAsync()
       => await Task.WhenAll(m_settings.Paths.Select(ResolveAsync)).ConfigureAwait(false);
 

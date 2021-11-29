@@ -8,8 +8,10 @@ namespace MarkDoc.Plugins.GitMarkdown
   public sealed class GlobalStep
     : BasePluginStep
   {
+    public const string ID = "12452BF9-2863-4AB6-8742-056F124CE409";
+
     /// <inheritdoc />
-    public override string Id => "12452BF9-2863-4AB6-8742-056F124CE409";
+    public override string Id => ID;
 
     /// <inheritdoc />
     public override string Name => "Global step";

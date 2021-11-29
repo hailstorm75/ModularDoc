@@ -32,14 +32,18 @@ namespace MarkDoc.Documentation.Xml
     /// <summary>
     /// Default constructor
     /// </summary>
-    public DocSettings(IEnumerable<string> paths)
+    public DocSettings(IReadOnlyDictionary<string, string> data)
     {
+      if (!data.TryGetValue("paths", out var paths))
+        throw new NotSupportedException();
+
       var pathsList = new LinkedList<string>();
 
       m_paths = pathsList;
       Id = new Guid("0D5688E6-AF55-4F06-9786-69C04C5D7674");
 
-      foreach (var path in paths)
+      // ReSharper disable once PossibleNullReferenceException
+      foreach (var path in paths.Split('|'))
       {
         ThrowIfInvalidPath(path);
         pathsList.AddLast(path);
@@ -55,7 +59,7 @@ namespace MarkDoc.Documentation.Xml
       if (string.IsNullOrEmpty(extension))
         throw new ArgumentException("Provided path '{path}' is invalid");
 
-      if (extension.Equals(".xml", StringComparison.InvariantCultureIgnoreCase))
+      if (!extension.Equals(".xml", StringComparison.InvariantCultureIgnoreCase))
         throw new ArgumentException($"Provided path '{path}' is of an invalid type");
 
       var info = new FileInfo(path);

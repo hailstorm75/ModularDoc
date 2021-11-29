@@ -27,5 +27,9 @@
         DockPanel.Dock="Right"
         FontSize="24" />
     </DockPanel>
+    <StackPanel Grid.Row="1">
+      <Button Command="{Binding ExecuteCommand}" Content="Execute" />
+      <ProgressRing IsVisible="{Binding Loading}" />
+    </StackPanel>
   </Grid>
 </UserControl>
