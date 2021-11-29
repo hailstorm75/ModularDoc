@@ -73,7 +73,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// </summary>
     public GlobalStepViewModel(IDialogManager dialogManager, IResolver resolver, ISettingsCreator settingsCreator)
     {
-      IsValid = true;
+      UpdateIsValid();
 
       BrowseCommand = ReactiveCommand.CreateFromTask(BrowseFolderAsync);
 
@@ -180,6 +180,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       UpdateTreeNodeStates<NamespaceNode>(arguments, nameof(IGlobalSettings.IgnoredNamespaces), nameof(IGlobalSettings.CheckedIgnoredNamespaces));
       UpdateTreeNodeStates<TypeNode>(arguments, nameof(IGlobalSettings.IgnoredTypes), nameof(IGlobalSettings.CheckedIgnoredTypes));
+
+      UpdateIsValid();
     }
 
     private void UpdateTreeNodeStates<T>(IReadOnlyDictionary<string, string> arguments, string ignored, string checkedIgnored)
