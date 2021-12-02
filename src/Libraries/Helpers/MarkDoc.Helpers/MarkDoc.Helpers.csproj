@@ -33,4 +33,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
+  </ItemGroup>
+
 </Project>

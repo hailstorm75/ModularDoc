@@ -3,6 +3,9 @@ using MarkDoc.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MarkDoc.App.Views;
+using MarkDoc.Core;
+using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.App.Managers
 {
@@ -64,6 +67,21 @@ namespace MarkDoc.App.Managers
       return result is null
         ? Option<string>.OfEmpty()
         : Option<string>.Of(result);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<bool> ShowDialog<TView>(IDialogManager.DialogButtons buttons = IDialogManager.DialogButtons.OkCancel)
+      where TView : IDialogView
+    {
+      var view = TypeResolver.Resolve<TView>();
+      var dialog = new DialogView
+      {
+        ViewContent = view
+      };
+
+      await dialog.ShowDialog(m_windowProvider()).ConfigureAwait(false);
+
+      return dialog.GetDialogResult();
     }
 
     #endregion

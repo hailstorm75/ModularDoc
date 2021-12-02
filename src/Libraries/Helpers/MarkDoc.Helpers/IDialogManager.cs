@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MarkDoc.Core;
 
 namespace MarkDoc.Helpers
 {
@@ -8,6 +9,17 @@ namespace MarkDoc.Helpers
   /// </summary>
   public interface IDialogManager
   {
+    public enum DialogButtons
+    {
+      None,
+      Yes,
+      YesNo,
+      YesNoCancel,
+      Ok,
+      OkCancel,
+      Cancel
+    }
+
     /// <summary>
     /// Attempts to select file(s)
     /// </summary>
@@ -23,5 +35,12 @@ namespace MarkDoc.Helpers
     /// <param name="title">Dialog title</param>
     /// <returns>Selection result</returns>
     ValueTask<Option<string>> TrySelectFolderAsync(string title);
+
+    /// <summary>
+    /// Displays a dialog with a given <typeparamref name="TView"/>
+    /// </summary>
+    /// <typeparam name="TView">View type</typeparam>
+    /// <returns>True if pressed ok</returns>
+    ValueTask<bool> ShowDialog<TView>(DialogButtons buttons = DialogButtons.OkCancel) where TView : IDialogView;
   }
 }
