@@ -169,10 +169,12 @@ namespace MarkDoc.Members.Dnlib
       // Transforms groupings of types into a dictionary
       IReadOnlyDictionary<string, IReadOnlyCollection<IType>> ComposeTypes()
         => m_groups
-          // Flatten the collection
-          .SelectMany(Linq.XtoX)
-          // Create a dictionary of types grouped by their namespaces
-          .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
+           // Flatten the collection
+           .SelectMany(Linq.XtoX)
+           // Group again to prevent duplicate namespaces from multiple sources
+           .GroupBy(Linq.GroupKey, Linq.GroupValuesOfValues)
+           // Create a dictionary of types grouped by their namespaces
+           .ToDictionary(Linq.GroupKey, x => x.GroupValuesOfValues().ToReadOnlyCollection());
 
       Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes,
         LazyThreadSafetyMode.PublicationOnly);
