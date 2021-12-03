@@ -29,7 +29,7 @@
     </DockPanel>
     <StackPanel Grid.Row="1">
       <Button Command="{Binding ExecuteCommand}" Content="Execute" />
-      <ProgressRing IsVisible="{Binding Loading}" />
+      <ProgressRing IsVisible="{Binding Loading}" IsIndeterminate="True" />
     </StackPanel>
   </Grid>
 </UserControl>
