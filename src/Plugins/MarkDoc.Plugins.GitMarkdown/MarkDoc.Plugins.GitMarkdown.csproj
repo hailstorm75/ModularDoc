@@ -38,7 +38,6 @@
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="dnlib" Version="3.3.5" />
     <PackageReference Include="FSharp.Core" Version="6.0.1" />
-    <PackageReference Include="Moq" Version="4.16.1" />
   </ItemGroup>
 
 </Project>

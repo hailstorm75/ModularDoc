@@ -6,9 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
-using MarkDoc.Core;
 using MarkDoc.Members;
-using Moq;
 
 namespace UT.Members.Data
 {
@@ -22,7 +20,6 @@ namespace UT.Members.Data
       var builder = new ContainerBuilder();
 
       RegisterModules(builder);
-      MockSettings(builder);
 
       CONTAINER = builder.Build();
     }
@@ -45,19 +42,6 @@ namespace UT.Members.Data
         foreach (var module in modules)
           builder.RegisterModule(module);
       }
-    }
-
-    private static void MockSettings(ContainerBuilder builder)
-    {
-      var global = new Mock<IGlobalSettings>();
-      global.SetupGet(x => x.IgnoredNamespaces)
-        .Returns(Array.Empty<string>);
-      global.SetupGet(x => x.IgnoredTypes)
-        .Returns(Array.Empty<string>);
-      var member = new Mock<IMemberSettings>();
-
-      builder.RegisterInstance(global.Object).As<IGlobalSettings>();
-      builder.RegisterInstance(member.Object).As<IMemberSettings>();
     }
 
     /// <inheritdoc />

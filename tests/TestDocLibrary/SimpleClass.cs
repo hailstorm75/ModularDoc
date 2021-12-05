@@ -12,6 +12,7 @@ namespace TestDocLibrary
   /// Class example
   /// </example>
   /// <typeparam name="TC">Class type param</typeparam>
+  // ReSharper disable once UnusedTypeParameter
   public class SimpleClass<TC>
   {
     /// <summary>
@@ -20,6 +21,7 @@ namespace TestDocLibrary
     /// <value>
     /// Property value
     /// </value>
+    // ReSharper disable once InconsistentNaming
     public int SimpleProperty { get; set; }
 
     /// <summary>
@@ -38,6 +40,8 @@ namespace TestDocLibrary
     /// </returns>
     /// <exception cref="ArgumentException">Argument exception</exception>
     /// <seealso cref="SimpleClass{TC}"/>
+    // ReSharper disable once InconsistentNaming
+    // ReSharper disable once UnusedTypeParameter
     public int SimpleMethod<T>(int param)
       => throw new NotImplementedException();
   }

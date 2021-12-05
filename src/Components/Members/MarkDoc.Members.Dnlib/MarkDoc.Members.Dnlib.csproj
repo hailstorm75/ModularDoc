@@ -22,7 +22,6 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="dnlib" Version="3.3.5" />
-    <PackageReference Include="Moq" Version="4.16.1" />
   </ItemGroup>
   
   <ItemGroup>
