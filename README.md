@@ -11,6 +11,8 @@ The biggest task, aside from testing all of the core libraries, is to create a m
 
 Like this project idea and would like to see it grow? Give it a star and follow for the latest updates.
 
+[I'm writing a Bachelor's thesis about this project](https://github.com/hailstorm75/MarkDoc.Thesis).
+
 ## Produced result
 
 This is my second attempt at creating such a tool. The first one is on [GitLab](https://gitlab.com/hailstorm75/markdoc). You can try it out for your self; however, it only supports .NET Framework libraries with NO DEPENDENCIES.
@@ -21,11 +23,17 @@ The generated structure is inspired by the one outputted by Doxygen. If you do n
 
 ## Running it
 
-As of writing this ReadMe, there is no user-friendly way of running this project. However, you can play around with the benchmark test in the console application.
+> It has been discovered, that running the application via the `dotnet cli` results in a crash due to incorrect loading of plugins. So, for now, please use Rider/VS20**
 
-To do so, supply the paths to your dll's, exe's, and the output directory path in the `MarkDoc.Console` `Program`. You will find the respective fields there: `OUTPUT` and `DLL_PATHS`.
+ 1. Run the MarkDoc.App
+ 2. Select the available plugin
+ 3. Provide paths to assemblies
+ 4. Navigate to the next step and validate whether all of your assemblies have their corresponding documentation files
+ 5. Navigate to the next step and select your target **Git** hosting platform
+ 6. Navigate to the next step and provide a path to a folder for output, optionally deselect namespaces/types to skip them
+ 7. Navigate to the next step and press execute (subject to change)
 
-Run it at your own risk, the code is meant to serve for development purposes.
+Run it at your own risk, the code is still under development.
 
 ## Technical description
 
@@ -78,24 +86,17 @@ The parts above are represented as interfaces and thus allow creating decoupled 
 
 # Roadmap
 
-The project is in its early stages of development.
+ 1. Complete the UI
+    1. Plugin selection
+    2. Plugin execution
+ 2. Add screenshots to the README
+ 3. Implement configuration saving
+ 4. Implement configuration loading
+ 5. Create a console application for configuration execution
+ 6. Bug fixes
+ 7. Expand unit tests
+ 8. Implement class diagram generation
+ 9. Rewrite the F# TypeComposer library
+ 10. ...
 
-| Stage | Status   | Milestone | Description |
-| ----- | -------- | --------- | ----------- |
-| Core  | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/1) | Define the core interfaces and create components which implement them. The goal is to ensure that the interfaces provide everything necessary and to successfully generate documentation |
-| Reorganize | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/2)  | Reorganize the project structure such that the interfaces are separate from the components which implement them. Document the project core and cover it with unit tests |
-| C# 9 support | :heavy_check_mark: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/6) | Add support for new C#9 features |
-| Add unit tests | :snowflake: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/7) | Cover the documentation layer with Unit Tests  |
-| Smart settings   | :hammer: |  [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/8)  | Create a framework for settings which will be propagated through plugins to components and will be displayed in the application UI |
-| Plugins | :hammer: | [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/3) | Create a MarkDoc plugin composed from __components__ |
-| UI   | :hammer: |  [Issues](https://github.com/hailstorm75/MarkDoc.Core/milestone/4)  | Create the application UI |
-
-**Legend**
-
-| Icon               | Description       |
-| ------------------ | ----------------- |
-| :grey_question:    | To be processed   |
-| :mag:              | Analysis phase    |
-| :hammer:           | Development phase |
-| :snowflake:        | Postponed         |
-| :heavy_check_mark: | Complete          |
+Alongisde develoment, it is crucial that a Wiki is created to document the whole architecture, so that others can contribute and/or use the application.
