@@ -16,8 +16,6 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using MarkDoc.Members.Dnlib.Helpers;
-using NLog;
-using ILogger = NLog.ILogger;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -47,7 +45,7 @@ namespace MarkDoc.Members.Dnlib
       "System.Runtime.CompilerServices.NullableContextAttribute"
     };
 
-    private readonly ILogger m_logger;
+    private readonly IMarkDocLogger m_logger;
 
     #endregion
 
@@ -63,9 +61,9 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Resolver()
+    public Resolver(IMarkDocLogger logger)
     {
-      m_logger = LogManager.GetCurrentClassLogger();
+      m_logger = logger;
 
       NewTypes();
     }
@@ -229,12 +227,12 @@ namespace MarkDoc.Members.Dnlib
         if (!globalSettings?.IgnoredNamespaces.Contains(processed) ?? true)
           return true;
 
-        m_logger.Trace($"Skipping namespace '{processed}' in '{assembly}'");
+        m_logger.Info($"Skipping namespace '{processed}' in '{assembly}'");
 
         return false;
       }
 
-      m_logger.Trace($"Processing assembly: '{assembly}'");
+      m_logger.Info($"Processing assembly: '{assembly}'");
 
       // If the resolved types were read..
       if (Types.IsValueCreated)
@@ -259,7 +257,7 @@ namespace MarkDoc.Members.Dnlib
           if (!globalSettings?.IgnoredTypes.Contains(type.FullName) ?? true)
             return true;
 
-          m_logger.Trace($"Skipping type '{type.FullName}' in '{assembly}'");
+          m_logger.Info($"Skipping type '{type.FullName}' in '{assembly}'");
 
           return false;
         })
@@ -272,7 +270,7 @@ namespace MarkDoc.Members.Dnlib
         {
           var result = grouping.SelectMany(ResolveTypes).ToReadOnlyCollection();
 
-          m_logger.Trace($"Found '{result.Count}' types in '{assembly}'");
+          m_logger.Info($"Found '{result.Count}' types in '{assembly}'");
 
           return result;
         });

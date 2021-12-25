@@ -118,8 +118,9 @@ namespace MarkDoc.Plugins.GitMarkdown
       var linkerSettings = GetSettings<ILinkerSettings>(data);
       var memberSettings = GetSettings<IMemberSettings>(data);
       var docSettings = GetSettings<IDocSettings>(data);
+      var logger = TypeResolver.Resolve<IMarkDocLogger>();
 
-      var resolver = new Resolver();
+      var resolver = new Resolver(logger);
       var docResolver = new DocResolver(resolver, docSettings);
 
       await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync()).ConfigureAwait(false);
