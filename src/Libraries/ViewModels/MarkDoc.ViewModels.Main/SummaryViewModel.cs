@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
+using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
+using MarkDoc.Views;
 using ReactiveUI;
 
 namespace MarkDoc.ViewModels.Main
@@ -14,6 +15,7 @@ namespace MarkDoc.ViewModels.Main
     : BaseViewModel, ISummaryViewModel
   {
     private readonly NavigationManager m_navigationManager;
+    private readonly IDialogManager m_dialogManager;
     private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
     private bool m_loading;
 
@@ -39,37 +41,29 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ICommand BackCommand { get; }
 
-    public ICommand ExecuteCommand { get; }
-
     #endregion
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    public SummaryViewModel(NavigationManager navigationManager)
+    public SummaryViewModel(NavigationManager navigationManager, IDialogManager dialogManager)
     {
       m_navigationManager = navigationManager;
+      m_dialogManager = dialogManager;
 
-      var canExecute = this.WhenAnyValue(viewModel => viewModel.Loading).Select(x => !x);
 
       BackCommand = ReactiveCommand.Create(NavigateBack);
-      ExecuteCommand = ReactiveCommand.CreateFromTask(ExecuteAsync, canExecute);
     }
 
-    /// <inheritdoc />
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-    public async Task ExecuteAsync()
+    public override async ValueTask OnLoadedAsync()
     {
       Loading = true;
 
       if (!m_pluginSettings.TryGetValue(IConfiguratorViewModel.ARGUMENT_ID, out var pluginId) || !m_pluginSettings.TryGetValue(IConfiguratorViewModel.ARGUMENT_SETTINGS, out var settings))
         return;
 
-      // ReSharper disable once AssignNullToNotNullAttribute
-      var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(settings);
-      // ReSharper disable once AssignNullToNotNullAttribute
-      var plugin = PluginManager.GetPlugin(pluginId);
-      await plugin.ExecuteAsync(deserialized ?? new Dictionary<string, IReadOnlyDictionary<string, string>>());
+      await m_dialogManager.ShowDialogAsync<IPluginProgressDialogView>(new Dictionary<string, string>{{ "settings", settings }, { "id", pluginId }}).ConfigureAwait(false);
 
       Loading = false;
     }

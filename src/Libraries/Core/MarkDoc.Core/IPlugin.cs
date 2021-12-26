@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MarkDoc.Core
@@ -51,6 +52,7 @@ namespace MarkDoc.Core
     /// Executes the plugin operation
     /// </summary>
     /// <param name="data">Settings for the plugin execution</param>
-    Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data);
+    /// <param name="cancellationToken">Operation cancellation token</param>
+    Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data, CancellationToken cancellationToken);
   }
 }

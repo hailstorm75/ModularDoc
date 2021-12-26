@@ -3,40 +3,37 @@ namespace MarkDoc.Core
   /// <summary>
   /// Interface for dialog views
   /// </summary>
-  /// <typeparam name="TViewModel">View model type for dialog view</typeparam>
-  public interface IDialogView<out TViewModel>
-    : IDialogView
-    where TViewModel : IDialogViewModel
+  public interface IDialogView
+    : IView
   {
+    /// <summary>
+    /// Dialog view title
+    /// </summary>
+    string Title { get; }
+
+    /// <summary>
+    /// Invoked when the parent dialog window positive button is pressed
+    /// </summary>
+    void OnPositiveButtonClicked();
+
+    /// <summary>
+    /// Invoked when the parent dialog window negative button is pressed
+    /// </summary>
+    void OnNegativeButtonClicked();
+
+    /// <summary>
+    /// Invoked when the parent dialog window cancel button is pressed
+    /// </summary>
+    void OnCancelButtonClicked();
   }
 
   /// <summary>
   /// Interface for dialog views
   /// </summary>
-  public interface IDialogView
-    : IView<IDialogViewModel>
+  /// <typeparam name="TViewModel">View model type for dialog view</typeparam>
+  public interface IDialogView<out TViewModel>
+    : IView<TViewModel>, IDialogView
+    where TViewModel : IDialogViewModel
   {
-    /// <summary>
-    /// Dialog view title
-    /// </summary>
-    public string Title => ViewModel.Title;
-
-    /// <summary>
-    /// Invoked when the parent dialog window positive button is pressed
-    /// </summary>
-    public void OnPositiveButtonClicked()
-      => ViewModel.OnPositiveButtonClicked();
-
-    /// <summary>
-    /// Invoked when the parent dialog window negative button is pressed
-    /// </summary>
-    public void OnNegativeButtonClicked()
-      => ViewModel.OnNegativeButtonClicked();
-
-    /// <summary>
-    /// Invoked when the parent dialog window cancel button is pressed
-    /// </summary>
-    public void OnCancelButtonClicked()
-      => ViewModel.OnCancelButtonClicked();
   }
 }

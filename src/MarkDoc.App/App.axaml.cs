@@ -49,6 +49,9 @@ namespace MarkDoc.App
       builder.RegisterType<StartupView>().As<IStartupView>();
       builder.RegisterType<HomeViewModel>().As<IHomeViewModel>();
       builder.RegisterType<HomeView>().As<IHomeView>();
+      builder.RegisterType<PluginProgressDialogView>().As<IPluginProgressDialogView>();
+      builder.RegisterType<PluginProgressDialogViewModel>().As<IPluginProgressDialogViewModel>();
+
       builder.RegisterType<Logger>().As<IMarkDocLogger>();
 
       builder.RegisterInstance(m_dialogManager).As<IDialogManager>().SingleInstance();

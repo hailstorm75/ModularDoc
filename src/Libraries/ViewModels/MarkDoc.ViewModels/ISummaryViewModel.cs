@@ -19,10 +19,5 @@ namespace MarkDoc.ViewModels
     /// Command for navigating back
     /// </summary>
     ICommand BackCommand { get; }
-
-    /// <summary>
-    /// Executes the plugin operation
-    /// </summary>
-    Task ExecuteAsync();
   }
 }

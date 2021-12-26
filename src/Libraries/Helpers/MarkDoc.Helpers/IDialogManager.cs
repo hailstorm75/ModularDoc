@@ -41,6 +41,6 @@ namespace MarkDoc.Helpers
     /// </summary>
     /// <typeparam name="TView">View type</typeparam>
     /// <returns>True if pressed ok</returns>
-    ValueTask<bool> ShowDialog<TView>(DialogButtons buttons = DialogButtons.OkCancel) where TView : IDialogView;
+    ValueTask<bool> ShowDialogAsync<TView>(IReadOnlyDictionary<string, string>? arguments = default, DialogButtons buttons = DialogButtons.OkCancel) where TView : IDialogView;
   }
 }

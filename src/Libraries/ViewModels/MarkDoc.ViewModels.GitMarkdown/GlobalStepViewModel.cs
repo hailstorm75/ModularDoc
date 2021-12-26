@@ -155,7 +155,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       // ReSharper disable once RedundantSuppressNullableWarningExpression
       var memberSettings = m_settingsCreator.CreateSettings<IMemberSettings>(data!);
-      var globalSettings = m_settingsCreator.CreateSettings<IGlobalSettings>(new Dictionary<string, string>());
+      var globalSettings = m_settingsCreator.CreateSettings<IGlobalSettings>(new Dictionary<string, string>(0));
 
       await m_resolver.ResolveAsync(memberSettings, globalSettings);
 

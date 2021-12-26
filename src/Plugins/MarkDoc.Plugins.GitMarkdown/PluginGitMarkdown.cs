@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using MarkDoc.Core;
@@ -112,7 +113,8 @@ namespace MarkDoc.Plugins.GitMarkdown
     }
 
     /// <inheritdoc />
-    public async Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
+    public async Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data,
+      CancellationToken cancellationToken)
     {
       var globalSettings = GetSettings<IGlobalSettings>(data);
       var linkerSettings = GetSettings<ILinkerSettings>(data);
