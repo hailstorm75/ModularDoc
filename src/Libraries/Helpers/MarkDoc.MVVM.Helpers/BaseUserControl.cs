@@ -46,6 +46,10 @@ namespace MarkDoc.MVVM.Helpers
     protected BaseUserControl()
       => DataContext = ViewModel;
 
+    // ReSharper disable once AnnotateNotNullTypeMember
+    public IViewModel GetViewModel()
+      => ViewModel;
+
     /// <inheritdoc />
     protected override async void OnInitialized()
     {
