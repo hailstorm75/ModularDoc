@@ -13,7 +13,7 @@ namespace MarkDoc.ViewModels.Main
   {
     private string m_settings = string.Empty;
     private string m_pluginId = string.Empty;
-    private CancellationTokenSource? m_tokenSource;
+    private CancellationTokenSource? m_tokenSource = new();
 
     /// <inheritdoc />
     public override Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
