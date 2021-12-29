@@ -8,8 +8,12 @@ namespace MarkDoc.Core
   }
 
   public interface IDefiniteProcess
+    : IProcess
   {
-    
+    double Complete { get; }
+    int Max { get; }
+
+    void IncreaseCompletion();
   }
 
   public interface IProcess
