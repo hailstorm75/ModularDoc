@@ -37,4 +37,8 @@
     <ProjectReference Include="..\..\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI" Version="16.3.10" />
+  </ItemGroup>
+
 </Project>

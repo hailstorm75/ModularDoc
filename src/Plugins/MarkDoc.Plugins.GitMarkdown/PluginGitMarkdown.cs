@@ -113,8 +113,8 @@ namespace MarkDoc.Plugins.GitMarkdown
     }
 
     /// <inheritdoc />
-    public async Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data,
-      CancellationToken cancellationToken)
+    public (IMarkDocLogger logger, IReadOnlyCollection<IProcess>, Func<CancellationToken, ValueTask> executor)
+      GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
     {
       var globalSettings = GetSettings<IGlobalSettings>(data);
       var linkerSettings = GetSettings<ILinkerSettings>(data);
@@ -122,16 +122,27 @@ namespace MarkDoc.Plugins.GitMarkdown
       var docSettings = GetSettings<IDocSettings>(data);
       var logger = TypeResolver.Resolve<IMarkDocLogger>();
 
-      var resolver = new Resolver(logger);
-      var docResolver = new DocResolver(resolver, docSettings, logger);
+      var memberProcess = new DefiniteProcess("Assembly resolver");
+      var documentationProcess = new DefiniteProcess("Documentation resolver");
+      var printerProcess = new IndefiniteProcess("Printer");
 
-      await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync()).ConfigureAwait(false);
+      var processes = new IProcess[] { memberProcess, documentationProcess, printerProcess };
 
-      var linker = new Linker(resolver, linkerSettings);
-      var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
-      var printer = new PrinterMarkdown(composer, linker);
+      return (logger, processes, async _ =>
+      {
+        var resolver = new Resolver(logger);
+        var docResolver = new DocResolver(resolver, docSettings, logger);
 
-      await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath).ConfigureAwait(false);
+        await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync())
+          .ConfigureAwait(false);
+
+        var linker = new Linker(resolver, linkerSettings);
+        var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
+        var printer = new PrinterMarkdown(composer, linker);
+
+        await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath)
+          .ConfigureAwait(false);
+      });
     }
 
     internal sealed class SettingsCreator

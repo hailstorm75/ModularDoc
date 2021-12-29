@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,11 +49,6 @@ namespace MarkDoc.Core
     /// <returns>Conversion result</returns>
     T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings;
 
-    /// <summary>
-    /// Executes the plugin operation
-    /// </summary>
-    /// <param name="data">Settings for the plugin execution</param>
-    /// <param name="cancellationToken">Operation cancellation token</param>
-    Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data, CancellationToken cancellationToken);
+    (IMarkDocLogger logger, IReadOnlyCollection<IProcess>, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data);
   }
 }

@@ -5,8 +5,10 @@
   xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Grid Margin="15" RowDefinitions="Auto,*">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
+  xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
+  <Grid Margin="15" RowDefinitions="Auto,*,4,*">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
       <FloatingButton
         Command="{Binding BackCommand}"
@@ -27,9 +29,25 @@
         DockPanel.Dock="Right"
         FontSize="24" />
     </DockPanel>
-    <StackPanel Grid.Row="1">
-      <Button Command="{Binding ExecuteCommand}" Content="Execute" />
-      <ProgressRing IsVisible="{Binding Loading}" IsIndeterminate="True" />
-    </StackPanel>
+    
+    <ListBox Grid.Row="3" Items="{Binding LogMessages}" VirtualizationMode="Simple">
+      <ListBox.ItemTemplate>
+        <DataTemplate DataType="{x:Type core:LogMessage}">
+          <Grid ColumnDefinitions="Auto, Auto, *">
+            <avalonia:Icon Grid.Column="0">
+              <avalonia:Icon.Value>
+                <Binding Path="Type">
+                  <Binding.Converter>
+                    <converters:LogTypeToIconConverter/>
+                  </Binding.Converter>
+                </Binding>
+              </avalonia:Icon.Value>
+            </avalonia:Icon>
+            <Label Grid.Column="1" Content="{Binding Time}"/>
+            <Label Grid.Column="2" Content="{Binding Message}"/>
+          </Grid>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </Grid>
 </UserControl>

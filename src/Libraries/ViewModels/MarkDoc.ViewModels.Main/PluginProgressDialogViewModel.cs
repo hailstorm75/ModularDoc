@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MarkDoc.MVVM.Helpers;
@@ -26,26 +25,6 @@ namespace MarkDoc.ViewModels.Main
       m_pluginId = pluginId ?? string.Empty;
 
       return Task.CompletedTask;
-    }
-
-    public async ValueTask Execute()
-    {
-      m_tokenSource = new CancellationTokenSource();
-
-      // ReSharper disable once AssignNullToNotNullAttribute
-      var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(m_settings);
-      // ReSharper disable once AssignNullToNotNullAttribute
-      var plugin = PluginManager.GetPlugin(m_pluginId);
-
-      Title = plugin.Name;
-
-      await plugin.ExecuteAsync(deserialized ?? new Dictionary<string, IReadOnlyDictionary<string, string>>(), m_tokenSource.Token);
-
-      if (m_tokenSource.IsCancellationRequested)
-        return;
-
-      CanClickPositive = true;
-      CanClickCancel = false;
     }
 
     /// <inheritdoc />

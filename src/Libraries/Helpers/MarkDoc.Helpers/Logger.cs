@@ -7,18 +7,18 @@ namespace MarkDoc.Helpers
     : IMarkDocLogger
   {
     /// <inheritdoc />
-    public event EventHandler<IMarkDocLogger.LogMessage>? NewLog;
+    public event EventHandler<LogMessage>? NewLog;
 
     /// <inheritdoc />
-    public void Info(string message) => NewLog?.Invoke(this, new IMarkDocLogger.LogMessage(IMarkDocLogger.LogType.Info ,message));
+    public void Info(string message) => NewLog?.Invoke(this, new LogMessage(IMarkDocLogger.LogType.Info ,message));
 
     /// <inheritdoc />
-    public void Debug(string message) => NewLog?.Invoke(this, new IMarkDocLogger.LogMessage(IMarkDocLogger.LogType.Debug, message));
+    public void Debug(string message) => NewLog?.Invoke(this, new LogMessage(IMarkDocLogger.LogType.Debug, message));
 
     /// <inheritdoc />
-    public void Error(string message) => NewLog?.Invoke(this, new IMarkDocLogger.LogMessage(IMarkDocLogger.LogType.Error, message));
+    public void Error(string message) => NewLog?.Invoke(this, new LogMessage(IMarkDocLogger.LogType.Error, message));
 
     /// <inheritdoc />
-    public void Warning(string message) => NewLog?.Invoke(this, new IMarkDocLogger.LogMessage(IMarkDocLogger.LogType.Warning, message));
+    public void Warning(string message) => NewLog?.Invoke(this, new LogMessage(IMarkDocLogger.LogType.Warning, message));
   }
 }
