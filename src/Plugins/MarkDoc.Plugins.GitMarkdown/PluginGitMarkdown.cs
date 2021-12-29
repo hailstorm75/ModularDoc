@@ -123,7 +123,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       var logger = TypeResolver.Resolve<IMarkDocLogger>();
 
       var resolver = new Resolver(logger);
-      var docResolver = new DocResolver(resolver, docSettings);
+      var docResolver = new DocResolver(resolver, docSettings, logger);
 
       await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync()).ConfigureAwait(false);
 

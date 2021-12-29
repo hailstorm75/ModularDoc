@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using MarkDoc.Core;
 using MarkDoc.Members.Types;
 using Cache =
   System.Collections.Concurrent.ConcurrentDictionary<string, (MarkDoc.Documentation.IDocElement? type,
@@ -25,18 +26,21 @@ namespace MarkDoc.Documentation.Xml
     private readonly Cache m_documentation;
     private readonly IResolver m_typeResolver;
     private readonly IDocSettings m_settings;
+    private readonly IMarkDocLogger m_logger;
 
     #endregion
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    /// <param name="typeResolver">Injected type resolver</param>
-    /// <param name="settings">Injected </param>
-    public DocResolver(IResolver typeResolver, IDocSettings settings)
+    /// <param name="typeResolver">Type resolver instance</param>
+    /// <param name="settings">Documentation resolver settings</param>
+    /// <param name="logger">Operation logger instance</param>
+    public DocResolver(IResolver typeResolver, IDocSettings settings, IMarkDocLogger logger)
     {
       m_typeResolver = typeResolver;
       m_settings = settings;
+      m_logger = logger;
       m_documentation = new Cache();
     }
 
@@ -48,6 +52,8 @@ namespace MarkDoc.Documentation.Xml
     /// <inheritdoc />
     public async Task ResolveAsync(string path)
     {
+      m_logger.Info($"Processing file: '{path}'");
+
       // Open the XML documentation file
       using var file = File.OpenText(path);
       // Load the XML documentation file
@@ -56,7 +62,7 @@ namespace MarkDoc.Documentation.Xml
       foreach (var group in doc.XPathSelectElements("doc/members/member").GroupBy(TypeGrouper))
       {
         // Depending on whether the group is a type or member, choose the corresponding caching method
-        Action<XElement> cache = group.Key switch
+        Func<XElement, string> cache = group.Key switch
         {
           true => CacheType,
           false => CacheMember
@@ -64,12 +70,16 @@ namespace MarkDoc.Documentation.Xml
 
         // for every documented item..
         foreach (var item in @group)
+        {
           // cache the item
-          cache(item);
+          var itemName = cache(item);
+          // log cached item name
+          m_logger.Info($"Cached item '{itemName}' from file '{path}'");
+        }
       }
     }
 
-    private void CacheMember(XElement element)
+    private string CacheMember(XElement element)
     {
       // Get the member name
       var name = RetrieveName(element);
@@ -81,19 +91,15 @@ namespace MarkDoc.Documentation.Xml
         var brace = name.IndexOf('(', StringComparison.InvariantCultureIgnoreCase);
         // if there is a brace..
         if (brace != -1)
-        {
           // cache the method
-          Cache(name[..ReverseIndexOf(name, '.', brace)], name, element);
-          // exit
-          return;
-        }
+          return Cache(name[..ReverseIndexOf(name, '.', brace)], name, element);
       }
 
       // Cache the member
-      Cache(name[..name.LastIndexOf('.')], name, element);
+      return Cache(name[..name.LastIndexOf('.')], name, element);
     }
 
-    private void CacheType(XElement element)
+    private string CacheType(XElement element)
     {
       // Get the member name
       var name = RetrieveName(element)[2..];
@@ -102,6 +108,8 @@ namespace MarkDoc.Documentation.Xml
       var toAdd = (new DocElement(name, element, this, m_typeResolver), new ConcurrentDictionary<string, IDocMember>());
       // Cache the type
       m_documentation.AddOrUpdate(name, toAdd, (_, y) => Update(y, toAdd));
+
+      return name;
     }
 
     private static bool TypeGrouper(XElement element)
@@ -112,7 +120,7 @@ namespace MarkDoc.Documentation.Xml
         .First(x => x.Name.LocalName.Equals("name", StringComparison.InvariantCultureIgnoreCase))
         .Value;
 
-    private void Cache(string key, string name, XElement element)
+    private string Cache(string key, string name, XElement element)
     {
       string ProcessName(string memberNameRaw)
       {
@@ -144,6 +152,8 @@ namespace MarkDoc.Documentation.Xml
         // Cache the member
         m_documentation.AddOrUpdate(key[2..], (null, dict), (_, y) => Update(y, (null, dict)));
       }
+
+      return toAdd.DisplayName;
     }
 
     private static int ReverseIndexOf(string value, char search, int @from)
@@ -189,6 +199,8 @@ namespace MarkDoc.Documentation.Xml
 
         // Return the empty type
         resultType = doc;
+
+        m_logger.Warning($"No documentation found for type '{doc.Name}'");
       }
       // Otherwise..
       else
