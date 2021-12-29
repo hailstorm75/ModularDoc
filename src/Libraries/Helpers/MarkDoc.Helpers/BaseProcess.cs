@@ -25,7 +25,7 @@ namespace MarkDoc.Helpers
     /// <summary>
     /// Default constructor
     /// </summary>
-    public BaseProcess(string name)
+    protected BaseProcess(string name)
     {
       Name = name;
     }
