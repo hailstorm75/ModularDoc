@@ -138,7 +138,7 @@ namespace MarkDoc.Plugins.GitMarkdown
 
         var linker = new Linker(resolver, linkerSettings);
         var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
-        var printer = new PrinterMarkdown(composer, linker);
+        var printer = new PrinterMarkdown(composer, linker, printerProcess);
 
         await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath)
           .ConfigureAwait(false);

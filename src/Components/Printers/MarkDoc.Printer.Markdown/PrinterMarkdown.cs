@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MarkDoc.Core;
 using MarkDoc.Generator;
 using MarkDoc.Linkers;
 using MarkDoc.Members.Types;
@@ -20,6 +21,7 @@ namespace MarkDoc.Printer.Markdown
     private const string EXTENSION = ".md";
 
     private readonly ILinker m_linker;
+    private readonly IIndefiniteProcess m_processLogger;
     private readonly ITypeComposer m_composer;
 
     #endregion
@@ -29,9 +31,11 @@ namespace MarkDoc.Printer.Markdown
     /// </summary>
     /// <param name="composer">Injected composer</param>
     /// <param name="linker">Injected linker</param>
-    public PrinterMarkdown(ITypeComposer composer, ILinker linker)
+    /// <param name="processLogger">Process logger instance</param>
+    public PrinterMarkdown(ITypeComposer composer, ILinker linker, IIndefiniteProcess processLogger)
     {
       m_linker = linker;
+      m_processLogger = processLogger;
       m_composer = composer;
     }
 
@@ -43,11 +47,15 @@ namespace MarkDoc.Printer.Markdown
       Task PrintIntermediate(IType type)
         => Print(m_composer.Compose(type), type, path);
 
+      m_processLogger.State = IProcess.ProcessState.Started;
+
       // Prepare the tasks of printing out pages for each respective type
       var tasks = types.AsParallel().Select(PrintIntermediate);
 
       // Execute the prepared tasks
       await Task.WhenAll(tasks).ConfigureAwait(false);
+
+      m_processLogger.State = IProcess.ProcessState.Success;
     }
 
     private async Task Print(IElement element, IType type, string output)
