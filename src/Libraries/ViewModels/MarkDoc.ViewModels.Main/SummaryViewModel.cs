@@ -39,6 +39,9 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ConcurrentBag<LogMessage> LogMessages { get; } = new();
 
+    /// <inheritdoc />
+    public IReadOnlyCollection<IProcess> Processes { get; private set; } = null!;
+
     #endregion
 
     #region Commands
@@ -82,6 +85,10 @@ namespace MarkDoc.ViewModels.Main
         // ReSharper disable once AssignNullToNotNullAttribute
         var plugin = PluginManager.GetPlugin(pluginId);
         var (logger, processes, executor) = plugin.GenerateExecutor(deserialized ?? new Dictionary<string, IReadOnlyDictionary<string, string>>());
+
+        Processes = processes;
+        this.RaisePropertyChanged(nameof(Processes));
+
         try
         {
           logger.NewLog += LoggerOnNewLog;

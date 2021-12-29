@@ -11,6 +11,7 @@ namespace MarkDoc.Core
     : IProcess
   {
     double Complete { get; }
+    int Current { get; }
     int Max { get; }
 
     void IncreaseCompletion();

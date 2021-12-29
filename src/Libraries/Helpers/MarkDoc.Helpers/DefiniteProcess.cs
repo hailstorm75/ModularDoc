@@ -1,15 +1,19 @@
 ﻿using System.Threading;
 using MarkDoc.Core;
+using ReactiveUI;
 
 namespace MarkDoc.Helpers
 {
   public class DefiniteProcess
     : BaseProcess, IDefiniteProcess
   {
-    private int m_complete;
+    private int m_current;
 
     /// <inheritdoc />
     public double Complete { get; private set; }
+
+    /// <inheritdoc />
+    public int Current => m_current;
 
     /// <inheritdoc />
     public int Max { get; }
@@ -20,6 +24,11 @@ namespace MarkDoc.Helpers
 
     /// <inheritdoc />
     public void IncreaseCompletion()
-      => Complete = Interlocked.Increment(ref m_complete) / (double)Max;
+    {
+      Complete = Interlocked.Increment(ref m_current) / (double)Max;
+
+      this.RaisePropertyChanged(nameof(Complete));
+      this.RaisePropertyChanged(nameof(Current));
+    }
   }
 }

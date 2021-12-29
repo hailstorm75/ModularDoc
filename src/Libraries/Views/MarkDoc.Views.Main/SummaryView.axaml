@@ -8,7 +8,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
-  <Grid Margin="15" RowDefinitions="Auto,*,4,*">
+  <Grid Margin="15" RowDefinitions="Auto,*,Auto">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
       <FloatingButton
         Command="{Binding BackCommand}"
@@ -30,24 +30,64 @@
         FontSize="24" />
     </DockPanel>
     
-    <ListBox Grid.Row="3" Items="{Binding LogMessages}" VirtualizationMode="Simple">
-      <ListBox.ItemTemplate>
-        <DataTemplate DataType="{x:Type core:LogMessage}">
-          <Grid ColumnDefinitions="Auto, Auto, *">
-            <avalonia:Icon Grid.Column="0">
-              <avalonia:Icon.Value>
-                <Binding Path="Type">
+    <ListBox Grid.Row="1" Items="{Binding Processes}">
+      <ListBox.DataTemplates>
+        <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
+          <DockPanel LastChildFill="True">
+            <ProgressRing DockPanel.Dock="Left"
+                          Width="14"
+                          Height="14"
+                          Maximum="{Binding Max}"
+                          Minimum="0"
+                          Value="{Binding Current}">
+              <ProgressRing.IsVisible>
+                <Binding Path="State" ConverterParameter="false">
                   <Binding.Converter>
-                    <converters:LogTypeToIconConverter/>
+                    <converters:ProcessStateToVisibilityConverter/>
                   </Binding.Converter>
                 </Binding>
-              </avalonia:Icon.Value>
-            </avalonia:Icon>
-            <Label Grid.Column="1" Content="{Binding Time}"/>
-            <Label Grid.Column="2" Content="{Binding Message}"/>
-          </Grid>
+              </ProgressRing.IsVisible>
+            </ProgressRing>
+            <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
+          </DockPanel>
         </DataTemplate>
-      </ListBox.ItemTemplate>
+        <DataTemplate DataType="{x:Type core:IIndefiniteProcess}">
+          <DockPanel LastChildFill="True">
+            <ProgressRing DockPanel.Dock="Left" IsIndeterminate="True" Width="14" Height="14">
+              <ProgressRing.IsVisible>
+                <Binding Path="State" ConverterParameter="false">
+                  <Binding.Converter>
+                    <converters:ProcessStateToVisibilityConverter/>
+                  </Binding.Converter>
+                </Binding>
+              </ProgressRing.IsVisible>
+            </ProgressRing>
+            <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
+          </DockPanel>
+        </DataTemplate>
+      </ListBox.DataTemplates>
     </ListBox>
+    
+    <Expander Grid.Row="2" Header="Logs">
+      <ListBox Items="{Binding LogMessages}" VirtualizationMode="Simple" HorizontalAlignment="Stretch">
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Grid ColumnDefinitions="Auto, Auto, *">
+              <avalonia:Icon Grid.Column="0">
+                <avalonia:Icon.Value>
+                  <Binding Path="Type">
+                    <Binding.Converter>
+                      <converters:LogTypeToIconConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </avalonia:Icon.Value>
+              </avalonia:Icon>
+              <Label Grid.Column="1" Content="{Binding Time}"/>
+              <Label Grid.Column="2" Content="{Binding Message}"/>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Expander>
   </Grid>
 </UserControl>

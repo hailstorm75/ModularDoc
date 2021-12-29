@@ -86,6 +86,8 @@ namespace MarkDoc.Documentation.Xml
         }
       }
 
+      await Task.Delay(250);
+
       m_processLogger.IncreaseCompletion();
     }
 

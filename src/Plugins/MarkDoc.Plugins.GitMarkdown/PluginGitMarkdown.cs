@@ -81,6 +81,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<GlobalStepViewModel>().As<IStepViewModel<IGlobalSettings>>();
 
       builder.RegisterType<SettingsCreator>().As<ISettingsCreator>();
+      builder.RegisterInstance(new DefiniteProcess(string.Empty, 0)).As<IDefiniteProcess>();
     }
 
     /// <inheritdoc />

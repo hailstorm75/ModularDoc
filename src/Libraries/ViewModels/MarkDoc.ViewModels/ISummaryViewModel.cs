@@ -26,6 +26,11 @@ namespace MarkDoc.ViewModels
     ConcurrentBag<LogMessage> LogMessages { get; }
 
     /// <summary>
+    /// Plugin processes
+    /// </summary>
+    IReadOnlyCollection<IProcess> Processes { get; }
+
+    /// <summary>
     /// Command for navigating back
     /// </summary>
     ICommand BackCommand { get; }
