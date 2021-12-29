@@ -1,12 +1,13 @@
 ﻿using MarkDoc.Core;
 
-namespace MarkDoc.Helpers;
-
-public class DefiniteProcess
-  : BaseProcess, IDefiniteProcess
+namespace MarkDoc.Helpers
 {
-  /// <inheritdoc />
-  public DefiniteProcess(string name) : base(name)
+  public class DefiniteProcess
+    : BaseProcess, IDefiniteProcess
   {
+    /// <inheritdoc />
+    public DefiniteProcess(string name) : base(name)
+    {
+    }
   }
 }
