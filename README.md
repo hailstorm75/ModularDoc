@@ -100,3 +100,13 @@ The parts above are represented as interfaces and thus allow creating decoupled 
  10. ...
 
 Alongisde develoment, it is crucial that a Wiki is created to document the whole architecture, so that others can contribute and/or use the application.
+
+# External libraries
+
+- [Avalonia UI](https://github.com/AvaloniaUI/Avalonia) for a cross-platform GUI
+- [Avalonia Behaviors](https://github.com/wieslawsoltes/AvaloniaBehaviors) for extending GUI building tools of Avalonia UI
+- [Icons.Avalonia](https://github.com/Projektanker/Icons.Avalonia) for adding font-awesome icons support to Avalonia UI
+- [Aura UI](https://github.com/PieroCastillo/Aura.UI) for extra Avalonia UI components
+- [xUnit](https://github.com/xunit/xunit) for unit testing
+- [Autofac](https://github.com/autofac/Autofac) for dependency injection
+- [dnlib](https://github.com/0xd4d/dnlib) for retrieving types from assemblies
