@@ -27,6 +27,7 @@ namespace MarkDoc.Documentation.Xml
     private readonly IResolver m_typeResolver;
     private readonly IDocSettings m_settings;
     private readonly IMarkDocLogger m_logger;
+    private readonly IDefiniteProcess m_processLogger;
 
     #endregion
 
@@ -36,18 +37,25 @@ namespace MarkDoc.Documentation.Xml
     /// <param name="typeResolver">Type resolver instance</param>
     /// <param name="settings">Documentation resolver settings</param>
     /// <param name="logger">Operation logger instance</param>
-    public DocResolver(IResolver typeResolver, IDocSettings settings, IMarkDocLogger logger)
+    public DocResolver(IResolver typeResolver, IDocSettings settings, IMarkDocLogger logger, IDefiniteProcess processLogger)
     {
       m_typeResolver = typeResolver;
       m_settings = settings;
       m_logger = logger;
+      m_processLogger = processLogger;
       m_documentation = new Cache();
     }
 
     #region Methods
 
     public async Task ResolveAsync()
-      => await Task.WhenAll(m_settings.Paths.Select(ResolveAsync)).ConfigureAwait(false);
+    {
+      m_processLogger.State = IProcess.ProcessState.Started;
+
+      await Task.WhenAll(m_settings.Paths.Select(ResolveAsync)).ConfigureAwait(false);
+
+      m_processLogger.State = IProcess.ProcessState.Success;
+    }
 
     /// <inheritdoc />
     public async Task ResolveAsync(string path)
@@ -77,6 +85,8 @@ namespace MarkDoc.Documentation.Xml
           m_logger.Info($"Cached item '{itemName}' from file '{path}'");
         }
       }
+
+      m_processLogger.IncreaseCompletion();
     }
 
     private string CacheMember(XElement element)

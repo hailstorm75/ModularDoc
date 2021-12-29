@@ -122,16 +122,16 @@ namespace MarkDoc.Plugins.GitMarkdown
       var docSettings = GetSettings<IDocSettings>(data);
       var logger = TypeResolver.Resolve<IMarkDocLogger>();
 
-      var memberProcess = new DefiniteProcess("Assembly resolver");
-      var documentationProcess = new DefiniteProcess("Documentation resolver");
+      var memberProcess = new DefiniteProcess("Assembly resolver", memberSettings.Paths.Count);
+      var documentationProcess = new DefiniteProcess("Documentation resolver", docSettings.Paths.Count);
       var printerProcess = new IndefiniteProcess("Printer");
 
       var processes = new IProcess[] { memberProcess, documentationProcess, printerProcess };
 
       return (logger, processes, async _ =>
       {
-        var resolver = new Resolver(logger);
-        var docResolver = new DocResolver(resolver, docSettings, logger);
+        var resolver = new Resolver(logger, memberProcess);
+        var docResolver = new DocResolver(resolver, docSettings, logger, documentationProcess);
 
         await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync())
           .ConfigureAwait(false);

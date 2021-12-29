@@ -46,6 +46,7 @@ namespace MarkDoc.Members.Dnlib
     };
 
     private readonly IMarkDocLogger m_logger;
+    private readonly IDefiniteProcess m_processLogger;
 
     #endregion
 
@@ -61,9 +62,10 @@ namespace MarkDoc.Members.Dnlib
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Resolver(IMarkDocLogger logger)
+    public Resolver(IMarkDocLogger logger, IDefiniteProcess processLogger)
     {
       m_logger = logger;
+      m_processLogger = processLogger;
 
       NewTypes();
     }
@@ -192,18 +194,20 @@ namespace MarkDoc.Members.Dnlib
 
     public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
     {
+      m_processLogger.State = IProcess.ProcessState.Started;
+
       NewTypes();
 
       Parallel.ForEach(memberSettings.Paths, path => Resolve(path, globalSettings));
+
+      m_processLogger.State = IProcess.ProcessState.Success;
 
       return Task.CompletedTask;
     }
 
     /// <inheritdoc />
     public void Resolve(string assembly)
-    {
-      Resolve(assembly, null);
-    }
+      => Resolve(assembly, null);
 
     /// <exception cref="InvalidOperationException">When attempting to resolve after <see cref="Types"/> has been read</exception>
     /// <exception cref="FileNotFoundException">When the <paramref name="assembly"/> does not exist</exception>
@@ -277,6 +281,7 @@ namespace MarkDoc.Members.Dnlib
 
       // Add the resulting group to the collection
       m_groups.Add(group);
+      m_processLogger.IncreaseCompletion();
 
       m_logger.Debug($"Cached types from '{assembly}'");
     }
