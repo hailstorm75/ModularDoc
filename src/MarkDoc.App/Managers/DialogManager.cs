@@ -70,15 +70,14 @@ namespace MarkDoc.App.Managers
     }
 
     /// <inheritdoc />
-    public async ValueTask<bool> ShowDialog<TView>(IDialogManager.DialogButtons buttons = IDialogManager.DialogButtons.OkCancel)
+    public async ValueTask<bool> ShowDialogAsync<TView>(IReadOnlyDictionary<string, string>? arguments = default, IDialogManager.DialogButtons buttons = IDialogManager.DialogButtons.OkCancel)
       where TView : IDialogView
     {
       var view = TypeResolver.Resolve<TView>();
-      var dialog = new DialogView
-      {
-        ViewContent = view
-      };
+      var dialog = new DialogView();
+      dialog.SetViewContent(view);
 
+      await view.SetNamedArgumentsAsync(arguments ?? new Dictionary<string, string>(0)).ConfigureAwait(false);
       await dialog.ShowDialog(m_windowProvider()).ConfigureAwait(false);
 
       return dialog.GetDialogResult();

@@ -1,3 +1,5 @@
+using System;
+
 namespace MarkDoc.Core
 {
   /// <summary>
@@ -7,9 +9,29 @@ namespace MarkDoc.Core
     : IViewModel
   {
     /// <summary>
+    /// Invoked when the dialog is to be closed
+    /// </summary>
+    event EventHandler CloseRequested;
+
+    /// <summary>
     /// Dialog title
     /// </summary>
     string Title { get; }
+
+    /// <summary>
+    /// Determines whether the positive button can be clicked
+    /// </summary>
+    bool CanClickPositive { get; }
+
+    /// <summary>
+    /// Determines whether the negative button can be clicked
+    /// </summary>
+    bool CanClickNegative { get; }
+
+    /// <summary>
+    /// Determines whether the cancel button can be clicked
+    /// </summary>
+    bool CanClickCancel { get; }
 
     /// <summary>
     /// Invoked when the parent dialog window positive button is pressed

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MarkDoc.Core;
 
@@ -16,13 +17,23 @@ namespace MarkDoc.ViewModels
     string Title { get; }
 
     /// <summary>
+    /// Execution logs
+    /// </summary>
+    ObservableCollection<LogMessage> LogMessages { get; }
+
+    /// <summary>
+    /// Plugin processes
+    /// </summary>
+    IReadOnlyCollection<IProcess> Processes { get; }
+
+    /// <summary>
     /// Command for navigating back
     /// </summary>
     ICommand BackCommand { get; }
 
     /// <summary>
-    /// Executes the plugin operation
+    /// Command for cancelling the operation
     /// </summary>
-    Task ExecuteAsync();
+    ICommand CancelCommand { get; }
   }
 }

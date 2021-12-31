@@ -53,7 +53,7 @@ namespace MarkDoc.ViewModels.Main
         // ReSharper disable once AssignNullToNotNullAttribute
         CurrentStepSettings = PluginSettings.TryGetValue(value.Id, out var settings)
           ? settings
-          : new Dictionary<string, string>();
+          : new Dictionary<string, string>(0);
 
         var previousSettings = Steps
           .Take(Steps.IndexOf(value))
@@ -61,7 +61,7 @@ namespace MarkDoc.ViewModels.Main
           {
             var pluginSettings = PluginSettings.TryGetValue(plugin.Id, out var result)
               ? result
-              : new Dictionary<string, string>();
+              : new Dictionary<string, string>(0);
 
             return new KeyValuePair<string, IReadOnlyDictionary<string, string>>(plugin.GetViewId(), pluginSettings);
           })

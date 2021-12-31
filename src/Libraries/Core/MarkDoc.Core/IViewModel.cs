@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MarkDoc.Core
@@ -13,5 +14,11 @@ namespace MarkDoc.Core
     /// </summary>
     /// <param name="arguments">Named arguments to set</param>
     Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
+
+    /// <summary>
+    /// Executed when the <see cref="IView{TViewModel}"/> loads
+    /// </summary>
+    /// <returns></returns>
+    ValueTask OnLoadedAsync();
   }
 }

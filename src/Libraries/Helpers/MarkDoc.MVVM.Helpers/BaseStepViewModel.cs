@@ -42,6 +42,9 @@ namespace MarkDoc.MVVM.Helpers
     /// <inheritdoc />
     public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
 
+    /// <inheritdoc />
+    public virtual ValueTask OnLoadedAsync() => ValueTask.CompletedTask;
+
     public virtual ValueTask SetPreviousSettings(
       IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
       => ValueTask.CompletedTask;

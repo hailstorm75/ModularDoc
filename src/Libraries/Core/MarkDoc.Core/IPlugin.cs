@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MarkDoc.Core
@@ -48,9 +50,10 @@ namespace MarkDoc.Core
     T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings;
 
     /// <summary>
-    /// Executes the plugin operation
+    /// Creates the plugin process executor along with complementary loggers
     /// </summary>
-    /// <param name="data">Settings for the plugin execution</param>
-    Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data);
+    /// <param name="configuration">Plugin executor configuration</param>
+    /// <returns>A logger of component execution details, individual component process progress loggers, executor instance</returns>
+    (IMarkDocLogger logger, IReadOnlyCollection<IProcess> processes, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration);
   }
 }

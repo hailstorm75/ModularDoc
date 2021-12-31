@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MarkDoc.Helpers
@@ -11,6 +12,12 @@ namespace MarkDoc.Helpers
     {
       foreach (var item in items)
         set.Add(item!);
+    }
+
+    public static void AddRange<T>(this Collection<T> collection, IEnumerable<T> items)
+    {
+      foreach (var item in items)
+        collection.Add(item!);
     }
 
     public static void AddSorted<T>(this IList<T> list, T item, IComparer<T>? comparer = default)

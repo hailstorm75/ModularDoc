@@ -24,6 +24,12 @@ namespace MarkDoc.Core
   public interface IView
   {
     /// <summary>
+    /// Retrieves the views view models
+    /// </summary>
+    /// <returns>View model instance</returns>
+    IViewModel GetViewModel();
+
+    /// <summary>
     /// Sets <paramref name="arguments"/> for the current view
     /// </summary>
     /// <param name="arguments">Arguments to set</param>

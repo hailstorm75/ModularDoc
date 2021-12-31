@@ -81,7 +81,7 @@ namespace MarkDoc.MVVM.Helpers
       {
         Name = name ?? throw new ArgumentNullException(nameof(name));
         HasArguments = false;
-        NamedArguments = new Dictionary<string, string>();
+        NamedArguments = new Dictionary<string, string>(0);
         Arguments = Array.Empty<string>();
         IsNavigatingBack = isPrevious;
       }

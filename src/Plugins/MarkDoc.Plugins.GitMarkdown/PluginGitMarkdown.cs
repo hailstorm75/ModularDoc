@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using MarkDoc.Core;
@@ -80,6 +81,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<GlobalStepViewModel>().As<IStepViewModel<IGlobalSettings>>();
 
       builder.RegisterType<SettingsCreator>().As<ISettingsCreator>();
+      builder.RegisterInstance(new DefiniteProcess(string.Empty, 0)).As<IDefiniteProcess>();
     }
 
     /// <inheritdoc />
@@ -112,23 +114,35 @@ namespace MarkDoc.Plugins.GitMarkdown
     }
 
     /// <inheritdoc />
-    public async Task ExecuteAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
+    public (IMarkDocLogger logger, IReadOnlyCollection<IProcess> processes, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
     {
-      var globalSettings = GetSettings<IGlobalSettings>(data);
-      var linkerSettings = GetSettings<ILinkerSettings>(data);
-      var memberSettings = GetSettings<IMemberSettings>(data);
-      var docSettings = GetSettings<IDocSettings>(data);
+      var globalSettings = GetSettings<IGlobalSettings>(configuration);
+      var linkerSettings = GetSettings<ILinkerSettings>(configuration);
+      var memberSettings = GetSettings<IMemberSettings>(configuration);
+      var docSettings = GetSettings<IDocSettings>(configuration);
+      var logger = TypeResolver.Resolve<IMarkDocLogger>();
 
-      var resolver = new Resolver();
-      var docResolver = new DocResolver(resolver, docSettings);
+      var memberProcess = new DefiniteProcess("Assembly resolver", memberSettings.Paths.Count);
+      var documentationProcess = new DefiniteProcess("Documentation resolver", docSettings.Paths.Count);
+      var printerProcess = new IndefiniteProcess("Printer");
 
-      await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync()).ConfigureAwait(false);
+      var processes = new IProcess[] { memberProcess, documentationProcess, printerProcess };
 
-      var linker = new Linker(resolver, linkerSettings);
-      var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
-      var printer = new PrinterMarkdown(composer, linker);
+      return (logger, processes, async _ =>
+      {
+        var resolver = new Resolver(logger, memberProcess);
+        var docResolver = new DocResolver(resolver, docSettings, logger, documentationProcess);
 
-      await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath).ConfigureAwait(false);
+        await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync())
+          .ConfigureAwait(false);
+
+        var linker = new Linker(resolver, linkerSettings);
+        var composer = new TypeComposer(new Creator(), docResolver, resolver, linker);
+        var printer = new PrinterMarkdown(composer, linker, printerProcess);
+
+        await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath)
+          .ConfigureAwait(false);
+      });
     }
 
     internal sealed class SettingsCreator
