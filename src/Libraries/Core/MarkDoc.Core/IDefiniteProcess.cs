@@ -1,11 +1,29 @@
-﻿namespace MarkDoc.Core;
-
-public interface IDefiniteProcess
-  : IProcess
+﻿namespace MarkDoc.Core
 {
-  double Complete { get; }
-  int Current { get; }
-  int Max { get; }
+  /// <summary>
+  /// Interface for definite processes
+  /// </summary>
+  public interface IDefiniteProcess
+    : IProcess
+  {
+    /// <summary>
+    /// Percentage complete
+    /// </summary>
+    double Complete { get; }
 
-  void IncreaseCompletion();
+    /// <summary>
+    /// Completed parts so far
+    /// </summary>
+    int Current { get; }
+
+    /// <summary>
+    /// Number of parts to be completed
+    /// </summary>
+    int Max { get; }
+
+    /// <summary>
+    /// Increases the number of complete parts
+    /// </summary>
+    void IncreaseCompletion();
+  }
 }

@@ -114,13 +114,12 @@ namespace MarkDoc.Plugins.GitMarkdown
     }
 
     /// <inheritdoc />
-    public (IMarkDocLogger logger, IReadOnlyCollection<IProcess>, Func<CancellationToken, ValueTask> executor)
-      GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
+    public (IMarkDocLogger logger, IReadOnlyCollection<IProcess> processes, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
     {
-      var globalSettings = GetSettings<IGlobalSettings>(data);
-      var linkerSettings = GetSettings<ILinkerSettings>(data);
-      var memberSettings = GetSettings<IMemberSettings>(data);
-      var docSettings = GetSettings<IDocSettings>(data);
+      var globalSettings = GetSettings<IGlobalSettings>(configuration);
+      var linkerSettings = GetSettings<ILinkerSettings>(configuration);
+      var memberSettings = GetSettings<IMemberSettings>(configuration);
+      var docSettings = GetSettings<IDocSettings>(configuration);
       var logger = TypeResolver.Resolve<IMarkDocLogger>();
 
       var memberProcess = new DefiniteProcess("Assembly resolver", memberSettings.Paths.Count);

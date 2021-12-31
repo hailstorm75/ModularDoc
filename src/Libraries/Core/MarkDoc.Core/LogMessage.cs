@@ -1,34 +1,35 @@
 ﻿using System;
 
-namespace MarkDoc.Core;
-
-/// <summary>
-/// Logger message structure
-/// </summary>
-public readonly struct LogMessage
+namespace MarkDoc.Core
 {
   /// <summary>
-  /// Log type
+  /// Logger message structure
   /// </summary>
-  public IMarkDocLogger.LogType Type { get; }
-
-  /// <summary>
-  /// Log message
-  /// </summary>
-  public string Message { get; }
-
-  /// <summary>
-  /// Log time
-  /// </summary>
-  public DateTime Time { get; }
-
-  /// <summary>
-  /// Default constructor
-  /// </summary>
-  public LogMessage(IMarkDocLogger.LogType type, string message)
+  public readonly struct LogMessage
   {
-    Type = type;
-    Message = message;
-    Time = DateTime.Now;
+    /// <summary>
+    /// Log type
+    /// </summary>
+    public IMarkDocLogger.LogType Type { get; }
+
+    /// <summary>
+    /// Log message
+    /// </summary>
+    public string Message { get; }
+
+    /// <summary>
+    /// Log time
+    /// </summary>
+    public DateTime Time { get; }
+
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    public LogMessage(IMarkDocLogger.LogType type, string message)
+    {
+      Type = type;
+      Message = message;
+      Time = DateTime.Now;
+    }
   }
 }

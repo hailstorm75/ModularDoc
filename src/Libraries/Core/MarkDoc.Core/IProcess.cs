@@ -1,41 +1,45 @@
-﻿namespace MarkDoc.Core;
-
-public interface IProcess
+﻿namespace MarkDoc.Core
 {
   /// <summary>
-  /// Progress name
+  /// Interface for processes
   /// </summary>
-  public string Name { get; }
-
-  /// <summary>
-  /// State of the given process
-  /// </summary>
-  public ProcessState State { get; set; }
-
-  /// <summary>
-  /// Enumeration of possible states of a <see cref="IProcess"/>
-  /// </summary>
-  public enum ProcessState
+  public interface IProcess
   {
     /// <summary>
-    /// The process is waiting
+    /// Progress name
     /// </summary>
-    Idle,
+    public string Name { get; }
+
     /// <summary>
-    /// The process is running
+    /// State of the given process
     /// </summary>
-    Started,
+    public ProcessState State { get; set; }
+
     /// <summary>
-    /// The process has finished successfully
+    /// Enumeration of possible states of a <see cref="IProcess"/>
     /// </summary>
-    Success,
-    /// <summary>
-    /// The process has finished unsuccessfully
-    /// </summary>
-    Failure,
-    /// <summary>
-    /// The process has been cancelled
-    /// </summary>
-    Cancelled
+    public enum ProcessState
+    {
+      /// <summary>
+      /// The process is waiting
+      /// </summary>
+      Idle,
+      /// <summary>
+      /// The process is running
+      /// </summary>
+      Started,
+      /// <summary>
+      /// The process has finished successfully
+      /// </summary>
+      Success,
+      /// <summary>
+      /// The process has finished unsuccessfully
+      /// </summary>
+      Failure,
+      /// <summary>
+      /// The process has been cancelled
+      /// </summary>
+      Cancelled
+    }
   }
 }

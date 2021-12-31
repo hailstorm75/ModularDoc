@@ -49,6 +49,11 @@ namespace MarkDoc.Core
     /// <returns>Conversion result</returns>
     T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data) where T : ILibrarySettings;
 
-    (IMarkDocLogger logger, IReadOnlyCollection<IProcess>, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data);
+    /// <summary>
+    /// Creates the plugin process executor along with complementary loggers
+    /// </summary>
+    /// <param name="configuration">Plugin executor configuration</param>
+    /// <returns>A logger of component execution details, individual component process progress loggers, executor instance</returns>
+    (IMarkDocLogger logger, IReadOnlyCollection<IProcess> processes, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration);
   }
 }
