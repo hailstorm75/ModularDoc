@@ -118,7 +118,7 @@
               <Border>
                 <avalonia:Icon
                   HorizontalAlignment="Center"
-                  FontSize="12">
+                  FontSize="14">
                   <avalonia:Icon.Foreground>
                     <Binding Path="Type">
                       <Binding.Converter>
