@@ -37,6 +37,7 @@ namespace MarkDoc.Documentation.Xml
     /// <param name="typeResolver">Type resolver instance</param>
     /// <param name="settings">Documentation resolver settings</param>
     /// <param name="logger">Operation logger instance</param>
+    /// <param name="processLogger">Instance of process logger</param>
     public DocResolver(IResolver typeResolver, IDocSettings settings, IMarkDocLogger logger, IDefiniteProcess processLogger)
     {
       m_typeResolver = typeResolver;
