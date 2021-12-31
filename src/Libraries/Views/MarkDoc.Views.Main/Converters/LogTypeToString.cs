@@ -5,7 +5,7 @@ using MarkDoc.Core;
 
 namespace MarkDoc.Views.Main.Converters
 {
-  public class LogTypeToIconConverter
+  public class LogTypeToString
     : IValueConverter
   {
     /// <inheritdoc />
@@ -16,10 +16,10 @@ namespace MarkDoc.Views.Main.Converters
 
       return logType switch
       {
-        IMarkDocLogger.LogType.Info => "fa-info-circle",
-        IMarkDocLogger.LogType.Error => "fa-times-circle",
-        IMarkDocLogger.LogType.Warning => "fa-exclamation-circle",
-        IMarkDocLogger.LogType.Debug => "fa-bug",
+        IMarkDocLogger.LogType.Info => "Info",
+        IMarkDocLogger.LogType.Error => "Error",
+        IMarkDocLogger.LogType.Warning => "Warning",
+        IMarkDocLogger.LogType.Debug => "Debug",
         _ => throw new ArgumentOutOfRangeException()
       };
     }
@@ -28,10 +28,10 @@ namespace MarkDoc.Views.Main.Converters
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
       => value switch
       {
-        "fa-info-circle" => IMarkDocLogger.LogType.Info,
-        "fa-times-circle " => IMarkDocLogger.LogType.Error,
-        "fa-exclamation-circle" => IMarkDocLogger.LogType.Warning,
-        "fa-bug" => IMarkDocLogger.LogType.Debug,
+        "Info" => IMarkDocLogger.LogType.Info,
+        "Error" => IMarkDocLogger.LogType.Error,
+        "Warning" => IMarkDocLogger.LogType.Warning,
+        "Debug" => IMarkDocLogger.LogType.Debug,
         _ => throw new ArgumentOutOfRangeException()
       };
   }

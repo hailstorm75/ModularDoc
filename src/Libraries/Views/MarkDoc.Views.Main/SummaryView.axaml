@@ -35,22 +35,17 @@
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
           <DockPanel LastChildFill="True">
             <Grid DockPanel.Dock="Left" RowDefinitions="*">
-              <avalonia:Icon Foreground="Black">
-                <!-- <avalonia:Icon.IsVisible> -->
-                <!--   <Binding Path="State" ConverterParameter="false"> -->
-                <!--     <Binding.Converter> -->
-                <!--       <converters:ProcessStateToVisibilityConverter/> -->
-                <!--     </Binding.Converter> -->
-                <!--   </Binding> -->
-                <!-- </avalonia:Icon.IsVisible> -->
-                <avalonia:Icon.Value>
-                  <Binding Path="State" >
-                    <Binding.Converter>
-                      <converters:ProcessStateToIconConverter/>
-                    </Binding.Converter>
-                  </Binding>
-                </avalonia:Icon.Value>
-              </avalonia:Icon>
+
+              <!-- <avalonia:Icon FontSize="10" Foreground="Black"> -->
+              <!--   <avalonia:Icon.Value> -->
+              <!--     <Binding Path="State" > -->
+              <!--       <Binding.Converter> -->
+              <!--         <converters:ProcessStateToIconConverter/> -->
+              <!--       </Binding.Converter> -->
+              <!--     </Binding> -->
+              <!--   </avalonia:Icon.Value> -->
+              <!-- </avalonia:Icon> -->
+
               <ProgressRing Width="14"
                             Height="14"
                             Maximum="{Binding Max}"
@@ -86,29 +81,56 @@
     </ListBox>
     
     <Expander Grid.Row="2" Header="Logs" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-      <DataGrid Items="{Binding LogMessages}" AutoGenerateColumns="False">
+      <DataGrid Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
         <DataGrid.Columns>
-          <DataGridTemplateColumn Header="Type">
+          <DataGridTemplateColumn Header="Type" CanUserReorder="False">
             <DataTemplate DataType="{x:Type core:LogMessage}">
-              <avalonia:Icon>
-                <avalonia:Icon.Value>
-                  <Binding Path="Type">
-                    <Binding.Converter>
-                      <converters:LogTypeToIconConverter/>
-                    </Binding.Converter>
-                  </Binding>
-                </avalonia:Icon.Value>
-              </avalonia:Icon>
+              <Border>
+                <avalonia:Icon
+                  HorizontalAlignment="Center"
+                  FontSize="12">
+                  <avalonia:Icon.Foreground>
+                    <Binding Path="Type">
+                      <Binding.Converter>
+                        <converters:LogTypeToColorConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Foreground>
+                  <avalonia:Icon.Value>
+                    <Binding Path="Type" >
+                      <Binding.Converter>
+                        <converters:LogTypeToIconConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Value>
+                </avalonia:Icon>
+                <ToolTip.Tip>
+                  <TextBlock TextWrapping="Wrap">
+                    <TextBlock.Text>
+                      <Binding Path="Type" >
+                        <Binding.Converter>
+                          <converters:LogTypeToString/>
+                        </Binding.Converter>
+                      </Binding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </ToolTip.Tip>
+              </Border>
             </DataTemplate>
           </DataGridTemplateColumn>
-          <DataGridTemplateColumn Header="Time" CanUserSort="True">
+          <DataGridTemplateColumn Header="Time" CanUserSort="True" CanUserReorder="False">
             <DataTemplate DataType="{x:Type core:LogMessage}">
               <Label Content="{Binding Time}" VerticalAlignment="Center"/>
             </DataTemplate>
           </DataGridTemplateColumn>
-          <DataGridTemplateColumn Header="Message" CanUserSort="False" Width="*">
+          <DataGridTemplateColumn Header="Message" CanUserSort="False" Width="*" CanUserReorder="False">
             <DataTemplate DataType="{x:Type core:LogMessage}">
-              <Label Content="{Binding Message}" VerticalAlignment="Center"/>
+              <Border VerticalAlignment="Center">
+                <ToolTip.Tip>
+                  <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                </ToolTip.Tip>
+                <Label Content="{Binding Message}" />
+              </Border>
             </DataTemplate>
           </DataGridTemplateColumn>
         </DataGrid.Columns>
