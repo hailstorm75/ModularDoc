@@ -16,10 +16,10 @@ namespace MarkDoc.Views.Main.Converters
 
       return state switch
       {
-        IProcess.ProcessState.Idle => "fa-clock-o",
+        IProcess.ProcessState.Idle => "fa-clock",
         IProcess.ProcessState.Started => "fa-spinner",
-        IProcess.ProcessState.Success => "fa-check-circle-o",
-        IProcess.ProcessState.Failure => "fa-times-circle-o",
+        IProcess.ProcessState.Success => "fa-check-circle",
+        IProcess.ProcessState.Failure => "fa-times-circle",
         IProcess.ProcessState.Cancelled => "fa-ban",
         _ => throw new ArgumentOutOfRangeException()
       };

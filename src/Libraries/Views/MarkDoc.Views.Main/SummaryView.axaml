@@ -34,46 +34,76 @@
       <ListBox.DataTemplates>
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
           <DockPanel LastChildFill="True">
-            <Grid DockPanel.Dock="Left" RowDefinitions="*">
+            <Border DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0, 0, 5, 0" Width="16">
+              <Grid RowDefinitions="Auto">
+                <avalonia:Icon FontSize="16" Foreground="Black" VerticalAlignment="Center">
+                  <avalonia:Icon.Value>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToIconConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Value>
+                  <ProgressRing.IsVisible>
+                    <Binding Path="State" ConverterParameter="negate">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </ProgressRing.IsVisible>
+                </avalonia:Icon>
+                
+                <ProgressRing Width="16"
+                              Height="16"
+                              Maximum="{Binding Max}"
+                              Minimum="0"
+                              Value="{Binding Current}">
+                  <ProgressRing.IsVisible>
+                    <Binding Path="State">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </ProgressRing.IsVisible>
+                </ProgressRing>
+              </Grid>
+            </Border>
 
-              <!-- <avalonia:Icon FontSize="10" Foreground="Black"> -->
-              <!--   <avalonia:Icon.Value> -->
-              <!--     <Binding Path="State" > -->
-              <!--       <Binding.Converter> -->
-              <!--         <converters:ProcessStateToIconConverter/> -->
-              <!--       </Binding.Converter> -->
-              <!--     </Binding> -->
-              <!--   </avalonia:Icon.Value> -->
-              <!-- </avalonia:Icon> -->
-
-              <ProgressRing Width="14"
-                            Height="14"
-                            Maximum="{Binding Max}"
-                            Minimum="0"
-                            Value="{Binding Current}">
-                <ProgressRing.IsVisible>
-                  <Binding Path="State">
-                    <Binding.Converter>
-                      <converters:ProcessStateToVisibilityConverter/>
-                    </Binding.Converter>
-                  </Binding>
-                </ProgressRing.IsVisible>
-              </ProgressRing>
-            </Grid>
             <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
           </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type core:IIndefiniteProcess}">
           <DockPanel LastChildFill="True">
-            <ProgressRing DockPanel.Dock="Left" IsIndeterminate="True" Width="14" Height="14">
-              <ProgressRing.IsVisible>
-                <Binding Path="State" ConverterParameter="false">
-                  <Binding.Converter>
-                    <converters:ProcessStateToVisibilityConverter/>
-                  </Binding.Converter>
-                </Binding>
-              </ProgressRing.IsVisible>
-            </ProgressRing>
+            <Border DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0, 0, 5, 0" Width="16">
+              <Grid RowDefinitions="Auto">
+                <avalonia:Icon FontSize="16" Foreground="Black" VerticalAlignment="Center">
+                  <avalonia:Icon.Value>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToIconConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Value>
+                  <ProgressRing.IsVisible>
+                    <Binding Path="State" ConverterParameter="negate">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </ProgressRing.IsVisible>
+                </avalonia:Icon>
+
+                <ProgressRing DockPanel.Dock="Left" IsIndeterminate="True" Width="16" Height="16">
+                  <ProgressRing.IsVisible>
+                    <Binding Path="State">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </ProgressRing.IsVisible>
+                </ProgressRing>
+              </Grid>
+            </Border>
             <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
           </DockPanel>
         </DataTemplate>
