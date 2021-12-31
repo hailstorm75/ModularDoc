@@ -8,7 +8,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
-  <Grid Margin="15" RowDefinitions="Auto,*,*">
+  <Grid Margin="15" RowDefinitions="Auto,*,4,*">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
       <FloatingButton
         Command="{Binding BackCommand}"
@@ -30,7 +30,7 @@
         FontSize="24" />
     </DockPanel>
     
-    <ListBox Grid.Row="1" Items="{Binding Processes}">
+    <ListBox Grid.Row="1" Items="{Binding Processes}" SelectionMode="Single">
       <ListBox.DataTemplates>
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
           <DockPanel LastChildFill="True">
@@ -48,7 +48,7 @@
               </ToolTip.Tip>
               
               <Grid RowDefinitions="Auto">
-                <avalonia:Icon FontSize="16" Foreground="Black" VerticalAlignment="Center">
+                <avalonia:Icon FontSize="16" VerticalAlignment="Center">
                   <avalonia:Icon.Value>
                     <Binding Path="State" >
                       <Binding.Converter>
@@ -56,13 +56,20 @@
                       </Binding.Converter>
                     </Binding>
                   </avalonia:Icon.Value>
-                  <ProgressRing.IsVisible>
+                  <avalonia:Icon.Foreground>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToColorConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Foreground>
+                  <avalonia:Icon.IsVisible>
                     <Binding Path="State" ConverterParameter="negate">
                       <Binding.Converter>
                         <converters:ProcessStateToVisibilityConverter/>
                       </Binding.Converter>
                     </Binding>
-                  </ProgressRing.IsVisible>
+                  </avalonia:Icon.IsVisible>
                 </avalonia:Icon>
                 
                 <ProgressRing Width="16"
@@ -100,7 +107,7 @@
               </ToolTip.Tip>
               
               <Grid RowDefinitions="Auto">
-                <avalonia:Icon FontSize="16" Foreground="Black" VerticalAlignment="Center">
+                <avalonia:Icon FontSize="16" VerticalAlignment="Center">
                   <avalonia:Icon.Value>
                     <Binding Path="State" >
                       <Binding.Converter>
@@ -108,13 +115,20 @@
                       </Binding.Converter>
                     </Binding>
                   </avalonia:Icon.Value>
-                  <ProgressRing.IsVisible>
+                  <avalonia:Icon.Foreground>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToColorConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Foreground>
+                  <avalonia:Icon.IsVisible>
                     <Binding Path="State" ConverterParameter="negate">
                       <Binding.Converter>
                         <converters:ProcessStateToVisibilityConverter/>
                       </Binding.Converter>
                     </Binding>
-                  </ProgressRing.IsVisible>
+                  </avalonia:Icon.IsVisible>
                 </avalonia:Icon>
 
                 <ProgressRing DockPanel.Dock="Left" IsIndeterminate="True" Width="16" Height="16">
@@ -134,61 +148,61 @@
       </ListBox.DataTemplates>
     </ListBox>
     
-    <Expander Grid.Row="2" Header="Logs" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-      <DataGrid Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
-        <DataGrid.Columns>
-          <DataGridTemplateColumn Header="Type" CanUserReorder="False">
-            <DataTemplate DataType="{x:Type core:LogMessage}">
-              <Border>
-                <avalonia:Icon
-                  HorizontalAlignment="Center"
-                  FontSize="14">
-                  <avalonia:Icon.Foreground>
-                    <Binding Path="Type">
-                      <Binding.Converter>
-                        <converters:LogTypeToColorConverter/>
-                      </Binding.Converter>
-                    </Binding>
-                  </avalonia:Icon.Foreground>
-                  <avalonia:Icon.Value>
+    <GridSplitter Grid.Row="2"/>
+    
+    <DataGrid Grid.Row="3"  Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn Header="Type" CanUserReorder="False">
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Border>
+              <avalonia:Icon
+                HorizontalAlignment="Center"
+                FontSize="14">
+                <avalonia:Icon.Foreground>
+                  <Binding Path="Type">
+                    <Binding.Converter>
+                      <converters:LogTypeToColorConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </avalonia:Icon.Foreground>
+                <avalonia:Icon.Value>
+                  <Binding Path="Type" >
+                    <Binding.Converter>
+                      <converters:LogTypeToIconConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </avalonia:Icon.Value>
+              </avalonia:Icon>
+              <ToolTip.Tip>
+                <TextBlock TextWrapping="Wrap">
+                  <TextBlock.Text>
                     <Binding Path="Type" >
                       <Binding.Converter>
-                        <converters:LogTypeToIconConverter/>
+                        <converters:LogTypeToStringConverter/>
                       </Binding.Converter>
                     </Binding>
-                  </avalonia:Icon.Value>
-                </avalonia:Icon>
-                <ToolTip.Tip>
-                  <TextBlock TextWrapping="Wrap">
-                    <TextBlock.Text>
-                      <Binding Path="Type" >
-                        <Binding.Converter>
-                          <converters:LogTypeToStringConverter/>
-                        </Binding.Converter>
-                      </Binding>
-                    </TextBlock.Text>
-                  </TextBlock>
-                </ToolTip.Tip>
-              </Border>
-            </DataTemplate>
-          </DataGridTemplateColumn>
-          <DataGridTemplateColumn Header="Time" CanUserSort="True" CanUserReorder="False">
-            <DataTemplate DataType="{x:Type core:LogMessage}">
-              <Label Content="{Binding Time}" VerticalAlignment="Center"/>
-            </DataTemplate>
-          </DataGridTemplateColumn>
-          <DataGridTemplateColumn Header="Message" CanUserSort="False" Width="*" CanUserReorder="False">
-            <DataTemplate DataType="{x:Type core:LogMessage}">
-              <Border VerticalAlignment="Center">
-                <ToolTip.Tip>
-                  <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
-                </ToolTip.Tip>
-                <Label Content="{Binding Message}" />
-              </Border>
-            </DataTemplate>
-          </DataGridTemplateColumn>
-        </DataGrid.Columns>
-      </DataGrid>
-    </Expander>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ToolTip.Tip>
+            </Border>
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="Time" CanUserSort="True" CanUserReorder="False">
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Label Content="{Binding Time}" VerticalAlignment="Center"/>
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="Message" CanUserSort="False" Width="*" CanUserReorder="False">
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Border VerticalAlignment="Center">
+              <ToolTip.Tip>
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+              </ToolTip.Tip>
+              <Label Content="{Binding Message}" />
+            </Border>
+          </DataTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
   </Grid>
 </UserControl>
