@@ -51,6 +51,8 @@ namespace UT.Documentation.Data
     private static void Mock(ContainerBuilder builder)
     {
       var resolver = new Mock<IResolver>().Object;
+      var logger = new Mock<IMarkDocLogger>().Object;
+      var process = new Mock<IDefiniteProcess>().Object;
       var doc = new Mock<IDocSettings>().Object;
       var global = new Mock<IGlobalSettings>();
       global.SetupGet(x => x.IgnoredNamespaces)
@@ -61,6 +63,8 @@ namespace UT.Documentation.Data
 
       builder.RegisterInstance(global.Object).As<IGlobalSettings>();
       builder.RegisterInstance(member.Object).As<IMemberSettings>();
+      builder.RegisterInstance(logger).As<IMarkDocLogger>();
+      builder.RegisterInstance(process).As<IDefiniteProcess>();
       builder.RegisterInstance(resolver).As<IResolver>();
       builder.RegisterInstance(doc).As<IDocSettings>();
     }

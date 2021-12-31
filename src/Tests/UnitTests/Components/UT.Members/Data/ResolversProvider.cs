@@ -6,7 +6,9 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
+using MarkDoc.Core;
 using MarkDoc.Members;
+using Moq;
 
 namespace UT.Members.Data
 {
@@ -20,6 +22,7 @@ namespace UT.Members.Data
       var builder = new ContainerBuilder();
 
       RegisterModules(builder);
+      Mock(builder);
 
       CONTAINER = builder.Build();
     }
@@ -42,6 +45,15 @@ namespace UT.Members.Data
         foreach (var module in modules)
           builder.RegisterModule(module);
       }
+    }
+
+    private static void Mock(ContainerBuilder builder)
+    {
+      var logger = new Mock<IMarkDocLogger>().Object;
+      var process = new Mock<IDefiniteProcess>().Object;
+
+      builder.RegisterInstance(logger).As<IMarkDocLogger>();
+      builder.RegisterInstance(process).As<IDefiniteProcess>();
     }
 
     /// <inheritdoc />
