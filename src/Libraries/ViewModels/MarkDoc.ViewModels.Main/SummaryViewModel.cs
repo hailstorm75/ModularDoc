@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Text.Json;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
 using ReactiveUI;
 
@@ -16,6 +18,7 @@ namespace MarkDoc.ViewModels.Main
   public class SummaryViewModel
     : BaseViewModel, ISummaryViewModel
   {
+    private readonly ConcurrentBag<LogMessage> m_concurrentLogMessages = new();
     private readonly NavigationManager m_navigationManager;
     private readonly CancellationTokenSource m_cancellationTokenSource;
     private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
@@ -37,7 +40,7 @@ namespace MarkDoc.ViewModels.Main
     }
 
     /// <inheritdoc />
-    public ConcurrentBag<LogMessage> LogMessages { get; } = new();
+    public ObservableCollection<LogMessage> LogMessages { get; } = new();
 
     /// <inheritdoc />
     public IReadOnlyCollection<IProcess> Processes { get; private set; } = null!;
@@ -73,6 +76,7 @@ namespace MarkDoc.ViewModels.Main
     public override async ValueTask OnLoadedAsync()
     {
       LogMessages.Clear();
+      m_concurrentLogMessages.Clear();
       Loading = true;
 
       try
@@ -93,11 +97,12 @@ namespace MarkDoc.ViewModels.Main
         {
           logger.NewLog += LoggerOnNewLog;
 
-          await executor(m_cancellationTokenSource.Token).ConfigureAwait(false);
+          await executor(m_cancellationTokenSource.Token).ConfigureAwait(true);
         }
         finally
         {
           logger.NewLog -= LoggerOnNewLog;
+          LogMessages.AddRange(m_concurrentLogMessages);
         }
       }
       finally
@@ -108,7 +113,7 @@ namespace MarkDoc.ViewModels.Main
 
     private void LoggerOnNewLog(object? sender, LogMessage e)
     {
-      LogMessages.Add(e);
+      m_concurrentLogMessages.Add(e);
       this.RaisePropertyChanged(nameof(LogMessages));
     }
 

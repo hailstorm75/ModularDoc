@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Core;
 
@@ -23,7 +19,7 @@ namespace MarkDoc.ViewModels
     /// <summary>
     /// Execution logs
     /// </summary>
-    ConcurrentBag<LogMessage> LogMessages { get; }
+    ObservableCollection<LogMessage> LogMessages { get; }
 
     /// <summary>
     /// Plugin processes

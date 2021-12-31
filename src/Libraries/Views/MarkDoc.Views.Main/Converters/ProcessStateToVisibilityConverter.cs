@@ -9,12 +9,13 @@ namespace MarkDoc.Views.Main.Converters
     : IValueConverter
   {
     /// <inheritdoc />
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
       if (value is not IProcess.ProcessState state)
         return null!;
 
-      return state == IProcess.ProcessState.Started;
+      var result = state == IProcess.ProcessState.Started;
+      return parameter is null ? result : !result;
     }
 
     /// <inheritdoc />

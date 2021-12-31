@@ -5,5 +5,6 @@
   <Application.Styles>
     <FluentTheme Mode="Light" />
     <StyleInclude Source="avares://Aura.UI.FluentTheme/AuraUI.xaml" />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
   </Application.Styles>
 </Application>

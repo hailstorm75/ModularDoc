@@ -8,7 +8,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
-  <Grid Margin="15" RowDefinitions="Auto,*,Auto">
+  <Grid Margin="15" RowDefinitions="Auto,*,*">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
       <FloatingButton
         Command="{Binding BackCommand}"
@@ -34,20 +34,37 @@
       <ListBox.DataTemplates>
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
           <DockPanel LastChildFill="True">
-            <ProgressRing DockPanel.Dock="Left"
-                          Width="14"
-                          Height="14"
-                          Maximum="{Binding Max}"
-                          Minimum="0"
-                          Value="{Binding Current}">
-              <ProgressRing.IsVisible>
-                <Binding Path="State" ConverterParameter="false">
-                  <Binding.Converter>
-                    <converters:ProcessStateToVisibilityConverter/>
-                  </Binding.Converter>
-                </Binding>
-              </ProgressRing.IsVisible>
-            </ProgressRing>
+            <Grid DockPanel.Dock="Left" RowDefinitions="*">
+              <avalonia:Icon Foreground="Black">
+                <!-- <avalonia:Icon.IsVisible> -->
+                <!--   <Binding Path="State" ConverterParameter="false"> -->
+                <!--     <Binding.Converter> -->
+                <!--       <converters:ProcessStateToVisibilityConverter/> -->
+                <!--     </Binding.Converter> -->
+                <!--   </Binding> -->
+                <!-- </avalonia:Icon.IsVisible> -->
+                <avalonia:Icon.Value>
+                  <Binding Path="State" >
+                    <Binding.Converter>
+                      <converters:ProcessStateToIconConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </avalonia:Icon.Value>
+              </avalonia:Icon>
+              <ProgressRing Width="14"
+                            Height="14"
+                            Maximum="{Binding Max}"
+                            Minimum="0"
+                            Value="{Binding Current}">
+                <ProgressRing.IsVisible>
+                  <Binding Path="State">
+                    <Binding.Converter>
+                      <converters:ProcessStateToVisibilityConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </ProgressRing.IsVisible>
+              </ProgressRing>
+            </Grid>
             <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
           </DockPanel>
         </DataTemplate>
@@ -68,12 +85,12 @@
       </ListBox.DataTemplates>
     </ListBox>
     
-    <Expander Grid.Row="2" Header="Logs">
-      <ListBox Items="{Binding LogMessages}" VirtualizationMode="Simple" HorizontalAlignment="Stretch">
-        <ListBox.ItemTemplate>
-          <DataTemplate DataType="{x:Type core:LogMessage}">
-            <Grid ColumnDefinitions="Auto, Auto, *">
-              <avalonia:Icon Grid.Column="0">
+    <Expander Grid.Row="2" Header="Logs" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+      <DataGrid Items="{Binding LogMessages}" AutoGenerateColumns="False">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Header="Type">
+            <DataTemplate DataType="{x:Type core:LogMessage}">
+              <avalonia:Icon>
                 <avalonia:Icon.Value>
                   <Binding Path="Type">
                     <Binding.Converter>
@@ -82,12 +99,20 @@
                   </Binding>
                 </avalonia:Icon.Value>
               </avalonia:Icon>
-              <Label Grid.Column="1" Content="{Binding Time}"/>
-              <Label Grid.Column="2" Content="{Binding Message}"/>
-            </Grid>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="Time" CanUserSort="True">
+            <DataTemplate DataType="{x:Type core:LogMessage}">
+              <Label Content="{Binding Time}" VerticalAlignment="Center"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="Message" CanUserSort="False" Width="*">
+            <DataTemplate DataType="{x:Type core:LogMessage}">
+              <Label Content="{Binding Message}" VerticalAlignment="Center"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
     </Expander>
   </Grid>
 </UserControl>
