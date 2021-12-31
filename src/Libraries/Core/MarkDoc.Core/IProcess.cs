@@ -27,7 +27,7 @@
       /// <summary>
       /// The process is running
       /// </summary>
-      Started,
+      Running,
       /// <summary>
       /// The process has finished successfully
       /// </summary>

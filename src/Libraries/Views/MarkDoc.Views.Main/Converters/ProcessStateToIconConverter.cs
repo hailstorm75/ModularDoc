@@ -17,7 +17,7 @@ namespace MarkDoc.Views.Main.Converters
       return state switch
       {
         IProcess.ProcessState.Idle => "fa-clock",
-        IProcess.ProcessState.Started => "fa-spinner",
+        IProcess.ProcessState.Running => "fa-spinner",
         IProcess.ProcessState.Success => "fa-check-circle",
         IProcess.ProcessState.Failure => "fa-times-circle",
         IProcess.ProcessState.Cancelled => "fa-ban",

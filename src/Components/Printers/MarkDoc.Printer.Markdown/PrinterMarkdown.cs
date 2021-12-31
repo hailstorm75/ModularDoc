@@ -47,7 +47,7 @@ namespace MarkDoc.Printer.Markdown
       Task PrintIntermediate(IType type)
         => Print(m_composer.Compose(type), type, path);
 
-      m_processLogger.State = IProcess.ProcessState.Started;
+      m_processLogger.State = IProcess.ProcessState.Running;
 
       // Prepare the tasks of printing out pages for each respective type
       var tasks = types.AsParallel().Select(PrintIntermediate);

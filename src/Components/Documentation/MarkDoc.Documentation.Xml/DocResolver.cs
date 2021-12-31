@@ -50,7 +50,7 @@ namespace MarkDoc.Documentation.Xml
 
     public async Task ResolveAsync()
     {
-      m_processLogger.State = IProcess.ProcessState.Started;
+      m_processLogger.State = IProcess.ProcessState.Running;
 
       await Task.WhenAll(m_settings.Paths.Select(ResolveAsync)).ConfigureAwait(false);
 

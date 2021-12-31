@@ -35,6 +35,18 @@
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
           <DockPanel LastChildFill="True">
             <Border DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0, 0, 5, 0" Width="16">
+              <ToolTip.Tip>
+                <TextBlock TextWrapping="Wrap">
+                  <TextBlock.Text>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToStringConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ToolTip.Tip>
+              
               <Grid RowDefinitions="Auto">
                 <avalonia:Icon FontSize="16" Foreground="Black" VerticalAlignment="Center">
                   <avalonia:Icon.Value>
@@ -75,6 +87,18 @@
         <DataTemplate DataType="{x:Type core:IIndefiniteProcess}">
           <DockPanel LastChildFill="True">
             <Border DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0, 0, 5, 0" Width="16">
+              <ToolTip.Tip>
+                <TextBlock TextWrapping="Wrap">
+                  <TextBlock.Text>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToStringConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ToolTip.Tip>
+              
               <Grid RowDefinitions="Auto">
                 <avalonia:Icon FontSize="16" Foreground="Black" VerticalAlignment="Center">
                   <avalonia:Icon.Value>

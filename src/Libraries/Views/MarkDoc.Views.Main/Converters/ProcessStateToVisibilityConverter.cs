@@ -14,7 +14,7 @@ namespace MarkDoc.Views.Main.Converters
       if (value is not IProcess.ProcessState state)
         return null!;
 
-      var result = state == IProcess.ProcessState.Started;
+      var result = state == IProcess.ProcessState.Running;
       return parameter is null ? result : !result;
     }
 

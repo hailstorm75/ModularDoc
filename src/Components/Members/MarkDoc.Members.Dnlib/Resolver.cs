@@ -194,7 +194,7 @@ namespace MarkDoc.Members.Dnlib
 
     public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
     {
-      m_processLogger.State = IProcess.ProcessState.Started;
+      m_processLogger.State = IProcess.ProcessState.Running;
 
       NewTypes();
 
