@@ -5,7 +5,7 @@ using MarkDoc.Core;
 
 namespace MarkDoc.Views.Main.Converters
 {
-  public class LogTypeToString
+  public class LogTypeToStringConverter
     : IValueConverter
   {
     /// <inheritdoc />

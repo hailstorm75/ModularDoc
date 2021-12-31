@@ -139,7 +139,7 @@
                     <TextBlock.Text>
                       <Binding Path="Type" >
                         <Binding.Converter>
-                          <converters:LogTypeToString/>
+                          <converters:LogTypeToStringConverter/>
                         </Binding.Converter>
                       </Binding>
                     </TextBlock.Text>
