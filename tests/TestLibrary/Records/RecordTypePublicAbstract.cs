@@ -1,6 +1,6 @@
 ﻿namespace TestLibrary.Records
 {
-  public abstract class RecordTypePublicAbstract
+  public abstract record RecordTypePublicAbstract
   {
   }
 }

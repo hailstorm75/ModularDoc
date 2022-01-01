@@ -1,6 +1,6 @@
 ﻿namespace TestLibrary.Members.Properties
 {
-  public class RecordProperties
+  public record RecordProperties
   {
     public int PropertyGetSet { get; set; }
 

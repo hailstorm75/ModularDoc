@@ -59,8 +59,8 @@ namespace UT.Members.Data
     #region Record
     
     public const string RECORD_NAMESPACE = "TestLibrary.Records";
-    public static string PUBLIC_RECORD_SEALED = "RecordTypePublicSealed";
-    public static string PUBLIC_RECORD_ABSTRACT = "RecordTypePublicAbstract";
+    public const string PUBLIC_RECORD_SEALED = "RecordTypePublicSealed";
+    public const string PUBLIC_RECORD_ABSTRACT = "RecordTypePublicAbstract";
     public const string PUBLIC_RECORD = "RecordTypePublic";
     public const string PUBLIC_RECORD_READONLY = "RecordReadonlyType";
     public const string INTERNAL_RECORD = "RecordTypeInternal";

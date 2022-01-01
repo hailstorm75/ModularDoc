@@ -540,13 +540,15 @@ namespace MarkDoc.Members.Dnlib
       if (!type.IsClass)
         return false;
 
-      if (type.CustomAttributes
-            .Select(x => x.TypeFullName)
-            .All(x => RECORD_ATTRIBUTES.Contains(x))
-          || type.Properties.FirstOrDefault(prop => prop.Name.Equals("EqualityContract"))
-            ?.GetMethod.CustomAttributes.FirstOrDefault(attr =>
-              attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) is not null
-          || type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) is not null)
+      var customAttributes = type.CustomAttributes
+        .Select(x => x.TypeFullName)
+        .ToReadOnlyCollection();
+
+      if (customAttributes.Count > 0 && customAttributes.All(x => RECORD_ATTRIBUTES.Contains(x))
+                                     && type.Properties.FirstOrDefault(prop => prop.Name.Equals("EqualityContract"))
+                                       ?.GetMethod.CustomAttributes.FirstOrDefault(attr =>
+                                         attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) is not null
+                                     && type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) is not null)
         return true;
 
       return false;
