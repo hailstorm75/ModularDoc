@@ -282,8 +282,6 @@ namespace MarkDoc.Members.Dnlib
       // Add the resulting group to the collection
       m_groups.Add(group);
 
-      Thread.Sleep(250);
-
       m_processLogger.IncreaseCompletion();
 
       m_logger.Debug($"Cached types from '{assembly}'");
