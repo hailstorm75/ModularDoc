@@ -9,7 +9,7 @@ namespace MarkDoc.Views.Main.Converters
     : IValueConverter
   {
     /// <inheritdoc />
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
       if (value is not IProcess.ProcessState state)
         return null!;
@@ -26,7 +26,7 @@ namespace MarkDoc.Views.Main.Converters
     }
 
     /// <inheritdoc />
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
       if (value is not string state)
         return null!;

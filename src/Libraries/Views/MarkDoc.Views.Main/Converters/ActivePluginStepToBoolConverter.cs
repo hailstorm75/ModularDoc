@@ -18,10 +18,10 @@ namespace MarkDoc.Views.Main.Converters
     }
 
     /// <inheritdoc />
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
       => value is IPluginStep step && CurrentPlugin is IPluginStep currentStep && step.Id.Equals(currentStep.Id);
 
     /// <inheritdoc />
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
   }
 }
