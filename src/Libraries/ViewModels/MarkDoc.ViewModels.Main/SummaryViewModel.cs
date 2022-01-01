@@ -59,6 +59,9 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ICommand CancelCommand { get; }
 
+    /// <inheritdoc />
+    public ICommand DoneCommand { get; }
+
     #endregion
 
     #region Constructors
@@ -76,6 +79,7 @@ namespace MarkDoc.ViewModels.Main
 
       BackCommand = ReactiveCommand.Create(NavigateBack, canNavigateBack);
       CancelCommand = ReactiveCommand.Create(CancelOperation, canCancelOperation);
+      DoneCommand = ReactiveCommand.Create(NavigateToMenu, canNavigateBack);
     }
 
     #endregion
@@ -149,9 +153,10 @@ namespace MarkDoc.ViewModels.Main
     }
 
     private void CancelOperation()
-    {
-      m_cancellationTokenSource.Cancel();
-    }
+      => m_cancellationTokenSource.Cancel();
+
+    private void NavigateToMenu()
+      => m_navigationManager.NavigateTo(PageNames.HOME);
 
     #endregion
   }
