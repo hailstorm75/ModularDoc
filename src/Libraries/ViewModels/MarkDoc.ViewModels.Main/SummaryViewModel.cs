@@ -18,11 +18,15 @@ namespace MarkDoc.ViewModels.Main
   public class SummaryViewModel
     : BaseViewModel, ISummaryViewModel
   {
+    #region Fields
+
     private readonly ConcurrentBag<LogMessage> m_concurrentLogMessages = new();
     private readonly NavigationManager m_navigationManager;
     private readonly CancellationTokenSource m_cancellationTokenSource;
     private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
     private bool m_loading;
+
+    #endregion
 
     #region Properties
 
@@ -57,6 +61,8 @@ namespace MarkDoc.ViewModels.Main
 
     #endregion
 
+    #region Constructors
+
     /// <summary>
     /// Default constructor
     /// </summary>
@@ -71,6 +77,10 @@ namespace MarkDoc.ViewModels.Main
       BackCommand = ReactiveCommand.Create(NavigateBack, canNavigateBack);
       CancelCommand = ReactiveCommand.Create(CancelOperation, canCancelOperation);
     }
+
+    #endregion
+
+    #region Methods
 
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public override async ValueTask OnLoadedAsync()
@@ -142,5 +152,7 @@ namespace MarkDoc.ViewModels.Main
     {
       m_cancellationTokenSource.Cancel();
     }
+
+    #endregion
   }
 }
