@@ -390,7 +390,7 @@ namespace MarkDoc.Members.Dnlib
     private static TypeDef? ResolveParent(object? parent)
     {
       if (parent is null) return null;
-      if (!(parent is TypeDef type))
+      if (parent is not TypeDef type)
         throw new InvalidOperationException($"Argument type of {parent} is not {nameof(TypeDef)}.");
 
       return type;
@@ -419,7 +419,7 @@ namespace MarkDoc.Members.Dnlib
         throw new ArgumentNullException(nameof(source));
 
       // If the signature is not a supported type..
-      if (!(source is TypeSig signature))
+      if (source is not TypeSig signature)
         // throw an exception
         throw new NotSupportedException(Resources.sourceNotTypeSignature);
 
@@ -455,7 +455,7 @@ namespace MarkDoc.Members.Dnlib
         throw new ArgumentNullException(nameof(subject));
 
       // If the subject is not a supported type..
-      if (!(subject is TypeDef subjectSig))
+      if (subject is not TypeDef subjectSig)
         // throw an exception
         throw new NotSupportedException(Resources.sourceNotTypeSignature);
 
@@ -545,8 +545,8 @@ namespace MarkDoc.Members.Dnlib
             .All(x => RECORD_ATTRIBUTES.Contains(x))
           || type.Properties.FirstOrDefault(prop => prop.Name.Equals("EqualityContract"))
             ?.GetMethod.CustomAttributes.FirstOrDefault(attr =>
-              attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) != null
-          || type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) != null)
+              attr.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute")) is not null
+          || type.Methods.FirstOrDefault(meth => meth.Name.Equals("<Clone>$")) is not null)
         return true;
 
       return false;
@@ -579,7 +579,7 @@ namespace MarkDoc.Members.Dnlib
         // Return the type
         yield return nested;
         // If the nested type can't have its own nested types..
-        if (!(nested is IInterface nestedType))
+        if (nested is not IInterface nestedType)
           // continue to the next nested type
           continue;
 
