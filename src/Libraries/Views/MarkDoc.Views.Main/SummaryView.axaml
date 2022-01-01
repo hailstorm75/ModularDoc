@@ -8,7 +8,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
-  <Grid Margin="15" RowDefinitions="Auto,*,4,*,Auto">
+  <Grid Margin="15" RowDefinitions="Auto,Auto,*,4,*,Auto">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
       <FloatingButton
         Command="{Binding BackCommand}"
@@ -30,7 +30,9 @@
         FontSize="24" />
     </DockPanel>
     
-    <ListBox Grid.Row="1" Items="{Binding Processes}" SelectionMode="Single">
+    <ProgressBar Grid.Row="1" Maximum="{Binding ProcessesTotal}" Value="{Binding ProcessesComplete}" Minimum="0" />
+    
+    <ListBox Grid.Row="2" Items="{Binding Processes}" SelectionMode="Single">
       <ListBox.DataTemplates>
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
           <DockPanel LastChildFill="True">
@@ -148,9 +150,9 @@
       </ListBox.DataTemplates>
     </ListBox>
     
-    <GridSplitter Grid.Row="2"/>
+    <GridSplitter Grid.Row="3"/>
     
-    <DataGrid Grid.Row="3"  Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
+    <DataGrid Grid.Row="4"  Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
       <DataGrid.Columns>
         <DataGridTemplateColumn Header="Type" CanUserReorder="False">
           <DataTemplate DataType="{x:Type core:LogMessage}">
@@ -205,7 +207,7 @@
       </DataGrid.Columns>
     </DataGrid>
     
-    <Grid Grid.Row="4" ColumnDefinitions="*, Auto, Auto" Margin="0 5 0 0">
+    <Grid Grid.Row="5" ColumnDefinitions="*, Auto, Auto" Margin="0 5 0 0">
       <Button Grid.Column="1">Save configuration</Button>
       <Button Command="{Binding DoneCommand}" Grid.Column="2" Margin="5 0 0 0">Done</Button>
     </Grid>

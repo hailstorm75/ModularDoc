@@ -1,4 +1,5 @@
-﻿using MarkDoc.Core;
+﻿using System;
+using MarkDoc.Core;
 using ReactiveUI;
 
 namespace MarkDoc.Helpers
@@ -7,6 +8,9 @@ namespace MarkDoc.Helpers
     : ReactiveObject, IProcess
   {
     private IProcess.ProcessState m_state;
+
+    /// <inheritdoc />
+    public event EventHandler<IProcess.ProcessState>? StateChanged;
 
     /// <inheritdoc />
     public string Name { get; }
@@ -18,6 +22,7 @@ namespace MarkDoc.Helpers
       set
       {
         m_state = value;
+        OnStateChanged(value);
         this.RaisePropertyChanged(nameof(State));
       }
     }
@@ -29,5 +34,8 @@ namespace MarkDoc.Helpers
     {
       Name = name;
     }
+
+    private void OnStateChanged(IProcess.ProcessState e)
+      => StateChanged?.Invoke(this, e);
   }
 }

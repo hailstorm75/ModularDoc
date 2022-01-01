@@ -47,6 +47,16 @@ namespace MarkDoc.ViewModels
     /// </summary>
     ICommand DoneCommand { get; }
 
+    /// <summary>
+    /// Number of processes that are finished
+    /// </summary>
+    int ProcessesComplete { get; }
+
+    /// <summary>
+    /// Number of all processes
+    /// </summary>
+    int ProcessesTotal { get; }
+
     #endregion
   }
 }

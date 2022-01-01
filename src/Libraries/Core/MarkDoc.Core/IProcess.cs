@@ -1,10 +1,17 @@
-﻿namespace MarkDoc.Core
+﻿using System;
+
+namespace MarkDoc.Core
 {
   /// <summary>
   /// Interface for processes
   /// </summary>
   public interface IProcess
   {
+    /// <summary>
+    /// Invoked whenever the <see cref="State"/> is changed
+    /// </summary>
+    event EventHandler<ProcessState>? StateChanged;
+
     /// <summary>
     /// Progress name
     /// </summary>

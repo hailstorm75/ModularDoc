@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -48,6 +49,12 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public IReadOnlyCollection<IProcess> Processes { get; private set; } = null!;
+
+    /// <inheritdoc />
+    public int ProcessesTotal { get; private set; }
+
+    /// <inheritdoc />
+    public int ProcessesComplete { get; private set; }
 
     #endregion
 
@@ -107,6 +114,12 @@ namespace MarkDoc.ViewModels.Main
         Processes = processes;
         this.RaisePropertyChanged(nameof(Processes));
 
+        ProcessesTotal = processes.Count;
+        this.RaisePropertyChanged(nameof(ProcessesTotal));
+
+        foreach (var process in Processes)
+          process.StateChanged += ProcessOnStateChanged;
+
         try
         {
           logger.NewLog += LoggerOnNewLog;
@@ -117,11 +130,27 @@ namespace MarkDoc.ViewModels.Main
         {
           logger.NewLog -= LoggerOnNewLog;
           LogMessages.AddRange(m_concurrentLogMessages);
+
+          foreach (var process in Processes)
+            process.StateChanged -= ProcessOnStateChanged;
         }
       }
       finally
       {
         Loading = false;
+      }
+    }
+
+    private void ProcessOnStateChanged(object? sender, IProcess.ProcessState e)
+    {
+      switch (e)
+      {
+        case IProcess.ProcessState.Success:
+        case IProcess.ProcessState.Failure:
+        case IProcess.ProcessState.Cancelled:
+          ProcessesComplete++;
+          this.RaisePropertyChanged(nameof(ProcessesComplete));
+          break;
       }
     }
 
