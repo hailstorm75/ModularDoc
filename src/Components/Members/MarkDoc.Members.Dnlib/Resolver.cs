@@ -541,7 +541,15 @@ namespace MarkDoc.Members.Dnlib
     /// <inheritdoc />
     public bool TryGetMemberSourceLine(int token, out int line, out string source)
     {
-      throw new NotImplementedException();
+      line = 0;
+      source = string.Empty;
+      if (!m_memberLines.TryGetValue(token, out var x))
+        return false;
+
+      line = x.line;
+      source = x.sourcePath;
+
+      return true;
     }
 
     private IEnumerable<IType> ResolveTypes(TypeDef subject)
