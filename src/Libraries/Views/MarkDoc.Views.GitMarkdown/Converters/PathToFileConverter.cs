@@ -9,10 +9,10 @@ namespace MarkDoc.Views.GitMarkdown.Converters
     : IValueConverter
   {
     /// <inheritdoc />
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
       if (value is not string path)
-        return value;
+        return value!;
 
       var index = path.LastIndexOf(Path.DirectorySeparatorChar) + 1;
       return index > 0
@@ -21,6 +21,6 @@ namespace MarkDoc.Views.GitMarkdown.Converters
     }
 
     /// <inheritdoc />
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
   }
 }
