@@ -13,7 +13,8 @@ open System.Collections.Concurrent
 type Linker(memberResolver, linkerSettings: ILinkerSettings) =
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = ConcurrentDictionary<IMember, Lazy<string>>()
-  let m_platform = match (linkerSettings :?> LinkerSettings).Platform with
+  let m_settings = linkerSettings :?> LinkerSettings
+  let m_platform = match m_settings.Platform with
                    | "1" -> GitPlatform.GitLab
                    | "0" -> GitPlatform.GitHub
                    | _ -> GitPlatform.GitHub
@@ -53,8 +54,10 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
   let registerAnchor(target: IMember, anchor: Lazy<string>) =
     m_anchors.TryAdd(target, anchor) |> ignore
     
-  static member CreateSettings platform =
-    LinkerSettings(platform) :> ILinkerSettings
+  let createLinkToSourceCode(target: IMember) =
+    match SourceLinker.createSourceLink target m_platform m_settings.GitPlatformUser m_settings.GitPlatformRepository m_settings.GitPlatformBranch with
+    | Some s -> s
+    | None -> ""
 
   interface ILinker with
     /// <inheritdoc />
@@ -68,3 +71,5 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     member _.RegisterAnchor(target: IMember, anchor: Lazy<string>) = registerAnchor(target, anchor)
     /// <inheritdoc />
     member _.CreateAnchor(page: IType, target: IMember) = createAnchor page target
+    /// <inheritdoc />
+    member _.CreateLinkToSourceCode(target: IMember) = createLinkToSourceCode target

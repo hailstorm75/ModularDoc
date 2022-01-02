@@ -44,6 +44,8 @@ namespace MarkDoc.Linkers
 
     void RegisterAnchor(IMember member, Lazy<string> anchor);
 
+    string CreateLinkToSourceCode(IMember member);
+
     #endregion
   }
 }

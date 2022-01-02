@@ -14,6 +14,7 @@
     <Compile Include="StructureGenerator.fs" />
     <Compile Include="LinkGenerator.fs" />
     <Compile Include="AnchorGenerator.fs" />
+    <Compile Include="SourceCodeLinkGenerator.fs" />
     <Compile Include="Linker.fs" />
   </ItemGroup>
 
