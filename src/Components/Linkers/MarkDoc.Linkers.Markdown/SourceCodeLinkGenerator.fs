@@ -40,17 +40,17 @@ module private SourceLinker =
     None
 
   let githubLink (target: IMember) username repository branch =
-    let format = "https://github.com/{0}/{1}/blob/{2}/{3}#L{4}"
-
     match ensureRootRepoDir target with
-    | Some x -> Some(String.Format(format, [ username; repository; branch; (snd x).Remove(0, m_rootRepositoryDirectory.Length); x |> fst |> string ]))
+    | Some x ->
+      let path = (snd x).Remove(0, m_rootRepositoryDirectory.Length + 1).Replace(@"\", "/")
+      Some $"https://github.com/{username}/{repository}/blob/{branch}/{path}#L{fst x}"
     | None -> None
 
   let gitlabLink (target: IMember) username repository branch =
-     let format = "https://gitlab.com/{0}/{1}/-/blob/{2}/{3}#L{4}"
-
      match ensureRootRepoDir target with
-     | Some x -> Some(String.Format(format, [ username; repository; branch; (snd x).Remove(0, m_rootRepositoryDirectory.Length); x |> fst |> string ]))
+     | Some x ->
+       let path = (snd x).Remove(0, m_rootRepositoryDirectory.Length + 1).Replace(@"\", "/")
+       Some $"https://gitlab.com/{username}/{repository}/-/blob/{branch}/{path}#L{fst x}"
      | None -> None
 
   let azureLink (target: IMember) username repository branch =
