@@ -1,8 +1,10 @@
 ﻿namespace MarkDoc.Generator.Basic
 
+open MarkDoc.Generator.Basic
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 open MarkDoc.Members.Enums
+open SomeHelpers
 open System
 
 module internal SignatureHelpers =
@@ -210,9 +212,13 @@ module internal SignatureHelpers =
   /// <param name="format">The formatting of the signature</param>
   /// <param name="processors">Processors which extract the signature parts from the given member</param>
   /// <param name="input">The member for which the signature is to be generated</param>
-  let generateSignature format (processors: (IMember -> string) seq) input =
+  let generateSignature format (processors: (IMember -> string) seq) (input: IMember) (tools: Tools) =
     let x input (col: obj[]) =
       String.Format(input, col)
-
-    x format (processors |> Seq.map(fun x -> x input :> obj) |> Seq.toArray) |> Code
-
+      
+    let signature = x format (processors |> Seq.map(fun x -> x input :> obj) |> Seq.toArray) |> Code
+    match tools.linker.CreateLinkToSourceCode input with
+    | "" -> signature
+    | link ->
+      let linkText = LinkContent(Italic "Source code", lazy link)
+      JoinedText (seq [linkText; signature], Environment.NewLine)

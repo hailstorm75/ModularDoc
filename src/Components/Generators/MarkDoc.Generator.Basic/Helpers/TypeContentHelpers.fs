@@ -171,7 +171,7 @@ module TypeContentHelpers =
     // Supply argument values for each section
     |> Seq.map (applyTools >> ElementHelpers.toElement)
     // Append the composed signature section
-    |> Seq.append (seq [ signature |> applyMember |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
+    |> Seq.append (seq [ signature |> applyMember |> applyTools |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement ])
 
   let private overloads (members: 'M IReadOnlyCollection when 'M :> IMember) =
     members
