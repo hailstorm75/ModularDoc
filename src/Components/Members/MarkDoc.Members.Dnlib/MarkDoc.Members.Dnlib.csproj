@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="dnlib" Version="3.4.0" />
+    <PackageReference Include="SharpPdb" Version="1.0.4" />
   </ItemGroup>
   
   <ItemGroup>

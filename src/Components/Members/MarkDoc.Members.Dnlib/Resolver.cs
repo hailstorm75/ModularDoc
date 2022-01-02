@@ -16,6 +16,7 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using MarkDoc.Members.Dnlib.Helpers;
+using SharpPdb.Managed;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -37,6 +38,7 @@ namespace MarkDoc.Members.Dnlib
     private readonly ConcurrentBag<IEnumerable<IGrouping<string, IReadOnlyCollection<IType>>>> m_groups = new();
 
     private readonly ConcurrentDictionary<string, IResType> m_resCache = new();
+    private readonly ConcurrentDictionary<int, (string sourcePath, int line)> m_memberLines = new();
     private Lazy<TrieNamespace> m_namespaces = null!;
 
     private static readonly HashSet<string> RECORD_ATTRIBUTES = new()
@@ -249,6 +251,7 @@ namespace MarkDoc.Members.Dnlib
 
       // Load the assembly
       var module = ModuleDefMD.Load(assembly);
+
       // Resolve and group assembly types:
       var group = module
         // Get the types within the assembly
@@ -282,9 +285,30 @@ namespace MarkDoc.Members.Dnlib
       // Add the resulting group to the collection
       m_groups.Add(group);
 
+      LoadPdb(assembly.Remove(assembly.Length - 3, 3) + "pdb");
+
       m_processLogger.IncreaseCompletion();
 
       m_logger.Debug($"Cached types from '{assembly}'");
+    }
+
+    private void LoadPdb(string pdbPath)
+    {
+      if (!File.Exists(pdbPath))
+        return;
+
+      var pdbFile = PdbFileReader.OpenPdb(pdbPath);
+      var sequencePoints = pdbFile.Functions
+        .Where(x => x.SequencePoints.Any())
+        .Select(x =>
+        {
+          var point = x.SequencePoints[0];
+
+          return (x.Token, point.StartLine, point.Source.Name);
+        });
+
+      foreach (var (token, startLine, source) in sequencePoints)
+        m_memberLines.TryAdd(token, (source, startLine));
     }
 
     internal IResType Resolve(TypeSig signature,
@@ -512,6 +536,12 @@ namespace MarkDoc.Members.Dnlib
 
       // Return true if a type was found
       return result != null;
+    }
+
+    /// <inheritdoc />
+    public bool TryGetMemberSourceLine(int token, out int line, out string source)
+    {
+      throw new NotImplementedException();
     }
 
     private IEnumerable<IType> ResolveTypes(TypeDef subject)

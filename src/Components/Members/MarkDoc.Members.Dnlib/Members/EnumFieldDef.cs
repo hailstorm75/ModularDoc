@@ -23,6 +23,9 @@ namespace MarkDoc.Members.Dnlib.Members
 
     public AccessorType Accessor { get; }
 
+    /// <inheritdoc />
+    public (int line, string source)? LineSource => null;
+
     #endregion
 
     internal EnumFieldDef(IFullName source, AccessorType accessor)

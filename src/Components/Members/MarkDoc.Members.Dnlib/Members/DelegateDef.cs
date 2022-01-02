@@ -33,6 +33,9 @@ namespace MarkDoc.Members.Dnlib.Members
     public AccessorType Accessor { get; }
 
     /// <inheritdoc />
+    public (int line, string source)? LineSource => null;
+
+    /// <inheritdoc />
     public IReadOnlyCollection<IArgument> Arguments { get; }
 
     /// <inheritdoc />

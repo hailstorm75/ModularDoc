@@ -26,7 +26,11 @@ namespace MarkDoc.Members.Dnlib.Members
     /// <inheritdoc />
     public abstract AccessorType Accessor { get; }
 
+    /// <inheritdoc />
     public abstract string RawName { get; }
+
+    /// <inheritdoc />
+    public (int line, string source)? LineSource { get; }
 
     #endregion
 
@@ -42,6 +46,9 @@ namespace MarkDoc.Members.Dnlib.Members
         throw new ArgumentNullException(nameof(source));
 
       Resolver = resolver;
+
+      if (Resolver.TryGetMemberSourceLine((int)source.MDToken.Raw, out var line, out var lineSource))
+        LineSource = (line, lineSource);
     }
   }
 }

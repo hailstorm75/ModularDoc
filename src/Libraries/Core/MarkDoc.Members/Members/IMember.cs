@@ -29,6 +29,11 @@ namespace MarkDoc.Members.Members
     /// </summary>
     AccessorType Accessor { get; }
 
+    /// <summary>
+    /// Line number and source file of the given member
+    /// </summary>
+    (int line, string source)? LineSource { get; }
+
     #endregion
   }
 }

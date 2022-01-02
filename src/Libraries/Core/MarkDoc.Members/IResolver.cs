@@ -41,6 +41,15 @@ namespace MarkDoc.Members
     /// <returns>True if found</returns>
     bool TryFindType(string fullname, out IType? result);
 
+    /// <summary>
+    /// Gets the <paramref name="line"/> number from the <paramref name="source"/> file for the given member <paramref name="token"/>
+    /// </summary>
+    /// <param name="token">Member token</param>
+    /// <param name="line">Member line position in the <paramref name="source"/></param>
+    /// <param name="source">Source code file path</param>
+    /// <returns>Ture if successfully retrieved requested data</returns>
+    bool TryGetMemberSourceLine(int token, out int line, out string source);
+
     #endregion
   }
 }
