@@ -58,6 +58,15 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     match SourceLinker.createSourceLink target m_platform m_settings.GitPlatformUser m_settings.GitPlatformRepository m_settings.GitPlatformBranch with
     | Some s -> s
     | None -> ""
+    
+  let getSourceCodeLinker: (IMember -> string) =
+    let mutable result = false
+    if (bool.TryParse(m_settings.LinksToSourceCodeEnabled, &result) && result) then
+      createLinkToSourceCode
+    else
+      fun _ -> ""
+      
+  let sourceCodeLinkerMethod = getSourceCodeLinker
 
   interface ILinker with
     /// <inheritdoc />
@@ -72,4 +81,4 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     /// <inheritdoc />
     member _.CreateAnchor(page: IType, target: IMember) = createAnchor page target
     /// <inheritdoc />
-    member _.CreateLinkToSourceCode(target: IMember) = createLinkToSourceCode target
+    member _.CreateLinkToSourceCode(target: IMember) = sourceCodeLinkerMethod target

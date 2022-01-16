@@ -9,11 +9,13 @@ type LinkerSettings(data: IReadOnlyDictionary<string, string>) =
   member val GitPlatformUser = data.[LinkerSettings.PLATFORM_USER] with get, set
   member val GitPlatformBranch = data.[LinkerSettings.PLATFORM_BRANCH] with get, set
   member val GitPlatformRepository = data.[LinkerSettings.PLATFORM_REPOSITORY] with get, set
+  member val LinksToSourceCodeEnabled = data.[LinkerSettings.ENABLE_LINKS_TO_SOURCE] with get, set
 
   static member val ENTRY_PLATFORM = "platform"
   static member val PLATFORM_USER = "platformUser"
   static member val PLATFORM_BRANCH = "platformBranch"
   static member val PLATFORM_REPOSITORY = "rootRepo"
+  static member val ENABLE_LINKS_TO_SOURCE = "toggleLinksToSource"
   
   interface ILinkerSettings with
     member this.Id = Guid("1B9469FD-41F5-4FDD-B7CB-40D971F6F418")

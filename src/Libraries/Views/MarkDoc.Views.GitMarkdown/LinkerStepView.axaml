@@ -21,6 +21,13 @@
         </DataTemplate>
       </ComboBox.ItemTemplate>
     </ComboBox>
+    
+    <ToggleSwitch Content="Create links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}"/>
+    <Grid ColumnDefinitions="*, 10, *, 10, *" IsEnabled="{Binding LinksToSourceCode}">
+      <TextBox Grid.Column="0" Watermark="Username" Text="{Binding GitUser}"/>
+      <TextBox Grid.Column="2" Watermark="Repository name" Text="{Binding GitRepository}"/>
+      <TextBox Grid.Column="4" Watermark="Branch name" Text="{Binding GitBranch}"/>
+    </Grid>
   </StackPanel>
 
 </UserControl>
