@@ -24,5 +24,15 @@ namespace MarkDoc.ViewModels
     /// Command for opening a plugin with existing settings
     /// </summary>
     ICommand PluginOpenCommand { get; }
+
+    /// <summary>
+    /// Opens application settings
+    /// </summary>
+    ICommand OpenSettingsCommand { get; }
+
+    /// <summary>
+    /// Determines whether the pane is open
+    /// </summary>
+    bool PaneOpen { get; set; }
   }
 }

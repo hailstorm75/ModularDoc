@@ -29,9 +29,19 @@ namespace MarkDoc.Core
     string Description { get; }
 
     /// <summary>
+    /// Plugin author
+    /// </summary>
+    string Author { get; }
+
+    /// <summary>
     /// Plugin image
     /// </summary>
     Stream? Image { get; }
+
+    /// <summary>
+    /// List of plugin step names
+    /// </summary>
+    IReadOnlyCollection<string> Steps { get; }
 
     #endregion
 

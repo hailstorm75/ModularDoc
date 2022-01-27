@@ -15,23 +15,50 @@ namespace MarkDoc.ViewModels.Main
   public class HomeViewModel
     : BaseViewModel, IHomeViewModel
   {
+    #region Fields
+
     private readonly NavigationManager m_navigationManager;
     private readonly IDialogManager m_dialogManager;
     private IPlugin? m_selectedPlugin;
+    private bool m_paneOpen;
+
+    #endregion
+
+    /// <inheritdoc />
+    public bool PaneOpen
+    {
+      get => m_paneOpen;
+      set
+      {
+        m_paneOpen = value;
+        this.RaisePropertyChanged(nameof(PaneOpen));
+      }
+    }
 
     public IPlugin? SelectedPlugin
     {
       get => m_selectedPlugin;
       set
       {
+        if (value is null)
+          PaneOpen = false;
+        else if (PaneOpen)
+        {
+          PaneOpen = false;
+          PaneOpen = true;
+        }
+        else
+          PaneOpen = true;
+
         m_selectedPlugin = value;
+
         this.RaisePropertyChanged(nameof(SelectedPlugin));
       }
     }
 
     /// <inheritdoc />
     public IReadOnlyCollection<IPlugin> Plugins
-      => PluginManager.Plugins.Value.Values.ToArray();
+      => Enumerable.Repeat(PluginManager.Plugins.Value.Values.First(), 10).ToArray();
 
     #region Commands
 
@@ -40,6 +67,9 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public ICommand PluginOpenCommand { get; }
+
+    /// <inheritdoc />
+    public ICommand OpenSettingsCommand { get; }
 
     #endregion
 
@@ -51,12 +81,16 @@ namespace MarkDoc.ViewModels.Main
       m_navigationManager = navigationManager;
       m_dialogManager = dialogManager;
 
-      PluginNewCommand = ReactiveCommand.Create<string>(PluginNew);
+      PluginNewCommand = ReactiveCommand.Create(PluginNew);
       PluginOpenCommand = ReactiveCommand.CreateFromTask(PluginOpen);
+      OpenSettingsCommand = ReactiveCommand.Create(NavigateToSettings);
     }
 
-    private void PluginNew(string pluginId)
-      => m_navigationManager.NavigateTo(PageNames.CONFIGURATION, pluginId);
+    private void PluginNew()
+      => m_navigationManager.NavigateTo(PageNames.CONFIGURATION, SelectedPlugin?.Id ?? string.Empty);
+
+    private void NavigateToSettings()
+      => m_navigationManager.NavigateTo(PageNames.SETTINGS);
 
     private async Task PluginOpen()
     {
