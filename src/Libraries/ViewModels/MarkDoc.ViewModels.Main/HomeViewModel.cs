@@ -17,6 +17,17 @@ namespace MarkDoc.ViewModels.Main
   {
     private readonly NavigationManager m_navigationManager;
     private readonly IDialogManager m_dialogManager;
+    private IPlugin? m_selectedPlugin;
+
+    public IPlugin? SelectedPlugin
+    {
+      get => m_selectedPlugin;
+      set
+      {
+        m_selectedPlugin = value;
+        this.RaisePropertyChanged(nameof(SelectedPlugin));
+      }
+    }
 
     /// <inheritdoc />
     public IReadOnlyCollection<IPlugin> Plugins

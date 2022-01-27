@@ -6,32 +6,106 @@
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Grid Margin="15" RowDefinitions="Auto,*">
-    <Label FontSize="24" Grid.Row="0">Plugin selection</Label>
-    <ScrollViewer Grid.Row="1" HorizontalAlignment="Center">
-      <ItemsControl Items="{Binding Path=Plugins, Mode=OneTime}">
-        <ItemsControl.ItemsPanel>
-          <ItemsPanelTemplate>
-            <WrapPanel />
-          </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-          <DataTemplate DataType="{x:Type core:IPlugin}">
-            <CardControl Header="{Binding Name}" SecondaryHeader="{Binding Description}">
-              <Interaction.Behaviors>
-                <EventTriggerBehavior EventName="PointerPressed">
-                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                  <InvokeCommandAction Command="{Binding Path=DataContext.PluginNewCommand, ElementName=HomeView}" CommandParameter="{Binding Id}" />
-                </EventTriggerBehavior>
-              </Interaction.Behaviors>
-              <Border CornerRadius="3">
-                <Image Source="{Binding Image}" Stretch="UniformToFill" />
-              </Border>
-            </CardControl>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </ScrollViewer>
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia">
+  <Grid RowDefinitions="Auto,Auto,*">
+    <!-- Row 0 -->
+    <Menu>
+      <MenuItem>
+        <MenuItem.Header>
+          <DockPanel LastChildFill="True">
+            <avalonia:Icon Value="fa-folder-open" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
+            <Label Content="Open" />
+          </DockPanel>
+        </MenuItem.Header>
+      </MenuItem>
+      <MenuItem>
+        <MenuItem.Header>
+          <DockPanel LastChildFill="True">
+            <avalonia:Icon Value="fa-cog" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
+            <Label Content="Settings" />
+          </DockPanel>
+        </MenuItem.Header>
+      </MenuItem>
+      <MenuItem>
+        <MenuItem.Header>
+          <DockPanel LastChildFill="True">
+            <avalonia:Icon Value="fa-question-circle" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
+            <Label Content="About" />
+          </DockPanel>
+        </MenuItem.Header>
+      </MenuItem>
+    </Menu>
+
+    <!-- Row 1 -->
+    <Border Grid.Row="1" BoxShadow="0 5 10 Gray" Padding="10">
+      <Grid ColumnDefinitions="2*,*,2*">
+        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search plugins...">
+          <TextBox.InnerRightContent>
+            <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0">
+              <avalonia:Icon Value="fa-search" Foreground="Gray" />
+            </Button>
+          </TextBox.InnerRightContent>
+        </TextBox>
+      </Grid>
+    </Border>
+
+    <!-- Row 2 -->
+    <Grid Grid.Row="2" VerticalAlignment="Stretch">
+      <!-- <Grid.ContextFlyout> -->
+      <!--   <Flyout Placement="Right"> -->
+      <!--     <Grid RowDefinitions="*, *, Auto"> -->
+      <!--       <StackPanel> -->
+      <!--         <Label Content="{Binding SelectedPlugin.Name}"/> -->
+      <!--         <TextBlock Text="{Binding SelectedPlugin.Description}" TextWrapping="Wrap"/> -->
+      <!--       </StackPanel> -->
+      <!--       <StackPanel Grid.Row="2" Orientation="Vertical"> -->
+      <!--         <Button Content="Create" IsDefault="True"/> -->
+      <!--         <Button Content="Cancel" IsCancel="True"/> -->
+      <!--       </StackPanel> -->
+      <!--     </Grid> -->
+      <!--   </Flyout> -->
+      <!-- </Grid.ContextFlyout> -->
+      <!-- Searching -->
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True">
+        <ProgressRing IsIndeterminate="True" HorizontalAlignment="Center" />
+        <Label Margin="0, 5, 0, 0" HorizontalAlignment="Center">Loading...</Label>
+      </StackPanel>
+      <!-- No plugins found -->
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
+        <avalonia:Icon Value="fa-dropbox" Foreground="Gray" FontSize="46" />
+        <Label Margin="0, 5, 0, 0" Content="No plugins found" />
+      </StackPanel>
+      <!-- Plugins grid -->
+      <Grid ColumnDefinitions="1*, 8*, 1*" Margin="0, 10, 0, 0">
+        <ListBox Items="{Binding Plugins}" Background="Transparent" SelectionMode="Single" Grid.Column="1"
+                 SelectedItem="{Binding SelectedPlugin}"
+                 VerticalAlignment="Stretch" HorizontalAlignment="Center">
+          <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+              <Setter Property="Background" Value="#f0ecf4" />
+              <Setter Property="Margin" Value="10" />
+              <Setter Property="CornerRadius" Value="10"/>
+            </Style>
+          </ListBox.Styles>
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type core:IPlugin}">
+              <DockPanel LastChildFill="True" MaxWidth="200">
+                <Image Source="{Binding Image}" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
+                <StackPanel DockPanel.Dock="Right">
+                  <TextBlock Text="{Binding Name}" VerticalAlignment="Top" FontWeight="Bold" />
+                  <TextBlock TextWrapping="Wrap" Text="{Binding Description}" FontSize="10" VerticalAlignment="Stretch" />
+                </StackPanel>
+              </DockPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Grid>
   </Grid>
 </UserControl>
