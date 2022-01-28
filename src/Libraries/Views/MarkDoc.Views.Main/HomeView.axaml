@@ -77,16 +77,11 @@
               </Grid>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
-              <Button Content="Create" IsDefault="True" Command="{Binding PluginNewCommand}"/>
-              <Button Content="Cancel" IsCancel="True" Command="{Binding PluginCancelCommand}"/>
+              <Button Content="Create" IsDefault="True" Command="{Binding PluginNewCommand}" Foreground="{DynamicResource AccentButtonForeground}" Background="{DynamicResource AccentButtonBackground}"/>
+              <Button Content="Cancel" IsCancel="True" Command="{Binding PluginCancelCommand}" Margin="5, 0,0, 0"/>
             </StackPanel>
           </Grid>
         </SplitView.Pane>
-        <SplitView.PaneTemplate>
-          <DataTemplate>
-            <Border BoxShadow="-5 -5 10 Gray" Padding="10"/>
-          </DataTemplate>
-        </SplitView.PaneTemplate>
 
         <!-- Searching -->
         <Grid>
@@ -113,13 +108,13 @@
               </ListBox.Styles>
               <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                  <WrapPanel />
+                  <WrapPanel ItemWidth="269" ItemHeight="90" />
                 </ItemsPanelTemplate>
               </ListBox.ItemsPanel>
               <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:IPlugin}">
-                  <DockPanel LastChildFill="True" MaxWidth="200">
-                    <Image Source="{Binding Image}" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
+                  <DockPanel LastChildFill="True" >
+                    <Image Source="{Binding Image}" Width="64" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" MaxWidth="64" MaxHeight="64" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
                     <StackPanel DockPanel.Dock="Right">
                       <TextBlock Text="{Binding Name}" VerticalAlignment="Top" FontWeight="Bold" />
                       <TextBlock TextWrapping="Wrap" Text="{Binding Description}" FontSize="10" VerticalAlignment="Stretch" />

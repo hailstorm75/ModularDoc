@@ -50,7 +50,7 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public IReadOnlyCollection<IPlugin> Plugins
-      => Enumerable.Repeat(PluginManager.Plugins.Value.Values.First(), 10).ToArray();
+      => PluginManager.Plugins.Value.Values.ToArray();
 
     #region Commands
 
