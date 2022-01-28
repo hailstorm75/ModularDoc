@@ -8,7 +8,8 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-  xmlns:system="clr-namespace:System;assembly=System.Runtime">
+  xmlns:system="clr-namespace:System;assembly=System.Runtime"
+  xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
   <Grid RowDefinitions="Auto,Auto,*">
     <!-- Row 0 -->
     <Menu>
@@ -114,7 +115,15 @@
               <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:IPlugin}">
                   <DockPanel LastChildFill="True" >
-                    <Image Source="{Binding Image}" Width="64" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" MaxWidth="64" MaxHeight="64" DockPanel.Dock="Left" Margin="0, 0, 5, 0" />
+                    <Image Width="64" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" MaxWidth="64" MaxHeight="64" DockPanel.Dock="Left" Margin="0, 0, 5, 0">
+                      <Image.Source>
+                        <Binding Path="Image" ConverterParameter="64">
+                          <Binding.Converter>
+                            <converters:BitmapConverter/>
+                          </Binding.Converter>
+                        </Binding>
+                      </Image.Source>
+                    </Image>
                     <StackPanel DockPanel.Dock="Right">
                       <TextBlock Text="{Binding Name}" VerticalAlignment="Top" FontWeight="Bold" />
                       <TextBlock TextWrapping="Wrap" Text="{Binding Description}" FontSize="10" VerticalAlignment="Stretch" />
