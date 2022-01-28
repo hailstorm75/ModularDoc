@@ -53,7 +53,7 @@
 
     <!-- Row 2 -->
     <Grid Grid.Row="2" VerticalAlignment="Stretch">
-      <SplitView IsPaneOpen="{Binding PaneOpen}" DisplayMode="Overlay" Padding="10" PanePlacement="Right">
+      <SplitView IsPaneOpen="{Binding PaneOpen}" PaneClosing="SplitView_OnPaneClosing" DisplayMode="Overlay" Padding="10" PanePlacement="Right">
         <SplitView.Pane>
           <Grid RowDefinitions="*, *, Auto" Margin="10">
             <StackPanel>
@@ -77,8 +77,8 @@
               </Grid>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
-              <Button Content="Create" IsDefault="True"/>
-              <Button Content="Cancel" IsCancel="True"/>
+              <Button Content="Create" IsDefault="True" Command="{Binding PluginNewCommand}"/>
+              <Button Content="Cancel" IsCancel="True" Command="{Binding PluginCancelCommand}"/>
             </StackPanel>
           </Grid>
         </SplitView.Pane>

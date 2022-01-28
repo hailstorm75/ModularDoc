@@ -35,21 +35,13 @@ namespace MarkDoc.ViewModels.Main
       }
     }
 
+    /// <inheritdoc />
     public IPlugin? SelectedPlugin
     {
       get => m_selectedPlugin;
       set
       {
-        if (value is null)
-          PaneOpen = false;
-        else if (PaneOpen)
-        {
-          PaneOpen = false;
-          PaneOpen = true;
-        }
-        else
-          PaneOpen = true;
-
+        PaneOpen = true;
         m_selectedPlugin = value;
 
         this.RaisePropertyChanged(nameof(SelectedPlugin));
@@ -64,6 +56,9 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public ICommand PluginNewCommand { get; }
+
+    /// <inheritdoc />
+    public ICommand PluginCancelCommand { get; }
 
     /// <inheritdoc />
     public ICommand PluginOpenCommand { get; }
@@ -82,8 +77,15 @@ namespace MarkDoc.ViewModels.Main
       m_dialogManager = dialogManager;
 
       PluginNewCommand = ReactiveCommand.Create(PluginNew);
+      PluginCancelCommand = ReactiveCommand.Create(PluginCancel);
       PluginOpenCommand = ReactiveCommand.CreateFromTask(PluginOpen);
       OpenSettingsCommand = ReactiveCommand.Create(NavigateToSettings);
+    }
+
+    private void PluginCancel()
+    {
+      SelectedPlugin = null;
+      PaneOpen = false;
     }
 
     private void PluginNew()

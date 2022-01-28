@@ -10,15 +10,36 @@ namespace MarkDoc.ViewModels
   public interface IHomeViewModel
     : IViewModel
   {
+    #region Properties
+
     /// <summary>
     /// Collection of available plugins
     /// </summary>
     IReadOnlyCollection<IPlugin> Plugins { get; }
 
     /// <summary>
+    /// Currently selected plugin
+    /// </summary>
+    IPlugin? SelectedPlugin { get; set; }
+
+    /// <summary>
+    /// Determines whether the pane is open
+    /// </summary>
+    bool PaneOpen { get; set; }
+
+    #endregion
+
+    #region Commands
+
+    /// <summary>
     /// Command for opening a plugin with new settings
     /// </summary>
     ICommand PluginNewCommand { get; }
+
+    /// <summary>
+    /// Command for closing the selected plugin
+    /// </summary>
+    ICommand PluginCancelCommand { get; }
 
     /// <summary>
     /// Command for opening a plugin with existing settings
@@ -30,9 +51,6 @@ namespace MarkDoc.ViewModels
     /// </summary>
     ICommand OpenSettingsCommand { get; }
 
-    /// <summary>
-    /// Determines whether the pane is open
-    /// </summary>
-    bool PaneOpen { get; set; }
+    #endregion
   }
 }
