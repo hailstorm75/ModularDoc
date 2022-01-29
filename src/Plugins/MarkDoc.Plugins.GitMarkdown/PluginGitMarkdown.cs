@@ -32,7 +32,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     : Module, IPlugin
   {
     private readonly ISettingsCreator m_settingsCreator;
-    private static readonly Lazy<IReadOnlyCollection<string>> m_steps;
+    private static readonly Lazy<IReadOnlyCollection<string>> STEPS;
 
     #region Properties
 
@@ -49,16 +49,16 @@ namespace MarkDoc.Plugins.GitMarkdown
     public string Author => "MarkDoc";
 
     /// <inheritdoc />
-    public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("MarkDoc.Plugin.GitMarkdown.icon.png");
+    public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("MarkDoc.Plugins.GitMarkdown.icon.png");
 
     /// <inheritdoc />
-    public IReadOnlyCollection<string> Steps => m_steps.Value;
+    public IReadOnlyCollection<string> Steps => STEPS.Value;
 
     #endregion
 
     static PluginGitMarkdown()
     {
-      m_steps = new Lazy<IReadOnlyCollection<string>>(() => TypeResolver
+      STEPS = new Lazy<IReadOnlyCollection<string>>(() => TypeResolver
         .Resolve<IEnumerable<IPluginStep>>()
         .OrderBy(step => step.StepNumber)
         .Select(step => step.Name)

@@ -54,47 +54,55 @@
 
     <!-- Row 2 -->
     <Grid Grid.Row="2" VerticalAlignment="Stretch">
-      <SplitView IsPaneOpen="{Binding PaneOpen}" PaneClosing="SplitView_OnPaneClosing" DisplayMode="Overlay" Padding="10" PanePlacement="Right">
+      <SplitView IsPaneOpen="{Binding PaneOpen}" PaneClosing="SplitView_OnPaneClosing" PaneBackground="Transparent" DisplayMode="Overlay" Padding="10" PanePlacement="Right">
         <SplitView.Pane>
-          <Grid RowDefinitions="*, *, Auto" Margin="10">
-            <StackPanel>
-              <Label Content="{Binding SelectedPlugin.Name}" FontWeight="Bold" FontSize="24" Margin="0 0 0 10"/>
-              <TextBlock Text="{Binding SelectedPlugin.Description}" TextWrapping="Wrap"/>
-            </StackPanel>
-            <StackPanel Grid.Row="1">
-              <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
-                <Label Grid.Row="0" Grid.Column="0" Content="Author:" Margin="0 0 5 0" FontWeight="Bold"/>
-                <Label Grid.Row="0" Grid.Column="1" Content="{Binding SelectedPlugin.Author}" />
+          <Border BoxShadow="0 5 10 Gray" Padding="10,10,10,0" Background="White" Margin="5,0,0,0">
+            <Grid RowDefinitions="*, Auto, *, Auto">
+              <StackPanel Background="White">
+                <Label Content="{Binding SelectedPlugin.Name}" FontWeight="Bold" FontSize="24"/>
+                <Image HorizontalAlignment="Center" Width="150" MaxHeight="150" Stretch="Uniform" Margin="0 10 0 10" >
+                  <Image.Source>
+                    <Binding Path="SelectedPlugin.Image" ConverterParameter="150">
+                      <Binding.Converter>
+                        <converters:BitmapConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </Image.Source>
+                </Image>
+                <TextBlock Text="{Binding SelectedPlugin.Description}" TextWrapping="Wrap"/>
+              </StackPanel>
+              <GridSplitter Grid.Row="1" ResizeDirection="Rows" Background="LightGray"/>
+              <Border Grid.Row="2" Background="White">
+                <StackPanel>
+                  <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0" Grid.Column="0" Content="Author:" Margin="0 0 5 0" FontWeight="Bold"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding SelectedPlugin.Author}" />
 
-                <Label Grid.Row="1" Grid.Column="0" Content="Steps:" Margin="0 0 5 0" FontWeight="Bold"/>
-                <ItemsControl Grid.Row="1" Grid.Column="1" Items="{Binding SelectedPlugin.Steps}">
-                  <ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type system:String}">
-                      <Label Content="{Binding}" FontStyle="Italic" />
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-              </Grid>
-            </StackPanel>
-            <StackPanel Grid.Row="2" Orientation="Horizontal">
-              <Button Content="Create" IsDefault="True" Classes="accent" Command="{Binding PluginNewCommand}" Foreground="{DynamicResource AccentButtonForeground}" Background="{DynamicResource AccentButtonBackground}"/>
-              <Button Content="Cancel" IsCancel="True" Command="{Binding PluginCancelCommand}" Margin="5, 0,0, 0"/>
-            </StackPanel>
-          </Grid>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Steps:" Margin="0 0 5 0" FontWeight="Bold"/>
+                    <ItemsControl Grid.Row="1" Grid.Column="1" Items="{Binding SelectedPlugin.Steps}">
+                      <ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type system:String}">
+                          <Label Content="{Binding}" FontStyle="Italic" />
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </Grid>
+                </StackPanel>
+              </Border>
+              <Border Grid.Row="3" Background="White" Padding="0,0,0,10">
+                <StackPanel Orientation="Horizontal">
+                  <!-- ReSharper disable once Xaml.StyleClassNotFound -->
+                  <Button Content="Create" IsDefault="True" Classes="accent" Command="{Binding PluginNewCommand}" Foreground="{DynamicResource AccentButtonForeground}" Background="{DynamicResource AccentButtonBackground}"/>
+                  <Button Content="Cancel" IsCancel="True" Command="{Binding PluginCancelCommand}" Margin="5, 0,0, 0"/>
+                </StackPanel>
+              </Border>
+            </Grid>
+          </Border>
         </SplitView.Pane>
 
         <!-- Searching -->
         <Grid>
-          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True">
-            <ProgressRing IsIndeterminate="True" HorizontalAlignment="Center" />
-            <Label Margin="0, 5, 0, 0" HorizontalAlignment="Center">Loading...</Label>
-          </StackPanel>
-          <!-- No plugins found -->
-          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
-            <avalonia:Icon Value="fa-dropbox" Foreground="Gray" FontSize="46" />
-            <Label Margin="0, 5, 0, 0" Content="No plugins found" />
-          </StackPanel>
           <!-- Plugins grid -->
           <Grid ColumnDefinitions="1*, 8*, 1*" Margin="0, 10, 0, 0">
             <ListBox Items="{Binding Plugins}" Background="Transparent" SelectionMode="Single" Grid.Column="1"
@@ -115,7 +123,7 @@
               <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:IPlugin}">
                   <DockPanel LastChildFill="True" >
-                    <Image Width="64" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" MaxWidth="64" MaxHeight="64" DockPanel.Dock="Left" Margin="0, 0, 5, 0">
+                    <Image Width="64" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform" MaxWidth="64" MaxHeight="64" DockPanel.Dock="Left" Margin="0, 0, 5, 0">
                       <Image.Source>
                         <Binding Path="Image" ConverterParameter="64">
                           <Binding.Converter>
@@ -133,6 +141,16 @@
               </ListBox.ItemTemplate>
             </ListBox>
           </Grid>
+          <!-- Loading plugins -->
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True">
+            <ProgressRing IsIndeterminate="True" HorizontalAlignment="Center" />
+            <Label Margin="0, 5, 0, 0" HorizontalAlignment="Center">Loading...</Label>
+          </StackPanel>
+          <!-- No plugins found -->
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
+            <avalonia:Icon Value="fa-dropbox" Foreground="Gray" FontSize="46" />
+            <Label Margin="0, 5, 0, 0" Content="No plugins found" />
+          </StackPanel>
         </Grid>
       </SplitView>
     </Grid>
