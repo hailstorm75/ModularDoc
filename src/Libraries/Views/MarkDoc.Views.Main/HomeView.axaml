@@ -113,11 +113,27 @@
                   <Setter Property="Background" Value="#f0ecf4" />
                   <Setter Property="Margin" Value="10" />
                   <Setter Property="CornerRadius" Value="10"/>
+                  <Setter Property="Template">
+                    <ControlTemplate>
+                      <ContentPresenter Name="PART_ContentPresenter"
+                                        Background="{TemplateBinding Background}"
+                                        BoxShadow="0 1 10 Gray"
+                                        Margin="4"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        Content="{TemplateBinding Content}"
+                                        Padding="{TemplateBinding Padding}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                    </ControlTemplate>
+                  </Setter>
                 </Style>
               </ListBox.Styles>
               <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                  <WrapPanel ItemWidth="269" ItemHeight="90" />
+                  <WrapPanel ItemWidth="270" ItemHeight="100" />
                 </ItemsPanelTemplate>
               </ListBox.ItemsPanel>
               <ListBox.ItemTemplate>
