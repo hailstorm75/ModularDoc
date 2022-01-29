@@ -78,7 +78,7 @@
               </Grid>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
-              <Button Content="Create" IsDefault="True" Command="{Binding PluginNewCommand}" Foreground="{DynamicResource AccentButtonForeground}" Background="{DynamicResource AccentButtonBackground}"/>
+              <Button Content="Create" IsDefault="True" Classes="accent" Command="{Binding PluginNewCommand}" Foreground="{DynamicResource AccentButtonForeground}" Background="{DynamicResource AccentButtonBackground}"/>
               <Button Content="Cancel" IsCancel="True" Command="{Binding PluginCancelCommand}" Margin="5, 0,0, 0"/>
             </StackPanel>
           </Grid>
