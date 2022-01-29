@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MarkDoc.Core;
@@ -14,7 +15,12 @@ namespace MarkDoc.MVVM.Helpers
     : ReactiveObject, IStepViewModel<TSettings>
     where TSettings : ILibrarySettings
   {
+    #region Fields
+
     private bool m_isValid;
+    private bool m_isLoading;
+
+    #endregion
 
     #region Properties
 
@@ -37,7 +43,20 @@ namespace MarkDoc.MVVM.Helpers
       }
     }
 
+    /// <inheritdoc />
+    public bool IsLoading
+    {
+      get => m_isLoading;
+      protected set
+      {
+        m_isLoading = value;
+        this.RaisePropertyChanged(nameof(IsLoading));
+      }
+    }
+
     #endregion
+    
+    #region Methods
 
     /// <inheritdoc />
     public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments);
@@ -54,5 +73,16 @@ namespace MarkDoc.MVVM.Helpers
 
     protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.RaisePropertyChanged(propertyName);
+
+    protected virtual void Dispose(bool disposing) {}
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+    
+    #endregion
   }
 }

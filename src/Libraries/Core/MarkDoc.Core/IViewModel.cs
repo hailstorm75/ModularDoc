@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarkDoc.Core
@@ -7,7 +8,15 @@ namespace MarkDoc.Core
   /// Interface for view models
   /// </summary>
   public interface IViewModel
+    : IDisposable
   {
+    /// <summary>
+    /// Determines whether the view model is loading
+    /// </summary>
+    public bool IsLoading { get; }
+
+    #region Methods
+
     /// <summary>
     /// Sets named <paramref name="arguments"/> for the view model
     /// </summary>
@@ -19,5 +28,7 @@ namespace MarkDoc.Core
     /// </summary>
     /// <returns></returns>
     ValueTask OnLoadedAsync();
+
+    #endregion
   }
 }

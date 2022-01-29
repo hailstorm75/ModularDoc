@@ -42,7 +42,7 @@
     <!-- Row 1 -->
     <Border Grid.Row="1" BoxShadow="0 5 10 Gray" Padding="10">
       <Grid ColumnDefinitions="2*,*,2*">
-        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search plugins...">
+        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search plugins..." Text="{Binding SearchTerm}">
           <TextBox.InnerRightContent>
             <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0">
               <avalonia:Icon Value="fa-search" Foreground="Gray" />
@@ -158,12 +158,19 @@
             </ListBox>
           </Grid>
           <!-- Loading plugins -->
-          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="True">
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsLoading}">
             <ProgressRing IsIndeterminate="True" HorizontalAlignment="Center" />
             <Label Margin="0, 5, 0, 0" HorizontalAlignment="Center">Loading...</Label>
           </StackPanel>
           <!-- No plugins found -->
-          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False">
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel.IsVisible>
+              <Binding Path="Plugins.Count" >
+                <Binding.Converter>
+                  <converters:IsEmptyConverter/>
+                </Binding.Converter>
+              </Binding>
+            </StackPanel.IsVisible>
             <avalonia:Icon Value="fa-dropbox" Foreground="Gray" FontSize="46" />
             <Label Margin="0, 5, 0, 0" Content="No plugins found" />
           </StackPanel>

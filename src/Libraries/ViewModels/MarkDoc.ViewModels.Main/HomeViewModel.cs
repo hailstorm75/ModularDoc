@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DynamicData;
+using DynamicData.Binding;
 using MarkDoc.Constants;
 using MarkDoc.Core;
 using MarkDoc.Helpers;
@@ -21,8 +26,26 @@ namespace MarkDoc.ViewModels.Main
     private readonly IDialogManager m_dialogManager;
     private IPlugin? m_selectedPlugin;
     private bool m_paneOpen;
+    private ReadOnlyObservableCollection<IPlugin> m_plugins;
+    private string m_searchTerm = string.Empty;
+    private readonly IDisposable m_cleanup;
 
     #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Search term for filtering plugins
+    /// </summary>
+    public string SearchTerm
+    {
+      get => m_searchTerm;
+      set
+      {
+        m_searchTerm = value;
+        this.RaisePropertyChanged(nameof(SearchTerm));
+      }
+    }
 
     /// <inheritdoc />
     public bool PaneOpen
@@ -50,7 +73,9 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public IReadOnlyCollection<IPlugin> Plugins
-      => PluginManager.Plugins.Value.Values.ToArray();
+      => m_plugins;
+
+    #endregion
 
     #region Commands
 
@@ -80,6 +105,30 @@ namespace MarkDoc.ViewModels.Main
       PluginCancelCommand = ReactiveCommand.Create(PluginCancel);
       PluginOpenCommand = ReactiveCommand.CreateFromTask(PluginOpen);
       OpenSettingsCommand = ReactiveCommand.Create(NavigateToSettings);
+
+      var filter = this.WhenValueChanged(t => t.SearchTerm)
+        .Throttle(TimeSpan.FromMilliseconds(250))
+        .Select(BuildFilter);
+
+      var list = new SourceList<IPlugin>();
+      list.AddRange(PluginManager.Plugins.Value.Values);
+      m_cleanup = list.Connect()
+        .Filter(filter)
+        .Sort(SortExpressionComparer<IPlugin>.Ascending(plugin => plugin.Name), SortOptions.UseBinarySearch)
+        .Bind(out m_plugins)
+        .DisposeMany()
+        .Subscribe();
+    }
+
+    #region Methods
+
+    private static Func<IPlugin, bool> BuildFilter(string? searchText)
+    {
+      if (string.IsNullOrEmpty(searchText))
+        return _ => true;
+
+      return plugin => plugin.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                       plugin.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 
     private void PluginCancel()
@@ -115,5 +164,15 @@ namespace MarkDoc.ViewModels.Main
         { IConfiguratorViewModel.ARGUMENT_SETTINGS, settings }
       });
     }
+
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing)
+      {
+        m_cleanup.Dispose();
+      }
+    }
+
+    #endregion
   }
 }
