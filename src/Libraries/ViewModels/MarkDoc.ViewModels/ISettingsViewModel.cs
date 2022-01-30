@@ -1,4 +1,5 @@
-﻿using MarkDoc.Core;
+﻿using System.Windows.Input;
+using MarkDoc.Core;
 
 namespace MarkDoc.ViewModels
 {
@@ -8,5 +9,9 @@ namespace MarkDoc.ViewModels
   public interface ISettingsViewModel
     : IViewModel
   {
+    /// <summary>
+    /// Navigates back to the home page
+    /// </summary>
+    ICommand BackCommand { get; set; }
   }
 }

@@ -2,8 +2,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="MarkDoc.Views.Main.SettingsView">
   <Grid Margin="15" RowDefinitions="Auto,*">
+    <DockPanel
+      Grid.Row="0"
+      Margin="5,0,0,15">
+      <FloatingButton
+        Command="{Binding BackCommand}"
+        DockPanel.Dock="Left"
+        Height="35"
+        Margin="0,0,10,0"
+        Padding="0.5,1,0,0"
+        Width="35">
+        <Button.Content>
+          <avalonia:Icon
+            FontSize="10"
+            Foreground="White"
+            Value="fa-arrow-left" />
+        </Button.Content>
+      </FloatingButton>
+      <Label
+        Content="{Binding Title}"
+        DockPanel.Dock="Right"
+        FontSize="24" />
+    </DockPanel>
   </Grid>
 </UserControl>

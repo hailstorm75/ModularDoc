@@ -19,6 +19,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Components\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
     <ProjectReference Include="..\..\Components\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
     <ProjectReference Include="..\..\Components\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />
