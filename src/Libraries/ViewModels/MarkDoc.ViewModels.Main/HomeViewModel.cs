@@ -91,6 +91,9 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ICommand OpenSettingsCommand { get; }
 
+    /// <inheritdoc />
+    public ICommand ClearSearchCommand { get; }
+
     #endregion
 
     /// <summary>
@@ -101,10 +104,15 @@ namespace MarkDoc.ViewModels.Main
       m_navigationManager = navigationManager;
       m_dialogManager = dialogManager;
 
+      var canClearSearch = this
+        .WhenAnyValue(x => x.SearchTerm)
+        .Select(x => !string.IsNullOrEmpty(x));
+
       PluginNewCommand = ReactiveCommand.Create(PluginNew);
       PluginCancelCommand = ReactiveCommand.Create(PluginCancel);
       PluginOpenCommand = ReactiveCommand.CreateFromTask(PluginOpen);
       OpenSettingsCommand = ReactiveCommand.Create(NavigateToSettings);
+      ClearSearchCommand = ReactiveCommand.Create(ClearSearch, canClearSearch);
 
       var filter = this.WhenValueChanged(t => t.SearchTerm)
         .Throttle(TimeSpan.FromMilliseconds(250))
@@ -130,6 +138,8 @@ namespace MarkDoc.ViewModels.Main
       return plugin => plugin.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                        plugin.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
+
+    private void ClearSearch() => SearchTerm = string.Empty;
 
     private void PluginCancel()
     {

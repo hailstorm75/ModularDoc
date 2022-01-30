@@ -44,8 +44,11 @@
       <Grid ColumnDefinitions="2*,*,2*">
         <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search plugins..." Text="{Binding SearchTerm}">
           <TextBox.InnerRightContent>
-            <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0">
-              <avalonia:Icon Value="fa-search" Foreground="Gray" />
+            <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0" Command="{Binding ClearSearchCommand}">
+              <ToolTip.Tip>
+                <Label Content="Clear search"/>
+              </ToolTip.Tip>
+              <avalonia:Icon Value="fa-times" Foreground="Gray" />
             </Button>
           </TextBox.InnerRightContent>
         </TextBox>

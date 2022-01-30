@@ -51,6 +51,11 @@ namespace MarkDoc.ViewModels
     /// </summary>
     ICommand OpenSettingsCommand { get; }
 
+    /// <summary>
+    /// Clears the currently entered search term
+    /// </summary>
+    ICommand ClearSearchCommand { get; }
+
     #endregion
   }
 }
