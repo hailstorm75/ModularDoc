@@ -23,12 +23,12 @@ namespace MarkDoc.MVVM.Helpers
 
     public static void RegisterModules(ContainerBuilder builder)
     {
-      var root = Path.GetFullPath("Plugins");
+      var execPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
+      var root = Path.Combine(execPath!, "Plugins");
       var plugins = Directory.EnumerateDirectories(root);
       var assemblies = plugins
         .SelectMany(path => Directory.EnumerateFiles(path, "MarkDoc.Plugins.*.dll", SearchOption.TopDirectoryOnly))
-        .Select(Assembly.LoadFrom)
-        .ToArray();
+        .Select(Assembly.LoadFrom);
 
       foreach (var assembly in assemblies)
       {
