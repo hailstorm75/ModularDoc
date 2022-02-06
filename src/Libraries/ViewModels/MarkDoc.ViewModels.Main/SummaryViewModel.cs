@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -23,8 +23,10 @@ namespace MarkDoc.ViewModels.Main
 
     private readonly ConcurrentBag<LogMessage> m_concurrentLogMessages = new();
     private readonly NavigationManager m_navigationManager;
+    private readonly IDialogManager m_dialogManager;
     private readonly CancellationTokenSource m_cancellationTokenSource;
     private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
+    private Configuration m_pluginConfiguration = default;
     private bool m_loading;
 
     #endregion
@@ -69,6 +71,9 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public ICommand DoneCommand { get; }
 
+    /// <inheritdoc />
+    public ICommand SaveConfigurationCommand { get; }
+
     #endregion
 
     #region Constructors
@@ -76,10 +81,11 @@ namespace MarkDoc.ViewModels.Main
     /// <summary>
     /// Default constructor
     /// </summary>
-    public SummaryViewModel(NavigationManager navigationManager)
+    public SummaryViewModel(NavigationManager navigationManager, IDialogManager dialogManager)
     {
       m_cancellationTokenSource = new CancellationTokenSource();
       m_navigationManager = navigationManager;
+      m_dialogManager = dialogManager;
 
       var canNavigateBack = this.WhenAnyValue(vm => vm.Loading).Select(x => !x);
       var canCancelOperation = this.WhenAnyValue(vm => vm.Loading);
@@ -87,6 +93,7 @@ namespace MarkDoc.ViewModels.Main
       BackCommand = ReactiveCommand.Create(NavigateBack, canNavigateBack);
       CancelCommand = ReactiveCommand.Create(CancelOperation, canCancelOperation);
       DoneCommand = ReactiveCommand.Create(NavigateToMenu, canNavigateBack);
+      SaveConfigurationCommand = ReactiveCommand.CreateFromTask(SaveConfiguration);
     }
 
     #endregion
@@ -109,7 +116,9 @@ namespace MarkDoc.ViewModels.Main
         var deserialized = JsonSerializer.Deserialize<Dictionary<string, IReadOnlyDictionary<string, string>>>(settings);
         // ReSharper disable once AssignNullToNotNullAttribute
         var plugin = PluginManager.GetPlugin(pluginId);
-        var (logger, processes, executor) = plugin.GenerateExecutor(deserialized ?? new Dictionary<string, IReadOnlyDictionary<string, string>>());
+        m_pluginConfiguration = new Configuration(pluginId, deserialized ?? new Dictionary<string, IReadOnlyDictionary<string, string>>());
+
+        var (logger, processes, executor) = plugin.GenerateExecutor(m_pluginConfiguration.Settings);
 
         Processes = processes;
         this.RaisePropertyChanged(nameof(Processes));
@@ -186,6 +195,16 @@ namespace MarkDoc.ViewModels.Main
 
     private void NavigateToMenu()
       => m_navigationManager.NavigateTo(PageNames.HOME);
+
+    private async Task SaveConfiguration()
+    {
+      var result = await m_dialogManager.TrySaveFileAsync("Save configuration", "pluginConfig", ("mconf", "MarkDoc config")).ConfigureAwait(false);
+      if (result.IsEmpty)
+        return;
+
+      await using var fileStream = new FileStream(result.Get(), FileMode.Create);
+      await Configuration.SaveToFileAsync(m_pluginConfiguration, fileStream).ConfigureAwait(false);
+    }
 
     #endregion
   }

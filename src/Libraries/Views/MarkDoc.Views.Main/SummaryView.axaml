@@ -29,9 +29,9 @@
         DockPanel.Dock="Right"
         FontSize="24" />
     </DockPanel>
-    
+
     <ProgressBar Grid.Row="1" Maximum="{Binding ProcessesTotal}" Value="{Binding ProcessesComplete}" Minimum="0" />
-    
+
     <ListBox Grid.Row="2" Items="{Binding Processes}" SelectionMode="Single">
       <ListBox.DataTemplates>
         <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
@@ -48,7 +48,7 @@
                   </TextBlock.Text>
                 </TextBlock>
               </ToolTip.Tip>
-              
+
               <Grid RowDefinitions="Auto">
                 <avalonia:Icon FontSize="16" VerticalAlignment="Center">
                   <avalonia:Icon.Value>
@@ -73,7 +73,7 @@
                     </Binding>
                   </avalonia:Icon.IsVisible>
                 </avalonia:Icon>
-                
+
                 <ProgressRing Width="16"
                               Height="16"
                               Maximum="{Binding Max}"
@@ -107,7 +107,7 @@
                   </TextBlock.Text>
                 </TextBlock>
               </ToolTip.Tip>
-              
+
               <Grid RowDefinitions="Auto">
                 <avalonia:Icon FontSize="16" VerticalAlignment="Center">
                   <avalonia:Icon.Value>
@@ -149,9 +149,9 @@
         </DataTemplate>
       </ListBox.DataTemplates>
     </ListBox>
-    
+
     <GridSplitter Grid.Row="3"/>
-    
+
     <DataGrid Grid.Row="4"  Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
       <DataGrid.Columns>
         <DataGridTemplateColumn Header="Type" CanUserReorder="False">
@@ -206,10 +206,10 @@
         </DataGridTemplateColumn>
       </DataGrid.Columns>
     </DataGrid>
-    
+
     <Grid Grid.Row="5" ColumnDefinitions="*, Auto, Auto" Margin="0 5 0 0">
-      <Button Grid.Column="1">Save configuration</Button>
-      <Button Command="{Binding DoneCommand}" Grid.Column="2" Margin="5 0 0 0">Done</Button>
+      <Button Grid.Column="1" Command="{Binding SaveConfigurationCommand}">Save configuration</Button>
+      <Button Grid.Column="2" Command="{Binding DoneCommand}" Margin="5 0 0 0">Done</Button>
     </Grid>
   </Grid>
 </UserControl>
