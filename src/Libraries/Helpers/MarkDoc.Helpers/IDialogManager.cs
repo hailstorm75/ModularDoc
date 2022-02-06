@@ -21,6 +21,14 @@ namespace MarkDoc.Helpers
     }
 
     /// <summary>
+    /// Attempts to choose a save path
+    /// </summary>
+    /// <param name="title">Dialog title</param>
+    /// <param name="defaultName">Default file name</param>
+    /// <returns>Save path</returns>
+    ValueTask<Option<string>> TrySaveFileAsync(string title, string? defaultName = default, (string name, string description)? extension = default);
+
+    /// <summary>
     /// Attempts to select file(s)
     /// </summary>
     /// <param name="title">Dialog title</param>

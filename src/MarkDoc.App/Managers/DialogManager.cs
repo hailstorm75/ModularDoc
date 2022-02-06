@@ -83,6 +83,30 @@ namespace MarkDoc.App.Managers
       return dialog.GetDialogResult();
     }
 
+    /// <inheritdoc />
+    public async ValueTask<Option<string>> TrySaveFileAsync(string title,
+      string? initialFilename = default,
+      (string name, string description)? extension = default)
+    {
+      var filter = extension is null
+        ? null
+        : new FileDialogFilter()
+          {
+            Extensions = new List<string>() { extension?.name! },
+            Name = extension?.description
+          };
+      var dialog = new SaveFileDialog
+      {
+        Title = title,
+        InitialFileName = initialFilename,
+        DefaultExtension = extension?.name,
+        Filters = filter is null ? null! : new List<FileDialogFilter>() { filter! }
+      };
+      var result = await dialog.ShowAsync(m_windowProvider());
+
+      return Option<string>.Of(result);
+    }
+
     #endregion
   }
 }

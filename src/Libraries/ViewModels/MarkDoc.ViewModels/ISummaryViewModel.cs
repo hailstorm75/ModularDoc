@@ -28,6 +28,16 @@ namespace MarkDoc.ViewModels
     /// </summary>
     IReadOnlyCollection<IProcess> Processes { get; }
 
+    /// <summary>
+    /// Number of processes that are finished
+    /// </summary>
+    int ProcessesComplete { get; }
+
+    /// <summary>
+    /// Number of all processes
+    /// </summary>
+    int ProcessesTotal { get; }
+
     #endregion
 
     #region Commands
@@ -48,14 +58,9 @@ namespace MarkDoc.ViewModels
     ICommand DoneCommand { get; }
 
     /// <summary>
-    /// Number of processes that are finished
+    /// Command for saving the created configuration
     /// </summary>
-    int ProcessesComplete { get; }
-
-    /// <summary>
-    /// Number of all processes
-    /// </summary>
-    int ProcessesTotal { get; }
+    ICommand SaveConfigurationCommand { get; }
 
     #endregion
   }
