@@ -13,6 +13,10 @@ type internal Element<'M when 'M :> ITextContent> =
   /// </summary>
   | TextElement of content: TextType<'M>
   /// <summary>
+  /// Element containing a diagram
+  /// </summary>
+  | DiagramElement of name: string * content: string
+  /// <summary>
   /// Element containing a link
   /// </summary>
   | LinkElement of content: TextType<'M> * reference: string
@@ -81,6 +85,7 @@ module internal ElementHelpers =
     // Initializes given element based on its type
     match element with
     | TextElement content -> TextHelpers.processText content tools :> IElement
+    | DiagramElement (name, content) -> tools.creator.CreateDiagram(name, content) :> IElement
     | LinkElement (content, reference) -> tools.creator.CreateLink(TextHelpers.processText content tools :?> IText, lazy reference) :> IElement
     | ListElement (content, listType, heading, level) -> tools.creator.CreateList(content, listType, heading, level) :> IElement
     | Section (content, heading, level) -> tools.creator.CreateSection(content, heading, level) :> IElement

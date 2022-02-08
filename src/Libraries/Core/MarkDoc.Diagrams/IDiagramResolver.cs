@@ -13,6 +13,6 @@ namespace MarkDoc.Diagrams
     /// <param name="type">Type to process</param>
     /// <param name="diagram">Resulting diagram</param>
     /// <returns>Success if diagram generated</returns>
-    bool TryGenerateDiagram(IType type, out string diagram);
+    bool TryGenerateDiagram(IType type, out (string name, string content) diagram);
   }
 }

@@ -6,11 +6,11 @@ using MarkDoc.Members.Types;
 
 namespace MarkDoc.Diagrams.PlantUML
 {
-  public class PlantUMLResolver
+  public class PlantUmlResolver
     : IDiagramResolver
   {
     /// <inheritdoc />
-    public bool TryGenerateDiagram(IType type, out string diagram)
+    public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
     {
       var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
       var relations = new LinkedList<string>();
@@ -75,7 +75,7 @@ namespace MarkDoc.Diagrams.PlantUML
 
       ExtractTypes(type, true);
 
-      diagram = string.Join(Environment.NewLine, PackTypes(types).Concat(relations));
+      diagram = (type.RawName.Replace('`', '_'), string.Join(Environment.NewLine, PackTypes(types).Concat(relations)));
       return true;
     }
 

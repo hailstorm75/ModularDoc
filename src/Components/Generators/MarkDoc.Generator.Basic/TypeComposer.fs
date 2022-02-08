@@ -34,9 +34,9 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
     | None -> None
     
   let printDiagram (input: IType) (tools: Tools) =
-    let mutable result: string = null;
+    let mutable result: struct (string * string) = ("", "");
     if tools.diagramResolver.TryGenerateDiagram(input, &result) then
-      Some (seq [ result |> Diagram |> TextElement |> ElementHelpers.initialize ])
+      Some (seq [ result.ToTuple() |> DiagramElement |> ElementHelpers.initialize ])
     else
       None
 

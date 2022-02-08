@@ -67,6 +67,12 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
       fun _ -> ""
       
   let sourceCodeLinkerMethod = getSourceCodeLinker
+  
+  member _.GetRawUrl() =
+    match m_platform with
+    | GitPlatform.GitLab -> $"https://gitlab.com/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/-/raw/{m_settings.GitPlatformBranch}/"
+    | GitPlatform.GitHub -> $"https://raw.githubusercontent.com/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/{m_settings.GitPlatformBranch}/"
+    | _ -> ""
 
   interface ILinker with
     /// <inheritdoc />
