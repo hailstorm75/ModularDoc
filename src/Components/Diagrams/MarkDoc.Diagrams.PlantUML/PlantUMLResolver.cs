@@ -10,6 +10,7 @@ namespace MarkDoc.Diagrams.PlantUML
     public bool TryGenerateDiagram(IType type, out string diagram)
     {
       var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
+      var relations = new LinkedList<string>();
 
       // ReSharper disable once VariableHidesOuterVariable
       (string nameSpace, string typeDiagram) GenerateType(IType type, bool isParent = false)
@@ -47,22 +48,31 @@ namespace MarkDoc.Diagrams.PlantUML
         if (parent is not IInterface interfaceType)
           return;
 
-        var interfaces = interfaceType.InheritedInterfaces.Select(GenerateResType);
-        foreach (var item in interfaces)
-          AddToDictionary(types, item);
+        foreach (var item in interfaceType.InheritedInterfaces)
+        {
+          relations.AddLast($"{parent.Name} <|-- {item.DisplayName}");
+          AddToDictionary(types, GenerateResType(item));
+        }
 
         if (parent is not IClass classType || classType.BaseClass is not null)
           return;
 
         var baseType = GenerateResType(classType.BaseClass!);
+
+        relations.AddLast($"{parent.Name} <|-- {classType.BaseClass!.DisplayName}");
         AddToDictionary(types, baseType);
       }
 
       ExtractTypes(type, true);
 
-      diagram = string.Empty;
+      diagram = string.Join(Environment.NewLine, PackTypes(types).Concat(relations));
       return true;
     }
+
+    private static IEnumerable<string> PackTypes(IReadOnlyDictionary<string, LinkedList<string>> types)
+      => types.Select(type => string.Format(@"package {0} <<Rectangle>> {
+  {1}
+}", type.Key, string.Join(Environment.NewLine, type.Value)));
 
     private static void AddToDictionary(IDictionary<string, LinkedList<string>> target, (string key, string value) data)
     {
