@@ -1,4 +1,7 @@
-﻿using MarkDoc.Members.ResolvedTypes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using MarkDoc.Members.ResolvedTypes;
 using MarkDoc.Members.Types;
 
 namespace MarkDoc.Diagrams.PlantUML
@@ -15,20 +18,28 @@ namespace MarkDoc.Diagrams.PlantUML
       // ReSharper disable once VariableHidesOuterVariable
       (string nameSpace, string typeDiagram) GenerateType(IType type, bool isParent = false)
       {
-        var highlightedTitle = isParent
-          ? $" as \"**{type.Name}**\""
-          : string.Empty;
+        string GenerateTitle(IInterface? inter = default)
+        {
+          var generics = inter is not null && inter.Generics.Keys.Any()
+            ? $"<{string.Join(",", inter.Generics.Keys)}>"
+            : string.Empty;
 
+          var highlightedTitle = isParent
+            ? $" as \"**{type.Name}**{generics}\""
+            : $" as \"{type.Name}{generics}\"";
+
+          return highlightedTitle;
+        }
+
+        var rawTitle = type.RawName.Replace('`', '_');
         var typeName = type switch
         {
-          IRecord => $"class {type.Name}{highlightedTitle} << (R, orchid) >>",
-          IClass c => $"{(c.IsAbstract ? "abstract " : "")}class {type.Name}{highlightedTitle}",
-          IInterface => $"interface {type.Name}{highlightedTitle}",
-          IEnum => $"enum {type.Name}{highlightedTitle}",
+          IRecord r => $"class {rawTitle}{GenerateTitle(r)} << (R, orchid) >>",
+          IClass c => $"{(c.IsAbstract ? "abstract " : "")}class {rawTitle}{GenerateTitle(c)}",
+          IInterface i => $"interface {rawTitle}{GenerateTitle(i)}",
+          IEnum => $"enum {rawTitle}{GenerateTitle()}",
           _ => throw new NotSupportedException("The given type is not supported")
         };
-
-        ExtractTypes(type, false);
 
         return (type.TypeNamespace, typeName);
       }
@@ -38,28 +49,27 @@ namespace MarkDoc.Diagrams.PlantUML
         => type.Reference.Value is not null
           // ReSharper disable once AssignNullToNotNullAttribute
           ? GenerateType(type.Reference.Value)
-          : (type.TypeNamespace, $"{type.DisplayName} << External >>");
+          : (type.TypeNamespace, $"{type.RawName.Replace('`', '_')} << External >>");
 
       void ExtractTypes(IType parent, bool isParent)
       {
-        // ReSharper disable once AssignNullToNotNullAttribute
-        AddToDictionary(types, GenerateType(type, isParent));
+        AddToDictionary(types, GenerateType(parent, isParent));
 
         if (parent is not IInterface interfaceType)
           return;
 
         foreach (var item in interfaceType.InheritedInterfaces)
         {
-          relations.AddLast($"{parent.Name} <|-- {item.DisplayName}");
+          relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {item.RawName.Replace('`', '_')}");
           AddToDictionary(types, GenerateResType(item));
         }
 
-        if (parent is not IClass classType || classType.BaseClass is not null)
+        if (parent is not IClass classType || classType.BaseClass is null)
           return;
 
         var baseType = GenerateResType(classType.BaseClass!);
 
-        relations.AddLast($"{parent.Name} <|-- {classType.BaseClass!.DisplayName}");
+        relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {classType.BaseClass!.RawName.Replace('`', '_')}");
         AddToDictionary(types, baseType);
       }
 
@@ -70,9 +80,7 @@ namespace MarkDoc.Diagrams.PlantUML
     }
 
     private static IEnumerable<string> PackTypes(IReadOnlyDictionary<string, LinkedList<string>> types)
-      => types.Select(type => string.Format(@"package {0} <<Rectangle>> {
-  {1}
-}", type.Key, string.Join(Environment.NewLine, type.Value)));
+      => types.Select(type => $"package {type.Key} <<Rectangle>> {{ {Environment.NewLine} { string.Join(Environment.NewLine, type.Value) } {Environment.NewLine} }}").ToList();
 
     private static void AddToDictionary(IDictionary<string, LinkedList<string>> target, (string key, string value) data)
     {

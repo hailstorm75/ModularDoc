@@ -13,6 +13,10 @@ type TextType<'M when 'M :> ITextContent> =
   /// </summary>
   | Normal of text: string
   /// <summary>
+  /// Diagram content
+  /// </summary>
+  | Diagram of text: string
+  /// <summary>
   /// Italic text
   /// </summary>
   | Italic of text: string
@@ -75,6 +79,7 @@ module internal TextHelpers =
     // Process the given input based on its type
     match input with
     | Normal text
+    | Diagram text
     | Italic text
     | Bold text
     | Code text
@@ -96,6 +101,7 @@ module internal TextHelpers =
     // Process the given input based on its type
     match textType with
     | Normal text -> tools.creator.CreateText(text, IText.TextStyle.Normal) :> ITextContent
+    | Diagram text -> tools.creator.CreateDiagram(text)
     | Italic text -> tools.creator.CreateText(text, IText.TextStyle.Italic) :> ITextContent
     | Bold text -> tools.creator.CreateText(text, IText.TextStyle.Bold) :> ITextContent
     | Code text -> tools.creator.CreateText(text, IText.TextStyle.Code) :> ITextContent

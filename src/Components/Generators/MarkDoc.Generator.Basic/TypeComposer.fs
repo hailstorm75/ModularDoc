@@ -13,8 +13,8 @@ open MarkDoc.Documentation.Tags
 /// <param name="docResolver">Injected documentation resolver</param>
 /// <param name="memberResolver">Injected member resolver</param>
 /// <param name="linker">Injected linker</param>
-type TypeComposer(creator, docResolver, memberResolver, linker) =
-  let m_tools: Tools = { linker = linker; creator = creator; docResolver = docResolver; typeResolver = memberResolver }
+type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver) =
+  let m_tools: Tools = { linker = linker; creator = creator; docResolver = docResolver; typeResolver = memberResolver; diagramResolver = diagramResolver }
 
   let composeSections input level =
     let createSection (x, y) = Section(x, y, level)
@@ -32,6 +32,13 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
     | Some x -> Some(seq [ ElementHelpers.initialize (TagHelpers.tagShort input x tools |> TextElement) ])
     // otherwise return no summary
     | None -> None
+    
+  let printDiagram (input: IType) (tools: Tools) =
+    let mutable result: string = null;
+    if tools.diagramResolver.TryGenerateDiagram(input, &result) then
+      Some (seq [ result |> Diagram |> TextElement |> ElementHelpers.initialize ])
+    else
+      None
 
   let printMemberTables = TypeContentHelpers.processTableOfContents
 
@@ -75,6 +82,7 @@ type TypeComposer(creator, docResolver, memberResolver, linker) =
     // Get the content
     let content = seq [
                     (printIntroduction input tools, "Description");
+                    (printDiagram input tools, "Diagram");
                     (printMemberTables input tools, "Members");
                     (printDetailed input tools, "Details")
                     (composeLink, "");

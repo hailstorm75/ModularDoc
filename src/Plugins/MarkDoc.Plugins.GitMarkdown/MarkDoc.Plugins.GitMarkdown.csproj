@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\Diagrams\MarkDoc.Diagrams.PlantUML\MarkDoc.Diagrams.PlantUML.csproj" />
     <ProjectReference Include="..\..\Components\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
     <ProjectReference Include="..\..\Components\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
     <ProjectReference Include="..\..\Components\Generators\MarkDoc.Generator.Basic\MarkDoc.Generator.Basic.fsproj" />

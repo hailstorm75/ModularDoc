@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Generator.Basic
 
+open MarkDoc.Diagrams
 open MarkDoc.Linkers
 open MarkDoc.Members
 open MarkDoc.Elements
@@ -22,7 +23,11 @@ type Tools = {
   /// </summary>
   docResolver: IDocResolver;
   /// <summary>
-  /// Type resolver resolver
+  /// Type resolver
   /// </summary>
-  typeResolver: IResolver;
+  typeResolver: IResolver
+  /// <summary>
+  /// Diagram resolver
+  /// </summary>
+  diagramResolver: IDiagramResolver
 }
