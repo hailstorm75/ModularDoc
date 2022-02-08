@@ -73,14 +73,19 @@ namespace MarkDoc.Members.Dnlib.Members
         IsSetInit = modifierSig?.Modifier.FullName.Equals("System.Runtime.CompilerServices.IsExternalInit") ?? false;
       }
 
-      IsReadOnly = (source.GetMethod?
-                     .CustomAttributes
-                     .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false)
-                   && (source.GetMethod?
-                       .CustomAttributes
-                       // ReSharper disable once ConstantNullCoalescingCondition
-                       .All(x => !x.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false
-                   );
+      IsReadOnly = ExtractIsReadOnly(source);
+    }
+
+    private static bool ExtractIsReadOnly(dnlib.DotNet.PropertyDef source)
+    {
+      return (source.GetMethod?
+               .CustomAttributes
+               .Any(x => x.TypeFullName.Equals("System.Runtime.CompilerServices.IsReadOnlyAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false)
+             && (source.GetMethod?
+                 .CustomAttributes
+                 // ReSharper disable once ConstantNullCoalescingCondition
+                 .All(x => !x.TypeFullName.Equals("System.Runtime.CompilerServices.CompilerGeneratedAttribute", StringComparison.InvariantCultureIgnoreCase)) ?? false
+             );
     }
 
     #region Methods

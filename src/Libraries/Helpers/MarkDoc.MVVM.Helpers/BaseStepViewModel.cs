@@ -55,7 +55,7 @@ namespace MarkDoc.MVVM.Helpers
     }
 
     #endregion
-    
+
     #region Methods
 
     /// <inheritdoc />
@@ -82,7 +82,7 @@ namespace MarkDoc.MVVM.Helpers
       Dispose(true);
       GC.SuppressFinalize(this);
     }
-    
+
     #endregion
   }
 }

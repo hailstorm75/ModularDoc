@@ -26,7 +26,7 @@ namespace MarkDoc.ViewModels.Main
     private readonly IDialogManager m_dialogManager;
     private readonly CancellationTokenSource m_cancellationTokenSource;
     private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
-    private Configuration m_pluginConfiguration = default;
+    private Configuration m_pluginConfiguration;
     private bool m_loading;
 
     #endregion

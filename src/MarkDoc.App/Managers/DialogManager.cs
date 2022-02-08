@@ -90,9 +90,9 @@ namespace MarkDoc.App.Managers
     {
       var filter = extension is null
         ? null
-        : new FileDialogFilter()
+        : new FileDialogFilter
           {
-            Extensions = new List<string>() { extension?.name! },
+            Extensions = new List<string> { extension?.name! },
             Name = extension?.description
           };
       var dialog = new SaveFileDialog
@@ -100,7 +100,8 @@ namespace MarkDoc.App.Managers
         Title = title,
         InitialFileName = initialFilename,
         DefaultExtension = extension?.name,
-        Filters = filter is null ? null! : new List<FileDialogFilter>() { filter! }
+        // ReSharper disable once AssignNullToNotNullAttribute
+        Filters = filter is null ? null! : new List<FileDialogFilter> { filter }
       };
       var result = await dialog.ShowAsync(m_windowProvider());
 

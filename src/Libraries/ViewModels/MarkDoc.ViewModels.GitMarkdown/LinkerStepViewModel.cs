@@ -115,9 +115,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
         return Task.CompletedTask;
 
       Selected = Options.First(x => x.Value.ToString().Equals(data));
-      GitUser = gitUser!;
-      GitRepository = gitRepository!;
-      GitBranch = gitBranch!;
+      // ReSharper disable AssignNullToNotNullAttribute
+      GitUser = gitUser;
+      GitRepository = gitRepository;
+      GitBranch = gitBranch;
+      // ReSharper restore AssignNullToNotNullAttribute
       LinksToSourceCode = linksToSourceCode;
 
       return Task.CompletedTask;
