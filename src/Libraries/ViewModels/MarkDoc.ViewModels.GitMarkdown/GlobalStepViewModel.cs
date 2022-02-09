@@ -36,10 +36,10 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override string Id => "23407B59-027B-43F9-901C-57F3016DE237";
 
     /// <inheritdoc />
-    public override string Title => "Global settings";
+    public override string Title => "Output settings";
 
     /// <inheritdoc />
-    public override string Description => "Settings used by multiple components";
+    public override string Description => "Select the output directory for the resulting documentation and uncheck types and/or namespaces which you wish to exclude from the documentation";
 
     /// <summary>
     /// Output directory

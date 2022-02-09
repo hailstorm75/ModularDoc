@@ -36,7 +36,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override string Title => "Assembly processing settings";
 
     /// <inheritdoc />
-    public override string Description => "TODO";
+    public override string Description => "Select one or more .NET assemblies for processing";
 
     public string PathToAssembly
     {
