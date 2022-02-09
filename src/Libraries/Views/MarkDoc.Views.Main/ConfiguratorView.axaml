@@ -19,7 +19,7 @@
       Grid.Column="0"
       Grid.ColumnSpan="2"
       Grid.Row="0"
-      Margin="5,0,0,15">
+      Margin="0,0,0,15">
       <Button
         Command="{Binding BackCommand}"
         DockPanel.Dock="Left"
@@ -40,56 +40,59 @@
         FontSize="24" />
     </DockPanel>
 
-    <ScrollViewer
-      Grid.Column="0"
-      Grid.Row="1"
-      Margin="0,0,10,0">
-      <ItemsControl Items="{Binding Steps}">
-        <ItemsControl.ItemsPanel>
-          <ItemsPanelTemplate>
-            <StackPanel />
-          </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-          <DataTemplate DataType="{x:Type core:IPluginStep}">
-            <Label Margin="5">
-              <Grid ColumnDefinitions="7,*">
-                <Border
-                  BorderBrush="Blue"
-                  BorderThickness="2,0,0,0"
-                  Grid.Column="0"
-                  Margin="0,0,5,0">
-                  <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                  <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
-                  <Border.IsVisible>
-                    <Binding ElementName="Root" Path="DataContext.CurrentStep">
+    <Border Grid.Column="0"
+            Grid.RowSpan="2"
+            Grid.Row="1"
+            Margin="0,0,10,0"
+            CornerRadius="{DynamicResource ControlCornerRadius}"
+            Background="{DynamicResource MenuFlyoutPresenterBackground}">
+      <ScrollViewer>
+        <ItemsControl Items="{Binding Steps}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type core:IPluginStep}">
+              <Label Margin="5">
+                      <Grid ColumnDefinitions="7,*">
+                      <Border
+                      BorderBrush="Blue"
+                      BorderThickness="2,0,0,0"
+                      Grid.Column="0"
+                      Margin="0,0,5,0">
+                      <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
+                      <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
+                      <Border.IsVisible>
+                      <Binding ElementName="Root" Path="DataContext.CurrentStep">
                       <Binding.Converter>
-                        <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding}" />
+                      <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding}" />
                       </Binding.Converter>
-                    </Binding>
-                  </Border.IsVisible>
-                  <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
-                  <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                </Border>
-                <TextBlock
-                  FontSize="16"
-                  Grid.Column="1"
-                  Text="{Binding Name}" />
-              </Grid>
-            </Label>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </ScrollViewer>
+                      </Binding>
+                      </Border.IsVisible>
+                      <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
+                      <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
+                      </Border>
+                      <TextBlock
+                      FontSize="16"
+                      Grid.Column="1"
+                      Text="{Binding Name}" />
+                      </Grid>
+                      </Label>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
 
     <Border
-      BoxShadow="2 2 4 4 LightGray"
       Grid.Column="1"
       Grid.Row="1"
       Margin="10"
       Padding="15">
       <ScrollViewer>
-        <ContentControl Content="{Binding Path=CurrentView}" />
+        <ContentControl Content="{Binding Path=CurrentView}"/>
       </ScrollViewer>
     </Border>
 
