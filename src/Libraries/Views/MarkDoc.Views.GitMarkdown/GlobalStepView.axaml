@@ -20,17 +20,17 @@
         VerticalContentAlignment="Center"
         Watermark="Output directory" />
 
-      <FloatingButton
+      <Button
         Command="{Binding BrowseCommand}"
         Grid.Column="1"
         Margin="8,0,0,0">
-        <FloatingButton.Content>
+        <Button.Content>
           <avalonia:Icon
             FontSize="10"
             Foreground="White"
             Value="fa-search" />
-        </FloatingButton.Content>
-      </FloatingButton>
+        </Button.Content>
+      </Button>
     </Grid>
 
     <TreeView

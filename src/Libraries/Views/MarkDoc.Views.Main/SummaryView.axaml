@@ -7,10 +7,11 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
+  xmlns:ui="using:FluentAvalonia.UI.Controls"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
   <Grid Margin="15" RowDefinitions="Auto,Auto,*,4,*,Auto">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
-      <FloatingButton
+      <Button
         Command="{Binding BackCommand}"
         DockPanel.Dock="Left"
         Height="35"
@@ -23,7 +24,7 @@
             Foreground="White"
             Value="fa-arrow-left" />
         </Button.Content>
-      </FloatingButton>
+      </Button>
       <Label
         Content="{Binding Title}"
         DockPanel.Dock="Right"
@@ -73,20 +74,6 @@
                     </Binding>
                   </avalonia:Icon.IsVisible>
                 </avalonia:Icon>
-
-                <ProgressRing Width="16"
-                              Height="16"
-                              Maximum="{Binding Max}"
-                              Minimum="0"
-                              Value="{Binding Current}">
-                  <ProgressRing.IsVisible>
-                    <Binding Path="State">
-                      <Binding.Converter>
-                        <converters:ProcessStateToVisibilityConverter/>
-                      </Binding.Converter>
-                    </Binding>
-                  </ProgressRing.IsVisible>
-                </ProgressRing>
               </Grid>
             </Border>
 
@@ -133,15 +120,15 @@
                   </avalonia:Icon.IsVisible>
                 </avalonia:Icon>
 
-                <ProgressRing DockPanel.Dock="Left" IsIndeterminate="True" Width="16" Height="16">
-                  <ProgressRing.IsVisible>
+                <ProgressBar DockPanel.Dock="Left" IsIndeterminate="True">
+                  <ProgressBar.IsVisible>
                     <Binding Path="State">
                       <Binding.Converter>
                         <converters:ProcessStateToVisibilityConverter/>
                       </Binding.Converter>
                     </Binding>
-                  </ProgressRing.IsVisible>
-                </ProgressRing>
+                  </ProgressBar.IsVisible>
+                </ProgressBar>
               </Grid>
             </Border>
             <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
@@ -152,7 +139,7 @@
 
     <GridSplitter Grid.Row="3"/>
 
-    <DataGrid Grid.Row="4"  Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
+    <DataGrid Grid.Row="4" Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
       <DataGrid.Columns>
         <DataGridTemplateColumn Header="Type" CanUserReorder="False">
           <DataTemplate DataType="{x:Type core:LogMessage}">

@@ -172,7 +172,7 @@
           </Grid>
           <!-- Loading plugins -->
           <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsLoading}">
-            <ProgressRing IsIndeterminate="True" HorizontalAlignment="Center" />
+            <ProgressBar IsIndeterminate="True" HorizontalAlignment="Center" />
             <Label Margin="0, 5, 0, 0" HorizontalAlignment="Center">Loading...</Label>
           </StackPanel>
           <!-- No plugins found -->

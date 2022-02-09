@@ -29,32 +29,25 @@
         VerticalContentAlignment="Center"
         Watermark="Select a .NET assembly" />
 
-      <FloatingButton
+      <Button
         Command="{Binding BrowseCommand}"
         Grid.Column="1"
         Margin="8,0,0,0">
-        <FloatingButton.Content>
+        <Button.Content>
           <avalonia:Icon
             FontSize="10"
             Foreground="White"
             Value="fa-search" />
-        </FloatingButton.Content>
-      </FloatingButton>
-      <FloatingButton Command="{Binding AddCommand}" Grid.Column="2">
-        <FloatingButton.Styles>
-          <Style Selector="FloatingButton:disabled">
-            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
-            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
-          </Style>
-        </FloatingButton.Styles>
-        <FloatingButton.Content>
+        </Button.Content>
+      </Button>
+      <Button Command="{Binding AddCommand}" Grid.Column="2">
+        <Button.Content>
           <avalonia:Icon
             FontSize="10"
             Foreground="White"
             Value="fa-plus" />
-        </FloatingButton.Content>
-      </FloatingButton>
+        </Button.Content>
+      </Button>
     </Grid>
     <Grid ColumnDefinitions="Auto, Auto" Margin="0,0,0,10">
       <Button Command="{Binding AddMultipleCommand}" Grid.Column="0">
@@ -85,7 +78,7 @@
           <DockPanel LastChildFill="True">
             <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
             <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-            <FloatingButton
+            <Button
               Background="Red"
               Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
               CommandParameter="{Binding}"
@@ -96,7 +89,7 @@
                   Foreground="White"
                   Value="fa-trash" />
               </Button.Content>
-            </FloatingButton>
+            </Button>
             <DockPanel
               DockPanel.Dock="Right"
               ToolTip.Placement="Pointer"

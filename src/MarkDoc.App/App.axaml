@@ -1,10 +1,10 @@
 <Application
   x:Class="MarkDoc.App.App"
   xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia">
   <Application.Styles>
-    <FluentTheme Mode="Light" />
-    <StyleInclude Source="avares://Aura.UI.FluentTheme/AuraUI.xaml" />
-    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    <styling:FluentAvaloniaTheme UseSystemThemeOnWindows="True" UseUserAccentColorOnWindows="True" SkipControls="DataGrid" />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
   </Application.Styles>
 </Application>

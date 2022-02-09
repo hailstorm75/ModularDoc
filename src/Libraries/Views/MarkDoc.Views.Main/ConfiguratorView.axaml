@@ -20,7 +20,7 @@
       Grid.ColumnSpan="2"
       Grid.Row="0"
       Margin="5,0,0,15">
-      <FloatingButton
+      <Button
         Command="{Binding BackCommand}"
         DockPanel.Dock="Left"
         Height="35"
@@ -33,7 +33,7 @@
             Foreground="White"
             Value="fa-arrow-left" />
         </Button.Content>
-      </FloatingButton>
+      </Button>
       <Label
         Content="{Binding Title}"
         DockPanel.Dock="Right"
