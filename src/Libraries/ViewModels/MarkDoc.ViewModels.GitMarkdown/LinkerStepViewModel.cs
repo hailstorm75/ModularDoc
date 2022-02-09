@@ -24,7 +24,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override string Title => "Linking settings";
 
     /// <inheritdoc />
-    public override string Description => "TODO";
+    public override string Description => "Select the target platform and relevant settings for correct link generation";
 
     public ObservableCollection<Selection> Options { get; } = new();
 

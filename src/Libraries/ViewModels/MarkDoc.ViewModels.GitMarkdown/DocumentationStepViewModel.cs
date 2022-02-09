@@ -27,7 +27,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public override string Title => "Documentation extraction settings";
 
     /// <inheritdoc />
-    public override string Description => "TODO";
+    public override string Description => "Validate that there are no missing documentation files. If documentation is missing, provide the path manually, or explicitly choose to ignore missing documentation.";
 
     /// <summary>
     /// Paths to documentation
