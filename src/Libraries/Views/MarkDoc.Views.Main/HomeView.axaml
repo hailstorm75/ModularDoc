@@ -10,7 +10,7 @@
   xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:system="clr-namespace:System;assembly=System.Runtime"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
-  <Grid RowDefinitions="Auto,*">
+  <Grid RowDefinitions="Auto,*" Margin="5, 0, 5, 0">
     <!-- Row 0 -->
     <Menu>
       <MenuItem Command="{Binding PluginOpenCommand}">
@@ -51,51 +51,6 @@
 
     <!-- Row 1 -->
     <HeaderedContentControl Grid.Row="1" Padding="10">
-      <HeaderedContentControl.Styles>
-        <Style Selector="HeaderedContentControl">
-          <Setter Property="Template">
-            <ControlTemplate>
-              <Grid RowDefinitions="Auto, *">
-                <Border Grid.Row="0" Background="{DynamicResource ControlFillColorDefaultBrush}"
-                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                        BorderThickness="1 1 1 0"
-                        CornerRadius="{Binding Source={StaticResource OverlayCornerRadius}, Converter={StaticResource TopCornerRadiusFilterConverter}}">
-                  <DockPanel>
-                    <Border Background="{DynamicResource ControlStrongStrokeColorDefault}"
-                            Height="1"
-                            Margin="1 0 1 0"
-                            VerticalAlignment="Bottom"
-                            DockPanel.Dock="Bottom" />
-
-                    <ContentPresenter Name="HeaderPresenter"
-                                      Content="{TemplateBinding Header}"
-                                      ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                      TextBlock.FontSize="24"
-                                      TextBlock.FontWeight="SemiBold"
-                                      Padding="12 8"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center" />
-                  </DockPanel>
-                </Border>
-
-                <Border Grid.Row="1" Name="ControlPreviewAreaHost"
-                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                        BorderThickness="1 0 1 1"
-                        Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
-                  <ContentPresenter Name="ExamplePresenter"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Margin="12 12 0 12" />
-                </Border>
-              </Grid>
-            </ControlTemplate>
-          </Setter>
-        </Style>
-      </HeaderedContentControl.Styles>
       <HeaderedContentControl.Header>
         <Grid ColumnDefinitions="2*,*,2*">
           <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Watermark="Search plugins..."
