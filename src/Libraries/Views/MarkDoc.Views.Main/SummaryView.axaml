@@ -7,7 +7,6 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
-  xmlns:ui="using:FluentAvalonia.UI.Controls"
   xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters">
   <Grid Margin="15" RowDefinitions="Auto,Auto,*,4,*,Auto">
     <DockPanel Grid.Row="0" Margin="5,0,0,15">
@@ -21,7 +20,6 @@
         <Button.Content>
           <avalonia:Icon
             FontSize="10"
-            Foreground="White"
             Value="fa-arrow-left" />
         </Button.Content>
       </Button>
