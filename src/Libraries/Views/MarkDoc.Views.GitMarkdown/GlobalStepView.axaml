@@ -35,17 +35,20 @@
               DockPanel.Dock="Left"
               IsChecked="{Binding IsChecked}"
               IsEnabled="{Binding IsEnabled}"
-              Margin="0,0,10,0" />
-            <Border>
-              <ToolTip.Tip>
-                <Label Content="{Binding FullNamespace}" />
-              </ToolTip.Tip>
-              <Label
-                Content="{Binding DisplayName}"
-                DockPanel.Dock="Right"
-                FontStyle="Italic"
-                VerticalAlignment="Center" />
-            </Border>
+              Margin="0,0,10,0">
+              <CheckBox.Content>
+                <Border>
+                  <ToolTip.Tip>
+                    <Label Content="{Binding FullNamespace}" />
+                  </ToolTip.Tip>
+                  <Label
+                    Content="{Binding DisplayName}"
+                    DockPanel.Dock="Right"
+                    FontStyle="Italic"
+                    VerticalAlignment="Center" />
+                </Border>
+              </CheckBox.Content>
+            </CheckBox>
           </DockPanel>
         </TreeDataTemplate>
         <TreeDataTemplate DataType="{x:Type gitMarkdown:NamespaceNode}" ItemsSource="{Binding Nodes}">
@@ -54,16 +57,19 @@
               DockPanel.Dock="Left"
               IsChecked="{Binding IsChecked}"
               IsEnabled="{Binding IsEnabled}"
-              Margin="0,0,10,0" />
-            <Border>
-              <ToolTip.Tip>
-                <Label Content="{Binding FullNamespace}" />
-              </ToolTip.Tip>
-              <Label
-                Content="{Binding DisplayName}"
-                DockPanel.Dock="Right"
-                VerticalAlignment="Center" />
-            </Border>
+              Margin="0,0,10,0">
+              <CheckBox.Content>
+                <Border>
+                  <ToolTip.Tip>
+                    <Label Content="{Binding FullNamespace}" />
+                  </ToolTip.Tip>
+                  <Label
+                    Content="{Binding DisplayName}"
+                    DockPanel.Dock="Right"
+                    VerticalAlignment="Center" />
+                </Border>
+              </CheckBox.Content>
+            </CheckBox>
           </DockPanel>
         </TreeDataTemplate>
       </TreeView.DataTemplates>
