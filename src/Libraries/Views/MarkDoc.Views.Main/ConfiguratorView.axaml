@@ -8,7 +8,96 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:MarkDoc.Views.Main.Controls">
+  <UserControl.Styles>
+    <Style Selector="controls|ListBoxItemEx">
+      <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
+      <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+      <Setter Property="Background" Value="{DynamicResource ListViewItemBackground}" />
+      <Setter Property="Foreground" Value="{DynamicResource ListViewItemForeground}" />
+      <Setter Property="Padding" Value="12,0,12,0" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="MinWidth" Value="{DynamicResource ListViewItemMinWidth}" />
+      <Setter Property="MinHeight" Value="{DynamicResource ListViewItemMinHeight}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Content="{TemplateBinding Content}"
+                              Padding="{TemplateBinding Padding}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              CornerRadius="{DynamicResource ControlCornerRadius}"
+                              Margin="2" />
+
+            <!-- added 1px left margin, otherwise we can get strange artifacts while
+						 animating, I'm guessing from bad invalidation rects? -->
+            <Border Name="SelectionIndicator"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Width="3"
+                    Height="16"
+                    Margin="1 0 0 0"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    Background="{DynamicResource AccentFillColorDefaultBrush}" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="controls|ListBoxItemEx /template/ Border#SelectionIndicator">
+      <Setter Property="IsVisible" Value="False" />
+      <Setter Property="RenderTransform" Value="scaleY(0)" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Duration="00:00:00.167"
+                                         Property="RenderTransform"
+                                         Easing="0,0 0,1" />
+        </Transitions>
+      </Setter>
+    </Style>
+
+    <Style Selector="controls|ListBoxItemEx /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="TextBlock.FontWeight" Value="Normal" />
+      <Setter Property="TextBlock.FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    </Style>
+
+    <!--  Disabled State  -->
+    <Style Selector="controls|ListBoxItemEx:disabled /template/ ContentPresenter#PART_ContentPresenter">
+      <!-- There's no Disabled brush for LVI, so just dim opacity -->
+      <Setter Property="Opacity" Value="0.5" />
+    </Style>
+
+    <!--  Selected State  -->
+    <Style Selector="controls|ListBoxItemEx:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ListViewItemBackgroundSelected}" />
+    </Style>
+    <Style Selector="controls|ListBoxItemEx:selected /template/ ContentPresenter">
+      <Setter Property="TextBlock.Foreground" Value="{DynamicResource ListViewItemForegroundSelected}" />
+    </Style>
+    <Style Selector="controls|ListBoxItemEx:selected /template/ Border#SelectionIndicator">
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="RenderTransform" Value="scaleY(1)" />
+    </Style>
+
+    <!--  Selected Unfocused State (not in WinUI, so keep as Selected) -->
+    <Style Selector="controls|ListBoxItemEx:selected:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ListViewItemBackgroundSelected}" />
+    </Style>
+    <Style Selector="controls|ListBoxItemEx:selected:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="TextBlock.Foreground" Value="{DynamicResource ListViewItemForegroundSelected}" />
+    </Style>
+
+    <!-- Disabled -->
+    <Style Selector="controls|ListBoxItemEx:selected:disabled /template/ Border#SelectionIndicator">
+      <Setter Property="Background" Value="{DynamicResource ListViewItemSelectionIndicatorDisabledBrush}" />
+    </Style>
+  </UserControl.Styles>
 
   <Grid
     ColumnDefinitions="Auto,*"
@@ -40,12 +129,13 @@
         FontSize="24" />
     </DockPanel>
 
-    <Border Grid.Column="0"
+    <HeaderedContentControl Grid.Column="0"
             Grid.RowSpan="2"
             Grid.Row="1"
+            MinWidth="150"
+            Header="Steps"
             Margin="0,0,10,0"
-            CornerRadius="{DynamicResource ControlCornerRadius}"
-            Background="{DynamicResource MenuFlyoutPresenterBackground}">
+            CornerRadius="{DynamicResource ControlCornerRadius}">
       <ScrollViewer>
         <ItemsControl Items="{Binding Steps}">
           <ItemsControl.ItemsPanel>
@@ -55,36 +145,15 @@
           </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type core:IPluginStep}">
-              <Label Margin="5">
-                      <Grid ColumnDefinitions="7,*">
-                      <Border
-                      BorderBrush="Blue"
-                      BorderThickness="2,0,0,0"
-                      Grid.Column="0"
-                      Margin="0,0,5,0">
-                      <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                      <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
-                      <Border.IsVisible>
-                      <Binding ElementName="Root" Path="DataContext.CurrentStep">
-                      <Binding.Converter>
-                      <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding}" />
-                      </Binding.Converter>
-                      </Binding>
-                      </Border.IsVisible>
-                      <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
-                      <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                      </Border>
-                      <TextBlock
-                      FontSize="16"
-                      Grid.Column="1"
-                      Text="{Binding Name}" />
-                      </Grid>
-                      </Label>
+              <controls:ListBoxItemEx SelectedItem="{Binding Path=DataContext.CurrentStep, ElementName=Root}"
+                                      ThisItem="{Binding}"
+                                      Content="{Binding Name}"
+                                      Margin="0, 5, 12, 5" />
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
       </ScrollViewer>
-    </Border>
+    </HeaderedContentControl>
 
     <Border
       Grid.Column="1"
@@ -92,7 +161,7 @@
       Margin="10"
       Padding="15">
       <ScrollViewer>
-        <ContentControl Content="{Binding Path=CurrentView}"/>
+        <ContentControl Content="{Binding Path=CurrentView}" />
       </ScrollViewer>
     </Border>
 
