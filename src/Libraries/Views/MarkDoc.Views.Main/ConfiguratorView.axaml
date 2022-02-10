@@ -3,7 +3,6 @@
   mc:Ignorable="d"
   x:Class="MarkDoc.Views.Main.ConfiguratorView"
   xmlns="https://github.com/avaloniaui"
-  xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
