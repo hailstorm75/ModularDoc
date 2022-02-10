@@ -118,7 +118,7 @@
         <Button.Content>
           <i:Icon
             FontSize="10"
-            Foreground="White"
+            Foreground="{DynamicResource TextControlForeground}"
             Value="fa-arrow-left" />
         </Button.Content>
       </Button>
