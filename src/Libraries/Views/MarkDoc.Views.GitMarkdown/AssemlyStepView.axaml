@@ -17,7 +17,6 @@
   </UserControl.Resources>
 
   <StackPanel>
-    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
     <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
       <TextBox
         Text="{Binding PathToAssembly}"

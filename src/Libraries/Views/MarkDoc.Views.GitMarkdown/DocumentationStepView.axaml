@@ -13,8 +13,6 @@
   </UserControl.Resources>
 
   <StackPanel>
-    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
-
     <Grid RowDefinitions="*,*">
       <StackPanel Grid.Row="0">
         <Label>Documentation</Label>
