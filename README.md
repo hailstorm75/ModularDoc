@@ -21,6 +21,11 @@ The result which it produces can be seen in the Wiki of my side project - [Commo
 
 The generated structure is inspired by the one outputted by Doxygen. If you do not like it, you can always create your own **Generator** (see below in the technical description) to generate your own custom output.
 
+## Preview
+
+![screen](https://user-images.githubusercontent.com/16069996/153456188-5f9678cf-efc8-4764-8bc4-6e5b1c034c0d.gif)
+
+
 ## Running it
 
 > It has been discovered, that running the application via the `dotnet cli` results in a crash due to incorrect loading of plugins. So, for now, please use Rider/VS20**
