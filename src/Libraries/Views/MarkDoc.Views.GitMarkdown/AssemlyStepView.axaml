@@ -10,62 +10,69 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:system="clr-namespace:System;assembly=System.Runtime"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia">
   <UserControl.Resources>
     <converters:PathToFileConverter x:Key="FileConverter" />
     <converters:PathToDirectoryConverter x:Key="DirectoryConverter" />
   </UserControl.Resources>
 
   <StackPanel>
-    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
-      <TextBox
-        Text="{Binding PathToAssembly}"
-        UseFloatingWatermark="True"
-        VerticalContentAlignment="Center"
-        Watermark="Select a .NET assembly" />
+    <TextBox
+      Margin="0,0,0,10"
+      Text="{Binding PathToAssembly}"
+      UseFloatingWatermark="True"
+      VerticalContentAlignment="Center"
+      Watermark="Select a .NET assembly">
+      <TextBox.InnerRightContent>
+        <StackPanel Orientation="Horizontal">
+          <Button Background="Transparent" Padding="4" Command="{Binding BrowseCommand}">
+            <ToolTip.Tip>
+              <Label Content="Browse" />
+            </ToolTip.Tip>
+            <avalonia:Icon Value="fa-search" Foreground="{DynamicResource TextControlForeground}" />
+          </Button>
 
-      <Button
-        Command="{Binding BrowseCommand}"
-        Grid.Column="1"
-        Margin="8,0,0,0">
-        <Button.Content>
-          <avalonia:Icon
-            FontSize="10"
-            Foreground="White"
-            Value="fa-search" />
-        </Button.Content>
-      </Button>
-      <Button Command="{Binding AddCommand}" Grid.Column="2">
-        <Button.Content>
-          <avalonia:Icon
-            FontSize="10"
-            Foreground="White"
-            Value="fa-plus" />
-        </Button.Content>
-      </Button>
-    </Grid>
-    <Grid ColumnDefinitions="Auto, Auto" Margin="0,0,0,10">
-      <Button Command="{Binding AddMultipleCommand}" Grid.Column="0">
-        <DockPanel LastChildFill="True">
-          <avalonia:Icon
-            DockPanel.Dock="Left"
-            FontSize="10"
-            Margin="0,0,5,0"
-            Value="fa-plus" />
-          <TextBlock DockPanel.Dock="Right">Add multiple</TextBlock>
-        </DockPanel>
-      </Button>
-      <Button Command="{Binding ValidateCommand}" Grid.Column="1">
-        <DockPanel LastChildFill="True">
-          <avalonia:Icon
-            DockPanel.Dock="Left"
-            FontSize="10"
-            Margin="0,0,5,0"
-            Value="fa-check" />
-          <TextBlock DockPanel.Dock="Right">Validate paths</TextBlock>
-        </DockPanel>
-      </Button>
-    </Grid>
+          <controls:SplitButton Command="{Binding AddCommand}" Margin="5,0,10,0">
+            <ToolTip.Tip>
+              Add assembly
+            </ToolTip.Tip>
+            <controls:SplitButton.Flyout>
+              <Flyout Placement="Bottom">
+                <Button Command="{Binding AddMultipleCommand}">
+                  <ToolTip.Tip>
+                    Add multiple assemblies at once
+                  </ToolTip.Tip>
+                  <DockPanel LastChildFill="True">
+                    <avalonia:Icon
+                      DockPanel.Dock="Left"
+                      FontSize="10"
+                      Value="fa-plus" />
+                    <TextBlock DockPanel.Dock="Right" Margin="5, 0, 0, 0">Add multiple</TextBlock>
+                  </DockPanel>
+                </Button>
+              </Flyout>
+            </controls:SplitButton.Flyout>
+            <controls:SplitButton.Content>
+              <avalonia:Icon
+                FontSize="10"
+                Value="fa-plus" />
+            </controls:SplitButton.Content>
+          </controls:SplitButton>
+        </StackPanel>
+      </TextBox.InnerRightContent>
+    </TextBox>
+
+    <Button Command="{Binding ValidateCommand}" Margin="0,0,0,10">
+      <DockPanel LastChildFill="True">
+        <avalonia:Icon
+          DockPanel.Dock="Left"
+          FontSize="10"
+          Margin="0,0,5,0"
+          Value="fa-check" />
+        <TextBlock DockPanel.Dock="Right">Validate paths</TextBlock>
+      </DockPanel>
+    </Button>
 
     <ListBox Items="{Binding Paths}">
       <ListBox.ItemTemplate>
