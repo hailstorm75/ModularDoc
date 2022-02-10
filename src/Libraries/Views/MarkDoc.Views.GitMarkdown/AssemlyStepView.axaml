@@ -17,10 +17,6 @@
   </UserControl.Resources>
 
   <StackPanel>
-    <Label
-      Content="{Binding Title}"
-      FontSize="18"
-      Margin="0,0,0,5" />
     <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
     <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
       <TextBox
