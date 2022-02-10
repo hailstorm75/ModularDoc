@@ -8,9 +8,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
   <StackPanel>
-    <Label Content="{Binding Title}" FontSize="18" />
-    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
-
     <ComboBox
       Items="{Binding Options}"
       SelectedItem="{Binding Selected}"

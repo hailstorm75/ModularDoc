@@ -17,8 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aura.UI" Version="0.1.4.2" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.11" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.12" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="3.7.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.0-preview.179" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0-preview.179" />
@@ -44,6 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="FluentAvalonia, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\..\.nuget\packages\fluentavaloniaui\1.2.1\lib\net5.0\FluentAvalonia.dll</HintPath>
+    </Reference>
     <Reference Include="Projektanker.Icons.Avalonia, Version=3.4.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\..\.nuget\packages\projektanker.icons.avalonia\3.4.1\lib\netstandard2.0\Projektanker.Icons.Avalonia.dll</HintPath>
     </Reference>

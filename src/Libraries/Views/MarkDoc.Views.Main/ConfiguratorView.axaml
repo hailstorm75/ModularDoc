@@ -3,24 +3,112 @@
   mc:Ignorable="d"
   x:Class="MarkDoc.Views.Main.ConfiguratorView"
   xmlns="https://github.com/avaloniaui"
-  xmlns:converters="clr-namespace:MarkDoc.Views.Main.Converters"
   xmlns:core="clr-namespace:MarkDoc.Core;assembly=MarkDoc.Core"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:MarkDoc.Views.Main.Controls">
+  <UserControl.Styles>
+    <Style Selector="controls|ListBoxItemEx">
+      <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
+      <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+      <Setter Property="Background" Value="{DynamicResource ListViewItemBackground}" />
+      <Setter Property="Foreground" Value="{DynamicResource ListViewItemForeground}" />
+      <Setter Property="Padding" Value="12,0,12,0" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="MinWidth" Value="{DynamicResource ListViewItemMinWidth}" />
+      <Setter Property="MinHeight" Value="{DynamicResource ListViewItemMinHeight}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Content="{TemplateBinding Content}"
+                              Padding="{TemplateBinding Padding}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              CornerRadius="{DynamicResource ControlCornerRadius}"
+                              Margin="2" />
+
+            <!-- added 1px left margin, otherwise we can get strange artifacts while
+						 animating, I'm guessing from bad invalidation rects? -->
+            <Border Name="SelectionIndicator"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Width="3"
+                    Height="16"
+                    Margin="1 0 0 0"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    Background="{DynamicResource AccentFillColorDefaultBrush}" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="controls|ListBoxItemEx /template/ Border#SelectionIndicator">
+      <Setter Property="IsVisible" Value="False" />
+      <Setter Property="RenderTransform" Value="scaleY(0)" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Duration="00:00:00.167"
+                                         Property="RenderTransform"
+                                         Easing="0,0 0,1" />
+        </Transitions>
+      </Setter>
+    </Style>
+
+    <Style Selector="controls|ListBoxItemEx /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="TextBlock.FontWeight" Value="Normal" />
+      <Setter Property="TextBlock.FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    </Style>
+
+    <!--  Disabled State  -->
+    <Style Selector="controls|ListBoxItemEx:disabled /template/ ContentPresenter#PART_ContentPresenter">
+      <!-- There's no Disabled brush for LVI, so just dim opacity -->
+      <Setter Property="Opacity" Value="0.5" />
+    </Style>
+
+    <!--  Selected State  -->
+    <Style Selector="controls|ListBoxItemEx:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ListViewItemBackgroundSelected}" />
+    </Style>
+    <Style Selector="controls|ListBoxItemEx:selected /template/ ContentPresenter">
+      <Setter Property="TextBlock.Foreground" Value="{DynamicResource ListViewItemForegroundSelected}" />
+    </Style>
+    <Style Selector="controls|ListBoxItemEx:selected /template/ Border#SelectionIndicator">
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="RenderTransform" Value="scaleY(1)" />
+    </Style>
+
+    <!--  Selected Unfocused State (not in WinUI, so keep as Selected) -->
+    <Style Selector="controls|ListBoxItemEx:selected:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource ListViewItemBackgroundSelected}" />
+    </Style>
+    <Style Selector="controls|ListBoxItemEx:selected:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="TextBlock.Foreground" Value="{DynamicResource ListViewItemForegroundSelected}" />
+    </Style>
+
+    <!-- Disabled -->
+    <Style Selector="controls|ListBoxItemEx:selected:disabled /template/ Border#SelectionIndicator">
+      <Setter Property="Background" Value="{DynamicResource ListViewItemSelectionIndicatorDisabledBrush}" />
+    </Style>
+  </UserControl.Styles>
 
   <Grid
     ColumnDefinitions="Auto,*"
     Margin="15"
-    RowDefinitions="Auto,*,Auto">
+    RowDefinitions="Auto,*">
     <!--  Row 0  -->
     <DockPanel
       Grid.Column="0"
       Grid.ColumnSpan="2"
       Grid.Row="0"
-      Margin="5,0,0,15">
-      <FloatingButton
+      Margin="0,0,0,15">
+      <Button
         Command="{Binding BackCommand}"
         DockPanel.Dock="Left"
         Height="35"
@@ -30,177 +118,178 @@
         <Button.Content>
           <i:Icon
             FontSize="10"
-            Foreground="White"
+            Foreground="{DynamicResource TextControlForeground}"
             Value="fa-arrow-left" />
         </Button.Content>
-      </FloatingButton>
+      </Button>
       <Label
         Content="{Binding Title}"
         DockPanel.Dock="Right"
         FontSize="24" />
     </DockPanel>
 
-    <ScrollViewer
-      Grid.Column="0"
-      Grid.Row="1"
-      Margin="0,0,10,0">
-      <ItemsControl Items="{Binding Steps}">
-        <ItemsControl.ItemsPanel>
-          <ItemsPanelTemplate>
-            <StackPanel />
-          </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-          <DataTemplate DataType="{x:Type core:IPluginStep}">
-            <Label Margin="5">
-              <Grid ColumnDefinitions="7,*">
-                <Border
-                  BorderBrush="Blue"
-                  BorderThickness="2,0,0,0"
-                  Grid.Column="0"
-                  Margin="0,0,5,0">
-                  <!--  ReSharper disable Xaml.BindingWithContextNotResolved  -->
-                  <!--  ReSharper disable Xaml.PossibleNullReferenceException  -->
-                  <Border.IsVisible>
-                    <Binding ElementName="Root" Path="DataContext.CurrentStep">
-                      <Binding.Converter>
-                        <converters:ActivePluginStepToBoolConverter CurrentPlugin="{Binding}" />
-                      </Binding.Converter>
-                    </Binding>
-                  </Border.IsVisible>
-                  <!--  ReSharper restore Xaml.PossibleNullReferenceException  -->
-                  <!--  ReSharper restore Xaml.BindingWithContextNotResolved  -->
-                </Border>
-                <TextBlock
-                  FontSize="16"
-                  Grid.Column="1"
-                  Text="{Binding Name}" />
-              </Grid>
-            </Label>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </ScrollViewer>
-
-    <Border
-      BoxShadow="2 2 4 4 LightGray"
-      Grid.Column="1"
-      Grid.Row="1"
-      Margin="10"
-      Padding="15">
+    <HeaderedContentControl Grid.Column="0"
+                            Grid.Row="1"
+                            Header="Steps"
+                            MinWidth="150"
+                            Margin="0,0,10,0"
+                            CornerRadius="{DynamicResource ControlCornerRadius}">
       <ScrollViewer>
-        <ContentControl Content="{Binding Path=CurrentView}" />
+        <ItemsControl Items="{Binding Steps}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type core:IPluginStep}">
+              <controls:ListBoxItemEx SelectedItem="{Binding Path=DataContext.CurrentStep, ElementName=Root}"
+                                      ThisItem="{Binding}"
+                                      Content="{Binding Name}"
+                                      Margin="0, 5, 12, 5" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
       </ScrollViewer>
-    </Border>
+    </HeaderedContentControl>
 
-    <!--  Row 2  -->
-    <Grid
-      ColumnDefinitions="*,*"
+    <HeaderedContentControl
       Grid.Column="1"
-      Grid.Row="2"
-      Margin="10,0,10,0">
-      <!--  Back  -->
-      <Button
-        Command="{Binding PreviousStageCommand}"
-        Grid.Column="0"
-        HorizontalAlignment="Left"
-        Name="ButtonBack">
-        <Interaction.Behaviors>
-          <DataTriggerBehavior
-            Binding="{Binding Path=CurrentStep.Id}"
-            ComparisonCondition="Equal"
-            Value="{Binding Steps[0].Id}">
-            <ChangePropertyAction
-              PropertyName="IsVisible"
-              TargetObject="{Binding #ButtonBack}"
-              Value="False" />
-          </DataTriggerBehavior>
-          <DataTriggerBehavior
-            Binding="{Binding Path=CurrentStep.Id}"
-            ComparisonCondition="NotEqual"
-            Value="{Binding Steps[0].Id}">
-            <ChangePropertyAction
-              PropertyName="IsVisible"
-              TargetObject="{Binding #ButtonBack}"
-              Value="True" />
-          </DataTriggerBehavior>
-        </Interaction.Behaviors>
-        <DockPanel>
-          <i:Icon DockPanel.Dock="Left" Value="fa-arrow-left" />
-          <Label
-            Content="Back"
-            DockPanel.Dock="Right"
-            Margin="5,0,0,0" />
-        </DockPanel>
-      </Button>
+      Grid.Row="1">
+      <HeaderedContentControl.Header>
+        <DockPanel LastChildFill="True">
+          <TextBlock
+            DockPanel.Dock="Left"
+            Text="{Binding CurrentView.ViewModel.Title}"
+            FontSize="24"
+            FontWeight="SemiBold"/>
 
-      <!--  Next & Finish  -->
-      <Button
-        Command="{Binding NextStageCommand}"
-        Grid.Column="1"
-        HorizontalAlignment="Right"
-        Name="ButtonNext">
-        <Interaction.Behaviors>
-          <DataTriggerBehavior
-            Binding="{Binding Path=CurrentStep.IsLastStep}"
-            ComparisonCondition="Equal"
-            Value="False">
-            <ChangePropertyAction
-              PropertyName="IsVisible"
-              TargetObject="{Binding #ButtonNext}"
-              Value="True" />
-          </DataTriggerBehavior>
-          <DataTriggerBehavior
-            Binding="{Binding Path=CurrentStep.IsLastStep}"
-            ComparisonCondition="Equal"
-            Value="True">
-            <ChangePropertyAction
-              PropertyName="IsVisible"
-              TargetObject="{Binding #ButtonNext}"
-              Value="False" />
-          </DataTriggerBehavior>
-        </Interaction.Behaviors>
-        <DockPanel>
-          <Label
-            Content="Next"
-            DockPanel.Dock="Left"
-            Margin="0,0,5,0" />
-          <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
+          <Button DockPanel.Dock="Right" HorizontalAlignment="Right">
+            <Button.Content>
+              <i:Icon Value="fa-question-circle" />
+            </Button.Content>
+            <ToolTip.Tip>
+              Help
+            </ToolTip.Tip>
+            <Button.Flyout>
+              <Flyout Placement="LeftEdgeAlignedTop">
+                <TextBlock MaxWidth="250" Text="{Binding CurrentView.ViewModel.Description}" TextWrapping="Wrap" />
+              </Flyout>
+            </Button.Flyout>
+          </Button>
         </DockPanel>
-      </Button>
-      <Button
-        Command="{Binding FinishCommand}"
-        Grid.Column="1"
-        HorizontalAlignment="Right"
-        Name="ButtonFinish">
-        <Interaction.Behaviors>
-          <DataTriggerBehavior
-            Binding="{Binding Path=CurrentStep.IsLastStep}"
-            ComparisonCondition="Equal"
-            Value="False">
-            <ChangePropertyAction
-              PropertyName="IsVisible"
-              TargetObject="{Binding #ButtonFinish}"
-              Value="False" />
-          </DataTriggerBehavior>
-          <DataTriggerBehavior
-            Binding="{Binding Path=CurrentStep.IsLastStep}"
-            ComparisonCondition="Equal"
-            Value="True">
-            <ChangePropertyAction
-              PropertyName="IsVisible"
-              TargetObject="{Binding #ButtonFinish}"
-              Value="True" />
-          </DataTriggerBehavior>
-        </Interaction.Behaviors>
-        <DockPanel>
-          <Label
-            Content="Finish"
-            DockPanel.Dock="Left"
-            Margin="0,0,5,0" />
-          <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
-        </DockPanel>
-      </Button>
-    </Grid>
+      </HeaderedContentControl.Header>
+      <Grid RowDefinitions="*, Auto">
+        <ContentControl Grid.Row="0" Content="{Binding CurrentView}" Margin="0, 0, 12, 0" />
+
+        <Grid
+          ColumnDefinitions="*,*"
+          Grid.Row="1"
+          Margin="10,0,10,0">
+          <!--  Back  -->
+          <Button
+            Command="{Binding PreviousStageCommand}"
+            Grid.Column="0"
+            HorizontalAlignment="Left"
+            Name="ButtonBack">
+            <Interaction.Behaviors>
+              <DataTriggerBehavior
+                Binding="{Binding Path=CurrentStep.Id}"
+                ComparisonCondition="Equal"
+                Value="{Binding Steps[0].Id}">
+                <ChangePropertyAction
+                  PropertyName="IsVisible"
+                  TargetObject="{Binding #ButtonBack}"
+                  Value="False" />
+              </DataTriggerBehavior>
+              <DataTriggerBehavior
+                Binding="{Binding Path=CurrentStep.Id}"
+                ComparisonCondition="NotEqual"
+                Value="{Binding Steps[0].Id}">
+                <ChangePropertyAction
+                  PropertyName="IsVisible"
+                  TargetObject="{Binding #ButtonBack}"
+                  Value="True" />
+              </DataTriggerBehavior>
+            </Interaction.Behaviors>
+            <DockPanel>
+              <i:Icon DockPanel.Dock="Left" Value="fa-arrow-left" />
+              <Label
+                Content="Back"
+                DockPanel.Dock="Right"
+                Margin="5,0,0,0" />
+            </DockPanel>
+          </Button>
+
+          <!--  Next & Finish  -->
+          <Button
+            Command="{Binding NextStageCommand}"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Name="ButtonNext">
+            <Interaction.Behaviors>
+              <DataTriggerBehavior
+                Binding="{Binding Path=CurrentStep.IsLastStep}"
+                ComparisonCondition="Equal"
+                Value="False">
+                <ChangePropertyAction
+                  PropertyName="IsVisible"
+                  TargetObject="{Binding #ButtonNext}"
+                  Value="True" />
+              </DataTriggerBehavior>
+              <DataTriggerBehavior
+                Binding="{Binding Path=CurrentStep.IsLastStep}"
+                ComparisonCondition="Equal"
+                Value="True">
+                <ChangePropertyAction
+                  PropertyName="IsVisible"
+                  TargetObject="{Binding #ButtonNext}"
+                  Value="False" />
+              </DataTriggerBehavior>
+            </Interaction.Behaviors>
+            <DockPanel>
+              <Label
+                Content="Next"
+                DockPanel.Dock="Left"
+                Margin="0,0,5,0" />
+              <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
+            </DockPanel>
+          </Button>
+          <Button
+            Command="{Binding FinishCommand}"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Name="ButtonFinish">
+            <Interaction.Behaviors>
+              <DataTriggerBehavior
+                Binding="{Binding Path=CurrentStep.IsLastStep}"
+                ComparisonCondition="Equal"
+                Value="False">
+                <ChangePropertyAction
+                  PropertyName="IsVisible"
+                  TargetObject="{Binding #ButtonFinish}"
+                  Value="False" />
+              </DataTriggerBehavior>
+              <DataTriggerBehavior
+                Binding="{Binding Path=CurrentStep.IsLastStep}"
+                ComparisonCondition="Equal"
+                Value="True">
+                <ChangePropertyAction
+                  PropertyName="IsVisible"
+                  TargetObject="{Binding #ButtonFinish}"
+                  Value="True" />
+              </DataTriggerBehavior>
+            </Interaction.Behaviors>
+            <DockPanel>
+              <Label
+                Content="Finish"
+                DockPanel.Dock="Left"
+                Margin="0,0,5,0" />
+              <i:Icon DockPanel.Dock="Right" Value="fa-arrow-right" />
+            </DockPanel>
+          </Button>
+        </Grid>
+      </Grid>
+    </HeaderedContentControl>
   </Grid>
 </UserControl>

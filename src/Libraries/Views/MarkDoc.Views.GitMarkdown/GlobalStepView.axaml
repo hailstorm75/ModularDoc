@@ -8,30 +8,21 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <StackPanel>
-    <Label
-      Content="{Binding Title}"
-      FontSize="18"
-      Margin="0,0,0,5" />
-    <TextBlock Margin="0,0,0,5" Text="{Binding Description}" />
-    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
-      <TextBox
-        Text="{Binding PathToOutput}"
-        UseFloatingWatermark="True"
-        VerticalContentAlignment="Center"
-        Watermark="Output directory" />
-
-      <FloatingButton
-        Command="{Binding BrowseCommand}"
-        Grid.Column="1"
-        Margin="8,0,0,0">
-        <FloatingButton.Content>
-          <avalonia:Icon
-            FontSize="10"
-            Foreground="White"
-            Value="fa-search" />
-        </FloatingButton.Content>
-      </FloatingButton>
-    </Grid>
+    <TextBox
+      Margin="0,0,0,10"
+      Text="{Binding PathToOutput}"
+      UseFloatingWatermark="True"
+      VerticalContentAlignment="Center"
+      Watermark="Output directory">
+      <TextBox.InnerRightContent>
+        <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0" Command="{Binding BrowseCommand}">
+          <ToolTip.Tip>
+            <Label Content="Browse" />
+          </ToolTip.Tip>
+          <avalonia:Icon Value="fa-search" />
+        </Button>
+      </TextBox.InnerRightContent>
+    </TextBox>
 
     <TreeView
       Items="{Binding AvailableNamespaces}"
@@ -44,17 +35,20 @@
               DockPanel.Dock="Left"
               IsChecked="{Binding IsChecked}"
               IsEnabled="{Binding IsEnabled}"
-              Margin="0,0,10,0" />
-            <Border>
-              <ToolTip.Tip>
-                <Label Content="{Binding FullNamespace}" />
-              </ToolTip.Tip>
-              <Label
-                Content="{Binding DisplayName}"
-                DockPanel.Dock="Right"
-                FontStyle="Italic"
-                VerticalAlignment="Center" />
-            </Border>
+              Margin="0,0,10,0">
+              <CheckBox.Content>
+                <Border>
+                  <ToolTip.Tip>
+                    <Label Content="{Binding FullNamespace}" />
+                  </ToolTip.Tip>
+                  <Label
+                    Content="{Binding DisplayName}"
+                    DockPanel.Dock="Right"
+                    FontStyle="Italic"
+                    VerticalAlignment="Center" />
+                </Border>
+              </CheckBox.Content>
+            </CheckBox>
           </DockPanel>
         </TreeDataTemplate>
         <TreeDataTemplate DataType="{x:Type gitMarkdown:NamespaceNode}" ItemsSource="{Binding Nodes}">
@@ -63,16 +57,19 @@
               DockPanel.Dock="Left"
               IsChecked="{Binding IsChecked}"
               IsEnabled="{Binding IsEnabled}"
-              Margin="0,0,10,0" />
-            <Border>
-              <ToolTip.Tip>
-                <Label Content="{Binding FullNamespace}" />
-              </ToolTip.Tip>
-              <Label
-                Content="{Binding DisplayName}"
-                DockPanel.Dock="Right"
-                VerticalAlignment="Center" />
-            </Border>
+              Margin="0,0,10,0">
+              <CheckBox.Content>
+                <Border>
+                  <ToolTip.Tip>
+                    <Label Content="{Binding FullNamespace}" />
+                  </ToolTip.Tip>
+                  <Label
+                    Content="{Binding DisplayName}"
+                    DockPanel.Dock="Right"
+                    VerticalAlignment="Center" />
+                </Border>
+              </CheckBox.Content>
+            </CheckBox>
           </DockPanel>
         </TreeDataTemplate>
       </TreeView.DataTemplates>

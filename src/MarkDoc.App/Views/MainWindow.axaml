@@ -6,10 +6,19 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MarkDoc.App.Views.MainWindow"
         Icon="/Assets/logo.ico"
+        Name="WindowHost"
         Title="MarkDoc">
 
-  <Grid>
-    <reactiveUi:TransitioningContentControl Name="MainContent"/>
+  <Grid RowDefinitions="Auto, *">
+    <Grid Name="TitleBarHost" ColumnDefinitions="Auto,*" Background="Transparent" IsVisible="False">
+      <!-- Image control for your Icon -->
+      <Image Source="/Assets/logo.ico" MaxHeight="16" Stretch="Uniform" IsHitTestVisible="False" />
+
+      <!-- TextBlock for the Window caption -->
+      <TextBlock Grid.Column="1" Text="{Binding ElementName=WindowHost, Path=Title}" VerticalAlignment="Center" Margin="5, 0, 0, 0" IsHitTestVisible="False" />
+    </Grid>
+    
+    <reactiveUi:TransitioningContentControl Grid.Row="1" Name="MainContent"/>
     <!-- <ContentPresenter Name="MainContent"/> -->
   </Grid>
 

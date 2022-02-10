@@ -5,13 +5,15 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
+using FluentAvalonia.Styling;
+using FluentAvalonia.UI.Controls;
 using MarkDoc.Constants;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.App.Views
 {
   public class MainWindow
-    : Window
+    : CoreWindow
   {
     private readonly NavigationManager m_navigator;
     private TransitioningContentControl? m_mainContent;
@@ -32,6 +34,38 @@ namespace MarkDoc.App.Views
 #if DEBUG
       this.AttachDevTools();
 #endif
+    }
+
+    /// <inheritdoc />
+    protected override void OnOpened(EventArgs e)
+    {
+      base.OnOpened(e);
+
+      // Check if CoreWindow has ICoreApplicationViewTitleBar (null only on Mac/Linux)
+      if (TitleBar != null)
+      {
+        // Tell CoreWindow we want to remove the default TitleBar and set our own
+        TitleBar.ExtendViewIntoTitleBar = true;
+
+        // Retrieve reference to the Xaml element we're using a TitleBar
+        if (this.FindControl<Grid>("TitleBarHost") is { } g)
+        {
+          // Call SetTitleBar to tell CoreWindow the element we want to use as the TitleBar
+          SetTitleBar(g);
+          g.IsVisible = true;
+
+          // Set the margin of the Custom TitleBar so it doesn't overlap with the CaptionButtons
+          g.Margin = new Thickness(8, 5, TitleBar.SystemOverlayRightInset, 5);
+        }
+      }
+
+      var faTheme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
+      if (faTheme == null)
+        return;
+
+      faTheme.RequestedTheme = "Light";
+      faTheme.UseUserAccentColorOnWindows = true;
+      faTheme.ForceWin32WindowToTheme(this);
     }
 
     private async void OnNavigationChanged(object? sender, NavigationManager.ViewData data)
