@@ -130,8 +130,8 @@
 
     <HeaderedContentControl Grid.Column="0"
                             Grid.Row="1"
-                            MinWidth="150"
                             Header="Steps"
+                            MinWidth="150"
                             Margin="0,0,10,0"
                             CornerRadius="{DynamicResource ControlCornerRadius}">
       <ScrollViewer>
@@ -155,8 +155,30 @@
 
     <HeaderedContentControl
       Grid.Column="1"
-      Grid.Row="1"
-      Header="{Binding CurrentView.ViewModel.Title}">
+      Grid.Row="1">
+      <HeaderedContentControl.Header>
+        <DockPanel LastChildFill="True">
+          <TextBlock
+            DockPanel.Dock="Left"
+            Text="{Binding CurrentView.ViewModel.Title}"
+            FontSize="24"
+            FontWeight="SemiBold"/>
+
+          <Button DockPanel.Dock="Right" HorizontalAlignment="Right">
+            <Button.Content>
+              <i:Icon Value="fa-question-circle" />
+            </Button.Content>
+            <ToolTip.Tip>
+              Help
+            </ToolTip.Tip>
+            <Button.Flyout>
+              <Flyout Placement="LeftEdgeAlignedTop">
+                <TextBlock MaxWidth="250" Text="{Binding CurrentView.ViewModel.Description}" TextWrapping="Wrap" />
+              </Flyout>
+            </Button.Flyout>
+          </Button>
+        </DockPanel>
+      </HeaderedContentControl.Header>
       <Grid RowDefinitions="*, Auto">
         <ContentControl Grid.Row="0" Content="{Binding CurrentView}" />
 
