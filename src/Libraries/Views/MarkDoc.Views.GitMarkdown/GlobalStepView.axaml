@@ -8,25 +8,21 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <StackPanel>
-    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
-      <TextBox
-        Text="{Binding PathToOutput}"
-        UseFloatingWatermark="True"
-        VerticalContentAlignment="Center"
-        Watermark="Output directory" />
-
-      <Button
-        Command="{Binding BrowseCommand}"
-        Grid.Column="1"
-        Margin="8,0,0,0">
-        <Button.Content>
-          <avalonia:Icon
-            FontSize="10"
-            Foreground="White"
-            Value="fa-search" />
-        </Button.Content>
-      </Button>
-    </Grid>
+    <TextBox
+      Margin="0,0,0,10"
+      Text="{Binding PathToOutput}"
+      UseFloatingWatermark="True"
+      VerticalContentAlignment="Center"
+      Watermark="Output directory">
+      <TextBox.InnerRightContent>
+        <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0" Command="{Binding BrowseCommand}">
+          <ToolTip.Tip>
+            <Label Content="Browse" />
+          </ToolTip.Tip>
+          <avalonia:Icon Value="fa-search" />
+        </Button>
+      </TextBox.InnerRightContent>
+    </TextBox>
 
     <TreeView
       Items="{Binding AvailableNamespaces}"
