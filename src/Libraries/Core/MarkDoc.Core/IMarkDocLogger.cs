@@ -39,24 +39,28 @@ namespace MarkDoc.Core
     /// Logs given <paramref name="message"/> as information
     /// </summary>
     /// <param name="message">Message to log</param>
-    void Info(string message);
+    /// <param name="source">Log source</param>
+    void Info(string message, string source = "Unspecified");
 
     /// <summary>
     /// Logs given <paramref name="message"/> as debug information
     /// </summary>
     /// <param name="message">Message to log</param>
-    void Debug(string message);
+    /// <param name="source">Log source</param>
+    void Debug(string message, string source = "Unspecified");
 
     /// <summary>
     /// Logs given <paramref name="message"/> as an error
     /// </summary>
     /// <param name="message">Message to log</param>
-    void Error(string message);
+    /// <param name="source">Log source</param>
+    void Error(string message, string source = "Unspecified");
 
     /// <summary>
     /// Logs given <paramref name="message"/> as a warning
     /// </summary>
     /// <param name="message">Message to log</param>
-    void Warning(string message);
+    /// <param name="source">Log source</param>
+    void Warning(string message, string source = "Unspecified");
   }
 }

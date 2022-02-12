@@ -7,6 +7,8 @@ namespace MarkDoc.Core
   /// </summary>
   public readonly struct LogMessage
   {
+    #region Properties
+
     /// <summary>
     /// Log type
     /// </summary>
@@ -23,12 +25,20 @@ namespace MarkDoc.Core
     public DateTime Time { get; }
 
     /// <summary>
+    /// Log source
+    /// </summary>
+    public string Source { get; }
+
+    #endregion
+
+    /// <summary>
     /// Default constructor
     /// </summary>
-    public LogMessage(IMarkDocLogger.LogType type, string message)
+    public LogMessage(IMarkDocLogger.LogType type, string message, string source)
     {
       Type = type;
       Message = message;
+      Source = source;
       Time = DateTime.Now;
     }
   }

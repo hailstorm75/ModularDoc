@@ -25,9 +25,11 @@ namespace MarkDoc.ViewModels.Main
     private readonly NavigationManager m_navigationManager;
     private readonly IDialogManager m_dialogManager;
     private readonly CancellationTokenSource m_cancellationTokenSource;
-    private IReadOnlyDictionary<string,string> m_pluginSettings = new Dictionary<string, string>();
+    private IReadOnlyDictionary<string, string> m_pluginSettings = new Dictionary<string, string>();
     private Configuration m_pluginConfiguration;
     private bool m_loading;
+    private bool groupLogsBySource;
+    private bool groupLogsByType;
 
     #endregion
 
@@ -57,6 +59,31 @@ namespace MarkDoc.ViewModels.Main
 
     /// <inheritdoc />
     public int ProcessesComplete { get; private set; }
+
+    /// <inheritdoc />
+    public bool GroupLogsBySource
+    {
+      get => groupLogsBySource;
+      set
+      {
+        groupLogsBySource = value;
+        this.RaisePropertyChanged(nameof(GroupLogsBySource));
+        this.RaisePropertyChanged(nameof(LogMessages));
+      }
+    }
+
+    /// <inheritdoc />
+    public bool GroupLogsByType
+    {
+      get => groupLogsByType;
+      set
+      {
+        groupLogsByType = value;
+        this.RaisePropertyChanged(nameof(GroupLogsByType));
+        this.RaisePropertyChanged(nameof(LogMessages));
+      }
+    }
+
 
     #endregion
 
@@ -139,6 +166,7 @@ namespace MarkDoc.ViewModels.Main
         {
           logger.NewLog -= LoggerOnNewLog;
           LogMessages.AddRange(m_concurrentLogMessages);
+          this.RaisePropertyChanged(nameof(LogMessages));
 
           foreach (var process in Processes)
             process.StateChanged -= ProcessOnStateChanged;
