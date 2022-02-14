@@ -34,9 +34,7 @@ namespace MarkDoc.ViewModels.Main
 
     #region Properties
 
-    /// <summary>
-    /// Search term for filtering plugins
-    /// </summary>
+    /// <inheritdoc />
     public string SearchTerm
     {
       get => m_searchTerm;
