@@ -155,7 +155,7 @@ namespace MarkDoc.ViewModels.Main
 
     private async Task PluginOpen()
     {
-      var configurationFile = await m_dialogManager.TrySelectFilesAsync("Open configuration", new [] { (new[] { "conf" } as IEnumerable<string>, "Configuration") });
+      var configurationFile = await m_dialogManager.TrySelectFilesAsync("Open configuration", new [] { (new[] { "mconf" } as IEnumerable<string>, "Configuration") });
       if (configurationFile.IsEmpty)
         return;
 
@@ -163,15 +163,10 @@ namespace MarkDoc.ViewModels.Main
       if (paths.Count == 0)
         return;
 
-      using var fileStream = new StreamReader(paths.First());
-      var data = await fileStream.ReadToEndAsync().ConfigureAwait(false);
-      var (pluginId, settings) = JsonConvert.DeserializeObject<KeyValuePair<string, string>>(data);
-
       m_navigationManager.NavigateTo(PageNames.CONFIGURATION,
       new Dictionary<string, string>
       {
-        { IConfiguratorViewModel.ARGUMENT_ID, pluginId },
-        { IConfiguratorViewModel.ARGUMENT_SETTINGS, settings }
+        { IConfiguratorViewModel.ARGUMENT_SETTINGS_PATH, paths.First() }
       });
     }
 
