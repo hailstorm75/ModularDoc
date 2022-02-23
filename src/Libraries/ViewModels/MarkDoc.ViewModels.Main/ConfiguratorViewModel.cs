@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MarkDoc.Constants;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
 using ReactiveUI;
 
@@ -176,18 +177,11 @@ namespace MarkDoc.ViewModels.Main
     {
       var (id, settings, settingsPath) = ExtractArguments(arguments);
 
-      m_plugin = PluginManager.GetPlugin(id);
-
       if (!string.IsNullOrEmpty(settingsPath))
       {
-        // var configuration = await Configuration.LoadFromFileAsync(settings).ConfigureAwait(false);
-        // PluginSettings = configuration.GetEditableSettings();
-
-        await using var stream = new FileStream(settingsPath, FileMode.Open);
-
-        var deserialized = await JsonSerializer.DeserializeAsync<Dictionary<string, IReadOnlyDictionary<string, string>>>(stream);
-        if (deserialized is not null)
-          PluginSettings = deserialized;
+        var configuration = await Configuration.LoadFromFileAsync(settingsPath).ConfigureAwait(true);
+        PluginSettings = configuration.GetEditableSettings();
+        id = configuration.PluginId;
       }
       else if (!string.IsNullOrEmpty(settings))
       {
@@ -195,6 +189,8 @@ namespace MarkDoc.ViewModels.Main
         if (deserialized is not null)
           PluginSettings = deserialized;
       }
+
+      m_plugin = PluginManager.GetPlugin(id);
 
       foreach (var step in m_plugin.GetPluginSteps())
       {
@@ -217,7 +213,7 @@ namespace MarkDoc.ViewModels.Main
 
       var result = ("", "", "");
       foreach (var (key, value) in arguments)
-        switch (key.ToLowerInvariant())
+        switch (key)
         {
           case "0":
           case IConfiguratorViewModel.ARGUMENT_ID:

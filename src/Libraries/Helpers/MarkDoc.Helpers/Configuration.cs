@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace MarkDoc.Helpers
 {
-  public readonly struct Configuration
+  public struct Configuration
   {
     /// <summary>
     /// Source plugin id
     /// </summary>
-    public string PluginId { get; }
+    public string PluginId { get; set; }
 
     /// <summary>
     /// Plugin settings
     /// </summary>
-    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> Settings { get; }
+    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> Settings { get; set; }
 
     /// <summary>
     /// Default constructor
@@ -32,10 +32,8 @@ namespace MarkDoc.Helpers
 
     public static async ValueTask<Configuration> LoadFromFileAsync(string path)
     {
-      await using var stream = new FileStream(path, FileMode.Open);
-      var (id, settings) = await JsonSerializer.DeserializeAsync<(string id, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)>(stream).ConfigureAwait(false);
-
-      return new Configuration(id, settings);
+      await using var stream = File.OpenRead(path);
+      return await JsonSerializer.DeserializeAsync<Configuration>(stream).ConfigureAwait(false);
     }
 
     public static async ValueTask SaveToFileAsync(Configuration configuration, Stream stream)
