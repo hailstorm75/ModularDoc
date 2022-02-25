@@ -20,12 +20,10 @@ namespace MarkDoc.Elements.Markdown
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Diagram(string name, string content, bool external, string urlToRaw)
+    public Diagram(string name, string diagramProvider, string content, bool external, string urlToRaw)
     {
       m_name = name;
-      m_content = external
-        ? string.Format("![{0}](https://www.plantuml.com/plantuml/proxy?cache=no&src={1}/{2}.iuml)", name, urlToRaw, name.Replace('.', Path.DirectorySeparatorChar))
-        : @$"```plantuml
+      m_content = @$"```{diagramProvider}
   {content}
 ```";
     }

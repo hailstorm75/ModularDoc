@@ -243,7 +243,7 @@ namespace MarkDoc.Plugins.GitMarkdown
 
       /// <inheritdoc />
       public IDiagram CreateDiagram(string name, string content)
-        => new Diagram(name, content, m_externalDiagrams, m_rawUrl);
+        => new Diagram(name, "mermaid", content, m_externalDiagrams, m_rawUrl);
 
       public ILink CreateLink(IText content, Lazy<string> reference)
         => new Link(content, reference);
