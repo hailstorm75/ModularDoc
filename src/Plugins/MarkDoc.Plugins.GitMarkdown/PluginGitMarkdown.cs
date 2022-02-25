@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Autofac;
 using MarkDoc.Core;
 using MarkDoc.Diagrams;
-using MarkDoc.Diagrams.PlantUML;
+using MarkDoc.Diagrams.Mermaid;
 using MarkDoc.Documentation;
 using MarkDoc.Documentation.Xml;
 using MarkDoc.Elements;
@@ -83,7 +83,7 @@ namespace MarkDoc.Plugins.GitMarkdown
       builder.RegisterType<Linker>().As<ILinker>().SingleInstance();
       builder.RegisterType<TypeComposer>().As<ITypeComposer>().SingleInstance();
       builder.RegisterType<PrinterMarkdown>().As<IPrinter>().SingleInstance();
-      builder.RegisterType<PlantUmlResolver>().As<IDiagramResolver>().SingleInstance();
+      builder.RegisterType<MermaidResolver>().As<IDiagramResolver>().SingleInstance();
 
       builder.RegisterType<AssembliesStep>().As<IPluginStep>();
       builder.RegisterType<DocumentationStep>().As<IPluginStep>();
@@ -156,7 +156,7 @@ namespace MarkDoc.Plugins.GitMarkdown
           .ConfigureAwait(false);
 
         var linker = new Linker(resolver, linkerSettings);
-        var diagrams = new PlantUmlResolver();
+        var diagrams = new MermaidResolver(linker);
         var composer = new TypeComposer(new Creator(false, linker.GetRawUrl()), docResolver, resolver, linker, diagrams);
         var printer = new PrinterMarkdown(composer, linker, printerProcess);
 

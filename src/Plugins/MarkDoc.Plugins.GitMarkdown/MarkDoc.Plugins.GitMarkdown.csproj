@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Components\Diagrams\MarkDoc.Diagrams.Mermaid\MarkDoc.Diagrams.Mermaid.csproj" />
     <ProjectReference Include="..\..\Components\Diagrams\MarkDoc.Diagrams.PlantUML\MarkDoc.Diagrams.PlantUML.csproj" />
     <ProjectReference Include="..\..\Components\Documentation\MarkDoc.Documentation.Xml\MarkDoc.Documentation.Xml.csproj" />
     <ProjectReference Include="..\..\Components\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
@@ -46,7 +47,7 @@
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="dnlib" Version="3.4.0" />
-    <PackageReference Include="FSharp.Core" Version="6.0.1" />
+    <PackageReference Include="FSharp.Core" Version="6.0.3" />
   </ItemGroup>
 
 </Project>

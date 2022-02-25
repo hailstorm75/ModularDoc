@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
   </ItemGroup>
 </Project>
