@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using MarkDoc.Linkers;
@@ -25,6 +26,7 @@ namespace MarkDoc.Diagrams.Mermaid
     }
 
     /// <inheritdoc />
+    [SuppressMessage("ReSharper", "RedundantSuppressNullableWarningExpression")]
     public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
     {
       var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
@@ -68,10 +70,10 @@ namespace MarkDoc.Diagrams.Mermaid
 
             foreach (var constraint in constraints)
             {
-              if (!typeNodes.Contains(constraint.RawName))
+              if (!typeNodes!.Contains(constraint.RawName))
               {
                 var res = GenerateResType(constraint);
-                AddToDictionary(types, res);
+                AddToDictionary(types!, res);
                 typeNodes.Add(constraint.RawName);
               }
 
