@@ -10,12 +10,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Debug\Libraries\Diagrams</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Core</OutputPath>
     <DocumentationFile>..\..\..\..\bin\Debug\Libraries\Core\MarkDoc.Diagrams.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Release\Libraries\Diagrams</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Libraries\Core</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
