@@ -154,6 +154,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
       Options.Add(new Selection("GitLab", (int)GitPlatform.GitLab));
 
       Selected = Options.First();
+      UpdateCanProceed();
     }
 
     #region Methods
@@ -174,14 +175,20 @@ namespace MarkDoc.ViewModels.GitMarkdown
         return Task.CompletedTask;
 
       Selected = Options.First(x => x.Value.ToString().Equals(data));
+
       // ReSharper disable AssignNullToNotNullAttribute
-      GitUser = gitUser;
-      GitRepository = gitRepository;
-      GitBranch = gitBranch;
+      m_gitUser = gitUser;
+      m_gitRepository = gitRepository;
+      m_gitBranch = gitBranch;
       // ReSharper restore AssignNullToNotNullAttribute
+
       LinksToSourceCode = linksToSourceCode;
       OutputStructured = outputStructuredBool;
       OutputTargetWiki = outputTargetWikiBool;
+
+      OnPropertyChanged(nameof(GitUser));
+      OnPropertyChanged(nameof(GitRepository));
+      OnPropertyChanged(nameof(GitBranch));
 
       return Task.CompletedTask;
     }

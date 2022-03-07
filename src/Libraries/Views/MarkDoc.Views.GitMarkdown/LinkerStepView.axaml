@@ -21,7 +21,7 @@
     </ComboBox>
     
     <StackPanel Orientation="Horizontal" Margin="0, 5, 0, 0">
-      <ToggleSwitch Content="Links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}"/>
+      <ToggleSwitch Content="Links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}" IsVisible="False"/>
       <ToggleSwitch Content="Output target" OnContent="Wiki" OffContent="Source" IsChecked="{Binding OutputTargetWiki}">
         <ToolTip.Tip>
           <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
@@ -52,7 +52,7 @@
         </ToolTip.Tip>
       </ToggleSwitch>
     </StackPanel>
-    <HeaderedContentControl Header="Repository details">
+    <HeaderedContentControl Header="Repository details" IsVisible="False">
       <Grid ColumnDefinitions="*, 10, *, 10, *" IsEnabled="{Binding RepositorySettingsRequired}">
         <TextBox Grid.Column="0" Watermark="Username" Text="{Binding GitUser}"/>
         <TextBox Grid.Column="2" Watermark="Repository name" Text="{Binding GitRepository}"/>
