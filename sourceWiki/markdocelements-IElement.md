@@ -19,7 +19,7 @@ Interface for elements
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IEnumerable` | [`Print`](markdocelements-IElement#print)()<br>Converts given element to a sequence of strings |
+| `IEnumerable` | [`Print`](markdocelements-IElement.md#print)()<br>Converts given element to a sequence of strings |
 
 ## Details
 ### Summary

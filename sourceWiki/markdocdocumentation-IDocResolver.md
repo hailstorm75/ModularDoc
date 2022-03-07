@@ -19,8 +19,8 @@ Interface for documentation resolvers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`ResolveAsync`](markdocdocumentation-IDocResolver#resolveasync)(`string` path)<br>Resolve xml documentation on given `path` |
-| `bool` | [`TryFindType`](markdocdocumentation-IDocResolver#tryfindtype)([`IType`](./markdocmemberstypes-IType) type, out [`IDocElement`](./markdocdocumentation-IDocElement) resultType) |
+| `Task` | [`ResolveAsync`](markdocdocumentation-IDocResolver.md#resolveasync)(`string` path)<br>Resolve xml documentation on given `path` |
+| `bool` | [`TryFindType`](markdocdocumentation-IDocResolver.md#tryfindtype)([`IType`](./markdocmemberstypes-IType.md) type, out [`IDocElement`](./markdocdocumentation-IDocElement.md) resultType) |
 
 ## Details
 ### Summary
@@ -46,7 +46,7 @@ public abstract bool TryFindType(IType type, out IDocElement resultType)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](./markdocmemberstypes-IType) | type |   |
-| `out` [`IDocElement`](./markdocdocumentation-IDocElement) | resultType |   |
+| [`IType`](./markdocmemberstypes-IType.md) | type |   |
+| `out` [`IDocElement`](./markdocdocumentation-IDocElement.md) | resultType |   |
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

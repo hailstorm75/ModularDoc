@@ -26,18 +26,18 @@ System.IDisposable --> MarkDoc.Core.IDialogViewModel
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `bool` | [`CanClickCancel`](markdoccore-IDialogViewModel#canclickcancel)<br>Determines whether the cancel button can be clicked | `get` |
-| `bool` | [`CanClickNegative`](markdoccore-IDialogViewModel#canclicknegative)<br>Determines whether the negative button can be clicked | `get` |
-| `bool` | [`CanClickPositive`](markdoccore-IDialogViewModel#canclickpositive)<br>Determines whether the positive button can be clicked | `get` |
-| `string` | [`Title`](markdoccore-IDialogViewModel#title)<br>Dialog title | `get` |
+| `bool` | [`CanClickCancel`](markdoccore-IDialogViewModel.md#canclickcancel)<br>Determines whether the cancel button can be clicked | `get` |
+| `bool` | [`CanClickNegative`](markdoccore-IDialogViewModel.md#canclicknegative)<br>Determines whether the negative button can be clicked | `get` |
+| `bool` | [`CanClickPositive`](markdoccore-IDialogViewModel.md#canclickpositive)<br>Determines whether the positive button can be clicked | `get` |
+| `string` | [`Title`](markdoccore-IDialogViewModel.md#title)<br>Dialog title | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`OnCancelButtonClicked`](markdoccore-IDialogViewModel#oncancelbuttonclicked)()<br>Invoked when the parent dialog window cancel button is pressed |
-| `void` | [`OnNegativeButtonClicked`](markdoccore-IDialogViewModel#onnegativebuttonclicked)()<br>Invoked when the parent dialog window negative button is pressed |
-| `void` | [`OnPositiveButtonClicked`](markdoccore-IDialogViewModel#onpositivebuttonclicked)()<br>Invoked when the parent dialog window positive button is pressed |
+| `void` | [`OnCancelButtonClicked`](markdoccore-IDialogViewModel.md#oncancelbuttonclicked)()<br>Invoked when the parent dialog window cancel button is pressed |
+| `void` | [`OnNegativeButtonClicked`](markdoccore-IDialogViewModel.md#onnegativebuttonclicked)()<br>Invoked when the parent dialog window negative button is pressed |
+| `void` | [`OnPositiveButtonClicked`](markdoccore-IDialogViewModel.md#onpositivebuttonclicked)()<br>Invoked when the parent dialog window positive button is pressed |
 
 ## Details
 ### Summary
@@ -46,7 +46,7 @@ Interface for dialog view models
 ### Inheritance
  - [
 `IViewModel`
-](./markdoccore-IViewModel)
+](./markdoccore-IViewModel.md)
  - `IDisposable`
 
 ### Methods

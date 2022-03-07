@@ -22,7 +22,7 @@ MarkDoc.Elements.IElement --> MarkDoc.Elements.IDiagram
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `ValueTask` | [`ToExternalFile`](markdocelements-IDiagram#toexternalfile)(`string` directory)<br>Exports the diagram to an external file |
+| `ValueTask` | [`ToExternalFile`](markdocelements-IDiagram.md#toexternalfile)(`string` directory)<br>Exports the diagram to an external file |
 
 ## Details
 ### Summary
@@ -31,7 +31,7 @@ Interface for diagram elements
 ### Inheritance
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
 
 ### Methods
 #### ToExternalFile

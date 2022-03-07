@@ -22,8 +22,8 @@ MarkDoc.Members.ResolvedTypes.IResType --> MarkDoc.Members.ResolvedTypes.IResTup
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`(string Item1, IResType Item2)`&gt; | [`Fields`](markdocmembersresolvedtypes-IResTuple#fields)<br>Tuple fields | `get` |
-| `bool` | [`IsValueTuple`](markdocmembersresolvedtypes-IResTuple#isvaluetuple)<br>Determines whether the tuple is a value tuple | `get` |
+| `IReadOnlyCollection`&lt;`(string Item1, IResType Item2)`&gt; | [`Fields`](markdocmembersresolvedtypes-IResTuple.md#fields)<br>Tuple fields | `get` |
+| `bool` | [`IsValueTuple`](markdocmembersresolvedtypes-IResTuple.md#isvaluetuple)<br>Determines whether the tuple is a value tuple | `get` |
 
 ## Details
 ### Summary
@@ -32,7 +32,7 @@ Interface for resolved tuples
 ### Inheritance
  - [
 `IResType`
-](./markdocmembersresolvedtypes-IResType)
+](./markdocmembersresolvedtypes-IResType.md)
 
 ### Properties
 #### Fields

@@ -19,16 +19,16 @@ Type resolver
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`Types`](markdocmembers-IResolver#types)<br>Resolved types | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`Types`](markdocmembers-IResolver.md#types)<br>Resolved types | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`Resolve`](markdocmembers-IResolver#resolve)(`string` assembly)<br>Resolves `assembly` types |
-| `Task` | [`ResolveAsync`](markdocmembers-IResolver#resolveasync)([`IMemberSettings`](./markdocmembers-IMemberSettings) memberSettings, [`IGlobalSettings`](./markdoccore-IGlobalSettings) globalSettings)<br>Resolves all assemblies based on the given settings |
-| `bool` | [`TryFindType`](markdocmembers-IResolver#tryfindtype)(`string` fullname, out [`IType`](./markdocmemberstypes-IType) result) |
-| `bool` | [`TryGetMemberSourceLine`](markdocmembers-IResolver#trygetmembersourceline)(`int` token, out `int` line, out `string` source) |
+| `void` | [`Resolve`](markdocmembers-IResolver.md#resolve)(`string` assembly)<br>Resolves `assembly` types |
+| `Task` | [`ResolveAsync`](markdocmembers-IResolver.md#resolveasync)([`IMemberSettings`](./markdocmembers-IMemberSettings.md) memberSettings, [`IGlobalSettings`](./markdoccore-IGlobalSettings.md) globalSettings)<br>Resolves all assemblies based on the given settings |
+| `bool` | [`TryFindType`](markdocmembers-IResolver.md#tryfindtype)(`string` fullname, out [`IType`](./markdocmemberstypes-IType.md) result) |
+| `bool` | [`TryGetMemberSourceLine`](markdocmembers-IResolver.md#trygetmembersourceline)(`int` token, out `int` line, out `string` source) |
 
 ## Details
 ### Summary
@@ -42,8 +42,8 @@ public abstract Task ResolveAsync(IMemberSettings memberSettings, IGlobalSetting
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IMemberSettings`](./markdocmembers-IMemberSettings) | memberSettings |   |
-| [`IGlobalSettings`](./markdoccore-IGlobalSettings) | globalSettings |   |
+| [`IMemberSettings`](./markdocmembers-IMemberSettings.md) | memberSettings |   |
+| [`IGlobalSettings`](./markdoccore-IGlobalSettings.md) | globalSettings |   |
 
 ##### Summary
 Resolves all assemblies based on the given settings
@@ -71,7 +71,7 @@ public abstract bool TryFindType(string fullname, out IType result)
 | Type | Name | Description |
 | --- | --- | --- |
 | `string` | fullname |   |
-| `out` [`IType`](./markdocmemberstypes-IType) | result |   |
+| `out` [`IType`](./markdocmemberstypes-IType.md) | result |   |
 
 #### TryGetMemberSourceLine
 ```csharp

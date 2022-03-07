@@ -19,9 +19,9 @@ Logger message structure
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Message`](markdoccore-LogMessage#message)<br>Log message | `get` |
-| `DateTime` | [`Time`](markdoccore-LogMessage#time)<br>Log time | `get` |
-| `LogType` | [`Type`](markdoccore-LogMessage#type)<br>Log type | `get` |
+| `string` | [`Message`](markdoccore-LogMessage.md#message)<br>Log message | `get` |
+| `DateTime` | [`Time`](markdoccore-LogMessage.md#time)<br>Log time | `get` |
+| `LogType` | [`Type`](markdoccore-LogMessage.md#type)<br>Log type | `get` |
 
 ## Details
 ### Summary

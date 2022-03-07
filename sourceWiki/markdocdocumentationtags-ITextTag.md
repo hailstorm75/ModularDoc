@@ -22,7 +22,7 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.ITextTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Content`](markdocdocumentationtags-ITextTag#content)<br>Text content | `get` |
+| `string` | [`Content`](markdocdocumentationtags-ITextTag.md#content)<br>Text content | `get` |
 
 ## Details
 ### Summary
@@ -31,7 +31,7 @@ Interface for tags containing text
 ### Inheritance
  - [
 `IContent`
-](./markdocdocumentationtags-IContent)
+](./markdocdocumentationtags-IContent.md)
 
 ### Properties
 #### Content

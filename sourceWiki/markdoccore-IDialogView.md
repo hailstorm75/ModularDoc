@@ -22,15 +22,15 @@ MarkDoc.Core.IView --> MarkDoc.Core.IDialogView
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Title`](markdoccore-IDialogView#title)<br>Dialog view title | `get` |
+| `string` | [`Title`](markdoccore-IDialogView.md#title)<br>Dialog view title | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`OnCancelButtonClicked`](markdoccore-IDialogView#oncancelbuttonclicked)()<br>Invoked when the parent dialog window cancel button is pressed |
-| `void` | [`OnNegativeButtonClicked`](markdoccore-IDialogView#onnegativebuttonclicked)()<br>Invoked when the parent dialog window negative button is pressed |
-| `void` | [`OnPositiveButtonClicked`](markdoccore-IDialogView#onpositivebuttonclicked)()<br>Invoked when the parent dialog window positive button is pressed |
+| `void` | [`OnCancelButtonClicked`](markdoccore-IDialogView.md#oncancelbuttonclicked)()<br>Invoked when the parent dialog window cancel button is pressed |
+| `void` | [`OnNegativeButtonClicked`](markdoccore-IDialogView.md#onnegativebuttonclicked)()<br>Invoked when the parent dialog window negative button is pressed |
+| `void` | [`OnPositiveButtonClicked`](markdoccore-IDialogView.md#onpositivebuttonclicked)()<br>Invoked when the parent dialog window positive button is pressed |
 
 ## Details
 ### Summary
@@ -39,7 +39,7 @@ Interface for dialog views
 ### Inheritance
  - [
 `IView`
-](./markdoccore-IView)
+](./markdoccore-IView.md)
 
 ### Methods
 #### OnPositiveButtonClicked

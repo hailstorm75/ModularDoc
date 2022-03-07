@@ -22,14 +22,14 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IDelegate`](./markdocmembersmembers-IDelegate)&gt; | [`Delegates`](markdocmemberstypes-IInterface#delegates)<br>Collection of delegates | `get` |
-| `IReadOnlyCollection`&lt;[`IEvent`](./markdocmembersmembers-IEvent)&gt; | [`Events`](markdocmemberstypes-IInterface#events)<br>Collection of events | `get` |
-| `IReadOnlyDictionary`&lt;`string`, `(Variance Item1, IReadOnlyCollection Item2)`&gt; | [`Generics`](markdocmemberstypes-IInterface#generics)<br>Generics name, and their variance and constraints | `get` |
-| `IReadOnlyCollection`&lt;[`IResType`](./markdocmembersresolvedtypes-IResType)&gt; | [`InheritedInterfaces`](markdocmemberstypes-IInterface#inheritedinterfaces)<br>Collection of inherited interfaces | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`InheritedTypes`](markdocmemberstypes-IInterface#inheritedtypes)<br>Members inherited from derived types | `get` |
-| `IReadOnlyCollection`&lt;[`IMethod`](./markdocmembersmembers-IMethod)&gt; | [`Methods`](markdocmemberstypes-IInterface#methods)<br>Collection of methods | `get` |
-| `IReadOnlyCollection`&lt;[`IType`](./markdocmemberstypes-IType)&gt; | [`NestedTypes`](markdocmemberstypes-IInterface#nestedtypes)<br>Collection of nested types | `get` |
-| `IReadOnlyCollection`&lt;[`IProperty`](./markdocmembersmembers-IProperty)&gt; | [`Properties`](markdocmemberstypes-IInterface#properties)<br>Collection of properties | `get` |
+| `IReadOnlyCollection`&lt;[`IDelegate`](./markdocmembersmembers-IDelegate.md)&gt; | [`Delegates`](markdocmemberstypes-IInterface.md#delegates)<br>Collection of delegates | `get` |
+| `IReadOnlyCollection`&lt;[`IEvent`](./markdocmembersmembers-IEvent.md)&gt; | [`Events`](markdocmemberstypes-IInterface.md#events)<br>Collection of events | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `(Variance Item1, IReadOnlyCollection Item2)`&gt; | [`Generics`](markdocmemberstypes-IInterface.md#generics)<br>Generics name, and their variance and constraints | `get` |
+| `IReadOnlyCollection`&lt;[`IResType`](./markdocmembersresolvedtypes-IResType.md)&gt; | [`InheritedInterfaces`](markdocmemberstypes-IInterface.md#inheritedinterfaces)<br>Collection of inherited interfaces | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`InheritedTypes`](markdocmemberstypes-IInterface.md#inheritedtypes)<br>Members inherited from derived types | `get` |
+| `IReadOnlyCollection`&lt;[`IMethod`](./markdocmembersmembers-IMethod.md)&gt; | [`Methods`](markdocmemberstypes-IInterface.md#methods)<br>Collection of methods | `get` |
+| `IReadOnlyCollection`&lt;[`IType`](./markdocmemberstypes-IType.md)&gt; | [`NestedTypes`](markdocmemberstypes-IInterface.md#nestedtypes)<br>Collection of nested types | `get` |
+| `IReadOnlyCollection`&lt;[`IProperty`](./markdocmembersmembers-IProperty.md)&gt; | [`Properties`](markdocmemberstypes-IInterface.md#properties)<br>Collection of properties | `get` |
 
 ## Details
 ### Summary
@@ -38,7 +38,7 @@ Interface for interface types
 ### Inheritance
  - [
 `IType`
-](./markdocmemberstypes-IType)
+](./markdocmemberstypes-IType.md)
 
 ### Properties
 #### InheritedInterfaces

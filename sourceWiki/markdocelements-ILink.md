@@ -31,7 +31,7 @@ MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ILink
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Lazy`&lt;`string`&gt; | [`Reference`](markdocelements-ILink#reference)<br>Link reference | `get` |
+| `Lazy`&lt;`string`&gt; | [`Reference`](markdocelements-ILink.md#reference)<br>Link reference | `get` |
 
 ## Details
 ### Summary
@@ -40,11 +40,11 @@ Interface for link elements
 ### Inheritance
  - [
 `ITextContent`
-](./markdocelements-ITextContent)
+](./markdocelements-ITextContent.md)
  - [
 `IElement`
-](./markdocelements-IElement)
- - [`IHasContent`](./markdocelementsextensions-IHasContentT)&lt;[`IText`](./markdocelements-IText)&gt;
+](./markdocelements-IElement.md)
+ - [`IHasContent`](./markdocelementsextensions-IHasContentT.md)&lt;[`IText`](./markdocelements-IText.md)&gt;
 
 ### Properties
 #### Reference

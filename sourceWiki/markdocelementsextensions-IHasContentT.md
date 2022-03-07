@@ -20,7 +20,7 @@ Interface for elements which have content
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `T` | [`Content`](markdocelementsextensions-IHasContentT#content)<br>Element content | `get` |
+| `T` | [`Content`](markdocelementsextensions-IHasContentT.md#content)<br>Element content | `get` |
 
 ## Details
 ### Summary

@@ -22,12 +22,12 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IProperty
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Nullable`&lt;[`AccessorType`](./markdocmembersenums-AccessorType)&gt; | [`GetAccessor`](markdocmembersmembers-IProperty#getaccessor)<br>Property get accessor type | `get` |
-| [`MemberInheritance`](./markdocmembersenums-MemberInheritance) | [`Inheritance`](markdocmembersmembers-IProperty#inheritance)<br>Property visibility | `get` |
-| `bool` | [`IsReadOnly`](markdocmembersmembers-IProperty#isreadonly)<br>Determines whether the property is readonly | `get` |
-| `bool` | [`IsSetInit`](markdocmembersmembers-IProperty#issetinit)<br>Is the property setter an init type | `get` |
-| `Nullable`&lt;[`AccessorType`](./markdocmembersenums-AccessorType)&gt; | [`SetAccessor`](markdocmembersmembers-IProperty#setaccessor)<br>Property set accessor type | `get` |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`Type`](markdocmembersmembers-IProperty#type)<br>Property type | `get` |
+| `Nullable`&lt;[`AccessorType`](./markdocmembersenums-AccessorType.md)&gt; | [`GetAccessor`](markdocmembersmembers-IProperty.md#getaccessor)<br>Property get accessor type | `get` |
+| [`MemberInheritance`](./markdocmembersenums-MemberInheritance.md) | [`Inheritance`](markdocmembersmembers-IProperty.md#inheritance)<br>Property visibility | `get` |
+| `bool` | [`IsReadOnly`](markdocmembersmembers-IProperty.md#isreadonly)<br>Determines whether the property is readonly | `get` |
+| `bool` | [`IsSetInit`](markdocmembersmembers-IProperty.md#issetinit)<br>Is the property setter an init type | `get` |
+| `Nullable`&lt;[`AccessorType`](./markdocmembersenums-AccessorType.md)&gt; | [`SetAccessor`](markdocmembersmembers-IProperty.md#setaccessor)<br>Property set accessor type | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`Type`](markdocmembersmembers-IProperty.md#type)<br>Property type | `get` |
 
 ## Details
 ### Summary
@@ -36,7 +36,7 @@ Interface for properties
 ### Inheritance
  - [
 `IMember`
-](./markdocmembersmembers-IMember)
+](./markdocmembersmembers-IMember.md)
 
 ### Properties
 #### Inheritance
@@ -61,7 +61,7 @@ public abstract bool IsReadOnly { get }
 Determines whether the property is readonly
 
 ##### Remarks
-Applicable only for [IStruct](./markdocmemberstypes-IStruct) properties
+Applicable only for [IStruct](./markdocmemberstypes-IStruct.md) properties
 
 #### GetAccessor
 ```csharp

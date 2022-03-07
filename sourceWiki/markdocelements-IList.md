@@ -29,13 +29,13 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IList
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `ListType` | [`Type`](markdocelements-IList#type)<br>List type | `get` |
+| `ListType` | [`Type`](markdocelements-IList.md#type)<br>List type | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IEnumerable` | [`Print`](markdocelements-IList#print)(`int` indent)<br>Prints element to a string |
+| `IEnumerable` | [`Print`](markdocelements-IList.md#print)(`int` indent)<br>Prints element to a string |
 
 ## Details
 ### Summary
@@ -44,11 +44,11 @@ Interface for list elements
 ### Inheritance
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
  - `IHasContent`&lt;`IReadOnlyCollection`&gt;
  - [
 `IHasHeading`
-](./markdocelementsextensions-IHasHeading)
+](./markdocelementsextensions-IHasHeading.md)
 
 ### Nested types
 #### Enums

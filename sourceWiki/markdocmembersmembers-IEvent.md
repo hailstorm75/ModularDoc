@@ -22,8 +22,8 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IEvent
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`MemberInheritance`](./markdocmembersenums-MemberInheritance) | [`Inheritance`](markdocmembersmembers-IEvent#inheritance)<br>Event inheritance type | `get` |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`Type`](markdocmembersmembers-IEvent#type)<br>Event type | `get` |
+| [`MemberInheritance`](./markdocmembersenums-MemberInheritance.md) | [`Inheritance`](markdocmembersmembers-IEvent.md#inheritance)<br>Event inheritance type | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`Type`](markdocmembersmembers-IEvent.md#type)<br>Event type | `get` |
 
 ## Details
 ### Summary
@@ -32,7 +32,7 @@ Interface for events
 ### Inheritance
  - [
 `IMember`
-](./markdocmembersmembers-IMember)
+](./markdocmembersmembers-IMember.md)
 
 ### Properties
 #### Inheritance

@@ -19,8 +19,8 @@ Interface for processes
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Name`](markdoccore-IProcess#name)<br>Progress name | `get` |
-| `ProcessState` | [`State`](markdoccore-IProcess#state)<br>State of the given process | `get; set` |
+| `string` | [`Name`](markdoccore-IProcess.md#name)<br>Progress name | `get` |
+| `ProcessState` | [`State`](markdoccore-IProcess.md#state)<br>State of the given process | `get; set` |
 
 ## Details
 ### Summary
@@ -51,6 +51,6 @@ State of the given process
 public event EventHandler StateChanged
 ```
 ##### Summary
-Invoked whenever the [IProcess](markdoccore-IProcess).[State](markdoccore-IProcess#state) is changed
+Invoked whenever the [IProcess](markdoccore-IProcess.md).[State](markdoccore-IProcess.md#state) is changed
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

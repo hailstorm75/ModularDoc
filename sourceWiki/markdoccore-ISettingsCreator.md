@@ -19,7 +19,7 @@ Interface for settings creators
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `T` | [`CreateSettings`](markdoccore-ISettingsCreator#createsettings)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; data) |
+| `T` | [`CreateSettings`](markdoccore-ISettingsCreator.md#createsettings)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; data) |
 
 ## Details
 ### Summary

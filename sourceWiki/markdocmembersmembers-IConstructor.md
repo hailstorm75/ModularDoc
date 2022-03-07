@@ -22,7 +22,7 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IConstructor
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IArgument`](./markdocmembersmembers-IArgument)&gt; | [`Arguments`](markdocmembersmembers-IConstructor#arguments)<br>Method arguments | `get` |
+| `IReadOnlyCollection`&lt;[`IArgument`](./markdocmembersmembers-IArgument.md)&gt; | [`Arguments`](markdocmembersmembers-IConstructor.md#arguments)<br>Method arguments | `get` |
 
 ## Details
 ### Summary
@@ -31,7 +31,7 @@ Interface for type constructors
 ### Inheritance
  - [
 `IMember`
-](./markdocmembersmembers-IMember)
+](./markdocmembersmembers-IMember.md)
 
 ### Properties
 #### Arguments

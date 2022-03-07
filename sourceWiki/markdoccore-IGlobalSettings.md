@@ -22,11 +22,11 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Core.IGlobalSettings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`CheckedIgnoredNamespaces`](markdoccore-IGlobalSettings#checkedignorednamespaces)<br>Globally ignored but previously selected namespaces | `get` |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`CheckedIgnoredTypes`](markdoccore-IGlobalSettings#checkedignoredtypes)<br>Globally ignored but previously selected types | `get` |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`IgnoredNamespaces`](markdoccore-IGlobalSettings#ignorednamespaces)<br>Globally ignored namespaces | `get` |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`IgnoredTypes`](markdoccore-IGlobalSettings#ignoredtypes)<br>Globally ignored types | `get` |
-| `string` | [`OutputPath`](markdoccore-IGlobalSettings#outputpath)<br>Output directory | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`CheckedIgnoredNamespaces`](markdoccore-IGlobalSettings.md#checkedignorednamespaces)<br>Globally ignored but previously selected namespaces | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`CheckedIgnoredTypes`](markdoccore-IGlobalSettings.md#checkedignoredtypes)<br>Globally ignored but previously selected types | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`IgnoredNamespaces`](markdoccore-IGlobalSettings.md#ignorednamespaces)<br>Globally ignored namespaces | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`IgnoredTypes`](markdoccore-IGlobalSettings.md#ignoredtypes)<br>Globally ignored types | `get` |
+| `string` | [`OutputPath`](markdoccore-IGlobalSettings.md#outputpath)<br>Output directory | `get` |
 
 ## Details
 ### Summary
@@ -35,7 +35,7 @@ Interface for global settings
 ### Inheritance
  - [
 `ILibrarySettings`
-](./markdoccore-ILibrarySettings)
+](./markdoccore-ILibrarySettings.md)
 
 ### Properties
 #### IgnoredNamespaces

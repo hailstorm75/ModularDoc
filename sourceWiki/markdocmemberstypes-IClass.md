@@ -25,11 +25,11 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IClass
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`BaseClass`](markdocmemberstypes-IClass#baseclass)<br>Inherited base class | `get` |
-| `IReadOnlyCollection`&lt;[`IConstructor`](./markdocmembersmembers-IConstructor)&gt; | [`Constructors`](markdocmemberstypes-IClass#constructors)<br>Class constructors | `get` |
-| `bool` | [`IsAbstract`](markdocmemberstypes-IClass#isabstract)<br>Determines whether this class is abstract | `get` |
-| `bool` | [`IsSealed`](markdocmemberstypes-IClass#issealed)<br>Determines whether this class is sealed | `get` |
-| `bool` | [`IsStatic`](markdocmemberstypes-IClass#isstatic)<br>Determines whether this class is static | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`BaseClass`](markdocmemberstypes-IClass.md#baseclass)<br>Inherited base class | `get` |
+| `IReadOnlyCollection`&lt;[`IConstructor`](./markdocmembersmembers-IConstructor.md)&gt; | [`Constructors`](markdocmemberstypes-IClass.md#constructors)<br>Class constructors | `get` |
+| `bool` | [`IsAbstract`](markdocmemberstypes-IClass.md#isabstract)<br>Determines whether this class is abstract | `get` |
+| `bool` | [`IsSealed`](markdocmemberstypes-IClass.md#issealed)<br>Determines whether this class is sealed | `get` |
+| `bool` | [`IsStatic`](markdocmemberstypes-IClass.md#isstatic)<br>Determines whether this class is static | `get` |
 
 ## Details
 ### Summary
@@ -38,10 +38,10 @@ Interface for classes
 ### Inheritance
  - [
 `IInterface`
-](./markdocmemberstypes-IInterface)
+](./markdocmemberstypes-IInterface.md)
  - [
 `IType`
-](./markdocmemberstypes-IType)
+](./markdocmemberstypes-IType.md)
 
 ### Properties
 #### IsStatic

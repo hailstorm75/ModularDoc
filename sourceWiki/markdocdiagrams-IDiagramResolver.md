@@ -19,7 +19,7 @@ Interface for diagram resolvers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `bool` | [`TryGenerateDiagram`](markdocdiagrams-IDiagramResolver#trygeneratediagram)([`IType`](./markdocmemberstypes-IType) type, out `(string name, string content)` diagram) |
+| `bool` | [`TryGenerateDiagram`](markdocdiagrams-IDiagramResolver.md#trygeneratediagram)([`IType`](./markdocmemberstypes-IType.md) type, out `(string name, string content)` diagram) |
 
 ## Details
 ### Summary
@@ -33,7 +33,7 @@ public abstract bool TryGenerateDiagram(IType type, out (string name, string con
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](./markdocmemberstypes-IType) | type |   |
+| [`IType`](./markdocmemberstypes-IType.md) | type |   |
 | `out` `(string name, string content)` | diagram |   |
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

@@ -19,8 +19,8 @@ Interface for types which have headings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Heading`](markdocelementsextensions-IHasHeading#heading)<br>Heading text | `get` |
-| `int` | [`Level`](markdocelementsextensions-IHasHeading#level)<br>Heading level | `get` |
+| `string` | [`Heading`](markdocelementsextensions-IHasHeading.md#heading)<br>Heading text | `get` |
+| `int` | [`Level`](markdocelementsextensions-IHasHeading.md#level)<br>Heading level | `get` |
 
 ## Details
 ### Summary

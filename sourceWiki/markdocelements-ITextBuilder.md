@@ -1,7 +1,7 @@
 # ITextBuilder `interface`
 
 ## Description
-Interface for joining multiple [ITextContent](./markdocelements-ITextContent) elements
+Interface for joining multiple [ITextContent](./markdocelements-ITextContent.md) elements
 
 ## Diagram
 ```mermaid
@@ -29,19 +29,19 @@ MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCo
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Delimiter`](markdocelements-ITextBuilder#delimiter)<br>Joined text delimiter | `get` |
+| `string` | [`Delimiter`](markdocelements-ITextBuilder.md#delimiter)<br>Joined text delimiter | `get` |
 
 ## Details
 ### Summary
-Interface for joining multiple [ITextContent](./markdocelements-ITextContent) elements
+Interface for joining multiple [ITextContent](./markdocelements-ITextContent.md) elements
 
 ### Inheritance
  - [
 `ITextContent`
-](./markdocelements-ITextContent)
+](./markdocelements-ITextContent.md)
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
  - `IHasContent`&lt;`IReadOnlyCollection`&gt;
 
 ### Properties

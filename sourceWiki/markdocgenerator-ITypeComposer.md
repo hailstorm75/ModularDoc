@@ -19,7 +19,7 @@ Interface for type printers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IPage`](./markdocelements-IPage) | [`Compose`](markdocgenerator-ITypeComposer#compose)([`IType`](./markdocmemberstypes-IType) type)<br>Prints a [IPage](./markdocelements-IPage) from the provided `type` |
+| [`IPage`](./markdocelements-IPage.md) | [`Compose`](markdocgenerator-ITypeComposer.md#compose)([`IType`](./markdocmemberstypes-IType.md) type)<br>Prints a [IPage](./markdocelements-IPage.md) from the provided `type` |
 
 ## Details
 ### Summary
@@ -33,10 +33,10 @@ public abstract IPage Compose(IType type)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](./markdocmemberstypes-IType) | type | Type to process |
+| [`IType`](./markdocmemberstypes-IType.md) | type | Type to process |
 
 ##### Summary
-Prints a [IPage](./markdocelements-IPage) from the provided `type`
+Prints a [IPage](./markdocelements-IPage.md) from the provided `type`
 
 ##### Returns
 Generated page

@@ -1,7 +1,7 @@
 # IMemberSettings `interface`
 
 ## Description
-Interface for [IResolver](./markdocmembers-IResolver) settings
+Interface for [IResolver](./markdocmembers-IResolver.md) settings
 
 ## Diagram
 ```mermaid
@@ -24,16 +24,16 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Members.IMemberSettings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdocmembers-IMemberSettings#paths)<br>Paths to member sources | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdocmembers-IMemberSettings.md#paths)<br>Paths to member sources | `get` |
 
 ## Details
 ### Summary
-Interface for [IResolver](./markdocmembers-IResolver) settings
+Interface for [IResolver](./markdocmembers-IResolver.md) settings
 
 ### Inheritance
  - [
 `ILibrarySettings`
-](./markdoccore-ILibrarySettings)
+](./markdoccore-ILibrarySettings.md)
 
 ### Properties
 #### Paths

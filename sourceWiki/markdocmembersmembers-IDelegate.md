@@ -19,15 +19,15 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IDelegate
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IArgument`](./markdocmembersmembers-IArgument)&gt; | [`Arguments`](markdocmembersmembers-IDelegate#arguments)<br>Delegate arguments | `get` |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&gt; | [`Generics`](markdocmembersmembers-IDelegate#generics)<br>Method generic arguments | `get` |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`Returns`](markdocmembersmembers-IDelegate#returns)<br>Method return type | `get` |
+| `IReadOnlyCollection`&lt;[`IArgument`](./markdocmembersmembers-IArgument.md)&gt; | [`Arguments`](markdocmembersmembers-IDelegate.md#arguments)<br>Delegate arguments | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&gt; | [`Generics`](markdocmembersmembers-IDelegate.md#generics)<br>Method generic arguments | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`Returns`](markdocmembersmembers-IDelegate.md#returns)<br>Method return type | `get` |
 
 ## Details
 ### Inheritance
  - [
 `IMember`
-](./markdocmembersmembers-IMember)
+](./markdocmembersmembers-IMember.md)
 
 ### Properties
 #### Arguments

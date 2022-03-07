@@ -1,7 +1,7 @@
 # IArgument `interface`
 
 ## Description
-Interface for [IMethod](./markdocmembersmembers-IMethod) arguments
+Interface for [IMethod](./markdocmembersmembers-IMethod.md) arguments
 
 ## Diagram
 ```mermaid
@@ -19,13 +19,13 @@ Interface for [IMethod](./markdocmembersmembers-IMethod) arguments
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`ArgumentType`](./markdocmembersenums-ArgumentType) | [`Keyword`](markdocmembersmembers-IArgument#keyword)<br>Argument keyword | `get` |
-| `string` | [`Name`](markdocmembersmembers-IArgument#name)<br>Argument name | `get` |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`Type`](markdocmembersmembers-IArgument#type)<br>Argument type | `get` |
+| [`ArgumentType`](./markdocmembersenums-ArgumentType.md) | [`Keyword`](markdocmembersmembers-IArgument.md#keyword)<br>Argument keyword | `get` |
+| `string` | [`Name`](markdocmembersmembers-IArgument.md#name)<br>Argument name | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`Type`](markdocmembersmembers-IArgument.md#type)<br>Argument type | `get` |
 
 ## Details
 ### Summary
-Interface for [IMethod](./markdocmembersmembers-IMethod) arguments
+Interface for [IMethod](./markdocmembersmembers-IMethod.md) arguments
 
 ### Properties
 #### Name

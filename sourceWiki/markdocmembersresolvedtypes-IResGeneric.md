@@ -22,7 +22,7 @@ MarkDoc.Members.ResolvedTypes.IResType --> MarkDoc.Members.ResolvedTypes.IResGen
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IResType`](./markdocmembersresolvedtypes-IResType)&gt; | [`Generics`](markdocmembersresolvedtypes-IResGeneric#generics)<br>Generic parameter types | `get` |
+| `IReadOnlyCollection`&lt;[`IResType`](./markdocmembersresolvedtypes-IResType.md)&gt; | [`Generics`](markdocmembersresolvedtypes-IResGeneric.md#generics)<br>Generic parameter types | `get` |
 
 ## Details
 ### Summary
@@ -31,7 +31,7 @@ Interface for generic resolved types
 ### Inheritance
  - [
 `IResType`
-](./markdocmembersresolvedtypes-IResType)
+](./markdocmembersresolvedtypes-IResType.md)
 
 ### Properties
 #### Generics

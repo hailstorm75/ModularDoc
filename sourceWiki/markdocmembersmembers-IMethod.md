@@ -25,11 +25,11 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IMethod
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&gt; | [`Generics`](markdocmembersmembers-IMethod#generics)<br>Method generic arguments | `get` |
-| [`MemberInheritance`](./markdocmembersenums-MemberInheritance) | [`Inheritance`](markdocmembersmembers-IMethod#inheritance)<br>Method visibility | `get` |
-| `bool` | [`IsAsync`](markdocmembersmembers-IMethod#isasync)<br>Determines whether the method is asynchronous | `get` |
-| [`OperatorType`](./markdocmembersenums-OperatorType) | [`Operator`](markdocmembersmembers-IMethod#operator)<br>Operator type | `get` |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`Returns`](markdocmembersmembers-IMethod#returns)<br>Method return type | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&gt; | [`Generics`](markdocmembersmembers-IMethod.md#generics)<br>Method generic arguments | `get` |
+| [`MemberInheritance`](./markdocmembersenums-MemberInheritance.md) | [`Inheritance`](markdocmembersmembers-IMethod.md#inheritance)<br>Method visibility | `get` |
+| `bool` | [`IsAsync`](markdocmembersmembers-IMethod.md#isasync)<br>Determines whether the method is asynchronous | `get` |
+| [`OperatorType`](./markdocmembersenums-OperatorType.md) | [`Operator`](markdocmembersmembers-IMethod.md#operator)<br>Operator type | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`Returns`](markdocmembersmembers-IMethod.md#returns)<br>Method return type | `get` |
 
 ## Details
 ### Summary
@@ -38,10 +38,10 @@ Interface for methods
 ### Inheritance
  - [
 `IConstructor`
-](./markdocmembersmembers-IConstructor)
+](./markdocmembersmembers-IConstructor.md)
  - [
 `IMember`
-](./markdocmembersmembers-IMember)
+](./markdocmembersmembers-IMember.md)
 
 ### Properties
 #### Inheritance

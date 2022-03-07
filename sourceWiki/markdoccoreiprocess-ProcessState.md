@@ -1,7 +1,7 @@
 # ProcessState `enum`
 
 ## Description
-Enumeration of possible states of a [IProcess](./markdoccore-IProcess)
+Enumeration of possible states of a [IProcess](./markdoccore-IProcess.md)
 
 ## Diagram
 ```mermaid
@@ -15,7 +15,7 @@ Enumeration of possible states of a [IProcess](./markdoccore-IProcess)
 
 ## Details
 ### Summary
-Enumeration of possible states of a [IProcess](./markdoccore-IProcess)
+Enumeration of possible states of a [IProcess](./markdoccore-IProcess.md)
 
 ### Fields
 #### Idle

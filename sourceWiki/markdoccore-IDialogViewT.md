@@ -42,15 +42,15 @@ Interface for dialog views
 ### Generic types
 | Type | Description | Constraints |
 | --- | --- | --- |
-| `TViewModel` `out` | View model type for dialog view | [`IDialogViewModel`](./markdoccore-IDialogViewModel) |
+| `TViewModel` `out` | View model type for dialog view | [`IDialogViewModel`](./markdoccore-IDialogViewModel.md) |
 
 ### Inheritance
- - [`IView`](./markdoccore-IViewT)&lt;`TViewModel`&gt;
+ - [`IView`](./markdoccore-IViewT.md)&lt;`TViewModel`&gt;
  - [
 `IView`
-](./markdoccore-IView)
+](./markdoccore-IView.md)
  - [
 `IDialogView`
-](./markdoccore-IDialogView)
+](./markdoccore-IDialogView.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

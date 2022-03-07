@@ -18,6 +18,6 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IEnumField
 ### Inheritance
  - [
 `IMember`
-](./markdocmembersmembers-IMember)
+](./markdocmembersmembers-IMember.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

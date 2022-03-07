@@ -31,7 +31,7 @@ MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IText
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `TextStyle` | [`Style`](markdocelements-IText#style)<br>Text element style | `get` |
+| `TextStyle` | [`Style`](markdocelements-IText.md#style)<br>Text element style | `get` |
 
 ## Details
 ### Summary
@@ -40,11 +40,11 @@ Interface for text elements
 ### Inheritance
  - [
 `ITextContent`
-](./markdocelements-ITextContent)
+](./markdocelements-ITextContent.md)
  - [
 `IElement`
-](./markdocelements-IElement)
- - [`IHasContent`](./markdocelementsextensions-IHasContentT)&lt;`string`&gt;
+](./markdocelements-IElement.md)
+ - [`IHasContent`](./markdocelementsextensions-IHasContentT.md)&lt;`string`&gt;
 
 ### Nested types
 #### Enums

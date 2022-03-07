@@ -22,9 +22,9 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.IListTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IContent`](./markdocdocumentationtags-IContent)&gt; | [`Headings`](markdocdocumentationtags-IListTag#headings)<br>List headings | `get` |
-| `IReadOnlyCollection`&lt;`IReadOnlyCollection`&gt; | [`Rows`](markdocdocumentationtags-IListTag#rows)<br>List rows | `get` |
-| `ListType` | [`Type`](markdocdocumentationtags-IListTag#type)<br>Type of list | `get` |
+| `IReadOnlyCollection`&lt;[`IContent`](./markdocdocumentationtags-IContent.md)&gt; | [`Headings`](markdocdocumentationtags-IListTag.md#headings)<br>List headings | `get` |
+| `IReadOnlyCollection`&lt;`IReadOnlyCollection`&gt; | [`Rows`](markdocdocumentationtags-IListTag.md#rows)<br>List rows | `get` |
+| `ListType` | [`Type`](markdocdocumentationtags-IListTag.md#type)<br>Type of list | `get` |
 
 ## Details
 ### Summary
@@ -33,7 +33,7 @@ Interface for documentation list tags
 ### Inheritance
  - [
 `IContent`
-](./markdocdocumentationtags-IContent)
+](./markdocdocumentationtags-IContent.md)
 
 ### Nested types
 #### Enums
@@ -55,7 +55,7 @@ public abstract IReadOnlyCollection Headings { get }
 List headings
 
 ##### Remarks
-Used when the list is a [ListType](./markdocdocumentationtagsilisttag-ListType).[Table](markdocdocumentationtags-IListTag#table)
+Used when the list is a [ListType](./markdocdocumentationtagsilisttag-ListType.md).[Table](markdocdocumentationtags-IListTag.md#table)
 
 #### Rows
 ```csharp

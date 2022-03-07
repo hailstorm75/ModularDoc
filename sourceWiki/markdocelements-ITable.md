@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.ITable
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IText`](./markdocelements-IText)&gt; | [`Headings`](markdocelements-ITable#headings)<br>Table headers | `get` |
+| `IReadOnlyCollection`&lt;[`IText`](./markdocelements-IText.md)&gt; | [`Headings`](markdocelements-ITable.md#headings)<br>Table headers | `get` |
 
 ## Details
 ### Summary
@@ -38,11 +38,11 @@ Interface for the table element
 ### Inheritance
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
  - `IHasContent`&lt;`IReadOnlyCollection`&gt;
  - [
 `IHasHeading`
-](./markdocelementsextensions-IHasHeading)
+](./markdocelementsextensions-IHasHeading.md)
 
 ### Properties
 #### Headings

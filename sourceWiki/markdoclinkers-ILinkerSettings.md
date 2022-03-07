@@ -1,7 +1,7 @@
 # ILinkerSettings `interface`
 
 ## Description
-Interface for [ILinker](./markdoclinkers-ILinker) object settings
+Interface for [ILinker](./markdoclinkers-ILinker.md) object settings
 
 ## Diagram
 ```mermaid
@@ -21,11 +21,11 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Linkers.ILinkerSettings
 
 ## Details
 ### Summary
-Interface for [ILinker](./markdoclinkers-ILinker) object settings
+Interface for [ILinker](./markdoclinkers-ILinker.md) object settings
 
 ### Inheritance
  - [
 `ILibrarySettings`
-](./markdoccore-ILibrarySettings)
+](./markdoccore-ILibrarySettings.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

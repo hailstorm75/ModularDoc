@@ -23,14 +23,14 @@ System.IDisposable --> MarkDoc.Core.IViewModel
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `bool` | [`IsLoading`](markdoccore-IViewModel#isloading)<br>Determines whether the view model is loading | `get` |
+| `bool` | [`IsLoading`](markdoccore-IViewModel.md#isloading)<br>Determines whether the view model is loading | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `ValueTask` | [`OnLoadedAsync`](markdoccore-IViewModel#onloadedasync)()<br>Executed when the [IView&lt;out TViewModel&gt;](./markdoccore-IViewT) loads |
-| `Task` | [`SetNamedArguments`](markdoccore-IViewModel#setnamedarguments)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
+| `ValueTask` | [`OnLoadedAsync`](markdoccore-IViewModel.md#onloadedasync)()<br>Executed when the [IView&lt;out TViewModel&gt;](./markdoccore-IViewT.md) loads |
+| `Task` | [`SetNamedArguments`](markdoccore-IViewModel.md#setnamedarguments)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
 
 ## Details
 ### Summary
@@ -54,7 +54,7 @@ public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> argum
 public abstract ValueTask OnLoadedAsync()
 ```
 ##### Summary
-Executed when the [IView&lt;out TViewModel&gt;](./markdoccore-IViewT) loads
+Executed when the [IView&lt;out TViewModel&gt;](./markdoccore-IViewT.md) loads
 
 ##### Returns
 

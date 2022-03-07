@@ -18,6 +18,6 @@ MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
 ### Inheritance
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

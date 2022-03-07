@@ -26,17 +26,17 @@ System.IDisposable --> MarkDoc.Core.IStepViewModel
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Description`](markdoccore-IStepViewModel#description)<br>Step description | `get` |
-| `string` | [`Id`](markdoccore-IStepViewModel#id)<br>Step view model Id | `get` |
-| `bool` | [`IsValid`](markdoccore-IStepViewModel#isvalid)<br>Determines whether the step form is filled correctly | `get` |
-| `string` | [`Title`](markdoccore-IStepViewModel#title)<br>Step name | `get` |
+| `string` | [`Description`](markdoccore-IStepViewModel.md#description)<br>Step description | `get` |
+| `string` | [`Id`](markdoccore-IStepViewModel.md#id)<br>Step view model Id | `get` |
+| `bool` | [`IsValid`](markdoccore-IStepViewModel.md#isvalid)<br>Determines whether the step form is filled correctly | `get` |
+| `string` | [`Title`](markdoccore-IStepViewModel.md#title)<br>Step name | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IReadOnlyDictionary` | [`GetSettings`](markdoccore-IStepViewModel#getsettings)()<br>Retrieves current settings |
-| `ValueTask` | [`SetPreviousSettings`](markdoccore-IStepViewModel#setprevioussettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; settings) |
+| `IReadOnlyDictionary` | [`GetSettings`](markdoccore-IStepViewModel.md#getsettings)()<br>Retrieves current settings |
+| `ValueTask` | [`SetPreviousSettings`](markdoccore-IStepViewModel.md#setprevioussettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; settings) |
 
 ## Details
 ### Summary
@@ -45,7 +45,7 @@ Interface for view models of plugin steps
 ### Inheritance
  - [
 `IViewModel`
-](./markdoccore-IViewModel)
+](./markdoccore-IViewModel.md)
  - `IDisposable`
 
 ### Methods

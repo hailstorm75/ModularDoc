@@ -30,12 +30,12 @@ Interface for records
 ### Inheritance
  - [
 `IClass`
-](./markdocmemberstypes-IClass)
+](./markdocmemberstypes-IClass.md)
  - [
 `IInterface`
-](./markdocmemberstypes-IInterface)
+](./markdocmemberstypes-IInterface.md)
  - [
 `IType`
-](./markdocmemberstypes-IType)
+](./markdocmemberstypes-IType.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

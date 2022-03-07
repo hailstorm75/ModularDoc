@@ -25,8 +25,8 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IStruct
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IConstructor`](./markdocmembersmembers-IConstructor)&gt; | [`Constructors`](markdocmemberstypes-IStruct#constructors)<br>Struct constructors | `get` |
-| `bool` | [`IsReadOnly`](markdocmemberstypes-IStruct#isreadonly)<br>Determines whether the struct is readonly | `get` |
+| `IReadOnlyCollection`&lt;[`IConstructor`](./markdocmembersmembers-IConstructor.md)&gt; | [`Constructors`](markdocmemberstypes-IStruct.md#constructors)<br>Struct constructors | `get` |
+| `bool` | [`IsReadOnly`](markdocmemberstypes-IStruct.md#isreadonly)<br>Determines whether the struct is readonly | `get` |
 
 ## Details
 ### Summary
@@ -35,10 +35,10 @@ Interface for struct types
 ### Inheritance
  - [
 `IInterface`
-](./markdocmemberstypes-IInterface)
+](./markdocmemberstypes-IInterface.md)
  - [
 `IType`
-](./markdocmemberstypes-IType)
+](./markdocmemberstypes-IType.md)
 
 ### Properties
 #### Constructors

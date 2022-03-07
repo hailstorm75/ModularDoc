@@ -19,9 +19,9 @@ Interface for documentation containers
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `bool` | [`HasInheritDoc`](markdocdocumentation-IDocumentation#hasinheritdoc)<br>Contains the `inheritdoc` tag | `get` |
-| `string` | [`InheritDocRef`](markdocdocumentation-IDocumentation#inheritdocref)<br>InheritDoc reference | `get` |
-| `IReadOnlyDictionary`&lt;`TagType`, `IReadOnlyCollection`&gt; | [`Tags`](markdocdocumentation-IDocumentation#tags)<br>Documentation tags | `get` |
+| `bool` | [`HasInheritDoc`](markdocdocumentation-IDocumentation.md#hasinheritdoc)<br>Contains the `inheritdoc` tag | `get` |
+| `string` | [`InheritDocRef`](markdocdocumentation-IDocumentation.md#inheritdocref)<br>InheritDoc reference | `get` |
+| `IReadOnlyDictionary`&lt;`TagType`, `IReadOnlyCollection`&gt; | [`Tags`](markdocdocumentation-IDocumentation.md#tags)<br>Documentation tags | `get` |
 
 ## Details
 ### Summary

@@ -19,20 +19,20 @@ Interface for plugins
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Author`](markdoccore-IPlugin#author)<br>Plugin author | `get` |
-| `string` | [`Description`](markdoccore-IPlugin#description)<br>Plugin description | `get` |
-| `string` | [`Id`](markdoccore-IPlugin#id)<br>Plugin id | `get` |
-| `Stream` | [`Image`](markdoccore-IPlugin#image)<br>Plugin image | `get` |
-| `string` | [`Name`](markdoccore-IPlugin#name)<br>Plugin name | `get` |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`Steps`](markdoccore-IPlugin#steps)<br>List of plugin step names | `get` |
+| `string` | [`Author`](markdoccore-IPlugin.md#author)<br>Plugin author | `get` |
+| `string` | [`Description`](markdoccore-IPlugin.md#description)<br>Plugin description | `get` |
+| `string` | [`Id`](markdoccore-IPlugin.md#id)<br>Plugin id | `get` |
+| `Stream` | [`Image`](markdoccore-IPlugin.md#image)<br>Plugin image | `get` |
+| `string` | [`Name`](markdoccore-IPlugin.md#name)<br>Plugin name | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`Steps`](markdoccore-IPlugin.md#steps)<br>List of plugin step names | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](markdoccore-IPlugin#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; configuration) |
-| `IReadOnlyCollection` | [`GetPluginSteps`](markdoccore-IPlugin#getpluginsteps)()<br>Get the [IPluginStep](./markdoccore-IPluginStep) instances |
-| `T` | [`GetSettings`](markdoccore-IPlugin#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; data) |
+| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](markdoccore-IPlugin.md#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; configuration) |
+| `IReadOnlyCollection` | [`GetPluginSteps`](markdoccore-IPlugin.md#getpluginsteps)()<br>Get the [IPluginStep](./markdoccore-IPluginStep.md) instances |
+| `T` | [`GetSettings`](markdoccore-IPlugin.md#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; data) |
 
 ## Details
 ### Summary
@@ -44,7 +44,7 @@ Interface for plugins
 public abstract IReadOnlyCollection GetPluginSteps()
 ```
 ##### Summary
-Get the [IPluginStep](./markdoccore-IPluginStep) instances
+Get the [IPluginStep](./markdoccore-IPluginStep.md) instances
 
 ##### Returns
 

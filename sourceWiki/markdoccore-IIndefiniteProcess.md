@@ -24,6 +24,6 @@ Interface for indefinite processes
 ### Inheritance
  - [
 `IProcess`
-](./markdoccore-IProcess)
+](./markdoccore-IProcess.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

@@ -19,17 +19,17 @@ Interface for plugin steps
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Id`](markdoccore-IPluginStep#id)<br>Unique identifier of the step | `get` |
-| `bool` | [`IsLastStep`](markdoccore-IPluginStep#islaststep)<br>Determines whether this step is last in the step sequence | `get` |
-| `string` | [`Name`](markdoccore-IPluginStep#name)<br>Step name | `get` |
-| `int` | [`StepNumber`](markdoccore-IPluginStep#stepnumber)<br>Step order number | `get` |
+| `string` | [`Id`](markdoccore-IPluginStep.md#id)<br>Unique identifier of the step | `get` |
+| `bool` | [`IsLastStep`](markdoccore-IPluginStep.md#islaststep)<br>Determines whether this step is last in the step sequence | `get` |
+| `string` | [`Name`](markdoccore-IPluginStep.md#name)<br>Step name | `get` |
+| `int` | [`StepNumber`](markdoccore-IPluginStep.md#stepnumber)<br>Step order number | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`GetStepViewAsync`](markdoccore-IPluginStep#getstepviewasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; settings, `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; previousSettings) |
-| `string` | [`GetViewId`](markdoccore-IPluginStep#getviewid)()<br>Retrieves the id of the view |
+| `Task` | [`GetStepViewAsync`](markdoccore-IPluginStep.md#getstepviewasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; settings, `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; previousSettings) |
+| `string` | [`GetViewId`](markdoccore-IPluginStep.md#getviewid)()<br>Retrieves the id of the view |
 
 ## Details
 ### Summary

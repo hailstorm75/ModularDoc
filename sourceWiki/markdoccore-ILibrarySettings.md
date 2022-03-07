@@ -19,7 +19,7 @@ Interface for settings of libraries
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Guid` | [`Id`](markdoccore-ILibrarySettings#id)<br>Settings id | `get` |
+| `Guid` | [`Id`](markdoccore-ILibrarySettings.md#id)<br>Settings id | `get` |
 
 ## Details
 ### Summary

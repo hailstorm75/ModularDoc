@@ -37,13 +37,13 @@ MarkDoc.Core.IView --> MarkDoc.Core.IStepView_1
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Id`](markdoccore-IStepViewT#id)<br>Step view Id | `get` |
+| `string` | [`Id`](markdoccore-IStepViewT.md#id)<br>Step view Id | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`SetPreviousSettingsAsync`](markdoccore-IStepViewT#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; settings) |
+| `Task` | [`SetPreviousSettingsAsync`](markdoccore-IStepViewT.md#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; settings) |
 
 ## Details
 ### Summary
@@ -52,13 +52,13 @@ Interface for views of plugin steps
 ### Generic types
 | Type | Description | Constraints |
 | --- | --- | --- |
-| `TViewModel` `out` | View model type for the view | [`IStepViewModel`](./markdoccore-IStepViewModel) |
+| `TViewModel` `out` | View model type for the view | [`IStepViewModel`](./markdoccore-IStepViewModel.md) |
 
 ### Inheritance
- - [`IView`](./markdoccore-IViewT)&lt;`TViewModel`&gt;
+ - [`IView`](./markdoccore-IViewT.md)&lt;`TViewModel`&gt;
  - [
 `IView`
-](./markdoccore-IView)
+](./markdoccore-IView.md)
 
 ### Methods
 #### SetPreviousSettingsAsync

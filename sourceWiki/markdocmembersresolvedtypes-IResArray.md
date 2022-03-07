@@ -19,9 +19,9 @@ Interface for resolved arrays
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | [`ArrayType`](markdocmembersresolvedtypes-IResArray#arraytype)<br>Type of given array | `get` |
-| `int` | [`Dimension`](markdocmembersresolvedtypes-IResArray#dimension)<br>Dimension of array | `get` |
-| `bool` | [`IsJagged`](markdocmembersresolvedtypes-IResArray#isjagged)<br>Determines whether the array is a jagged array type | `get` |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | [`ArrayType`](markdocmembersresolvedtypes-IResArray.md#arraytype)<br>Type of given array | `get` |
+| `int` | [`Dimension`](markdocmembersresolvedtypes-IResArray.md#dimension)<br>Dimension of array | `get` |
+| `bool` | [`IsJagged`](markdocmembersresolvedtypes-IResArray.md#isjagged)<br>Determines whether the array is a jagged array type | `get` |
 
 ## Details
 ### Summary

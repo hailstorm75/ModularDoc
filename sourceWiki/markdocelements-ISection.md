@@ -31,10 +31,10 @@ Interface for section elements
 ### Inheritance
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
  - `IHasContent`&lt;`IReadOnlyCollection`&gt;
  - [
 `IHasHeading`
-](./markdocelementsextensions-IHasHeading)
+](./markdocelementsextensions-IHasHeading.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

@@ -19,7 +19,7 @@ Interface for documentation printers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`Print`](markdocprinter-IPrinter#print)(`IEnumerable`&lt;[`IType`](./markdocmemberstypes-IType)&gt; types, `string` path) |
+| `Task` | [`Print`](markdocprinter-IPrinter.md#print)(`IEnumerable`&lt;[`IType`](./markdocmemberstypes-IType.md)&gt; types, `string` path) |
 
 ## Details
 ### Summary
@@ -33,7 +33,7 @@ public abstract Task Print(IEnumerable<IType> types, string path)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IEnumerable`&lt;[`IType`](./markdocmemberstypes-IType)&gt; | types |   |
+| `IEnumerable`&lt;[`IType`](./markdocmemberstypes-IType.md)&gt; | types |   |
 | `string` | path |   |
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

@@ -22,7 +22,7 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IEnum
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IEnumField`](./markdocmembersmembers-IEnumField)&gt; | [`Fields`](markdocmemberstypes-IEnum#fields)<br>Enum fields | `get` |
+| `IReadOnlyCollection`&lt;[`IEnumField`](./markdocmembersmembers-IEnumField.md)&gt; | [`Fields`](markdocmemberstypes-IEnum.md#fields)<br>Enum fields | `get` |
 
 ## Details
 ### Summary
@@ -31,7 +31,7 @@ Interface for enums
 ### Inheritance
  - [
 `IType`
-](./markdocmemberstypes-IType)
+](./markdocmemberstypes-IType.md)
 
 ### Properties
 #### Fields

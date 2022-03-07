@@ -1,7 +1,7 @@
 # IElementCreator `interface`
 
 ## Description
-Interface for [IElement](./markdocelements-IElement) creators
+Interface for [IElement](./markdocelements-IElement.md) creators
 
 ## Diagram
 ```mermaid
@@ -19,18 +19,18 @@ Interface for [IElement](./markdocelements-IElement) creators
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IDiagram`](./markdocelements-IDiagram) | [`CreateDiagram`](markdocelements-IElementCreator#creatediagram)(`string` name, `string` content)<br>Creates a new [IDiagram](./markdocelements-IDiagram) instance |
-| [`ILink`](./markdocelements-ILink) | [`CreateLink`](markdocelements-IElementCreator#createlink)([`IText`](./markdocelements-IText) content, `Lazy`&lt;`string`&gt; reference) |
-| [`IList`](./markdocelements-IList) | [`CreateList`](markdocelements-IElementCreator#createlist)(`IEnumerable`&lt;[`IElement`](./markdocelements-IElement)&gt; elements, `ListType` type, `string` heading, `int` level) |
-| [`IPage`](./markdocelements-IPage) | [`CreatePage`](markdocelements-IElementCreator#createpage)(`IEnumerable`&lt;[`IPage`](./markdocelements-IPage)&gt; subpages, `IEnumerable`&lt;[`IElement`](./markdocelements-IElement)&gt; content, `string` heading, `int` level) |
-| [`ISection`](./markdocelements-ISection) | [`CreateSection`](markdocelements-IElementCreator#createsection)(`IEnumerable`&lt;[`IElement`](./markdocelements-IElement)&gt; content, `string` heading, `int` level) |
-| [`ITable`](./markdocelements-ITable) | [`CreateTable`](markdocelements-IElementCreator#createtable)(`IEnumerable`&lt;`IReadOnlyCollection`&gt; content, `IEnumerable`&lt;[`IText`](./markdocelements-IText)&gt; headings, `string` heading, `int` level) |
-| [`IText`](./markdocelements-IText) | [`CreateText`](markdocelements-IElementCreator#createtext)(`string` content, `TextStyle` style) |
-| [`ITextContent`](./markdocelements-ITextContent) | [`JoinTextContent`](markdocelements-IElementCreator#jointextcontent)(`IEnumerable`&lt;[`ITextContent`](./markdocelements-ITextContent)&gt; content, `string` delimiter) |
+| [`IDiagram`](./markdocelements-IDiagram.md) | [`CreateDiagram`](markdocelements-IElementCreator.md#creatediagram)(`string` name, `string` content)<br>Creates a new [IDiagram](./markdocelements-IDiagram.md) instance |
+| [`ILink`](./markdocelements-ILink.md) | [`CreateLink`](markdocelements-IElementCreator.md#createlink)([`IText`](./markdocelements-IText.md) content, `Lazy`&lt;`string`&gt; reference) |
+| [`IList`](./markdocelements-IList.md) | [`CreateList`](markdocelements-IElementCreator.md#createlist)(`IEnumerable`&lt;[`IElement`](./markdocelements-IElement.md)&gt; elements, `ListType` type, `string` heading, `int` level) |
+| [`IPage`](./markdocelements-IPage.md) | [`CreatePage`](markdocelements-IElementCreator.md#createpage)(`IEnumerable`&lt;[`IPage`](./markdocelements-IPage.md)&gt; subpages, `IEnumerable`&lt;[`IElement`](./markdocelements-IElement.md)&gt; content, `string` heading, `int` level) |
+| [`ISection`](./markdocelements-ISection.md) | [`CreateSection`](markdocelements-IElementCreator.md#createsection)(`IEnumerable`&lt;[`IElement`](./markdocelements-IElement.md)&gt; content, `string` heading, `int` level) |
+| [`ITable`](./markdocelements-ITable.md) | [`CreateTable`](markdocelements-IElementCreator.md#createtable)(`IEnumerable`&lt;`IReadOnlyCollection`&gt; content, `IEnumerable`&lt;[`IText`](./markdocelements-IText.md)&gt; headings, `string` heading, `int` level) |
+| [`IText`](./markdocelements-IText.md) | [`CreateText`](markdocelements-IElementCreator.md#createtext)(`string` content, `TextStyle` style) |
+| [`ITextContent`](./markdocelements-ITextContent.md) | [`JoinTextContent`](markdocelements-IElementCreator.md#jointextcontent)(`IEnumerable`&lt;[`ITextContent`](./markdocelements-ITextContent.md)&gt; content, `string` delimiter) |
 
 ## Details
 ### Summary
-Interface for [IElement](./markdocelements-IElement) creators
+Interface for [IElement](./markdocelements-IElement.md) creators
 
 ### Methods
 #### CreateList
@@ -40,7 +40,7 @@ public abstract IList CreateList(IEnumerable<IElement> elements, ListType type, 
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IEnumerable`&lt;[`IElement`](./markdocelements-IElement)&gt; | elements |   |
+| `IEnumerable`&lt;[`IElement`](./markdocelements-IElement.md)&gt; | elements |   |
 | `ListType` | type |   |
 | `string` | heading |   |
 | `int` | level |   |
@@ -52,7 +52,7 @@ public abstract ISection CreateSection(IEnumerable<IElement> content, string hea
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IEnumerable`&lt;[`IElement`](./markdocelements-IElement)&gt; | content |   |
+| `IEnumerable`&lt;[`IElement`](./markdocelements-IElement.md)&gt; | content |   |
 | `string` | heading |   |
 | `int` | level |   |
 
@@ -64,7 +64,7 @@ public abstract ITable CreateTable(IEnumerable<IReadOnlyCollection> content, IEn
 | Type | Name | Description |
 | --- | --- | --- |
 | `IEnumerable`&lt;`IReadOnlyCollection`&gt; | content |   |
-| `IEnumerable`&lt;[`IText`](./markdocelements-IText)&gt; | headings |   |
+| `IEnumerable`&lt;[`IText`](./markdocelements-IText.md)&gt; | headings |   |
 | `string` | heading |   |
 | `int` | level |   |
 
@@ -75,8 +75,8 @@ public abstract IPage CreatePage(IEnumerable<IPage> subpages, IEnumerable<IEleme
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IEnumerable`&lt;[`IPage`](./markdocelements-IPage)&gt; | subpages |   |
-| `IEnumerable`&lt;[`IElement`](./markdocelements-IElement)&gt; | content |   |
+| `IEnumerable`&lt;[`IPage`](./markdocelements-IPage.md)&gt; | subpages |   |
+| `IEnumerable`&lt;[`IElement`](./markdocelements-IElement.md)&gt; | content |   |
 | `string` | heading |   |
 | `int` | level |   |
 
@@ -101,7 +101,7 @@ public abstract IDiagram CreateDiagram(string name, string content)
 | `string` | content | Diagram data source |
 
 ##### Summary
-Creates a new [IDiagram](./markdocelements-IDiagram) instance
+Creates a new [IDiagram](./markdocelements-IDiagram.md) instance
 
 ##### Returns
 
@@ -113,7 +113,7 @@ public abstract ILink CreateLink(IText content, Lazy<string> reference)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IText`](./markdocelements-IText) | content |   |
+| [`IText`](./markdocelements-IText.md) | content |   |
 | `Lazy`&lt;`string`&gt; | reference |   |
 
 #### JoinTextContent
@@ -123,7 +123,7 @@ public abstract ITextContent JoinTextContent(IEnumerable<ITextContent> content, 
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IEnumerable`&lt;[`ITextContent`](./markdocelements-ITextContent)&gt; | content |   |
+| `IEnumerable`&lt;[`ITextContent`](./markdocelements-ITextContent.md)&gt; | content |   |
 | `string` | delimiter |   |
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

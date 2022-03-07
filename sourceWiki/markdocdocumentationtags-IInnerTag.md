@@ -22,9 +22,9 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.IInnerTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IContent`](./markdocdocumentationtags-IContent)&gt; | [`Content`](markdocdocumentationtags-IInnerTag#content)<br>Tag content | `get` |
-| `string` | [`Reference`](markdocdocumentationtags-IInnerTag#reference)<br>Tag reference | `get` |
-| `InnerTagType` | [`Type`](markdocdocumentationtags-IInnerTag#type)<br>Tag type | `get` |
+| `IReadOnlyCollection`&lt;[`IContent`](./markdocdocumentationtags-IContent.md)&gt; | [`Content`](markdocdocumentationtags-IInnerTag.md#content)<br>Tag content | `get` |
+| `string` | [`Reference`](markdocdocumentationtags-IInnerTag.md#reference)<br>Tag reference | `get` |
+| `InnerTagType` | [`Type`](markdocdocumentationtags-IInnerTag.md#type)<br>Tag type | `get` |
 
 ## Details
 ### Summary
@@ -33,7 +33,7 @@ Interface for tags which are within other tags
 ### Inheritance
  - [
 `IContent`
-](./markdocdocumentationtags-IContent)
+](./markdocdocumentationtags-IContent.md)
 
 ### Nested types
 #### Enums

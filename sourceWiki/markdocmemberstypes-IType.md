@@ -19,11 +19,11 @@ Interface for types
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`AccessorType`](./markdocmembersenums-AccessorType) | [`Accessor`](markdocmemberstypes-IType#accessor)<br>Type accessor | `get` |
-| `bool` | [`IsNested`](markdocmemberstypes-IType#isnested)<br>Determines whether this type is nested | `get` |
-| `string` | [`Name`](markdocmemberstypes-IType#name)<br>Type name | `get` |
-| `string` | [`RawName`](markdocmemberstypes-IType#rawname)<br>Reflection fullname with namespace | `get` |
-| `string` | [`TypeNamespace`](markdocmemberstypes-IType#typenamespace)<br>Type namespace | `get` |
+| [`AccessorType`](./markdocmembersenums-AccessorType.md) | [`Accessor`](markdocmemberstypes-IType.md#accessor)<br>Type accessor | `get` |
+| `bool` | [`IsNested`](markdocmemberstypes-IType.md#isnested)<br>Determines whether this type is nested | `get` |
+| `string` | [`Name`](markdocmemberstypes-IType.md#name)<br>Type name | `get` |
+| `string` | [`RawName`](markdocmemberstypes-IType.md#rawname)<br>Reflection fullname with namespace | `get` |
+| `string` | [`TypeNamespace`](markdocmemberstypes-IType.md#typenamespace)<br>Type namespace | `get` |
 
 ## Details
 ### Summary

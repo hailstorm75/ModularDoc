@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IPage
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IPage`](markdocelements-IPage)&gt; | [`Subpages`](markdocelements-IPage#subpages)<br>Pages within this given page | `get` |
+| `IReadOnlyCollection`&lt;[`IPage`](markdocelements-IPage.md)&gt; | [`Subpages`](markdocelements-IPage.md#subpages)<br>Pages within this given page | `get` |
 
 ## Details
 ### Summary
@@ -38,11 +38,11 @@ Interface for page elements
 ### Inheritance
  - [
 `IElement`
-](./markdocelements-IElement)
+](./markdocelements-IElement.md)
  - `IHasContent`&lt;`IReadOnlyCollection`&gt;
  - [
 `IHasHeading`
-](./markdocelementsextensions-IHasHeading)
+](./markdocelementsextensions-IHasHeading.md)
 
 ### Properties
 #### Subpages

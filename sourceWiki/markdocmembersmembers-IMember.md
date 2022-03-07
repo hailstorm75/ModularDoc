@@ -19,11 +19,11 @@ Interface for type members
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`AccessorType`](./markdocmembersenums-AccessorType) | [`Accessor`](markdocmembersmembers-IMember#accessor)<br>Member accessor | `get` |
-| `bool` | [`IsStatic`](markdocmembersmembers-IMember#isstatic)<br>Is method static | `get` |
-| `Nullable`&lt;`(int Item1, string Item2)`&gt; | [`LineSource`](markdocmembersmembers-IMember#linesource)<br>Line number and source file of the given member | `get` |
-| `string` | [`Name`](markdocmembersmembers-IMember#name)<br>Member name | `get` |
-| `string` | [`RawName`](markdocmembersmembers-IMember#rawname)<br>Raw member name | `get` |
+| [`AccessorType`](./markdocmembersenums-AccessorType.md) | [`Accessor`](markdocmembersmembers-IMember.md#accessor)<br>Member accessor | `get` |
+| `bool` | [`IsStatic`](markdocmembersmembers-IMember.md#isstatic)<br>Is method static | `get` |
+| `Nullable`&lt;`(int Item1, string Item2)`&gt; | [`LineSource`](markdocmembersmembers-IMember.md#linesource)<br>Line number and source file of the given member | `get` |
+| `string` | [`Name`](markdocmembersmembers-IMember.md#name)<br>Member name | `get` |
+| `string` | [`RawName`](markdocmembersmembers-IMember.md#rawname)<br>Raw member name | `get` |
 
 ## Details
 ### Summary

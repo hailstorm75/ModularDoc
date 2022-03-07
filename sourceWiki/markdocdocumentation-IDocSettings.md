@@ -1,7 +1,7 @@
 # IDocSettings `interface`
 
 ## Description
-Interface for [IDocResolver](./markdocdocumentation-IDocResolver) settings
+Interface for [IDocResolver](./markdocdocumentation-IDocResolver.md) settings
 
 ## Diagram
 ```mermaid
@@ -24,16 +24,16 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Documentation.IDocSettings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdocdocumentation-IDocSettings#paths)<br>Paths to documentation sources | `get; set` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdocdocumentation-IDocSettings.md#paths)<br>Paths to documentation sources | `get; set` |
 
 ## Details
 ### Summary
-Interface for [IDocResolver](./markdocdocumentation-IDocResolver) settings
+Interface for [IDocResolver](./markdocdocumentation-IDocResolver.md) settings
 
 ### Inheritance
  - [
 `ILibrarySettings`
-](./markdoccore-ILibrarySettings)
+](./markdoccore-ILibrarySettings.md)
 
 ### Properties
 #### Paths

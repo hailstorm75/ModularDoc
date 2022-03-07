@@ -22,15 +22,15 @@ MarkDoc.Core.IProcess --> MarkDoc.Core.IDefiniteProcess
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `double` | [`Complete`](markdoccore-IDefiniteProcess#complete)<br>Percentage complete | `get` |
-| `int` | [`Current`](markdoccore-IDefiniteProcess#current)<br>Completed parts so far | `get` |
-| `int` | [`Max`](markdoccore-IDefiniteProcess#max)<br>Number of parts to be completed | `get` |
+| `double` | [`Complete`](markdoccore-IDefiniteProcess.md#complete)<br>Percentage complete | `get` |
+| `int` | [`Current`](markdoccore-IDefiniteProcess.md#current)<br>Completed parts so far | `get` |
+| `int` | [`Max`](markdoccore-IDefiniteProcess.md#max)<br>Number of parts to be completed | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`IncreaseCompletion`](markdoccore-IDefiniteProcess#increasecompletion)()<br>Increases the number of complete parts |
+| `void` | [`IncreaseCompletion`](markdoccore-IDefiniteProcess.md#increasecompletion)()<br>Increases the number of complete parts |
 
 ## Details
 ### Summary
@@ -39,7 +39,7 @@ Interface for definite processes
 ### Inheritance
  - [
 `IProcess`
-](./markdoccore-IProcess)
+](./markdoccore-IProcess.md)
 
 ### Methods
 #### IncreaseCompletion

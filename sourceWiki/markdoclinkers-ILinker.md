@@ -19,16 +19,16 @@ Interface for creating links
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;[`IType`](./markdocmemberstypes-IType), `string`&gt; | [`Paths`](markdoclinkers-ILinker#paths)<br>Types path structure | `get` |
+| `IReadOnlyDictionary`&lt;[`IType`](./markdocmemberstypes-IType.md), `string`&gt; | [`Paths`](markdoclinkers-ILinker.md#paths)<br>Types path structure | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Lazy` | [`CreateAnchor`](markdoclinkers-ILinker#createanchor)([`IType`](./markdocmemberstypes-IType) page, [`IMember`](./markdocmembersmembers-IMember) member)<br>Creates an anchor to a given `member` |
-| `string` | [`CreateLink`](markdoclinkers-ILinker#createlink-12)(`...`)<br>Creates a link to a given type `target` |
-| `string` | [`CreateLinkToSourceCode`](markdoclinkers-ILinker#createlinktosourcecode)([`IMember`](./markdocmembersmembers-IMember) member) |
-| `void` | [`RegisterAnchor`](markdoclinkers-ILinker#registeranchor)([`IMember`](./markdocmembersmembers-IMember) member, `Lazy`&lt;`string`&gt; anchor) |
+| `Lazy` | [`CreateAnchor`](markdoclinkers-ILinker.md#createanchor)([`IType`](./markdocmemberstypes-IType.md) page, [`IMember`](./markdocmembersmembers-IMember.md) member)<br>Creates an anchor to a given `member` |
+| `string` | [`CreateLink`](markdoclinkers-ILinker.md#createlink-12)(`...`)<br>Creates a link to a given type `target` |
+| `string` | [`CreateLinkToSourceCode`](markdoclinkers-ILinker.md#createlinktosourcecode)([`IMember`](./markdocmembersmembers-IMember.md) member) |
+| `void` | [`RegisterAnchor`](markdoclinkers-ILinker.md#registeranchor)([`IMember`](./markdocmembersmembers-IMember.md) member, `Lazy`&lt;`string`&gt; anchor) |
 
 ## Details
 ### Summary
@@ -42,8 +42,8 @@ public abstract string CreateLink(IType source, IResType target)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](./markdocmemberstypes-IType) | source | Link from |
-| [`IResType`](./markdocmembersresolvedtypes-IResType) | target | Link target |
+| [`IType`](./markdocmemberstypes-IType.md) | source | Link from |
+| [`IResType`](./markdocmembersresolvedtypes-IResType.md) | target | Link target |
 
 ##### Summary
 Creates a link to a given type `target`
@@ -58,8 +58,8 @@ public abstract string CreateLink(IType source, IType target)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](./markdocmemberstypes-IType) | source |  |
-| [`IType`](./markdocmemberstypes-IType) | target |  |
+| [`IType`](./markdocmemberstypes-IType.md) | source |  |
+| [`IType`](./markdocmemberstypes-IType.md) | target |  |
 
 ##### Summary
 Creates a link to a given type `target`
@@ -74,8 +74,8 @@ public abstract Lazy CreateAnchor(IType page, IMember member)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](./markdocmemberstypes-IType) | page | Page type |
-| [`IMember`](./markdocmembersmembers-IMember) | member | Member to link to |
+| [`IType`](./markdocmemberstypes-IType.md) | page | Page type |
+| [`IMember`](./markdocmembersmembers-IMember.md) | member | Member to link to |
 
 ##### Summary
 Creates an anchor to a given `member`
@@ -90,7 +90,7 @@ public abstract void RegisterAnchor(IMember member, Lazy<string> anchor)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IMember`](./markdocmembersmembers-IMember) | member |   |
+| [`IMember`](./markdocmembersmembers-IMember.md) | member |   |
 | `Lazy`&lt;`string`&gt; | anchor |   |
 
 #### CreateLinkToSourceCode
@@ -100,7 +100,7 @@ public abstract string CreateLinkToSourceCode(IMember member)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IMember`](./markdocmembersmembers-IMember) | member |   |
+| [`IMember`](./markdocmembersmembers-IMember.md) | member |   |
 
 ### Properties
 #### Paths

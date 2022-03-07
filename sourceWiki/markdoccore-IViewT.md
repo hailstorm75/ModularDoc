@@ -28,7 +28,7 @@ MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `TViewModel` | [`ViewModel`](markdoccore-IViewT#viewmodel)<br>View model | `get` |
+| `TViewModel` | [`ViewModel`](markdoccore-IViewT.md#viewmodel)<br>View model | `get` |
 
 ## Details
 ### Summary
@@ -37,12 +37,12 @@ Interface for views
 ### Generic types
 | Type | Description | Constraints |
 | --- | --- | --- |
-| `TViewModel` `out` | View model type for the view | [`IViewModel`](./markdoccore-IViewModel) |
+| `TViewModel` `out` | View model type for the view | [`IViewModel`](./markdoccore-IViewModel.md) |
 
 ### Inheritance
  - [
 `IView`
-](./markdoccore-IView)
+](./markdoccore-IView.md)
 
 ### Properties
 #### ViewModel

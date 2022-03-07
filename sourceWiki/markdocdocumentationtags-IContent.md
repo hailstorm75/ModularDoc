@@ -1,7 +1,7 @@
 # IContent `interface`
 
 ## Description
-Base interface for tags within [ITag](./markdocdocumentationtags-ITag) , [IInnerTag](./markdocdocumentationtags-IInnerTag) and [IListTag](./markdocdocumentationtags-IListTag)
+Base interface for tags within [ITag](./markdocdocumentationtags-ITag.md) , [IInnerTag](./markdocdocumentationtags-IInnerTag.md) and [IListTag](./markdocdocumentationtags-IListTag.md)
 
 ## Diagram
 ```mermaid
@@ -16,6 +16,6 @@ Base interface for tags within [ITag](./markdocdocumentationtags-ITag) , [IInner
 
 ## Details
 ### Summary
-Base interface for tags within [ITag](./markdocdocumentationtags-ITag) , [IInnerTag](./markdocdocumentationtags-IInnerTag) and [IListTag](./markdocdocumentationtags-IListTag)
+Base interface for tags within [ITag](./markdocdocumentationtags-ITag.md) , [IInnerTag](./markdocdocumentationtags-IInnerTag.md) and [IListTag](./markdocdocumentationtags-IListTag.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

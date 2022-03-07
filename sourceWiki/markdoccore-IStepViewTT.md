@@ -57,14 +57,14 @@ Interface for views of plugin steps
 ### Generic types
 | Type | Description | Constraints |
 | --- | --- | --- |
-| `TViewModel` `out` | View model type for the view | [`IStepViewModel`](./markdoccore-IStepViewModelT)&lt;`TSettings`&gt; |
-| `TSettings` | Step settings type | [`ILibrarySettings`](./markdoccore-ILibrarySettings) |
+| `TViewModel` `out` | View model type for the view | [`IStepViewModel`](./markdoccore-IStepViewModelT.md)&lt;`TSettings`&gt; |
+| `TSettings` | Step settings type | [`ILibrarySettings`](./markdoccore-ILibrarySettings.md) |
 
 ### Inheritance
- - [`IStepView`](./markdoccore-IStepViewT)&lt;`TViewModel`&gt;
- - [`IView`](./markdoccore-IViewT)&lt;`TViewModel`&gt;
+ - [`IStepView`](./markdoccore-IStepViewT.md)&lt;`TViewModel`&gt;
+ - [`IView`](./markdoccore-IViewT.md)&lt;`TViewModel`&gt;
  - [
 `IView`
-](./markdoccore-IView)
+](./markdoccore-IView.md)
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)
