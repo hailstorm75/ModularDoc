@@ -11,6 +11,13 @@ open System.Collections.Concurrent
 /// Markdown linker class
 /// </summary>
 type Linker(memberResolver, linkerSettings: ILinkerSettings) =
+  let evalBoolString (input: string): bool =
+    let mutable result = false
+    if bool.TryParse(input, &result) then
+      result
+    else
+      false
+  
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = ConcurrentDictionary<IMember, Lazy<string>>()
   let m_settings = linkerSettings :?> LinkerSettings
@@ -18,12 +25,18 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
                    | "1" -> GitPlatform.GitLab
                    | "0" -> GitPlatform.GitHub
                    | _ -> GitPlatform.GitHub
+  let m_toWiki = evalBoolString m_settings.OutputTargetWiki
+  let m_structured = evalBoolString m_settings.OutputStructured
 
   let structure =
-    Structure.generateStructure(m_memberResolver.Types.Value, m_platform)
+    Structure.generateStructure m_memberResolver.Types.Value m_platform m_toWiki m_structured
 
   let createLink (source: IType, target: IType) =
-    Link.createLink(source, target, structure, m_platform)
+    let link = Link.createLink(source, target, structure, m_platform)
+    if m_toWiki then
+      link
+    else
+      link + ".md"
 
   let createResLink (source: IType, target: IResType) =
     // If the target reference is not null..
@@ -60,8 +73,7 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     | None -> ""
     
   let getSourceCodeLinker: (IMember -> string) =
-    let mutable result = false
-    if (bool.TryParse(m_settings.LinksToSourceCodeEnabled, &result) && result) then
+    if m_structured then
       createLinkToSourceCode
     else
       fun _ -> ""
