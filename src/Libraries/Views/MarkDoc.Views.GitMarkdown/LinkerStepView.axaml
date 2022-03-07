@@ -20,7 +20,7 @@
       </ComboBox.ItemTemplate>
     </ComboBox>
     
-    <StackPanel Orientation="Horizontal">
+    <StackPanel Orientation="Horizontal" Margin="0, 5, 0, 0">
       <ToggleSwitch Content="Links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}"/>
       <ToggleSwitch Content="Output target" OnContent="Wiki" OffContent="Source" IsChecked="{Binding OutputTargetWiki}">
         <ToolTip.Tip>
