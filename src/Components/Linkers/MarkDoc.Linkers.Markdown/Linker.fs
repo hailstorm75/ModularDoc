@@ -21,9 +21,20 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
 
   let structure =
     Structure.generateStructure(m_memberResolver.Types.Value, m_platform)
+    
+  let evalBoolString (input: string): bool =
+    let mutable result = false
+    if bool.TryParse(input, &result) then
+      result
+    else
+      false
 
   let createLink (source: IType, target: IType) =
-    Link.createLink(source, target, structure, m_platform)
+    let link = Link.createLink(source, target, structure, m_platform)
+    if evalBoolString m_settings.OutputTargetWiki then
+      link
+    else
+      link + ".md"
 
   let createResLink (source: IType, target: IResType) =
     // If the target reference is not null..
@@ -60,8 +71,7 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     | None -> ""
     
   let getSourceCodeLinker: (IMember -> string) =
-    let mutable result = false
-    if (bool.TryParse(m_settings.LinksToSourceCodeEnabled, &result) && result) then
+    if evalBoolString m_settings.LinksToSourceCodeEnabled then
       createLinkToSourceCode
     else
       fun _ -> ""
