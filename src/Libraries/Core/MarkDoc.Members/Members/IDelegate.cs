@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace MarkDoc.Members.Members
 {
+  /// <summary>
+  /// Interface for delegate members
+  /// </summary>
   public interface IDelegate
     : IMember
   {

@@ -9,7 +9,13 @@ namespace MarkDoc.Members
   public interface IMemberSettings
     : ILibrarySettings
   {
-    public const string ENTRY_PATHS = "assemblyPaths";
+    /// <summary>
+    /// Settings constant for paths
+    /// </summary>
+    public const string ENTRY_PATHS = "memberPaths";
+    /// <summary>
+    /// Delimiter for multiple paths
+    /// </summary>
     public const string PATH_DELIMITER = "|";
 
     /// <summary>
