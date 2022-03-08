@@ -21,6 +21,13 @@ namespace MarkDoc.Linkers
     /// <summary>
     /// Creates a link to a given type <paramref name="target"/>
     /// </summary>
+    /// <param name="target">Link target</param>
+    /// <returns>Retrieved link</returns>
+    string CreateLink(IType target);
+
+    /// <summary>
+    /// Creates a link to a given type <paramref name="target"/>
+    /// </summary>
     /// <param name="source">Link from</param>
     /// <param name="target">Link target</param>
     /// <returns>Retrieved link</returns>

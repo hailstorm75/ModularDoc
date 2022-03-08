@@ -1,7 +1,10 @@
 ﻿namespace MarkDoc.Generator.Basic
 
 open System
+open FSharpPlus
 open MarkDoc.Generator
+open MarkDoc.Generator.Basic
+open MarkDoc.Helpers
 open MarkDoc.Members.Types
 open MarkDoc.Elements
 open MarkDoc.Documentation.Tags
@@ -76,8 +79,8 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
     let res tools = tools.creator.JoinTextContent([ text; link ] |> Seq.map (fun x -> ElementHelpers.initialize x tools :?> ITextContent), " ") :> IElement
     seq [ res ] |> Some
 
+  let applyTools input = input m_tools
   let composeContent input tools =
-    let applyTools input = input tools
 
     // Get the content
     let content = seq [
@@ -110,9 +113,42 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
     let content = tName.Print () |> Seq.head
     name + " " + content
     
+  let lift (x: 'T option) (f: 'T -> 'U option): 'U option =
+    match x with
+    | Some v -> f v
+    | None -> None
+
+  let composeTableOfContents =
+    let rec createList (node: TrieNamespace.TrieNode) (space: string): Element<#ITextContent> option =
+      let types = m_tools.typeResolver.Types.Value;
+      let subLists = match node.Nodes with
+                     | sequence when Seq.isEmpty sequence -> None
+                     | sequence
+                       -> Some(seq {
+                            for item in sequence do
+                              let newSpace = String.Join(".", seq { space; item.Key } |> Seq.filter (String.IsNullOrEmpty >> not))
+                              if types.ContainsKey(newSpace) then
+                                for t in types.[newSpace] do
+                                  yield (t.Name |> Italic, m_tools.linker.CreateLink(t)) |> LinkElement |> ElementHelpers.initialize <| m_tools |> Some
+
+                              yield item.Key |> Normal |> TextElement |> ElementHelpers.initialize <| m_tools |> Some
+                              yield lift (createList item.Value newSpace) (ElementHelpers.initialize >> applyTools >> Some)
+                          })
+      match subLists with
+      | Some list -> ListElement(list |> SomeHelpers.whereSome, IList.ListType.Dotted, "", 0) |> Some
+      | None -> None
+
+    let result = lift (createList memberResolver.Namespaces.Value.Root "") (ElementHelpers.initialize >> applyTools >> Some)
+    seq { result }
+
   interface ITypeComposer with
     /// <inheritdoc />
-    member __.Compose input =
+    member _.ComposeTableOfContents() =
+      let page = Page(composeTableOfContents |> SomeHelpers.whereSome, "Table of contents", 0)
+      ElementHelpers.initialize page m_tools :?> IPage
+
+    /// <inheritdoc />
+    member _.Compose input =
       // If the input is null..
       if (isNull input) then
         // throw an exception

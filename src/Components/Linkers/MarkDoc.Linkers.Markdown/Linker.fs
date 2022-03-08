@@ -31,6 +31,13 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
   let structure =
     Structure.generateStructure m_memberResolver.Types.Value m_platform m_toWiki m_structured
 
+  let createLinkFromRoot (target: IType) =
+    let link = Link.createLinkFromRoot(target, structure)
+    if m_toWiki then
+      link
+    else
+      link + ".md"
+
   let createLink (source: IType, target: IType) =
     let link = Link.createLink(source, target, structure, m_platform)
     if m_toWiki then
@@ -90,6 +97,8 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     /// <inheritdoc />
     member _.Paths with get() = structure
 
+    /// <inheritdoc />
+    member _.CreateLink(target: IType) = createLinkFromRoot(target)
     /// <inheritdoc />
     member _.CreateLink(source: IType, target: IType) = createLink(source, target)
     /// <inheritdoc />

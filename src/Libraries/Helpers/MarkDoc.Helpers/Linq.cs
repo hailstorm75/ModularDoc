@@ -41,6 +41,14 @@ namespace MarkDoc.Helpers
     public static T XtoX<T>(T input)
       => input;
 
+    public static IEnumerable<T> ConcatItem<T>(this IEnumerable<T> source, T item)
+    {
+      foreach (var x in source)
+        yield return x;
+
+      yield return item;
+    }
+
     /// <summary>
     /// Returns distinct elements from a sequence by using the default equality comparer to compare values by a given key.
     /// </summary>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarkDoc.Core;
 using MarkDoc.Generator;
+using MarkDoc.Helpers;
 using MarkDoc.Linkers;
 using MarkDoc.Members.Types;
 
@@ -47,10 +48,12 @@ namespace MarkDoc.Printer.Markdown
       Task PrintIntermediate(IType type)
         => Print(m_composer.Compose(type), type, path);
 
+      var tableOfContents = m_composer.ComposeTableOfContents();
+
       m_processLogger.State = IProcess.ProcessState.Running;
 
       // Prepare the tasks of printing out pages for each respective type
-      var tasks = types.AsParallel().Select(PrintIntermediate);
+      var tasks = types.Select(PrintIntermediate).ConcatItem(Print(tableOfContents, "Table of Contents", path));
 
       // Execute the prepared tasks
       await Task.WhenAll(tasks).ConfigureAwait(false);
@@ -58,10 +61,10 @@ namespace MarkDoc.Printer.Markdown
       m_processLogger.State = IProcess.ProcessState.Success;
     }
 
-    private async Task Print(IElement element, IType type, string output)
+    private static async Task Print(IElement element, string name, string output)
     {
       // Compose the export path for thee given type
-      var path = Path.Combine(output, m_linker.Paths[type]) + EXTENSION;
+      var path = Path.Combine(output, name) + EXTENSION;
 
       // If the output path directory does not exist
       if (!Directory.Exists(path))
@@ -75,6 +78,10 @@ namespace MarkDoc.Printer.Markdown
         // print it to the export file
         await file.WriteAsync(line).ConfigureAwait(false);
     }
+
+
+    private async Task Print(IElement element, IType type, string output)
+      => await Print(element, m_linker.Paths[type], output);
 
     #endregion
   }

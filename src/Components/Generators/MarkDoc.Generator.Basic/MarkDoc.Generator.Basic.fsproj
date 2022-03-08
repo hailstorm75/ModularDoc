@@ -39,8 +39,10 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj">
     </ProjectReference>
+    <ProjectReference Include="..\..\Elements\MarkDoc.Elements.Markdown\MarkDoc.Elements.Markdown.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="6.0.3" />
+    <PackageReference Include="FSharpPlus" Version="1.2.2" />
   </ItemGroup>
 </Project>

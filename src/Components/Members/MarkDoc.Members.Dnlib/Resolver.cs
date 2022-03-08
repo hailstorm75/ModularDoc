@@ -56,6 +56,8 @@ namespace MarkDoc.Members.Dnlib
 
     /// <inheritdoc />
     public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; } = null!;
+    
+    public Lazy<TrieNamespace> Namespaces => m_namespaces;
 
     #endregion
 

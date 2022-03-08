@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarkDoc.Core;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Types;
 
 namespace MarkDoc.Members
@@ -15,6 +16,11 @@ namespace MarkDoc.Members
     /// Resolved types
     /// </summary>
     Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
+
+    /// <summary>
+    /// Resolved namespace trie
+    /// </summary>
+    Lazy<TrieNamespace> Namespaces { get; }
 
     #region Methods
 

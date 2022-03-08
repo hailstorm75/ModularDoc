@@ -48,6 +48,13 @@ module private Link =
 
         // Compose the link
         String.Join('/', link)
+        
+  let createLinkFromRoot(target: IType, structure: IReadOnlyDictionary<IType, string>) =
+    let mutable resultTarget = null
+    if structure.TryGetValue(target, &resultTarget) then
+      "./" + resultTarget
+    else
+      ""
 
   /// <summary>
   /// Creates a link for given <paramref name="target"/>

@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
     <ProjectReference Include="..\MarkDoc.Core\MarkDoc.Core.csproj" />
   </ItemGroup>
 
