@@ -19,7 +19,8 @@ Interface for type printers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IPage`](../elements/IPage.md) | [`Compose`](markdoc/generator/ITypeComposer.md#compose)([`IType`](../members/types/IType.md) type)<br>Prints a [IPage](../elements/IPage.md) from the provided `type` |
+| [`IPage`](../elements/IPage.md) | [`Compose`](markdoc/generator/ITypeComposer.md#compose)([`IType`](../members/types/IType.md) type)<br>Composes a [IPage](../elements/IPage.md) from the provided `type` |
+| [`IPage`](../elements/IPage.md) | [`ComposeTableOfContents`](markdoc/generator/ITypeComposer.md#composetableofcontents)()<br>Composes a [IPage](../elements/IPage.md) containing links to all types |
 
 ## Details
 ### Summary
@@ -36,9 +37,19 @@ public abstract IPage Compose(IType type)
 | [`IType`](../members/types/IType.md) | type | Type to process |
 
 ##### Summary
-Prints a [IPage](../elements/IPage.md) from the provided `type`
+Composes a [IPage](../elements/IPage.md) from the provided `type`
 
 ##### Returns
-Generated page
+Composed page
+
+#### ComposeTableOfContents
+```csharp
+public abstract IPage ComposeTableOfContents()
+```
+##### Summary
+Composes a [IPage](../elements/IPage.md) containing links to all types
+
+##### Returns
+Composed page
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

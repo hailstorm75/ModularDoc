@@ -26,7 +26,7 @@ Interface for creating links
 | Returns | Name |
 | --- | --- |
 | `Lazy` | [`CreateAnchor`](markdoc/linkers/ILinker.md#createanchor)([`IType`](../members/types/IType.md) page, [`IMember`](../members/members/IMember.md) member)<br>Creates an anchor to a given `member` |
-| `string` | [`CreateLink`](markdoc/linkers/ILinker.md#createlink-12)(`...`)<br>Creates a link to a given type `target` |
+| `string` | [`CreateLink`](markdoc/linkers/ILinker.md#createlink-13)(`...`)<br>Creates a link to a given type `target` |
 | `string` | [`CreateLinkToSourceCode`](markdoc/linkers/ILinker.md#createlinktosourcecode)([`IMember`](../members/members/IMember.md) member) |
 | `void` | [`RegisterAnchor`](markdoc/linkers/ILinker.md#registeranchor)([`IMember`](../members/members/IMember.md) member, `Lazy`&lt;`string`&gt; anchor) |
 
@@ -35,7 +35,22 @@ Interface for creating links
 Interface for creating links
 
 ### Methods
-#### CreateLink [1/2]
+#### CreateLink [1/3]
+```csharp
+public abstract string CreateLink(IType target)
+```
+##### Arguments
+| Type | Name | Description |
+| --- | --- | --- |
+| [`IType`](../members/types/IType.md) | target | Link target |
+
+##### Summary
+Creates a link to a given type `target`
+
+##### Returns
+Retrieved link
+
+#### CreateLink [2/3]
 ```csharp
 public abstract string CreateLink(IType source, IResType target)
 ```
@@ -51,7 +66,7 @@ Creates a link to a given type `target`
 ##### Returns
 Retrieved link
 
-#### CreateLink [2/2]
+#### CreateLink [3/3]
 ```csharp
 public abstract string CreateLink(IType source, IType target)
 ```
