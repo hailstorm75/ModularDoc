@@ -21,5 +21,5 @@ type GitPlatform =
   /// <summary>
   /// Bitbucket platform
   /// </summary>
-  | [<Description("Bitbucket")>]    BitBucket = 3 
+  | [<Description("Bitbucket")>]    Bitbucket = 3 
 

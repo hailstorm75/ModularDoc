@@ -37,7 +37,11 @@ module private SourceLinker =
     | None -> None
 
   let bitbucketLink (target: IMember) username repository branch  =
-    None
+    match ensureRootRepoDir target with
+    | Some x ->
+      let path = (snd x).Remove(0, m_rootRepositoryDirectory.Length + 1).Replace(@"\", "/")
+      Some $"https://bitbucket.org/{username}/{repository}/src/{branch}/{path}#lines-{fst x}"
+    | None -> None
 
   let githubLink (target: IMember) username repository branch =
     match ensureRootRepoDir target with
@@ -58,7 +62,7 @@ module private SourceLinker =
 
   let createSourceLink (target: IMember) (platform: GitPlatform) (username: string) (repository: string) (branch: string) =
     match platform with
-    | GitPlatform.BitBucket -> bitbucketLink
+    | GitPlatform.Bitbucket -> bitbucketLink
     | GitPlatform.GitHub -> githubLink
     | GitPlatform.GitLab -> gitlabLink
     | GitPlatform.Azure -> azureLink
