@@ -84,6 +84,7 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     match m_platform with
     | GitPlatform.GitLab -> $"https://gitlab.com/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/-/raw/{m_settings.GitPlatformBranch}/"
     | GitPlatform.GitHub -> $"https://raw.githubusercontent.com/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/{m_settings.GitPlatformBranch}/"
+    | GitPlatform.Bitbucket -> $"https://bitbucket.org/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/raw/{m_settings.GitPlatformBranch}/"
     | _ -> ""
 
   interface ILinker with

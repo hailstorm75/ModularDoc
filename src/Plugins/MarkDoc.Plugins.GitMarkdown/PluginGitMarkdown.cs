@@ -21,6 +21,7 @@ using MarkDoc.Linkers;
 using MarkDoc.Linkers.Markdown;
 using MarkDoc.Members;
 using MarkDoc.Members.Dnlib;
+using MarkDoc.Members.Types;
 using MarkDoc.MVVM.Helpers;
 using MarkDoc.Printer;
 using MarkDoc.Printer.Markdown;
@@ -45,7 +46,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     public string Name => "Markdown for Git";
 
     /// <inheritdoc />
-    public string Description => "Markdown documentation generating plugin for GitHub and GitLab";
+    public string Description => "Markdown documentation generating plugin for GitHub, GitLab, and Bitbucket";
 
     /// <inheritdoc />
     public string Author => "MarkDoc";
@@ -136,7 +137,7 @@ namespace MarkDoc.Plugins.GitMarkdown
     public (IMarkDocLogger logger, IReadOnlyCollection<IProcess> processes, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
     {
       var globalSettings = GetSettings<IGlobalSettings>(configuration);
-      var linkerSettings = GetSettings<ILinkerSettings>(configuration);
+      var linkerSettings = (LinkerSettings)GetSettings<ILinkerSettings>(configuration);
       var memberSettings = GetSettings<IMemberSettings>(configuration);
       var docSettings = GetSettings<IDocSettings>(configuration);
       var logger = TypeResolver.Resolve<IMarkDocLogger>();
@@ -156,13 +157,26 @@ namespace MarkDoc.Plugins.GitMarkdown
           .ConfigureAwait(false);
 
         var linker = new Linker(resolver, linkerSettings);
-        var diagrams = new MermaidResolver(linker);
+        var diagrams = linkerSettings.Platform.Equals("bitbucket", StringComparison.InvariantCultureIgnoreCase)
+          ? new EmptyDiagramResolver()
+          : new MermaidResolver(linker) as IDiagramResolver;
         var composer = new TypeComposer(new Creator(false, linker.GetRawUrl()), docResolver, resolver, linker, diagrams);
         var printer = new PrinterMarkdown(composer, linker, printerProcess);
 
         await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath)
           .ConfigureAwait(false);
       });
+    }
+
+    private sealed class EmptyDiagramResolver
+      : IDiagramResolver
+    {
+      /// <inheritdoc />
+      public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
+      {
+        diagram = (string.Empty, string.Empty);
+        return false;
+      }
     }
 
     internal sealed class SettingsCreator
