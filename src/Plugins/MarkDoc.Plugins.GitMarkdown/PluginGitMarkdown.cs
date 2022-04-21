@@ -157,7 +157,7 @@ namespace MarkDoc.Plugins.GitMarkdown
           .ConfigureAwait(false);
 
         var linker = new Linker(resolver, linkerSettings);
-        var diagrams = linkerSettings.Platform.Equals("bitbucket", StringComparison.InvariantCultureIgnoreCase)
+        var diagrams = linkerSettings.Platform.Equals("3", StringComparison.InvariantCultureIgnoreCase)
           ? new EmptyDiagramResolver()
           : new MermaidResolver(linker) as IDiagramResolver;
         var composer = new TypeComposer(new Creator(false, linker.GetRawUrl()), docResolver, resolver, linker, diagrams);

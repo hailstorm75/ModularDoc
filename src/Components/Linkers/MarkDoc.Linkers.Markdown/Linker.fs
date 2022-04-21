@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Linkers.Markdown
 
+open System
 open MarkDoc.Members
 open MarkDoc.Linkers
 open MarkDoc.Members.ResolvedTypes
@@ -22,9 +23,10 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
   let m_anchors = ConcurrentDictionary<IMember, Lazy<string>>()
   let m_settings = linkerSettings :?> LinkerSettings
   let m_platform = match m_settings.Platform with
+                   | "3" -> GitPlatform.Bitbucket
                    | "1" -> GitPlatform.GitLab
                    | "0" -> GitPlatform.GitHub
-                   | _ -> GitPlatform.GitHub
+                   | _ -> raise (NotSupportedException("Unsupported platform selected for the linking process"))
   let m_toWiki = evalBoolString m_settings.OutputTargetWiki
   let m_structured = evalBoolString m_settings.OutputStructured
 
