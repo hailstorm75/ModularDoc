@@ -55,7 +55,7 @@ public abstract IReadOnlyCollection Headings { get }
 List headings
 
 ##### Remarks
-Used when the list is a [ListType](ilisttag/ListType.md).Table
+Used when the list is a [ListType](ilisttag/ListType.md).[Table](markdoc/documentation/tags/IListTag.md#table)
 
 #### Rows
 ```csharp

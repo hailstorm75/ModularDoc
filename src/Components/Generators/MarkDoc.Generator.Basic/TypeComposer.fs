@@ -127,8 +127,8 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
                        -> Some(seq {
                             for item in sequence do
                               let newSpace = String.Join(".", seq { space; item.Key } |> Seq.filter (String.IsNullOrEmpty >> not))
-                              if types.ContainsKey(newSpace) then
-                                for t in types.[newSpace] do
+                              if types.ContainsKey(space) then
+                                for t in types.[space] |> Seq.filter (fun x -> not x.IsNested) do
                                   yield (t.Name |> Italic, m_tools.linker.CreateLink(t)) |> LinkElement |> ElementHelpers.initialize <| m_tools |> Some
 
                               yield item.Key |> Normal |> TextElement |> ElementHelpers.initialize <| m_tools |> Some
