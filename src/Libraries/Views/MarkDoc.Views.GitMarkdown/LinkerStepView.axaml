@@ -8,7 +8,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:converters="clr-namespace:MarkDoc.Views.GitMarkdown.Converters">
 
-  <StackPanel>
+  <Grid RowDefinitions="Auto, Auto Auto">
     <ComboBox
       Items="{Binding Options}"
       SelectedItem="{Binding Selected}"
@@ -20,7 +20,7 @@
       </ComboBox.ItemTemplate>
     </ComboBox>
     
-    <StackPanel Orientation="Horizontal" Margin="0, 5, 0, 0">
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 5, 0, 0">
       <ToggleSwitch Content="Links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}" IsVisible="False"/>
       <ToggleSwitch Content="Output target" OnContent="Wiki" OffContent="Source" IsChecked="{Binding OutputTargetWiki}">
         <ToolTip.Tip>
@@ -52,13 +52,13 @@
         </ToolTip.Tip>
       </ToggleSwitch>
     </StackPanel>
-    <HeaderedContentControl Header="Repository details" IsVisible="False">
+    <HeaderedContentControl Grid.Row="2" Header="Repository details" IsVisible="False">
       <Grid ColumnDefinitions="*, 10, *, 10, *" IsEnabled="{Binding RepositorySettingsRequired}">
         <TextBox Grid.Column="0" Watermark="Username" Text="{Binding GitUser}"/>
         <TextBox Grid.Column="2" Watermark="Repository name" Text="{Binding GitRepository}"/>
         <TextBox Grid.Column="4" Watermark="Branch name" Text="{Binding GitBranch}"/>
       </Grid>
     </HeaderedContentControl>
-  </StackPanel>
+  </Grid>
 
 </UserControl>

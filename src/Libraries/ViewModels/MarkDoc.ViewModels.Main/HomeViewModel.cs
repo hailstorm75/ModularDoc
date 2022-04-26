@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ using MarkDoc.Constants;
 using MarkDoc.Core;
 using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
-using Newtonsoft.Json;
 using ReactiveUI;
 
 namespace MarkDoc.ViewModels.Main
