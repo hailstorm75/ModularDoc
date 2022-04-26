@@ -17,7 +17,7 @@
     <converters:PathToDirectoryConverter x:Key="DirectoryConverter" />
   </UserControl.Resources>
 
-  <StackPanel>
+  <Grid RowDefinitions="Auto, Auto, *">
     <TextBox
       Margin="0,0,0,10"
       Text="{Binding PathToAssembly}"
@@ -63,7 +63,7 @@
       </TextBox.InnerRightContent>
     </TextBox>
 
-    <Button Command="{Binding ValidateCommand}" Margin="0,0,0,10">
+    <Button Grid.Row="1" Command="{Binding ValidateCommand}" Margin="0,0,0,10">
       <DockPanel LastChildFill="True">
         <avalonia:Icon
           DockPanel.Dock="Left"
@@ -74,55 +74,57 @@
       </DockPanel>
     </Button>
 
-    <ListBox Items="{Binding Paths}">
-      <ListBox.ItemTemplate>
-        <DataTemplate DataType="{x:Type system:String}">
-          <DockPanel LastChildFill="True">
-            <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
-            <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-            <Button
-              Background="Red"
-              Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
-              CommandParameter="{Binding}"
-              DockPanel.Dock="Left">
-              <Button.Content>
-                <avalonia:Icon
-                  FontSize="10"
-                  Foreground="White"
-                  Value="fa-trash" />
-              </Button.Content>
-            </Button>
-            <DockPanel
-              DockPanel.Dock="Right"
-              ToolTip.Placement="Pointer"
-              ToolTip.Tip="{Binding}">
-              <DockPanel.ContextMenu>
-                <ContextMenu>
-                  <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
-                  <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                  <MenuItem
-                    Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
-                    CommandParameter="{Binding}"
-                    Header="Delete">
-                    <MenuItem.Icon>
-                      <avalonia:Icon FontSize="10" Value="fa-trash" />
-                    </MenuItem.Icon>
-                  </MenuItem>
-                </ContextMenu>
-              </DockPanel.ContextMenu>
-              <TextBlock
-                Margin="10,0,0,0"
-                Text="{Binding Converter={StaticResource DirectoryConverter}}"
-                VerticalAlignment="Center" />
-              <TextBlock
-                FontWeight="Bold"
-                Text="{Binding Converter={StaticResource FileConverter}}"
-                VerticalAlignment="Center" />
+    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+      <ListBox Items="{Binding Paths}">
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type system:String}">
+            <DockPanel LastChildFill="True">
+              <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+              <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+              <Button
+                Background="Red"
+                Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
+                CommandParameter="{Binding}"
+                DockPanel.Dock="Left">
+                <Button.Content>
+                  <avalonia:Icon
+                    FontSize="10"
+                    Foreground="White"
+                    Value="fa-trash" />
+                </Button.Content>
+              </Button>
+              <DockPanel
+                DockPanel.Dock="Right"
+                ToolTip.Placement="Pointer"
+                ToolTip.Tip="{Binding}">
+                <DockPanel.ContextMenu>
+                  <ContextMenu>
+                    <!--  ReSharper disable once Xaml.PossibleNullReferenceException  -->
+                    <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                    <MenuItem
+                      Command="{Binding Path=DataContext.RemoveCommand, ElementName=AssemblyStepView}"
+                      CommandParameter="{Binding}"
+                      Header="Delete">
+                      <MenuItem.Icon>
+                        <avalonia:Icon FontSize="10" Value="fa-trash" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                  </ContextMenu>
+                </DockPanel.ContextMenu>
+                <TextBlock
+                  Margin="10,0,0,0"
+                  Text="{Binding Converter={StaticResource DirectoryConverter}}"
+                  VerticalAlignment="Center" />
+                <TextBlock
+                  FontWeight="Bold"
+                  Text="{Binding Converter={StaticResource FileConverter}}"
+                  VerticalAlignment="Center" />
+              </DockPanel>
             </DockPanel>
-          </DockPanel>
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
-  </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </ScrollViewer>
+  </Grid>
 
 </UserControl>

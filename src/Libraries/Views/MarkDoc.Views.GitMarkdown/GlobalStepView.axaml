@@ -7,7 +7,7 @@
   xmlns:gitMarkdown="clr-namespace:MarkDoc.ViewModels.GitMarkdown;assembly=MarkDoc.ViewModels.GitMarkdown"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <StackPanel>
+  <Grid RowDefinitions="Auto, *">
     <TextBox
       Margin="0,0,0,10"
       Text="{Binding PathToOutput}"
@@ -25,6 +25,7 @@
     </TextBox>
 
     <TreeView
+      Grid.Row="1"
       Items="{Binding AvailableNamespaces}"
       Name="AvailableNamespacesTree"
       SelectionMode="Single">
@@ -74,5 +75,5 @@
         </TreeDataTemplate>
       </TreeView.DataTemplates>
     </TreeView>
-  </StackPanel>
+  </Grid>
 </UserControl>

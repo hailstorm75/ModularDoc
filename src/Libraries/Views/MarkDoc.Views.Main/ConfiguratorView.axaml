@@ -143,10 +143,12 @@
           </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type core:IPluginStep}">
+              <!-- ReSharper disable Xaml.PossibleNullReferenceException -->
               <controls:ListBoxItemEx SelectedItem="{Binding Path=DataContext.CurrentStep, ElementName=Root}"
                                       ThisItem="{Binding}"
                                       Content="{Binding Name}"
                                       Margin="0, 5, 12, 5" />
+              <!-- ReSharper restore Xaml.PossibleNullReferenceException -->
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
