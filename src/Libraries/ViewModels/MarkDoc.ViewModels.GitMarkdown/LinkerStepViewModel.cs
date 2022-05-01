@@ -152,6 +152,7 @@ namespace MarkDoc.ViewModels.GitMarkdown
     {
       Options.Add(new Selection("GitHub", (int)GitPlatform.GitHub));
       Options.Add(new Selection("GitLab", (int)GitPlatform.GitLab));
+      Options.Add(new Selection("Bitbucket", (int)GitPlatform.Bitbucket));
 
       Selected = Options.First();
       UpdateCanProceed();

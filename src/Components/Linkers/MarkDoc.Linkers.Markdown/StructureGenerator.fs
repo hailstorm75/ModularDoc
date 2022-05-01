@@ -25,7 +25,7 @@ module private Structure =
         if toWiki then
           match platform with
           | GitPlatform.GitLab
-          | GitPlatform.BitBucket
+          | GitPlatform.Bitbucket
           | GitPlatform.Azure  -> structuredOutput
           | GitPlatform.GitHub -> flatOutput
           | _ -> raise (NotSupportedException())
