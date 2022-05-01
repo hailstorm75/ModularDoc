@@ -27,6 +27,11 @@ namespace MarkDoc.ViewModels
     /// </summary>
     bool PaneOpen { get; set; }
 
+    /// <summary>
+    /// Search term for filtering plugins
+    /// </summary>
+    string SearchTerm { get; set; }
+
     #endregion
 
     #region Commands

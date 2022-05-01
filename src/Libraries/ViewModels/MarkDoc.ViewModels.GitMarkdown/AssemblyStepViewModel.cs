@@ -149,7 +149,16 @@ namespace MarkDoc.ViewModels.GitMarkdown
       if (result.IsEmpty)
         return;
 
-      PathToAssembly = result.Get().First();
+      var path = result.Get().First();
+
+      if (m_pathsInsensitive.Contains(path))
+        return;
+
+      m_pathsInsensitive.Add(path);
+      Paths.AddSorted(path);
+
+      OnPropertyChanged(nameof(Paths));
+      UpdateCanProceed();
     }
 
     private bool AddPath()

@@ -38,6 +38,14 @@ namespace MarkDoc.Elements
     IText CreateText(string content, IText.TextStyle style = IText.TextStyle.Normal);
 
     /// <summary>
+    /// Creates a new <see cref="IDiagram"/> instance
+    /// </summary>
+    /// <param name="name">Diagram name</param>
+    /// <param name="content">Diagram data source</param>
+    /// <returns></returns>
+    IDiagram CreateDiagram(string name, string content);
+
+    /// <summary>
     /// Creates a new <see cref="ILink"/> instance
     /// </summary>
     /// <param name="content">Wrapped text</param>

@@ -5,9 +5,10 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:gitMarkdown="clr-namespace:MarkDoc.ViewModels.GitMarkdown;assembly=MarkDoc.ViewModels.GitMarkdown"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:converters="clr-namespace:MarkDoc.Views.GitMarkdown.Converters">
 
-  <StackPanel>
+  <Grid RowDefinitions="Auto, Auto Auto">
     <ComboBox
       Items="{Binding Options}"
       SelectedItem="{Binding Selected}"
@@ -19,12 +20,45 @@
       </ComboBox.ItemTemplate>
     </ComboBox>
     
-    <ToggleSwitch Content="Create links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}"/>
-    <Grid ColumnDefinitions="*, 10, *, 10, *" IsEnabled="{Binding LinksToSourceCode}">
-      <TextBox Grid.Column="0" Watermark="Username" Text="{Binding GitUser}"/>
-      <TextBox Grid.Column="2" Watermark="Repository name" Text="{Binding GitRepository}"/>
-      <TextBox Grid.Column="4" Watermark="Branch name" Text="{Binding GitBranch}"/>
-    </Grid>
-  </StackPanel>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 5, 0, 0">
+      <ToggleSwitch Content="Links to source code" OnContent="Enabled" OffContent="Disabled" IsChecked="{Binding LinksToSourceCode}" IsVisible="False"/>
+      <ToggleSwitch Content="Output target" OnContent="Wiki" OffContent="Source" IsChecked="{Binding OutputTargetWiki}">
+        <ToolTip.Tip>
+          <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
+            <TextBlock Grid.Row="0" Grid.Column="0" DockPanel.Dock="Left" Text="Wiki" FontWeight="Bold"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" DockPanel.Dock="Right" Margin="5, 0, 0, 0" Text="The documentation shall be hosted in the Wiki" TextWrapping="Wrap"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" DockPanel.Dock="Left" Text="Source" FontWeight="Bold"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" DockPanel.Dock="Right" Margin="5, 0, 0, 0" Text="The documentation shall be hosted alongside the source code" TextWrapping="Wrap"/>
+          </Grid>
+        </ToolTip.Tip>
+      </ToggleSwitch>
+      <ToggleSwitch Content="Output structure" OnContent="Structured" OffContent="Flat" IsChecked="{Binding OutputStructured}">
+        <ToggleSwitch.IsEnabled>
+          <Binding Path="OutputTargetWiki" >
+            <Binding.Converter>
+              <converters:NegateConverter/>
+            </Binding.Converter>
+          </Binding>
+        </ToggleSwitch.IsEnabled>
+        <ToolTip.Tip>
+          <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Structured" FontWeight="Bold"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Margin="5, 0, 0, 0" Text="The output shall have a folder structure based on type namespaces" TextWrapping="Wrap"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Flat" FontWeight="Bold"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Margin="5, 0, 0, 0" Text="The output shall have a flat structure with file names prepended with the corresponding namespace" TextWrapping="Wrap"/>
+          </Grid>
+        </ToolTip.Tip>
+      </ToggleSwitch>
+    </StackPanel>
+    <HeaderedContentControl Grid.Row="2" Header="Repository details" IsVisible="False">
+      <Grid ColumnDefinitions="*, 10, *, 10, *" IsEnabled="{Binding RepositorySettingsRequired}">
+        <TextBox Grid.Column="0" Watermark="Username" Text="{Binding GitUser}"/>
+        <TextBox Grid.Column="2" Watermark="Repository name" Text="{Binding GitRepository}"/>
+        <TextBox Grid.Column="4" Watermark="Branch name" Text="{Binding GitBranch}"/>
+      </Grid>
+    </HeaderedContentControl>
+  </Grid>
 
 </UserControl>

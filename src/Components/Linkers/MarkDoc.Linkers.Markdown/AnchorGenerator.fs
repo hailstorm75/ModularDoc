@@ -39,7 +39,7 @@ module private Anchor =
   /// <param name="platform">Platform for which the structure is to be generated for</param>
   let createAnchor(input: string Lazy, pageName: string, platform: GitPlatform) =
     match platform with
-    | GitPlatform.BitBucket -> bitbucketAnchor
+    | GitPlatform.Bitbucket -> bitbucketAnchor
     | GitPlatform.GitHub -> githubAnchor
     | GitPlatform.GitLab -> gitlabAnchor
     | GitPlatform.Azure -> azureAnchor

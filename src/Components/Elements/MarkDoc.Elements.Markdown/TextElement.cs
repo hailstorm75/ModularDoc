@@ -11,6 +11,8 @@ namespace MarkDoc.Elements.Markdown
   public class TextElement
     : BaseElement, IText
   {
+    private readonly bool m_isDiagram;
+
     #region Properties
 
     /// <inheritdoc />
@@ -26,8 +28,10 @@ namespace MarkDoc.Elements.Markdown
     /// </summary>
     /// <param name="content">Text content</param>
     /// <param name="style">Text style</param>
-    public TextElement(string content, TextStyle style = TextStyle.Normal)
+    /// <param name="isDiagram">Determines whether the given element is a diagram</param>
+    public TextElement(string content, TextStyle style = TextStyle.Normal, bool isDiagram = false)
     {
+      m_isDiagram = isDiagram;
       Content = content;
       Style = style;
     }
@@ -39,6 +43,10 @@ namespace MarkDoc.Elements.Markdown
       if (string.IsNullOrEmpty(Content))
         // print an empty
         yield return string.Empty;
+      else if (m_isDiagram)
+        yield return @$"```plantuml
+  {Content}
+```";
       // Otherwise..
       else
         // depending on the text style..

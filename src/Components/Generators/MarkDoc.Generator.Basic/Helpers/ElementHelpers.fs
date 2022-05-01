@@ -13,6 +13,10 @@ type internal Element<'M when 'M :> ITextContent> =
   /// </summary>
   | TextElement of content: TextType<'M>
   /// <summary>
+  /// Element containing a diagram
+  /// </summary>
+  | DiagramElement of name: string * content: string
+  /// <summary>
   /// Element containing a link
   /// </summary>
   | LinkElement of content: TextType<'M> * reference: string
@@ -67,7 +71,7 @@ module internal ElementHelpers =
   /// Casts given <paramref name="input"/> to an <see cref="IElement"/> type
   /// </summary>
   /// <param name="input">Item for processing</param>
-  /// <typeparam name="M">Wraped text type</typeparam>
+  /// <typeparam name="M">Wrapped text type</typeparam>
   /// <returns>Input element after casting</returns>
   let toElement (input: 'M when 'M :> IElement) = input :> IElement
 
@@ -81,7 +85,8 @@ module internal ElementHelpers =
     // Initializes given element based on its type
     match element with
     | TextElement content -> TextHelpers.processText content tools :> IElement
-    | LinkElement (content, reference) -> tools.creator.CreateLink(TextHelpers.processText content tools :?> IText, lazy(reference)) :> IElement
+    | DiagramElement (name, content) -> tools.creator.CreateDiagram(name, content) :> IElement
+    | LinkElement (content, reference) -> tools.creator.CreateLink(TextHelpers.processText content tools :?> IText, lazy reference) :> IElement
     | ListElement (content, listType, heading, level) -> tools.creator.CreateList(content, listType, heading, level) :> IElement
     | Section (content, heading, level) -> tools.creator.CreateSection(content, heading, level) :> IElement
     | Table (content, headings, heading, level) -> tools.creator.CreateTable(content, headings, heading, level) :> IElement

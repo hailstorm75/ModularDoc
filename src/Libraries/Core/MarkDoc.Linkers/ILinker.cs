@@ -29,8 +29,8 @@ namespace MarkDoc.Linkers
     /// <summary>
     /// Creates a link to a given type <paramref name="target"/>
     /// </summary>
-    /// <param name="source"></param>
-    /// <param name="target"></param>
+    /// <param name="source">Link from</param>
+    /// <param name="target">Link target</param>
     /// <returns>Retrieved link</returns>
     string CreateLink(IType source, IType target);
 
@@ -42,8 +42,18 @@ namespace MarkDoc.Linkers
     /// <returns>Retrieved link</returns>
     Lazy<string> CreateAnchor(IType page, IMember member);
 
+    /// <summary>
+    /// Adds an <paramref name="anchor"/> for the given <paramref name="member"/> to known list of anchors
+    /// </summary>
+    /// <param name="member">Member for which the anchor should be registered</param>
+    /// <param name="anchor">Anchor value</param>
     void RegisterAnchor(IMember member, Lazy<string> anchor);
 
+    /// <summary>
+    /// Creates a link path to the source code location of the given <paramref name="member"/>
+    /// </summary>
+    /// <param name="member">Member to link to</param>
+    /// <returns>Link to source code line</returns>
     string CreateLinkToSourceCode(IMember member);
 
     #endregion

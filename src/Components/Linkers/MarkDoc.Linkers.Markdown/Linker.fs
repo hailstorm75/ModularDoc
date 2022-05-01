@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Linkers.Markdown
 
+open System
 open MarkDoc.Members
 open MarkDoc.Linkers
 open MarkDoc.Members.ResolvedTypes
@@ -11,19 +12,33 @@ open System.Collections.Concurrent
 /// Markdown linker class
 /// </summary>
 type Linker(memberResolver, linkerSettings: ILinkerSettings) =
+  let evalBoolString (input: string): bool =
+    let mutable result = false
+    if bool.TryParse(input, &result) then
+      result
+    else
+      false
+  
   let m_memberResolver : IResolver = memberResolver
   let m_anchors = ConcurrentDictionary<IMember, Lazy<string>>()
   let m_settings = linkerSettings :?> LinkerSettings
   let m_platform = match m_settings.Platform with
+                   | "3" -> GitPlatform.Bitbucket
                    | "1" -> GitPlatform.GitLab
                    | "0" -> GitPlatform.GitHub
-                   | _ -> GitPlatform.GitHub
+                   | _ -> raise (NotSupportedException("Unsupported platform selected for the linking process"))
+  let m_toWiki = evalBoolString m_settings.OutputTargetWiki
+  let m_structured = evalBoolString m_settings.OutputStructured
 
   let structure =
-    Structure.generateStructure(m_memberResolver.Types.Value, m_platform)
+    Structure.generateStructure m_memberResolver.Types.Value m_platform m_toWiki m_structured
 
   let createLink (source: IType, target: IType) =
-    Link.createLink(source, target, structure, m_platform)
+    let link = Link.createLink(source, target, structure, m_platform)
+    if m_toWiki then
+      link
+    else
+      link + ".md"
 
   let createResLink (source: IType, target: IResType) =
     // If the target reference is not null..
@@ -60,13 +75,19 @@ type Linker(memberResolver, linkerSettings: ILinkerSettings) =
     | None -> ""
     
   let getSourceCodeLinker: (IMember -> string) =
-    let mutable result = false
-    if (bool.TryParse(m_settings.LinksToSourceCodeEnabled, &result) && result) then
+    if m_structured then
       createLinkToSourceCode
     else
       fun _ -> ""
       
   let sourceCodeLinkerMethod = getSourceCodeLinker
+  
+  member _.GetRawUrl() =
+    match m_platform with
+    | GitPlatform.GitLab -> $"https://gitlab.com/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/-/raw/{m_settings.GitPlatformBranch}/"
+    | GitPlatform.GitHub -> $"https://raw.githubusercontent.com/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/{m_settings.GitPlatformBranch}/"
+    | GitPlatform.Bitbucket -> $"https://bitbucket.org/{m_settings.GitPlatformUser}/{m_settings.GitPlatformRepository}/raw/{m_settings.GitPlatformBranch}/"
+    | _ -> ""
 
   interface ILinker with
     /// <inheritdoc />

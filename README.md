@@ -17,14 +17,14 @@ Like this project idea and would like to see it grow? Give it a star and follow 
 
 This is my second attempt at creating such a tool. The first one is on [GitLab](https://gitlab.com/hailstorm75/markdoc). You can try it out for your self; however, it only supports .NET Framework libraries with NO DEPENDENCIES.
 
-The result which it produces can be seen in the Wiki of my side project - [Common](https://gitlab.com/hailstorm75/Common/-/wikis/home). All of the Wiki content is generated using the legacy MarkDoc.
+The result which it produces can be seen in the [Wiki](https://github.com/hailstorm75/MarkDoc.Core/wiki) or the repository [source code](https://github.com/hailstorm75/MarkDoc.Core/tree/unstable/sourceWiki)
 
-The generated structure is inspired by the one outputted by Doxygen. If you do not like it, you can always create your own **Generator** (see below in the technical description) to generate your own custom output.
+The generated structure is inspired by the one outputted by Doxygen. If you do not like it, you can always create your own - everything is modular and you can swap out components, libraries, create new plugins... 
+Detailed instructions on how to do exactly that are still to be written; however, you can explore the current implementation of the GitMarkdown plugin as a reference for your own project.
 
 ## Preview
 
 ![screen](https://user-images.githubusercontent.com/16069996/153456188-5f9678cf-efc8-4764-8bc4-6e5b1c034c0d.gif)
-
 
 ## Running it
 
@@ -45,14 +45,14 @@ Run it at your own risk, the code is still under development.
 This project aims to be as modular as possible to support specifics of each **Git** platform and, if so be desired, to generate not only Markdown but other output types such as HTML, LaTeX, or whatever might be required in the future.
 With this in mind, the project is separated into the following **component** types:
 
-| Part | Description |
-| ---- | ----------- |
-| Members | Retrieve library types structure |
-| Documentation | Retrieve library types documentation |
-| Elements | Documentation building blocks |
-| Generators | Binds the types to their documentation and generates the documentation output |
-| Linkers | Define the documentation file output structure and allow linking types between files |
-| Printers | Saves the generated output to files |
+|          Part | Description                                                                          |
+|--------------:|--------------------------------------------------------------------------------------|
+|       Members | Retrieve library types structure                                                     |
+| Documentation | Retrieve library types documentation                                                 |
+|      Elements | Documentation building blocks                                                        |
+|    Generators | Binds the types to their documentation and generates the documentation output        |
+|       Linkers | Define the documentation file output structure and allow linking types between files |
+|      Printers | Saves the generated output to files                                                  |
 
 The parts above are represented as interfaces and thus allow creating decoupled component implementations.
 
@@ -60,58 +60,49 @@ The parts above are represented as interfaces and thus allow creating decoupled 
 
 > Note: may vary depending on component implementations
 
-```
-             +--------------+
-             | Input folder |
-             ++------------++
-     DLL, EXE |            | XML
-              v            v
-+-------------+---+    +---+-------------+
-|     Members     |    |  Documentation  |
-+-------------+---+    +---+-------------+
-        IType |            | IDocElement
-              v            v
-       +------+------------+-----+
-+------+------+            +-----+-------+
-|   Elements  |  Composers |   Linkers   |
-+------+------+            +-----+-------+
-       +------------+------------+
-                    | IElement
-                    v
-              +-----+-------+
-              |  Printers   |
-              +-----+-------+
-                    | Documentaion file (.md, .html, ...)
-                    v
-             +------+--------+
-             | Output folder |
-             +---------------+
-
+```mermaid
+flowchart TB
+    inputFolder[Input Folder]
+    member[Member resolver]
+    documentation[Documentation resolver]
+    printer[Printer]
+    outputFolder[Output folder]
+    
+    inputFolder -- Dll, EXE --> member
+    inputFolder -- XML --> documentation
+    subgraph Composer
+        direction RL
+        elements[Markdown elements]
+        linker[Git Linker]
+    end
+    member -- IType --> Composer
+    documentation -- IDocElement --> Composer
+    Composer -- IElement --> printer
+    printer -- Documentation file --> outputFolder
 ```
 
 # Roadmap
 
- 1. Complete the UI
-    1. Plugin selection
-    2. Plugin execution
- 2. Add screenshots to the README
- 3. Implement configuration saving
- 4. Implement configuration loading
- 5. Create a console application for configuration execution
- 6. Bug fixes
- 7. Expand unit tests
- 8. Implement class diagram generation
- 9. Rewrite the F# TypeComposer library
- 10. ...
+ 1. Create a console application for configuration execution
+ 2. Bug fixes
+ 3. Expand unit tests
+ 4. Rewrite the F# TypeComposer library
+ 5. Add a plugin for creating diagrams only
+ 6. Add a plugin for creating static HTML pages
+    1. Enable it to use docFX templates
+    2. Provide MarkDoc custom templates
+ 7. Add a plugin for uploading documentation files to GitHubs wiki
+ 8. ...
 
-Alongisde develoment, it is crucial that a Wiki is created to document the whole architecture, so that others can contribute and/or use the application.
+Alongside development, it is crucial that a Wiki is created to document the whole architecture, so that others can contribute and/or use the application.
 
 # External libraries
 
 - [Avalonia UI](https://github.com/AvaloniaUI/Avalonia) for a cross-platform GUI
 - [Avalonia Behaviors](https://github.com/wieslawsoltes/AvaloniaBehaviors) for extending GUI building tools of Avalonia UI
+- [DynamicData](https://github.com/reactivemarbles/DynamicData) for awesome reactive collections
+- [FluentAvaloniaUI](https://github.com/amwx/FluentAvalonia) for the modern FluentUI look
 - [Icons.Avalonia](https://github.com/Projektanker/Icons.Avalonia) for adding font-awesome icons support to Avalonia UI
-- [Aura UI](https://github.com/PieroCastillo/Aura.UI) for extra Avalonia UI components
 - [xUnit](https://github.com/xunit/xunit) for unit testing
 - [Autofac](https://github.com/autofac/Autofac) for dependency injection
 - [dnlib](https://github.com/0xd4d/dnlib) for retrieving types from assemblies
