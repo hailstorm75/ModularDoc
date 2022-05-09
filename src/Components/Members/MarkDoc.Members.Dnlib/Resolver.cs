@@ -7,6 +7,8 @@ using System.Threading;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using MarkDoc.Core;
 using MarkDoc.Members.Dnlib.ResolvedTypes;
@@ -16,7 +18,6 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using MarkDoc.Members.Dnlib.Helpers;
-using SharpPdb.Managed;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -297,17 +298,29 @@ namespace MarkDoc.Members.Dnlib
       if (!File.Exists(pdbPath))
         return;
 
-      var pdbFile = PdbFileReader.OpenPdb(pdbPath);
-      var sequencePoints = pdbFile.Functions
-        .Where(x => x.SequencePoints.Any())
-        .Select(x =>
+      var b = File.ReadAllBytes(pdbPath);
+      var d = ImmutableArray.Create(b);
+      var a = MetadataReaderProvider.FromPortablePdbImage(d);
+      var reader = a.GetMetadataReader();
+      var scopes = reader.MethodDebugInformation
+        .Where(h => !h.IsNil)
+        .Select(md => (reader.GetMethodDebugInformation(md), System.Reflection.Metadata.Ecma335.MetadataTokens.GetToken(md.ToDefinitionHandle())))
+        .Where(m => !m.Item1.SequencePointsBlob.IsNil)
+        .Select(m =>
         {
-          var point = x.SequencePoints[0];
+          return m.Item1.GetSequencePoints()
+            .Select(sp =>
+            {
+              var document = reader.GetDocument(sp.Document);
+              var name = reader.GetString(document.Name);
 
-          return (x.Token, point.StartLine, point.Source.Name);
-        });
+              return (m.Item2, sp.StartLine, name);
+            })
+            .First();
+        })
+        .ToArray();
 
-      foreach (var (token, startLine, source) in sequencePoints)
+      foreach (var (token, startLine, source) in scopes)
         m_memberLines.TryAdd(token, (source, startLine));
     }
 
