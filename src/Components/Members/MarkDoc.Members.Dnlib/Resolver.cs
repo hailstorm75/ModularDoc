@@ -7,7 +7,6 @@ using System.Threading;
 using System.Linq;
 using MarkDoc.Members.Dnlib.Properties;
 using System.Collections.Concurrent;
-using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using MarkDoc.Core;
@@ -286,7 +285,8 @@ namespace MarkDoc.Members.Dnlib
       // Add the resulting group to the collection
       m_groups.Add(group);
 
-      LoadPdb(assembly.Remove(assembly.Length - 3, 3) + "pdb");
+      var pdbPath = assembly.Remove(assembly.Length - 3, 3) + "pdb";
+      LoadPdb(pdbPath);
 
       m_processLogger.IncreaseCompletion();
 
@@ -296,28 +296,38 @@ namespace MarkDoc.Members.Dnlib
     private void LoadPdb(string pdbPath)
     {
       if (!File.Exists(pdbPath))
+      {
+        m_logger.Warning($"Could not load '{pdbPath}'");
         return;
+      }
 
-      var b = File.ReadAllBytes(pdbPath);
-      var d = ImmutableArray.Create(b);
-      var a = MetadataReaderProvider.FromPortablePdbImage(d);
-      var reader = a.GetMetadataReader();
+      using var stream = new StreamReader(pdbPath);
+      var provider = MetadataReaderProvider.FromPortablePdbStream(stream.BaseStream, MetadataStreamOptions.PrefetchMetadata, 0);
+      var reader = provider.GetMetadataReader();
       var scopes = reader.MethodDebugInformation
         .Where(h => !h.IsNil)
-        .Select(md => (reader.GetMethodDebugInformation(md), System.Reflection.Metadata.Ecma335.MetadataTokens.GetToken(md.ToDefinitionHandle())))
-        .Where(m => !m.Item1.SequencePointsBlob.IsNil)
-        .Select(m =>
+        .Select(md =>
         {
-          return m.Item1.GetSequencePoints()
-            .Select(sp =>
-            {
-              var document = reader.GetDocument(sp.Document);
-              var name = reader.GetString(document.Name);
+          var methodInfo = reader.GetMethodDebugInformation(md);
+          var methodToken = System.Reflection.Metadata.Ecma335.MetadataTokens.GetToken(md.ToDefinitionHandle());
 
-              return (m.Item2, sp.StartLine, name);
-            })
+          if (methodInfo.Document.IsNil)
+            return (0, 0, string.Empty);
+
+          var document = reader.GetDocument(methodInfo.Document);
+          var name = reader.GetString(document.Name);
+
+          if (methodInfo.SequencePointsBlob.IsNil)
+            return (methodToken, 1, name);
+
+          var sp = methodInfo
+            .GetSequencePoints()
+            .OrderBy(x => x.StartLine)
             .First();
+
+          return (methodToken, sp.StartLine, name);
         })
+        .Where(x => x.Item3.Length > 0)
         .ToArray();
 
       foreach (var (token, startLine, source) in scopes)
