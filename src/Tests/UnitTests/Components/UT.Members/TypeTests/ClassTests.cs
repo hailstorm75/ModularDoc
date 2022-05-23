@@ -391,7 +391,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var type = query?.InheritedInterfaces.FirstOrDefault(inherited => inherited.DisplayName.Equals(Constants.PUBLIC_INHERITED_INTERFACE));
+      var type = query?.InheritedTypesFlat.FirstOrDefault(inherited => inherited.DisplayName.Equals(Constants.PUBLIC_INHERITED_INTERFACE));
 
       Assert.False(type is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected inherited interface.");
     }
@@ -403,7 +403,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var interfacesCount = query?.InheritedInterfaces.Count ?? 0;
+      var interfacesCount = query?.InheritedTypesFlat.Count ?? 0;
 
       Assert.True(interfacesCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of inherited interface.");
     }

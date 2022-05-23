@@ -104,7 +104,7 @@ namespace MarkDoc.Diagrams.Mermaid
         if (parent is not IInterface interfaceType)
           return;
 
-        foreach (var item in interfaceType.InheritedInterfaces)
+        foreach (var item in interfaceType.InheritedTypesFlat)
         {
           relations.AddLast($"{item.RawName.Replace('`', '_')} --> {parent.RawName.Replace('`', '_')}");
           AddToDictionary(types, GenerateResType(item));

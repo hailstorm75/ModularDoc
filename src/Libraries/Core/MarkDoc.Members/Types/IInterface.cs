@@ -15,7 +15,7 @@ namespace MarkDoc.Members.Types
     /// <summary>
     /// Collection of inherited interfaces
     /// </summary>
-    IReadOnlyCollection<IResType> InheritedInterfaces { get; }
+    IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
     /// <summary>
     /// Generics name, and their variance and constraints
     /// </summary>

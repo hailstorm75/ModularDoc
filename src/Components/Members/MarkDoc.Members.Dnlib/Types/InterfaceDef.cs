@@ -30,7 +30,7 @@ namespace MarkDoc.Members.Dnlib.Types
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IResType> InheritedInterfaces { get; }
+    public IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
@@ -86,7 +86,7 @@ namespace MarkDoc.Members.Dnlib.Types
       Generics = generics;
 
       // Initialize the inherited interfaces
-      InheritedInterfaces = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+      InheritedTypesFlat = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
 
       // Initialize the delegates
       Delegates = source.NestedTypes
@@ -141,7 +141,7 @@ namespace MarkDoc.Members.Dnlib.Types
         .ToReadOnlyCollection();
 
       // Initialize inherited members
-      InheritedTypeMembers = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
+      InheritedTypeMembers = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedTypesFlat.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #endregion
