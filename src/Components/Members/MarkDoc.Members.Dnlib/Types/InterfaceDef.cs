@@ -51,7 +51,7 @@ namespace MarkDoc.Members.Dnlib.Types
     public IReadOnlyCollection<IProperty> Properties { get; }
 
     /// <inheritdoc />
-    public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypes { get; }
+    public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
 
     #endregion
 
@@ -141,7 +141,7 @@ namespace MarkDoc.Members.Dnlib.Types
         .ToReadOnlyCollection();
 
       // Initialize inherited members
-      InheritedTypes = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
+      InheritedTypeMembers = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #endregion
@@ -183,9 +183,9 @@ namespace MarkDoc.Members.Dnlib.Types
           .Concat(events)
           .Concat(delegates)
           // Select unique inherited types
-          .Where(x => !type.InheritedTypes.Value.ContainsKey(x.member))
+          .Where(x => !type.InheritedTypeMembers.Value.ContainsKey(x.member))
           // Join the newly resolved inherited types with the parent inherited types
-          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
+          .Concat(type.InheritedTypeMembers.Value.Select(x => (x.Key, x.Value)));
       }
 
       return inheritedTypes

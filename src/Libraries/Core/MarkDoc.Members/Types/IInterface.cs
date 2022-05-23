@@ -43,6 +43,6 @@ namespace MarkDoc.Members.Types
     /// <summary>
     /// Members inherited from derived types
     /// </summary>
-    Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypes { get; }
+    Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
   }
 }
