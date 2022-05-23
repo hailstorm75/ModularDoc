@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using Avalonia;
 using MarkDoc.Constants;
 using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
@@ -33,7 +32,7 @@ namespace MarkDoc.ViewModels.Main
     }
 
     /// <inheritdoc />
-    public ICommand BackCommand { get; set; }
+    public ICommand BackCommand { get; }
 
     /// <summary>
     /// Default constructor
