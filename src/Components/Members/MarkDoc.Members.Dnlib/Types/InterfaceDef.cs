@@ -33,7 +33,7 @@ namespace MarkDoc.Members.Dnlib.Types
     public IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
 
     /// <inheritdoc />
-    public Lazy<TreeNode> InheritedTypesStructured { get; }
+    public Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
@@ -92,7 +92,7 @@ namespace MarkDoc.Members.Dnlib.Types
       InheritedTypesFlat = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
 
       // Initialize the inherited types structured
-      InheritedTypesStructured = new Lazy<TreeNode>(ResolveInheritedTypesStructured, LazyThreadSafetyMode.PublicationOnly);
+      InheritedTypesStructured = new Lazy<IReadOnlyCollection<TreeNode>>(ResolveInheritedTypesStructured, LazyThreadSafetyMode.PublicationOnly);
 
       // Initialize the delegates
       Delegates = source.NestedTypes
@@ -214,7 +214,7 @@ namespace MarkDoc.Members.Dnlib.Types
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(interfaceImpl => Resolver.Resolve(interfaceImpl.Interface.ToTypeSig(), outerArgs));
 
-    private TreeNode ResolveInheritedTypesStructured()
+    private IReadOnlyCollection<TreeNode> ResolveInheritedTypesStructured()
     {
       var row = new List<TreeNode>();
       var rowNames = new HashSet<string>();
@@ -224,7 +224,7 @@ namespace MarkDoc.Members.Dnlib.Types
       {
         var leaves = InheritedTypesFlat
           .Except(processed)
-          .Where(type => type.Reference.Value is null || (type.Reference.Value is IInterface inter && inter.InheritedTypesFlat.Except(processed).Any()))
+          .Where(type => type.Reference.Value is null || (type.Reference.Value is IInterface inter && !inter.InheritedTypesFlat.Except(processed).Any()))
           .Select(type => Tuple.Create(type, (IInterface?)type.Reference.Value))
           .ToReadOnlyCollection();
 
@@ -255,7 +255,7 @@ namespace MarkDoc.Members.Dnlib.Types
           processed.Add(leaf.Item1);
         }
       }
-      return new TreeNode(RawName, row);
+      return row;
     }
 
     protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)

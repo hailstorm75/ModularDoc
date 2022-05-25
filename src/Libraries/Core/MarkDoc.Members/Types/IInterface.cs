@@ -20,7 +20,7 @@ namespace MarkDoc.Members.Types
     /// <summary>
     /// Structured inherited types
     /// </summary>
-    Lazy<TreeNode> InheritedTypesStructured { get; }
+    Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
     /// <summary>
     /// Generics name, and their variance and constraints
     /// </summary>
