@@ -6,37 +6,15 @@ namespace MarkDoc.Helpers
   public abstract class BaseTrie<T>
     where T : notnull
   {
-    protected readonly TrieNode m_root;
+    protected readonly TrieNode<T> m_root;
 
     protected BaseTrie()
-      => m_root = new TrieNode();
+      => m_root = new TrieNode<T>();
 
     /// <summary>
     /// Trie root node
     /// </summary>
-    public TrieNode Root => m_root;
-
-    public class TrieNode
-    {
-      private readonly Dictionary<T, TrieNode> m_roots;
-
-      public IReadOnlyDictionary<T, TrieNode> Nodes
-        => m_roots;
-
-      public TrieNode()
-        => m_roots = new Dictionary<T, TrieNode>();
-
-      public TrieNode Add(T item)
-      {
-        if (m_roots.ContainsKey(item))
-          return m_roots[item];
-
-        var node = new TrieNode();
-        m_roots.Add(item, node);
-
-        return node;
-      }
-    }
+    public TrieNode<T> Root => m_root;
 
     public void AddRange(IEnumerable<T> items)
     {
@@ -56,6 +34,28 @@ namespace MarkDoc.Helpers
       var root = m_root;
       foreach (var ns in split)
         root = root.Add(ns);
+    }
+  }
+
+  public class TrieNode<T> where T : notnull
+  {
+    private readonly Dictionary<T, TrieNode<T>> m_roots;
+
+    public IReadOnlyDictionary<T, TrieNode<T>> Nodes
+      => m_roots;
+
+    public TrieNode()
+      => m_roots = new Dictionary<T, TrieNode<T>>();
+
+    public TrieNode<T> Add(T item)
+    {
+      if (m_roots.ContainsKey(item))
+        return m_roots[item];
+
+      var node = new TrieNode<T>();
+      m_roots.Add(item, node);
+
+      return node;
     }
   }
 }

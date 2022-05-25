@@ -33,6 +33,9 @@ namespace MarkDoc.Members.Dnlib.Types
     public IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
 
     /// <inheritdoc />
+    public Lazy<TreeNode> InheritedTypesStructured { get; }
+
+    /// <inheritdoc />
     public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
 
     /// <inheritdoc />
@@ -85,8 +88,11 @@ namespace MarkDoc.Members.Dnlib.Types
       // Initialize the generics
       Generics = generics;
 
-      // Initialize the inherited interfaces
+      // Initialize the inherited types flattened
       InheritedTypesFlat = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+
+      // Initialize the inherited types structured
+      InheritedTypesStructured = new Lazy<TreeNode>(ResolveInheritedTypesStructured, LazyThreadSafetyMode.PublicationOnly);
 
       // Initialize the delegates
       Delegates = source.NestedTypes
@@ -207,6 +213,50 @@ namespace MarkDoc.Members.Dnlib.Types
 
     private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(interfaceImpl => Resolver.Resolve(interfaceImpl.Interface.ToTypeSig(), outerArgs));
+
+    private TreeNode ResolveInheritedTypesStructured()
+    {
+      var row = new List<TreeNode>();
+      var rowNames = new HashSet<string>();
+      var processed = new HashSet<IResType>();
+
+      while (true)
+      {
+        var leaves = InheritedTypesFlat
+          .Except(processed)
+          .Where(type => type.Reference.Value is null || (type.Reference.Value is IInterface inter && inter.InheritedTypesFlat.Except(processed).Any()))
+          .Select(type => Tuple.Create(type, (IInterface?)type.Reference.Value))
+          .ToReadOnlyCollection();
+
+        if (leaves.Count == 0)
+          break;
+
+        foreach (var leaf in leaves)
+        {
+          var leafInherited = leaf.Item2?.InheritedTypesFlat ?? Array.Empty<IResType>();
+
+          var hash = leafInherited
+            .Select(type => type.RawName)
+            .Where(rowNames.Contains)
+            .ToHashSet();
+          var children = row
+            .Where(t => hash.Contains(t.Name))
+            .ToReadOnlyCollection();
+          var node = new TreeNode(leaf.Item1.RawName, children);
+
+          foreach (var child in children)
+          {
+            row.Remove(child);
+            rowNames.Remove(child.Name);
+          }
+
+          row.Add(node);
+          rowNames.Add(node.Name);
+          processed.Add(leaf.Item1);
+        }
+      }
+      return new TreeNode(RawName, row);
+    }
 
     protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MarkDoc.Helpers;
 using MarkDoc.Members.Enums;
 using MarkDoc.Members.Members;
 using MarkDoc.Members.ResolvedTypes;
@@ -13,9 +14,13 @@ namespace MarkDoc.Members.Types
     : IType
   {
     /// <summary>
-    /// Collection of inherited interfaces
+    /// Collection of inherited types
     /// </summary>
     IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
+    /// <summary>
+    /// Structured inherited types
+    /// </summary>
+    Lazy<TreeNode> InheritedTypesStructured { get; }
     /// <summary>
     /// Generics name, and their variance and constraints
     /// </summary>
