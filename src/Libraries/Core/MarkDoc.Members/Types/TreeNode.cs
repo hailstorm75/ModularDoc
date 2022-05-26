@@ -13,7 +13,7 @@ namespace MarkDoc.Members.Types
     /// </summary>
     public string Name { get; }
 
-    public IResType Value { get;}
+    public IResType Value { get; }
 
     /// <summary>
     /// Child nodes
