@@ -439,13 +439,21 @@ namespace UT.Members.TypeTests
     public void ValidateInheritedTypesStructured(IResolver resolver, string name)
     {
       var query = GetClass(resolver, name);
+      var j = new TreeNode("TestLibrary.Classes.J", null!, Array.Empty<TreeNode>());
       var expected = new[]
       {
-        new TreeNode("TestLibrary.Classes.A", null!,new[] { new TreeNode("TestLibrary.Classes.B", null!, Array.Empty<TreeNode>()) }),
+        new TreeNode("TestLibrary.Classes.A", null!,new[]
+        {
+          new TreeNode("TestLibrary.Classes.B", null!, new[]
+          {
+            new TreeNode("TestLibrary.Classes.G", null!,new[] { j }),
+            new TreeNode("TestLibrary.Classes.H", null!,new[] { j })
+          })
+        }),
         new TreeNode("TestLibrary.Classes.C", null!,new[]
         {
           new TreeNode("TestLibrary.Classes.E", null!,Array.Empty<TreeNode>()),
-          new TreeNode("TestLibrary.Classes.D", null!,new[] { new TreeNode("TestLibrary.Classes.F", null!,Array.Empty<TreeNode>())}),
+          new TreeNode("TestLibrary.Classes.D", null!,new[] { new TreeNode("TestLibrary.Classes.F", null!,Array.Empty<TreeNode>())})
         })
       };
 
