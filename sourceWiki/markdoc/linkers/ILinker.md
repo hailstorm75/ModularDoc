@@ -27,7 +27,7 @@ Interface for creating links
 | --- | --- |
 | `Lazy` | [`CreateAnchor`](markdoc/linkers/ILinker.md#createanchor)([`IType`](../members/types/IType.md) page, [`IMember`](../members/members/IMember.md) member)<br>Creates an anchor to a given `member` |
 | `string` | [`CreateLink`](markdoc/linkers/ILinker.md#createlink-12)(`...`)<br>Creates a link to a given type `target` |
-| `string` | [`CreateLinkToSourceCode`](markdoc/linkers/ILinker.md#createlinktosourcecode)([`IMember`](../members/members/IMember.md) member) |
+| `string` | [`CreateLinkToSourceCode`](markdoc/linkers/ILinker.md#createlinktosourcecode)([`IMember`](../members/members/IMember.md) member)<br>Creates a link path to the source code location of the given `member` |
 | `void` | [`RegisterAnchor`](markdoc/linkers/ILinker.md#registeranchor)([`IMember`](../members/members/IMember.md) member, `Lazy`&lt;`string`&gt; anchor) |
 
 ## Details
@@ -58,8 +58,8 @@ public abstract string CreateLink(IType source, IType target)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IType`](../members/types/IType.md) | source |  |
-| [`IType`](../members/types/IType.md) | target |  |
+| [`IType`](../members/types/IType.md) | source | Link from |
+| [`IType`](../members/types/IType.md) | target | Link target |
 
 ##### Summary
 Creates a link to a given type `target`
@@ -100,7 +100,13 @@ public abstract string CreateLinkToSourceCode(IMember member)
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| [`IMember`](../members/members/IMember.md) | member |   |
+| [`IMember`](../members/members/IMember.md) | member | Member to link to |
+
+##### Summary
+Creates a link path to the source code location of the given `member`
+
+##### Returns
+Link to source code line
 
 ### Properties
 #### Paths

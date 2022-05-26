@@ -1,5 +1,8 @@
 # OperatorType `enum`
 
+## Description
+Method operator types
+
 ## Diagram
 ```mermaid
   flowchart LR
@@ -11,6 +14,9 @@
 ```
 
 ## Details
+### Summary
+Method operator types
+
 ### Fields
 #### None
 
