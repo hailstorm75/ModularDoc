@@ -42,9 +42,11 @@ module internal TypeHelpers =
 
     // Get the input name based on its name
     match input with
-    | :? IClass as x -> processWithoutInheritance x
-    | :? IStruct as x -> processWithoutInheritance x
-    | :? IInterface as x -> processWithVariance x
+    | :? IInterface as x ->
+      match x with
+      | :? IClass as y -> processWithoutInheritance y
+      | :? IStruct as y -> processWithoutInheritance y
+      | _ -> processWithVariance x
     | _ -> input.Name
 
   let private tryFindMember (input: IType) (memberFull: string) (memberCut: string) =
