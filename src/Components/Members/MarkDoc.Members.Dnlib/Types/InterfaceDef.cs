@@ -219,14 +219,36 @@ namespace MarkDoc.Members.Dnlib.Types
       var row = new List<TreeNode>();
       var rowNames = new HashSet<string>();
       var processed = new HashSet<IResType>();
+      var source = InheritedTypesFlat
+        .Select(t => Tuple.Create(t, (IInterface?)t.Reference.Value))
+        .OrderBy(tup => tup.Item2 is null ? 0 : tup.Item2.InheritedTypesFlat.Count)
+        .ToArray()
+        .AsSpan();
 
       while (true)
       {
-        var leaves = InheritedTypesFlat
-          .Except(processed)
-          .Where(type => type.Reference.Value is null || (type.Reference.Value is IInterface inter && !inter.InheritedTypesFlat.Except(processed).Any()))
-          .Select(type => Tuple.Create(type, (IInterface?)type.Reference.Value))
-          .ToReadOnlyCollection();
+        var leaves = new LinkedList<Tuple<IResType, IInterface?>>();
+        while (source.Length != 0)
+        {
+          if (source[0].Item2 is not null)
+          {
+            var quit = false;
+            foreach (var item in source[0].Item2!.InheritedTypesFlat)
+            {
+              // If COMMENT..
+              if (processed.Contains(item))
+                continue;
+              quit = true;
+              break;
+            }
+
+            if (quit)
+              break;
+          }
+
+          leaves.AddLast(source[0]);
+          source = source[1..];
+        }
 
         if (leaves.Count == 0)
           break;
@@ -255,6 +277,7 @@ namespace MarkDoc.Members.Dnlib.Types
           processed.Add(leaf.Item1);
         }
       }
+
       return row;
     }
 
