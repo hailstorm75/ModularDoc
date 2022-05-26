@@ -202,9 +202,11 @@ module TypeContentHelpers =
 
     let groupByType (itemType: IType) =
       match itemType with
-      | :? IClass     -> "Classes"    |> Some
-      | :? IStruct    -> "Structures" |> Some
-      | :? IInterface -> "Interfaces" |> Some
+      | :? IInterface ->
+        match itemType with
+        | :? IClass     -> "Classes"    |> Some
+        | :? IStruct    -> "Structures" |> Some
+        | _ -> "Interfaces" |> Some
       | :? IEnum      -> "Enums"      |> Some
       | _             -> None
 
