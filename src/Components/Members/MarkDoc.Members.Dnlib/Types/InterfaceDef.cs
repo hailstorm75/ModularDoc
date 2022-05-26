@@ -264,7 +264,7 @@ namespace MarkDoc.Members.Dnlib.Types
           var children = row
             .Where(t => hash.Contains(t.Name))
             .ToReadOnlyCollection();
-          var node = new TreeNode(leaf.Item1.RawName, children);
+          var node = new TreeNode(leaf.Item1.RawName, leaf.Item1, children);
 
           foreach (var child in children)
           {

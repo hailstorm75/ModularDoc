@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MarkDoc.Members.ResolvedTypes;
 
 namespace MarkDoc.Members.Types
 {
@@ -12,26 +13,21 @@ namespace MarkDoc.Members.Types
     /// </summary>
     public string Name { get; }
 
+    public IResType Value { get;}
+
     /// <summary>
     /// Child nodes
     /// </summary>
     public IReadOnlyCollection<TreeNode> Children { get; }
 
     /// <summary>
-    /// SUMMARY
-    /// </summary>
-    public TreeNode? Parent { get; set; }
-
-    /// <summary>
     /// Default constructor
     /// </summary>
-    public TreeNode(string name, IReadOnlyCollection<TreeNode> children)
+    public TreeNode(string name, IResType value, IReadOnlyCollection<TreeNode> children)
     {
       Name = name;
+      Value = value;
       Children = children;
-
-      foreach (var child in children)
-        child.Parent = this;
     }
   }
 }

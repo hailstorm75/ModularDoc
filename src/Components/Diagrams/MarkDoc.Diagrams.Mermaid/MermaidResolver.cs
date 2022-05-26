@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -104,12 +105,19 @@ namespace MarkDoc.Diagrams.Mermaid
         if (parent is not IInterface interfaceType)
           return;
 
-        foreach (var item in interfaceType.InheritedTypesFlat)
+        void ProcessInheritance(string parentName, IEnumerable<TreeNode> source)
         {
-          relations.AddLast($"{item.RawName.Replace('`', '_')} --> {parent.RawName.Replace('`', '_')}");
-          AddToDictionary(types, GenerateResType(item));
-          typeNodes.Add(item.RawName);
+          foreach (var item in source)
+          {
+            relations.AddLast($"{item.Name.Replace('`', '_')} --> {parentName.Replace('`', '_')}");
+            AddToDictionary(types, GenerateResType(item.Value));
+            typeNodes.Add(item.Name);
+
+            ProcessInheritance(item.Name, item.Children);
+          }
         }
+
+        ProcessInheritance(parent.RawName, interfaceType.InheritedTypesStructured.Value);
 
         if (parent is not IClass classType || classType.BaseClass is null)
           return;

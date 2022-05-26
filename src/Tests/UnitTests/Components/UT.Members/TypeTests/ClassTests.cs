@@ -441,11 +441,11 @@ namespace UT.Members.TypeTests
       var query = GetClass(resolver, name);
       var expected = new[]
       {
-        new TreeNode("TestLibrary.Classes.A", new[] { new TreeNode("TestLibrary.Classes.B", Array.Empty<TreeNode>()) }),
-        new TreeNode("TestLibrary.Classes.C", new[]
+        new TreeNode("TestLibrary.Classes.A", null!,new[] { new TreeNode("TestLibrary.Classes.B", null!, Array.Empty<TreeNode>()) }),
+        new TreeNode("TestLibrary.Classes.C", null!,new[]
         {
-          new TreeNode("TestLibrary.Classes.E", Array.Empty<TreeNode>()),
-          new TreeNode("TestLibrary.Classes.D", new[] { new TreeNode("TestLibrary.Classes.F", Array.Empty<TreeNode>())}),
+          new TreeNode("TestLibrary.Classes.E", null!,Array.Empty<TreeNode>()),
+          new TreeNode("TestLibrary.Classes.D", null!,new[] { new TreeNode("TestLibrary.Classes.F", null!,Array.Empty<TreeNode>())}),
         })
       };
 
