@@ -314,7 +314,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetInterface(resolver, name);
 
-      var type = query?.InheritedInterfaces.FirstOrDefault(inherited => inherited.DisplayName.Equals(nameof(IDisposable)));
+      var type = query?.InheritedTypesFlat.FirstOrDefault(inherited => inherited.DisplayName.Equals(nameof(IDisposable)));
 
       Assert.False(type is null, $"{resolver.GetType().FullName}: The '{name}' interface is missing the expected inherited interface.");
     }
@@ -326,7 +326,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetInterface(resolver, name);
 
-      var interfacesCount = query?.InheritedInterfaces.Count ?? 0;
+      var interfacesCount = query?.InheritedTypesFlat.Count ?? 0;
 
       Assert.True(interfacesCount == 1, $"{resolver.GetType().FullName}: The '{name}' interface has an unexpected number of inherited interface.");
     }
@@ -435,7 +435,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetInterface(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -448,7 +448,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetInterface(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -461,7 +461,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetInterface(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -474,7 +474,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetInterface(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }

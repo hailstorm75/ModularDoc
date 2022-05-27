@@ -174,7 +174,7 @@ namespace MarkDoc.Documentation.Xml
         // otherwise return an empty
         : Enumerable.Empty<IType>();
 
-      var sources = type.InheritedInterfaces
+      var sources = type.InheritedTypesFlat
         // Select type references
         .Select(x => x.Reference.Value)
         // Exclude types with no references

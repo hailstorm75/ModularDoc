@@ -25,8 +25,9 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 | `IReadOnlyCollection`&lt;[`IDelegate`](../members/IDelegate.md)&gt; | [`Delegates`](markdoc/members/types/IInterface.md#delegates)<br>Collection of delegates | `get` |
 | `IReadOnlyCollection`&lt;[`IEvent`](../members/IEvent.md)&gt; | [`Events`](markdoc/members/types/IInterface.md#events)<br>Collection of events | `get` |
 | `IReadOnlyDictionary`&lt;`string`, `(Variance Item1, IReadOnlyCollection Item2)`&gt; | [`Generics`](markdoc/members/types/IInterface.md#generics)<br>Generics name, and their variance and constraints | `get` |
-| `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; | [`InheritedInterfaces`](markdoc/members/types/IInterface.md#inheritedinterfaces)<br>Collection of inherited interfaces | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`InheritedTypes`](markdoc/members/types/IInterface.md#inheritedtypes)<br>Members inherited from derived types | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`InheritedTypeMembers`](markdoc/members/types/IInterface.md#inheritedtypemembers)<br>Members inherited from derived types | `get` |
+| `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; | [`InheritedTypesFlat`](markdoc/members/types/IInterface.md#inheritedtypesflat)<br>Collection of inherited types | `get` |
+| `Lazy`&lt;`IReadOnlyCollection`&gt; | [`InheritedTypesStructured`](markdoc/members/types/IInterface.md#inheritedtypesstructured)<br>Structured inherited types | `get` |
 | `IReadOnlyCollection`&lt;[`IMethod`](../members/IMethod.md)&gt; | [`Methods`](markdoc/members/types/IInterface.md#methods)<br>Collection of methods | `get` |
 | `IReadOnlyCollection`&lt;[`IType`](./IType.md)&gt; | [`NestedTypes`](markdoc/members/types/IInterface.md#nestedtypes)<br>Collection of nested types | `get` |
 | `IReadOnlyCollection`&lt;[`IProperty`](../members/IProperty.md)&gt; | [`Properties`](markdoc/members/types/IInterface.md#properties)<br>Collection of properties | `get` |
@@ -41,12 +42,19 @@ Interface for interface types
 ](./IType.md)
 
 ### Properties
-#### InheritedInterfaces
+#### InheritedTypesFlat
 ```csharp
-public abstract IReadOnlyCollection InheritedInterfaces { get }
+public abstract IReadOnlyCollection InheritedTypesFlat { get }
 ```
 ##### Summary
-Collection of inherited interfaces
+Collection of inherited types
+
+#### InheritedTypesStructured
+```csharp
+public abstract Lazy InheritedTypesStructured { get }
+```
+##### Summary
+Structured inherited types
 
 #### Generics
 ```csharp
@@ -90,9 +98,9 @@ public abstract IReadOnlyCollection Properties { get }
 ##### Summary
 Collection of properties
 
-#### InheritedTypes
+#### InheritedTypeMembers
 ```csharp
-public abstract Lazy InheritedTypes { get }
+public abstract Lazy InheritedTypeMembers { get }
 ```
 ##### Summary
 Members inherited from derived types

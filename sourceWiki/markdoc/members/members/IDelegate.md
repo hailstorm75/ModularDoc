@@ -1,5 +1,8 @@
 # IDelegate `interface`
 
+## Description
+Interface for delegate types
+
 ## Diagram
 ```mermaid
   flowchart LR
@@ -24,6 +27,9 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IDelegate
 | [`IResType`](../resolvedtypes/IResType.md) | [`Returns`](markdoc/members/members/IDelegate.md#returns)<br>Method return type | `get` |
 
 ## Details
+### Summary
+Interface for delegate types
+
 ### Inheritance
  - [
 `IMember`

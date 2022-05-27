@@ -177,7 +177,7 @@ module internal ContentHelpers =
 
       let mutable result: IInterface = null
       // If the member is inherited..
-      if interfaceType.InheritedTypes.Value.TryGetValue(typeMember, &result) then
+      if interfaceType.InheritedTypeMembers.Value.TryGetValue(typeMember, &result) then
         Some(seq [ typeReference result |> ElementHelpers.initialize |> applyTools ])
       // Otherwise..
       else

@@ -415,7 +415,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetStruct(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -428,7 +428,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetStruct(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -441,7 +441,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetStruct(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -454,7 +454,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetStruct(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }

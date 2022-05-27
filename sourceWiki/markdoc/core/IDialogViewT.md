@@ -31,7 +31,7 @@ MarkDoc.Core.IViewModel --> MarkDoc.Core.IView_1TViewModel
   class MarkDoc.Core.IDialogView interfaceStyle;
   end
 MarkDoc.Core.IView_1 --> MarkDoc.Core.IDialogView_1
-MarkDoc.Core.IView --> MarkDoc.Core.IDialogView_1
+MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 MarkDoc.Core.IDialogView --> MarkDoc.Core.IDialogView_1
 ```
 

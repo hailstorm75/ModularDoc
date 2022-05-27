@@ -17,7 +17,7 @@ Interface for methods
   class MarkDoc.Members.Members.IMember interfaceStyle;
   end
 MarkDoc.Members.Members.IConstructor --> MarkDoc.Members.Members.IMethod
-MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IMethod
+MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IConstructor
 ```
 
 ## Members

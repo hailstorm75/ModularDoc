@@ -202,9 +202,11 @@ module TypeContentHelpers =
 
     let groupByType (itemType: IType) =
       match itemType with
-      | :? IClass     -> "Classes"    |> Some
-      | :? IStruct    -> "Structures" |> Some
-      | :? IInterface -> "Interfaces" |> Some
+      | :? IInterface ->
+        match itemType with
+        | :? IClass     -> "Classes"    |> Some
+        | :? IStruct    -> "Structures" |> Some
+        | _ -> "Interfaces" |> Some
       | :? IEnum      -> "Enums"      |> Some
       | _             -> None
 
@@ -236,7 +238,7 @@ module TypeContentHelpers =
   let private inheritance (input: IType) tools =
     let getInterfaces (x: 'M when 'M :> IInterface) =
       // Get the inherited interfaces
-      x.InheritedInterfaces
+      x.InheritedTypesFlat
       // Compose the inherited types into elements
       |> Seq.map (fun x -> ElementHelpers.initialize (TypeHelpers.processResType input x tools |> TextElement) tools)
 

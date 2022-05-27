@@ -58,7 +58,7 @@ namespace MarkDoc.Diagrams.PlantUML
         if (parent is not IInterface interfaceType)
           return;
 
-        foreach (var item in interfaceType.InheritedInterfaces)
+        foreach (var item in interfaceType.InheritedTypesFlat)
         {
           relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {item.RawName.Replace('`', '_')}");
           AddToDictionary(types, GenerateResType(item));

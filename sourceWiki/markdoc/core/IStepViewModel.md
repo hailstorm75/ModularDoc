@@ -18,7 +18,7 @@ Interface for view models of plugin steps
 System.IDisposable[[IDisposable]]
   end
 MarkDoc.Core.IViewModel --> MarkDoc.Core.IStepViewModel
-System.IDisposable --> MarkDoc.Core.IStepViewModel
+System.IDisposable --> MarkDoc.Core.IViewModel
 ```
 
 ## Members
