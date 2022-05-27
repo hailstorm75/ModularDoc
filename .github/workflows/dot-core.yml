@@ -39,14 +39,14 @@ jobs:
       run: dotnet test src/MarkDoc.sln --logger "trx"
     - name: Extract test results
       run: |
-        mkdir ~/TestResults
-        for f in `find . -name '*.trx' -type f`; do mv $f ~/TestResults; done
-        trx2junit ~/TestResults/*.trx
-        ls ~/TestResults
+        mkdir ~/artifacts
+        for f in `find . -name '*.trx' -type f`; do mv $f ~/artifacts; done
+        trx2junit ~/artifacts/*.trx
+        rm -f ~/artifacts/*.trx
     - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1.36
+      uses: EnricoMi/publish-unit-test-result-action/composite@v1.36
       if: always()
       with:
-        junit_files: "~/TestResults/*.xml"
+        files: "~/artifacts/*.xml"
         job_summary: true
         
