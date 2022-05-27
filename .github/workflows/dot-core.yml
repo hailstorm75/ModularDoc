@@ -49,4 +49,3 @@ jobs:
       with:
         files: "artifacts/*.xml"
         job_summary: true
-        
