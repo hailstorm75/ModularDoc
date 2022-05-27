@@ -33,5 +33,19 @@ jobs:
       run: dotnet build src/MarkDoc.sln --configuration Debug --no-restore
     - name: Build tests
       run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
+    - name: Install tooling for conversion
+      run: dotnet tool install -g trx2junit
     - name: Run tests
-      run: dotnet test src/MarkDoc.sln
+      run: dotnet test src/MarkDoc.sln --logger "trx"
+    - name: Extract test results
+      run: |
+        mkdir ~/TestResults
+        for f in `find . -name '*.trx' -type f`; do mv $f ~/TestResults; done
+        trx2junit ~/TestResults/*.trx
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        junit_files: "~/TestResults/*.xml"
+        job_summary: true
+        
