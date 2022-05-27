@@ -13,6 +13,9 @@ namespace MarkDoc.Members.Types
     /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    /// Contained node type
+    /// </summary>
     public IResType Value { get; }
 
     /// <summary>

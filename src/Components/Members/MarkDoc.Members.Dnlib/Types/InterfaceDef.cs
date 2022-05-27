@@ -89,7 +89,7 @@ namespace MarkDoc.Members.Dnlib.Types
       Generics = generics;
 
       // Initialize the inherited types flattened
-      InheritedTypesFlat = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+      InheritedTypesFlat = ResolveInheritedTypesFlat(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
 
       // Initialize the inherited types structured
       InheritedTypesStructured = new Lazy<IReadOnlyCollection<TreeNode>>(ResolveInheritedTypesStructured, LazyThreadSafetyMode.PublicationOnly);
@@ -211,74 +211,46 @@ namespace MarkDoc.Members.Dnlib.Types
         .ToDictionary(x => x.member, x => x.type);
     }
 
-    private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
+    private IEnumerable<IResType> ResolveInheritedTypesFlat(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(interfaceImpl => Resolver.Resolve(interfaceImpl.Interface.ToTypeSig(), outerArgs));
 
     private IReadOnlyCollection<TreeNode> ResolveInheritedTypesStructured()
     {
-      var row = new List<TreeNode>();
-      var rowNames = new HashSet<string>();
-      var processed = new HashSet<IResType>();
-      var source = InheritedTypesFlat
-        .Select(t => Tuple.Create(t, (IInterface?)t.Reference.Value))
-        .OrderBy(tup => tup.Item2 is null ? 0 : tup.Item2.InheritedTypesFlat.Count)
-        .ToArray()
-        .AsSpan();
-
-      while (true)
+      // Prepare a list of sub-inherited type raw names by the types inherited by this type
+      var subFlatList = new HashSet<string>(InheritedTypesFlat.Count);
+      // For each inherited type by this type..
+      foreach (var item in InheritedTypesFlat)
       {
-        var leaves = new LinkedList<Tuple<IResType, IInterface?>>();
-        while (source.Length != 0)
-        {
-          if (source[0].Item2 is not null)
-          {
-            var quit = false;
-            foreach (var item in source[0].Item2!.InheritedTypesFlat)
-            {
-              // If COMMENT..
-              if (processed.Contains(item))
-                continue;
-              quit = true;
-              break;
-            }
+        // If it is part of the sub-inherited types or it is not part of the resolved set of types..
+        if (subFlatList.Contains(item.RawName) || item.Reference.Value is null)
+          // Skip this inherited type
+          continue;
 
-            if (quit)
-              break;
-          }
+        // If the given resolved type is not at least an interface..
+        if (item.Reference.Value is not IInterface inter)
+          // Then it is not an inheritable type and an exception must be thrown
+          throw new NotSupportedException("An inherited type is not at least an interface");
 
-          leaves.AddLast(source[0]);
-          source = source[1..];
-        }
-
-        if (leaves.Count == 0)
-          break;
-
-        foreach (var leaf in leaves)
-        {
-          var leafInherited = leaf.Item2?.InheritedTypesFlat ?? Array.Empty<IResType>();
-
-          var hash = leafInherited
-            .Select(type => type.RawName)
-            .Where(rowNames.Contains)
-            .ToHashSet();
-          var children = row
-            .Where(t => hash.Contains(t.Name))
-            .ToReadOnlyCollection();
-          var node = new TreeNode(leaf.Item1.RawName, leaf.Item1, children);
-
-          foreach (var child in children)
-          {
-            row.Remove(child);
-            rowNames.Remove(child.Name);
-          }
-
-          row.Add(node);
-          rowNames.Add(node.Name);
-          processed.Add(leaf.Item1);
-        }
+        // Populate the list of sub-inherited types
+        subFlatList.AddRange(inter.InheritedTypesFlat.Select(type => type.RawName));
       }
 
-      return row;
+      // Return a structured list of inherited types
+      return InheritedTypesFlat
+        // Skip the types that originate from the sub-inherited types
+        .Where(type => !subFlatList.Contains(type.RawName))
+        // Select the structured tree nodes
+        .Select(type =>
+        {
+          // Extract a list of tree nodes from the inherited types
+          var children = type.Reference.Value is IInterface i
+            ? i.InheritedTypesStructured.Value
+            : Array.Empty<TreeNode>();
+          // Return a materialized tree node
+          return new TreeNode(type.RawName, type, children);
+        })
+        // Materialize the list
+        .ToReadOnlyCollection();
     }
 
     protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
