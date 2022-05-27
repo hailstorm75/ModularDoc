@@ -46,6 +46,6 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
       with:
-        junit_files: "~/TestResults/*.xml"
+        files: "~/TestResults/*.xml"
         job_summary: true
         
