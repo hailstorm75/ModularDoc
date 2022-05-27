@@ -42,10 +42,11 @@ jobs:
         mkdir ~/TestResults
         for f in `find . -name '*.trx' -type f`; do mv $f ~/TestResults; done
         trx2junit ~/TestResults/*.trx
+        ls ~/TestResults
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
       with:
-        files: "~/TestResults/*.xml"
+        files: "/home/runner/TestResults/*.xml"
         job_summary: true
         
