@@ -44,10 +44,9 @@ jobs:
         trx2junit ~/TestResults/*.trx
         ls ~/TestResults
     - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1
+      uses: EnricoMi/publish-unit-test-result-action@v1.36
       if: always()
       with:
-        files: "~/TestResults/**/*.xml"
-        junit_files: "~/TestResults/**/*.xml"
+        junit_files: "~/TestResults/*.xml"
         job_summary: true
         
