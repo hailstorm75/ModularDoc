@@ -17,7 +17,7 @@ Interface for struct types
   class MarkDoc.Members.Types.IType interfaceStyle;
   end
 MarkDoc.Members.Types.IInterface --> MarkDoc.Members.Types.IStruct
-MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IStruct
+MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 ```
 
 ## Members

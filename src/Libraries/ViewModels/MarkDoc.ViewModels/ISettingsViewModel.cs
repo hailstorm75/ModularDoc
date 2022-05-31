@@ -12,6 +12,11 @@ namespace MarkDoc.ViewModels
     /// <summary>
     /// Navigates back to the home page
     /// </summary>
-    ICommand BackCommand { get; set; }
+    ICommand BackCommand { get; }
+
+    /// <summary>
+    /// Determines whether the dark mode is on
+    /// </summary>
+    bool IsDarkModeOn { get; }
   }
 }

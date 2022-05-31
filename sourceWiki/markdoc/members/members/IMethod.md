@@ -17,7 +17,7 @@ Interface for methods
   class MarkDoc.Members.Members.IMember interfaceStyle;
   end
 MarkDoc.Members.Members.IConstructor --> MarkDoc.Members.Members.IMethod
-MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IMethod
+MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IConstructor
 ```
 
 ## Members
@@ -25,7 +25,7 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IMethod
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&gt; | [`Generics`](markdoc/members/members/IMethod.md#generics)<br>Method generic arguments | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt;&gt; | [`Generics`](markdoc/members/members/IMethod.md#generics)<br>Method generic arguments | `get` |
 | [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](markdoc/members/members/IMethod.md#inheritance)<br>Method visibility | `get` |
 | `bool` | [`IsAsync`](markdoc/members/members/IMethod.md#isasync)<br>Determines whether the method is asynchronous | `get` |
 | [`OperatorType`](../enums/OperatorType.md) | [`Operator`](markdoc/members/members/IMethod.md#operator)<br>Operator type | `get` |

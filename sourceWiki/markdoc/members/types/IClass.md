@@ -17,7 +17,7 @@ Interface for classes
   class MarkDoc.Members.Types.IType interfaceStyle;
   end
 MarkDoc.Members.Types.IInterface --> MarkDoc.Members.Types.IClass
-MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IClass
+MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 ```
 
 ## Members

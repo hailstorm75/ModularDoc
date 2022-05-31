@@ -1,5 +1,8 @@
 # IEnumField `interface`
 
+## Description
+Interface for enum field entries
+
 ## Diagram
 ```mermaid
   flowchart LR
@@ -15,6 +18,9 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IEnumField
 ```
 
 ## Details
+### Summary
+Interface for enum field entries
+
 ### Inheritance
  - [
 `IMember`

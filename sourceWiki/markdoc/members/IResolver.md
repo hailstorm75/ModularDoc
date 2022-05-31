@@ -19,7 +19,7 @@ Type resolver
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`Types`](markdoc/members/IResolver.md#types)<br>Resolved types | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IType`](types/IType.md)&gt;&gt;&gt; | [`Types`](markdoc/members/IResolver.md#types)<br>Resolved types | `get` |
 
 ### Methods
 #### Public  methods

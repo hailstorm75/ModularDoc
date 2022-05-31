@@ -8,6 +8,7 @@ using Avalonia.ReactiveUI;
 using FluentAvalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using MarkDoc.Constants;
+using MarkDoc.Helpers;
 using MarkDoc.MVVM.Helpers;
 
 namespace MarkDoc.App.Views
@@ -63,7 +64,10 @@ namespace MarkDoc.App.Views
       if (faTheme == null)
         return;
 
-      faTheme.RequestedTheme = "Light";
+      var themeManager = TypeResolver.Resolve<IThemeManager>();
+      themeManager.LoadThemeSettings();
+
+      faTheme.RequestedTheme = themeManager.GetDarkMode() ? "Dark" : "Light";
       faTheme.UseUserAccentColorOnWindows = true;
       faTheme.ForceWin32WindowToTheme(this);
     }

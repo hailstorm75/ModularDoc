@@ -39,7 +39,7 @@ Interface for the table element
  - [
 `IElement`
 ](./IElement.md)
- - `IHasContent`&lt;`IReadOnlyCollection`&gt;
+ - `IHasContent`&lt;`IReadOnlyCollection`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt;&gt;
  - [
 `IHasHeading`
 ](extensions/IHasHeading.md)
