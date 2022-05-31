@@ -43,7 +43,7 @@ MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`SetPreviousSettingsAsync`](markdoc/core/IStepViewT.md#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; settings) |
+| `Task` | [`SetPreviousSettingsAsync`](markdoc/core/IStepViewT.md#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
 
 ## Details
 ### Summary
@@ -63,12 +63,12 @@ Interface for views of plugin steps
 ### Methods
 #### SetPreviousSettingsAsync
 ```csharp
-public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary> settings)
+public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
 ```
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; | settings |   |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; | settings |   |
 
 ### Properties
 #### Id

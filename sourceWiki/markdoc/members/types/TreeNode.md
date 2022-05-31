@@ -20,7 +20,7 @@ Node of a tree structure
 | --- | --- | --- |
 | `IReadOnlyCollection`&lt;[`TreeNode`](markdoc/members/types/TreeNode.md)&gt; | [`Children`](markdoc/members/types/TreeNode.md#children)<br>Child nodes | `get` |
 | `string` | [`Name`](markdoc/members/types/TreeNode.md#name)<br>Node name | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Value`](markdoc/members/types/TreeNode.md#value) | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Value`](markdoc/members/types/TreeNode.md#value)<br>Contained node type | `get` |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Node of a tree structure
 
 ### Constructors
 #### TreeNode
-[*Source code*](https://github.com///blob//src/Libraries/Core/MarkDoc.Members/Types/TreeNode.cs#L26)
+[*Source code*](https://github.com///blob//src/Libraries/Core/MarkDoc.Members/Types/TreeNode.cs#L29)
 ```csharp
 public TreeNode(string name, IResType value, IReadOnlyCollection<TreeNode> children)
 ```
@@ -51,6 +51,8 @@ Node name
 ```csharp
 public IResType Value { get }
 ```
+##### Summary
+Contained node type
 
 #### Children
 ```csharp

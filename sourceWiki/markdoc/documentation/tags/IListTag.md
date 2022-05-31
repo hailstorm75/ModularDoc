@@ -23,7 +23,7 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.IListTag
 | Type | Name | Methods |
 | --- | --- | --- |
 | `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Headings`](markdoc/documentation/tags/IListTag.md#headings)<br>List headings | `get` |
-| `IReadOnlyCollection`&lt;`IReadOnlyCollection`&gt; | [`Rows`](markdoc/documentation/tags/IListTag.md#rows)<br>List rows | `get` |
+| `IReadOnlyCollection`&lt;`IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt;&gt; | [`Rows`](markdoc/documentation/tags/IListTag.md#rows)<br>List rows | `get` |
 | `ListType` | [`Type`](markdoc/documentation/tags/IListTag.md#type)<br>Type of list | `get` |
 
 ## Details

@@ -39,7 +39,7 @@ Interface for page elements
  - [
 `IElement`
 ](./IElement.md)
- - `IHasContent`&lt;`IReadOnlyCollection`&gt;
+ - `IHasContent`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt;
  - [
 `IHasHeading`
 ](extensions/IHasHeading.md)

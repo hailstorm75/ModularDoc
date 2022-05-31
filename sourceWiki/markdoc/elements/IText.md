@@ -21,9 +21,9 @@ Interface for text elements
   class MarkDoc.Elements.Extensions.IHasContent_1 interfaceStyle;
 
   end
-MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IText
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.IText
 MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IText
 ```
 
 ## Members

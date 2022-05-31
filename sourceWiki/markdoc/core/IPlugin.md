@@ -30,9 +30,9 @@ Interface for plugins
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](markdoc/core/IPlugin.md#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; configuration) |
-| `IReadOnlyCollection` | [`GetPluginSteps`](markdoc/core/IPlugin.md#getpluginsteps)()<br>Get the [IPluginStep](./IPluginStep.md) instances |
-| `T` | [`GetSettings`](markdoc/core/IPlugin.md#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; data) |
+| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](markdoc/core/IPlugin.md#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; configuration) |
+| `IReadOnlyCollection`&lt;[`IPluginStep`](./IPluginStep.md)&gt; | [`GetPluginSteps`](markdoc/core/IPlugin.md#getpluginsteps)()<br>Get the [IPluginStep](./IPluginStep.md) instances |
+| `T` | [`GetSettings`](markdoc/core/IPlugin.md#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; data) |
 
 ## Details
 ### Summary
@@ -51,22 +51,22 @@ Get the [IPluginStep](./IPluginStep.md) instances
 
 #### GetSettings
 ```csharp
-public abstract T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary> data)
+public abstract T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
 where T : ILibrarySettings
 ```
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; | data |   |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; | data |   |
 
 #### GenerateExecutor
 ```csharp
-public abstract (IMarkDocLogger logger, IReadOnlyCollection processes, Func executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary> configuration)
+public abstract (IMarkDocLogger logger, IReadOnlyCollection processes, Func executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
 ```
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; | configuration |   |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; | configuration |   |
 
 ### Properties
 #### Id
