@@ -20,7 +20,7 @@ Interface for joining multiple [ITextContent](./ITextContent.md) elements
 MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1[[IHasContent]]
   end
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.ITextBuilder
-MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextBuilder
+MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
 MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1 --> MarkDoc.Elements.ITextBuilder
 ```
 
@@ -42,7 +42,7 @@ Interface for joining multiple [ITextContent](./ITextContent.md) elements
  - [
 `IElement`
 ](./IElement.md)
- - `IHasContent`&lt;`IReadOnlyCollection`&gt;
+ - `IHasContent`&lt;`IReadOnlyCollection`&lt;[`ITextContent`](./ITextContent.md)&gt;&gt;
 
 ### Properties
 #### Delimiter

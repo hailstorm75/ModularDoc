@@ -1,5 +1,6 @@
 ﻿namespace MarkDoc.Generator.Basic
 
+open System.Linq
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 open MarkDoc.Members.Types
@@ -42,9 +43,11 @@ module internal TypeHelpers =
 
     // Get the input name based on its name
     match input with
-    | :? IClass as x -> processWithoutInheritance x
-    | :? IStruct as x -> processWithoutInheritance x
-    | :? IInterface as x -> processWithVariance x
+    | :? IInterface as x ->
+      match x with
+      | :? IClass as y -> processWithoutInheritance y
+      | :? IStruct as y -> processWithoutInheritance y
+      | _ -> processWithVariance x
     | _ -> input.Name
 
   let private tryFindMember (input: IType) (memberFull: string) (memberCut: string) =
@@ -160,7 +163,7 @@ module internal TypeHelpers =
   /// <param name="item">Resolved type to process</param>
   /// <param name="tools">Tools for processing the resolved type</param>
   /// <returns>Formatted display name of the processed <paramref name="item"/></returns>
-  let processResType source (item: IResType) tools =
+  let rec processResType source (item: IResType) tools =
     let tryLink (item: IResType) =
       // Link to the known resolved type
       let link = tools.linker.CreateLink(source, item)
@@ -173,15 +176,17 @@ module internal TypeHelpers =
         // return without a link
         InlineCode item.DisplayName
 
-    // TODO: Generic arrays?
     // Process the resolved type based on whether it is generic or not
     match item with
     | :? IResGeneric as generic ->
-      // Get the type generics
-      let generics = generic.Generics
-                     // Create a link to each generic type
-                     |> Seq.map tryLink
       // Compose the resolved type signature
-      (seq [ tryLink generic; "<" |> Normal; (generics, ", ") |> JoinedText; ">" |> Normal ], "") |> JoinedText
+      (seq [ tryLink generic; "<" |> Normal; (generic.Generics |> Seq.map (fun n -> processResType source n tools), ", ") |> JoinedText; ">" |> Normal ], "") |> JoinedText
+    | :? IResArray as arr ->
+      let braces = if arr.IsJagged then
+                     String.Join("", Enumerable.Repeat("[]", arr.Dimension))
+                   else
+                     String.Format("[{0}]", String.Join("", Enumerable.Repeat(",", arr.Dimension-1)))
+      
+      (seq [ processResType source arr.ArrayType tools; InlineCode braces ], "") |> JoinedText
     | _ -> tryLink item
 

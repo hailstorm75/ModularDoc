@@ -18,7 +18,7 @@ Interface for view models of plugin steps
 System.IDisposable[[IDisposable]]
   end
 MarkDoc.Core.IViewModel --> MarkDoc.Core.IStepViewModel
-System.IDisposable --> MarkDoc.Core.IStepViewModel
+System.IDisposable --> MarkDoc.Core.IViewModel
 ```
 
 ## Members
@@ -35,8 +35,8 @@ System.IDisposable --> MarkDoc.Core.IStepViewModel
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IReadOnlyDictionary` | [`GetSettings`](markdoc/core/IStepViewModel.md#getsettings)()<br>Retrieves current settings |
-| `ValueTask` | [`SetPreviousSettings`](markdoc/core/IStepViewModel.md#setprevioussettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; settings) |
+| `IReadOnlyDictionary`&lt;`string`, `string`&gt; | [`GetSettings`](markdoc/core/IStepViewModel.md#getsettings)()<br>Retrieves current settings |
+| `ValueTask` | [`SetPreviousSettings`](markdoc/core/IStepViewModel.md#setprevioussettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
 
 ## Details
 ### Summary
@@ -61,12 +61,12 @@ Current form settings
 
 #### SetPreviousSettings
 ```csharp
-public abstract ValueTask SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary> settings)
+public abstract ValueTask SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
 ```
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; | settings |   |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; | settings |   |
 
 ### Properties
 #### IsValid

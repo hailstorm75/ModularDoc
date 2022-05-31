@@ -46,8 +46,8 @@ MarkDoc.Core.IViewModel --> MarkDoc.Core.IView_1TViewModel
   class MarkDoc.Core.IView interfaceStyle;
   end
 MarkDoc.Core.IStepView_1 --> MarkDoc.Core.IStepView_2
-MarkDoc.Core.IView_1 --> MarkDoc.Core.IStepView_2
-MarkDoc.Core.IView --> MarkDoc.Core.IStepView_2
+MarkDoc.Core.IView_1 --> MarkDoc.Core.IStepView_1
+MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 ```
 
 ## Details

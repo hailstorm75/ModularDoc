@@ -26,8 +26,8 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Core.IStepViewModel_1TSettings
 System.IDisposable[[IDisposable]]
   end
 MarkDoc.Core.IStepViewModel --> MarkDoc.Core.IStepViewModel_1
-MarkDoc.Core.IViewModel --> MarkDoc.Core.IStepViewModel_1
-System.IDisposable --> MarkDoc.Core.IStepViewModel_1
+MarkDoc.Core.IViewModel --> MarkDoc.Core.IStepViewModel
+System.IDisposable --> MarkDoc.Core.IViewModel
 ```
 
 ## Details

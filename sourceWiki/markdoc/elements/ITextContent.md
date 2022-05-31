@@ -1,5 +1,8 @@
 # ITextContent `interface`
 
+## Description
+Interface for elements representing test-based content
+
 ## Diagram
 ```mermaid
   flowchart LR
@@ -15,6 +18,9 @@ MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
 ```
 
 ## Details
+### Summary
+Interface for elements representing test-based content
+
 ### Inheritance
  - [
 `IElement`

@@ -22,7 +22,7 @@ Interface for text elements
 
   end
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.IText
-MarkDoc.Elements.IElement --> MarkDoc.Elements.IText
+MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
 MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IText
 ```
 
