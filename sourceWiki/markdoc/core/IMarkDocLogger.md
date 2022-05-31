@@ -70,6 +70,7 @@ public abstract void Error(string message)
 Logs given `message` as an error
 
 #### Warning
+[*Source code*](https://github.com///blob//src/Libraries/Core/MarkDoc.Members/Types/TreeNode.cs#L14)
 ```csharp
 public abstract void Warning(string message)
 ```

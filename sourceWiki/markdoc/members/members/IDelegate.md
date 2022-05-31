@@ -1,7 +1,7 @@
 # IDelegate `interface`
 
 ## Description
-Interface for delegate members
+Interface for delegate types
 
 ## Diagram
 ```mermaid
@@ -23,12 +23,12 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IDelegate
 | Type | Name | Methods |
 | --- | --- | --- |
 | `IReadOnlyCollection`&lt;[`IArgument`](./IArgument.md)&gt; | [`Arguments`](markdoc/members/members/IDelegate.md#arguments)<br>Delegate arguments | `get` |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&gt; | [`Generics`](markdoc/members/members/IDelegate.md#generics)<br>Method generic arguments | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt;&gt; | [`Generics`](markdoc/members/members/IDelegate.md#generics)<br>Method generic arguments | `get` |
 | [`IResType`](../resolvedtypes/IResType.md) | [`Returns`](markdoc/members/members/IDelegate.md#returns)<br>Method return type | `get` |
 
 ## Details
 ### Summary
-Interface for delegate members
+Interface for delegate types
 
 ### Inheritance
  - [

@@ -1,7 +1,7 @@
 # OperatorType `enum`
 
 ## Description
-Types of method operators
+Method operator types
 
 ## Diagram
 ```mermaid
@@ -15,7 +15,7 @@ Types of method operators
 
 ## Details
 ### Summary
-Types of method operators
+Method operator types
 
 ### Fields
 #### None

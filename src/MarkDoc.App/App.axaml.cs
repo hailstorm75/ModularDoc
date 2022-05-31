@@ -51,6 +51,7 @@ namespace MarkDoc.App
       builder.RegisterType<HomeView>().As<IHomeView>();
 
       builder.RegisterType<Logger>().As<IMarkDocLogger>();
+      builder.RegisterType<ThemeManager>().As<IThemeManager>();
 
       builder.RegisterInstance(m_dialogManager).As<IDialogManager>().SingleInstance();
 

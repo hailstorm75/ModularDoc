@@ -23,6 +23,7 @@
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="3.7.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.0-preview.179" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0-preview.179" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Update="Assets\Resources.Designer.cs">

@@ -181,6 +181,9 @@ namespace UT.Members.TypeTests
     public static IEnumerable<object[]> GetClassWithInterfacesData()
       => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_INHERITING_CLASS });
 
+    public static IEnumerable<object[]> GetClassWithComplexInheritance()
+      => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_CLASS_COMPLEX_INHERITANCE });
+
     public static IEnumerable<object[]> GetClassWithMembersData(string name)
       => new ResolversProvider().Select(resolver => new object[] { resolver, Constants.PUBLIC_CLASS, name });
 
@@ -212,6 +215,40 @@ namespace UT.Members.TypeTests
       resolver.Resolve(Constants.TEST_ASSEMBLY);
 
       return resolver.FindType<IClass>(name);
+    }
+
+    #endregion
+
+    #region Comparer
+
+    private class TreeNodeComparer
+      : IEqualityComparer<IEnumerable<TreeNode>>
+    {
+      public bool Equals(IEnumerable<TreeNode>? expected, IEnumerable<TreeNode>? actual)
+      {
+        if (expected == null || actual == null)
+          return false;
+
+        var expectedArr = expected.OrderBy(x => x.Name).ToArray();
+        var actualArr = actual.OrderBy(x => x.Name).ToArray();
+
+        if (expectedArr.Length != actualArr.Length)
+          return false;
+
+        for (var i = 0; i < expectedArr.Length; i++)
+        {
+          if (!expectedArr[i].Name.Equals(actualArr[i].Name))
+            return false;
+
+          if (!Equals(expectedArr[i].Children, actualArr[i].Children))
+            return false;
+        }
+
+        return true;
+      }
+
+      public int GetHashCode(IEnumerable<TreeNode> obj)
+        => obj.GetHashCode();
     }
 
     #endregion
@@ -340,7 +377,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -353,7 +390,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -366,7 +403,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -379,7 +416,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var inheritedMember = query?.InheritedTypes.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
+      var inheritedMember = query?.InheritedTypeMembers.Value.FirstOrDefault(member => member.Key.Name.Equals(memberName)) ?? default;
 
       Assert.Equal(sourceTypeName, inheritedMember.Value.Name);
     }
@@ -387,13 +424,42 @@ namespace UT.Members.TypeTests
     [Theory]
     [Trait("Category", nameof(IClass))]
     [MemberData(nameof(GetClassWithInterfacesData))]
-    public void ValidateInterfaceInheritedInterfaces(IResolver resolver, string name)
+    public void ValidateInheritedInterfaces(IResolver resolver, string name)
     {
       var query = GetClass(resolver, name);
 
-      var type = query?.InheritedInterfaces.FirstOrDefault(inherited => inherited.DisplayName.Equals(Constants.PUBLIC_INHERITED_INTERFACE));
+      var type = query?.InheritedTypesFlat.FirstOrDefault(inherited => inherited.DisplayName.Equals(Constants.PUBLIC_INHERITED_INTERFACE));
 
       Assert.False(type is null, $"{resolver.GetType().FullName}: The '{name}' class is missing the expected inherited interface.");
+    }
+
+    [Theory]
+    [Trait("Category", nameof(IClass))]
+    [MemberData(nameof(GetClassWithComplexInheritance))]
+    public void ValidateInheritedTypesStructured(IResolver resolver, string name)
+    {
+      var query = GetClass(resolver, name);
+      var j = new TreeNode("TestLibrary.Classes.J", null!, Array.Empty<TreeNode>());
+      var expected = new[]
+      {
+        new TreeNode("TestLibrary.Classes.A", null!,new[]
+        {
+          new TreeNode("TestLibrary.Classes.B", null!, new[]
+          {
+            new TreeNode("TestLibrary.Classes.G", null!,new[] { j }),
+            new TreeNode("TestLibrary.Classes.H", null!,new[] { j })
+          })
+        }),
+        new TreeNode("TestLibrary.Classes.C", null!,new[]
+        {
+          new TreeNode("TestLibrary.Classes.E", null!,Array.Empty<TreeNode>()),
+          new TreeNode("TestLibrary.Classes.D", null!,new[] { new TreeNode("TestLibrary.Classes.F", null!,Array.Empty<TreeNode>())})
+        })
+      };
+
+      var result = query?.InheritedTypesStructured.Value;
+
+      Assert.Equal(expected, result!, new TreeNodeComparer());
     }
 
     [Theory]
@@ -403,7 +469,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetClass(resolver, name);
 
-      var interfacesCount = query?.InheritedInterfaces.Count ?? 0;
+      var interfacesCount = query?.InheritedTypesFlat.Count ?? 0;
 
       Assert.True(interfacesCount == 1, $"{resolver.GetType().FullName}: The '{name}' class has an unexpected number of inherited interface.");
     }

@@ -20,7 +20,7 @@ Interface for element documentation
 | Type | Name | Methods |
 | --- | --- | --- |
 | [`IDocumentation`](./IDocumentation.md) | [`Documentation`](markdoc/documentation/IDocElement.md#documentation)<br>Element documentation | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`Members`](markdoc/documentation/IDocElement.md#members)<br>Element members | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, [`IDocMember`](./IDocMember.md)&gt;&gt; | [`Members`](markdoc/documentation/IDocElement.md#members)<br>Element members | `get` |
 | `string` | [`Name`](markdoc/documentation/IDocElement.md#name)<br>Element name | `get` |
 
 ## Details

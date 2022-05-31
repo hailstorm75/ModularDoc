@@ -19,8 +19,7 @@ Type resolver
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Lazy`&lt;`TrieNamespace`&gt; | [`Namespaces`](markdoc/members/IResolver.md#namespaces)<br>Resolved namespace trie | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&gt; | [`Types`](markdoc/members/IResolver.md#types)<br>Resolved types | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IType`](types/IType.md)&gt;&gt;&gt; | [`Types`](markdoc/members/IResolver.md#types)<br>Resolved types | `get` |
 
 ### Methods
 #### Public  methods
@@ -92,12 +91,5 @@ public abstract Lazy Types { get }
 ```
 ##### Summary
 Resolved types
-
-#### Namespaces
-```csharp
-public abstract Lazy Namespaces { get }
-```
-##### Summary
-Resolved namespace trie
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

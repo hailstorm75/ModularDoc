@@ -35,7 +35,7 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IList
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IEnumerable` | [`Print`](markdoc/elements/IList.md#print)(`int` indent)<br>Prints element to a string |
+| `IEnumerable`&lt;`string`&gt; | [`Print`](markdoc/elements/IList.md#print)(`int` indent)<br>Prints element to a string |
 
 ## Details
 ### Summary
@@ -45,7 +45,7 @@ Interface for list elements
  - [
 `IElement`
 ](./IElement.md)
- - `IHasContent`&lt;`IReadOnlyCollection`&gt;
+ - `IHasContent`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt;
  - [
 `IHasHeading`
 ](extensions/IHasHeading.md)

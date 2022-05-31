@@ -99,11 +99,13 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
   let getTypeName (input: IType) =
     let name = TypeHelpers.getTypeName input
     let tName = match input with
-                | :? IStruct as x ->
-                  if x.IsReadOnly then "readonly struct" else "struct"
-                | :? IRecord -> "record"
-                | :? IClass -> "class"
-                | :? IInterface -> "interface"
+                | :? IInterface ->
+                  match input with
+                  | :? IStruct as x ->
+                    if x.IsReadOnly then "readonly struct" else "struct"
+                  | :? IRecord -> "record"
+                  | :? IClass -> "class"
+                  | _ ->  "interface"
                 | :? IEnum -> "enum"
                 | _ -> ""
                 |> InlineCode

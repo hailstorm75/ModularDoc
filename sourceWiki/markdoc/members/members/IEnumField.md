@@ -1,7 +1,7 @@
 # IEnumField `interface`
 
 ## Description
-Interface for enum field members
+Interface for enum field entries
 
 ## Diagram
 ```mermaid
@@ -19,7 +19,7 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IEnumField
 
 ## Details
 ### Summary
-Interface for enum field members
+Interface for enum field entries
 
 ### Inheritance
  - [

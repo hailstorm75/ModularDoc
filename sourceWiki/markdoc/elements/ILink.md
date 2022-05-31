@@ -22,7 +22,7 @@ Interface for link elements
 
   end
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.ILink
-MarkDoc.Elements.IElement --> MarkDoc.Elements.ILink
+MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
 MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ILink
 ```
 

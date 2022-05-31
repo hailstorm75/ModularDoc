@@ -18,7 +18,7 @@ Interface for dialog view models
 System.IDisposable[[IDisposable]]
   end
 MarkDoc.Core.IViewModel --> MarkDoc.Core.IDialogViewModel
-System.IDisposable --> MarkDoc.Core.IDialogViewModel
+System.IDisposable --> MarkDoc.Core.IViewModel
 ```
 
 ## Members

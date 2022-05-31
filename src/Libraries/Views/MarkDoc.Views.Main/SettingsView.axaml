@@ -28,5 +28,7 @@
         DockPanel.Dock="Right"
         FontSize="24" />
     </DockPanel>
+    
+    <ToggleSwitch Grid.Row="1" VerticalAlignment="Top" Content="Dark mode" OnContent="On" OffContent="Off" IsChecked="{Binding IsDarkModeOn}"/>
   </Grid>
 </UserControl>

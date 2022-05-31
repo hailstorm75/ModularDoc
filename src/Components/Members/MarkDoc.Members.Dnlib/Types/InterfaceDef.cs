@@ -30,7 +30,10 @@ namespace MarkDoc.Members.Dnlib.Types
     #region Properties
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IResType> InheritedInterfaces { get; }
+    public IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
+
+    /// <inheritdoc />
+    public Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
@@ -51,7 +54,7 @@ namespace MarkDoc.Members.Dnlib.Types
     public IReadOnlyCollection<IProperty> Properties { get; }
 
     /// <inheritdoc />
-    public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypes { get; }
+    public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
 
     #endregion
 
@@ -85,8 +88,11 @@ namespace MarkDoc.Members.Dnlib.Types
       // Initialize the generics
       Generics = generics;
 
-      // Initialize the inherited interfaces
-      InheritedInterfaces = ResolveInterfaces(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+      // Initialize the inherited types flattened
+      InheritedTypesFlat = ResolveInheritedTypesFlat(source, source.ResolveTypeGenerics()).ToReadOnlyCollection();
+
+      // Initialize the inherited types structured
+      InheritedTypesStructured = new Lazy<IReadOnlyCollection<TreeNode>>(ResolveInheritedTypesStructured, LazyThreadSafetyMode.PublicationOnly);
 
       // Initialize the delegates
       Delegates = source.NestedTypes
@@ -141,7 +147,7 @@ namespace MarkDoc.Members.Dnlib.Types
         .ToReadOnlyCollection();
 
       // Initialize inherited members
-      InheritedTypes = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedInterfaces.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
+      InheritedTypeMembers = new Lazy<IReadOnlyDictionary<IMember, IInterface>>(() => ResolveInheritedMembers(InheritedTypesFlat.Concat(inheritedTypes)), LazyThreadSafetyMode.PublicationOnly);
     }
 
     #endregion
@@ -183,9 +189,9 @@ namespace MarkDoc.Members.Dnlib.Types
           .Concat(events)
           .Concat(delegates)
           // Select unique inherited types
-          .Where(x => !type.InheritedTypes.Value.ContainsKey(x.member))
+          .Where(x => !type.InheritedTypeMembers.Value.ContainsKey(x.member))
           // Join the newly resolved inherited types with the parent inherited types
-          .Concat(type.InheritedTypes.Value.Select(x => (x.Key, x.Value)));
+          .Concat(type.InheritedTypeMembers.Value.Select(x => (x.Key, x.Value)));
       }
 
       return inheritedTypes
@@ -205,8 +211,47 @@ namespace MarkDoc.Members.Dnlib.Types
         .ToDictionary(x => x.member, x => x.type);
     }
 
-    private IEnumerable<IResType> ResolveInterfaces(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
+    private IEnumerable<IResType> ResolveInheritedTypesFlat(dnlib.DotNet.TypeDef source, IReadOnlyDictionary<string, string> outerArgs)
       => source.Interfaces.Select(interfaceImpl => Resolver.Resolve(interfaceImpl.Interface.ToTypeSig(), outerArgs));
+
+    private IReadOnlyCollection<TreeNode> ResolveInheritedTypesStructured()
+    {
+      // Prepare a list of sub-inherited type raw names by the types inherited by this type
+      var subFlatList = new HashSet<string>(InheritedTypesFlat.Count);
+      // For each inherited type by this type..
+      foreach (var item in InheritedTypesFlat)
+      {
+        // If it is part of the sub-inherited types or it is not part of the resolved set of types..
+        if (subFlatList.Contains(item.RawName) || item.Reference.Value is null)
+          // Skip this inherited type
+          continue;
+
+        // If the given resolved type is not at least an interface..
+        if (item.Reference.Value is not IInterface inter)
+          // Then it is not an inheritable type and an exception must be thrown
+          throw new NotSupportedException("An inherited type is not at least an interface");
+
+        // Populate the list of sub-inherited types
+        subFlatList.AddRange(inter.InheritedTypesFlat.Select(type => type.RawName));
+      }
+
+      // Return a structured list of inherited types
+      return InheritedTypesFlat
+        // Skip the types that originate from the sub-inherited types
+        .Where(type => !subFlatList.Contains(type.RawName))
+        // Select the structured tree nodes
+        .Select(type =>
+        {
+          // Extract a list of tree nodes from the inherited types
+          var children = type.Reference.Value is IInterface i
+            ? i.InheritedTypesStructured.Value
+            : Array.Empty<TreeNode>();
+          // Return a materialized tree node
+          return new TreeNode(type.RawName, type, children);
+        })
+        // Materialize the list
+        .ToReadOnlyCollection();
+    }
 
     protected static IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> ResolveGenerics(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
     {

@@ -202,9 +202,11 @@ module TypeContentHelpers =
 
     let groupByType (itemType: IType) =
       match itemType with
-      | :? IClass     -> "Classes"    |> Some
-      | :? IStruct    -> "Structures" |> Some
-      | :? IInterface -> "Interfaces" |> Some
+      | :? IInterface ->
+        match itemType with
+        | :? IClass     -> "Classes"    |> Some
+        | :? IStruct    -> "Structures" |> Some
+        | _ -> "Interfaces" |> Some
       | :? IEnum      -> "Enums"      |> Some
       | _             -> None
 
@@ -236,7 +238,7 @@ module TypeContentHelpers =
   let private inheritance (input: IType) tools =
     let getInterfaces (x: 'M when 'M :> IInterface) =
       // Get the inherited interfaces
-      x.InheritedInterfaces
+      x.InheritedTypesFlat
       // Compose the inherited types into elements
       |> Seq.map (fun x -> ElementHelpers.initialize (TypeHelpers.processResType input x tools |> TextElement) tools)
 
@@ -666,27 +668,10 @@ module TypeContentHelpers =
           // Get the method return type
           let processReturn =
             // Get the method return type name
-            let name = if isNull method.Returns then "void" else method.Returns.DisplayName
-            // Stylize the type name
-            let content = InlineCode name
-            // If the return type is void..
             if isNull method.Returns then
-              // return it as is
-              content
-            // Otherwise..
+              InlineCode "void"
             else
-              let a = input :> IType
-              let b = method.Returns
-              // Try to get reference to the return type
-              let link = tools.linker.CreateLink(a, b)
-              // If there is no reference..
-              if String.IsNullOrEmpty link then
-                // return the type name as is
-                content
-              // Otherwise..
-              else
-                // wrap the type name in a link to the reference
-                LinkContent(content, lazy(link))
+              TypeHelpers.processResType input method.Returns tools
 
           // Get the method signature and description
           let processMethod =
@@ -724,7 +709,7 @@ module TypeContentHelpers =
                 // Print the method name with an anchor to the detailed method information
                 yield LinkContent(InlineCode method.Name, tools.linker.CreateAnchor(input, method))
 
-                // Beging arguments
+                // Begin arguments
                 yield Normal "("
 
                 // If there are overloads do not print the arguments

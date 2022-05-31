@@ -190,7 +190,12 @@ namespace MarkDoc.Members.Dnlib
 
       Types = new Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>>(ComposeTypes,
         LazyThreadSafetyMode.PublicationOnly);
-      m_namespaces = new Lazy<TrieNamespace>(() => new TrieNamespace().AddRange(Types.Value.Keys),
+      m_namespaces = new Lazy<TrieNamespace>(() =>
+        {
+          var trie = new TrieNamespace();
+          trie.AddRange(Types.Value.Keys);
+          return trie;
+        },
         LazyThreadSafetyMode.PublicationOnly);
       m_groups.Clear();
       m_resCache.Clear();
