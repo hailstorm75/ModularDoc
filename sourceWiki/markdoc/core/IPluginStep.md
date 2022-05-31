@@ -28,7 +28,7 @@ Interface for plugin steps
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`GetStepViewAsync`](markdoc/core/IPluginStep.md#getstepviewasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; settings, `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; previousSettings) |
+| `Task`&lt;[`IStepView`](./IStepViewT.md)&lt;[`IStepViewModel`](./IStepViewModel.md)&gt;&gt; | [`GetStepViewAsync`](markdoc/core/IPluginStep.md#getstepviewasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; settings, `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; previousSettings) |
 | `string` | [`GetViewId`](markdoc/core/IPluginStep.md#getviewid)()<br>Retrieves the id of the view |
 
 ## Details
@@ -38,13 +38,13 @@ Interface for plugin steps
 ### Methods
 #### GetStepViewAsync
 ```csharp
-public abstract Task GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary> previousSettings)
+public abstract Task GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
 ```
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
 | `IReadOnlyDictionary`&lt;`string`, `string`&gt; | settings |   |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&gt; | previousSettings |   |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; | previousSettings |   |
 
 #### GetViewId
 ```csharp

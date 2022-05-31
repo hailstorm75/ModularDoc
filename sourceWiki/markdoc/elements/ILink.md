@@ -21,9 +21,9 @@ Interface for link elements
   class MarkDoc.Elements.Extensions.IHasContent_1 interfaceStyle;
 
   end
-MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ILink
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.ILink
 MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ILink
 ```
 
 ## Members

@@ -21,7 +21,7 @@ Interface for documentation containers
 | --- | --- | --- |
 | `bool` | [`HasInheritDoc`](markdoc/documentation/IDocumentation.md#hasinheritdoc)<br>Contains the `inheritdoc` tag | `get` |
 | `string` | [`InheritDocRef`](markdoc/documentation/IDocumentation.md#inheritdocref)<br>InheritDoc reference | `get` |
-| `IReadOnlyDictionary`&lt;`TagType`, `IReadOnlyCollection`&gt; | [`Tags`](markdoc/documentation/IDocumentation.md#tags)<br>Documentation tags | `get` |
+| `IReadOnlyDictionary`&lt;`TagType`, `IReadOnlyCollection`&lt;[`ITag`](tags/ITag.md)&gt;&gt; | [`Tags`](markdoc/documentation/IDocumentation.md#tags)<br>Documentation tags | `get` |
 
 ## Details
 ### Summary

@@ -24,7 +24,7 @@ Interface for [IElement](./IElement.md) creators
 | [`IList`](./IList.md) | [`CreateList`](markdoc/elements/IElementCreator.md#createlist)(`IEnumerable`&lt;[`IElement`](./IElement.md)&gt; elements, `ListType` type, `string` heading, `int` level) |
 | [`IPage`](./IPage.md) | [`CreatePage`](markdoc/elements/IElementCreator.md#createpage)(`IEnumerable`&lt;[`IPage`](./IPage.md)&gt; subpages, `IEnumerable`&lt;[`IElement`](./IElement.md)&gt; content, `string` heading, `int` level) |
 | [`ISection`](./ISection.md) | [`CreateSection`](markdoc/elements/IElementCreator.md#createsection)(`IEnumerable`&lt;[`IElement`](./IElement.md)&gt; content, `string` heading, `int` level) |
-| [`ITable`](./ITable.md) | [`CreateTable`](markdoc/elements/IElementCreator.md#createtable)(`IEnumerable`&lt;`IReadOnlyCollection`&gt; content, `IEnumerable`&lt;[`IText`](./IText.md)&gt; headings, `string` heading, `int` level) |
+| [`ITable`](./ITable.md) | [`CreateTable`](markdoc/elements/IElementCreator.md#createtable)(`IEnumerable`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt; content, `IEnumerable`&lt;[`IText`](./IText.md)&gt; headings, `string` heading, `int` level) |
 | [`IText`](./IText.md) | [`CreateText`](markdoc/elements/IElementCreator.md#createtext)(`string` content, `TextStyle` style) |
 | [`ITextContent`](./ITextContent.md) | [`JoinTextContent`](markdoc/elements/IElementCreator.md#jointextcontent)(`IEnumerable`&lt;[`ITextContent`](./ITextContent.md)&gt; content, `string` delimiter) |
 
@@ -58,12 +58,12 @@ public abstract ISection CreateSection(IEnumerable<IElement> content, string hea
 
 #### CreateTable
 ```csharp
-public abstract ITable CreateTable(IEnumerable<IReadOnlyCollection> content, IEnumerable<IText> headings, string heading, int level)
+public abstract ITable CreateTable(IEnumerable<IReadOnlyCollection<IElement>> content, IEnumerable<IText> headings, string heading, int level)
 ```
 ##### Arguments
 | Type | Name | Description |
 | --- | --- | --- |
-| `IEnumerable`&lt;`IReadOnlyCollection`&gt; | content |   |
+| `IEnumerable`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt; | content |   |
 | `IEnumerable`&lt;[`IText`](./IText.md)&gt; | headings |   |
 | `string` | heading |   |
 | `int` | level |   |
