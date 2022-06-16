@@ -30,21 +30,21 @@ Logger message structure
 ### Properties
 #### Type
 ```csharp
-public LogType Type { get }
+public LogType Type { get; }
 ```
 ##### Summary
 Log type
 
 #### Message
 ```csharp
-public string Message { get }
+public string Message { get; }
 ```
 ##### Summary
 Log message
 
 #### Time
 ```csharp
-public DateTime Time { get }
+public DateTime Time { get; }
 ```
 ##### Summary
 Log time

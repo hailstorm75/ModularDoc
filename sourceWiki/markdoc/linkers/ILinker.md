@@ -69,7 +69,7 @@ Retrieved link
 
 #### CreateAnchor
 ```csharp
-public abstract Lazy CreateAnchor(IType page, IMember member)
+public abstract Lazy<string> CreateAnchor(IType page, IMember member)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -111,7 +111,7 @@ Link to source code line
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyDictionary Paths { get }
+public abstract IReadOnlyDictionary<IType, string> Paths { get; }
 ```
 ##### Summary
 Types path structure

@@ -32,35 +32,35 @@ Interface for type members
 ### Properties
 #### IsStatic
 ```csharp
-public abstract bool IsStatic { get }
+public abstract bool IsStatic { get; }
 ```
 ##### Summary
 Is method static
 
 #### Name
 ```csharp
-public abstract string Name { get }
+public abstract string Name { get; }
 ```
 ##### Summary
 Member name
 
 #### RawName
 ```csharp
-public abstract string RawName { get }
+public abstract string RawName { get; }
 ```
 ##### Summary
 Raw member name
 
 #### Accessor
 ```csharp
-public abstract AccessorType Accessor { get }
+public abstract AccessorType Accessor { get; }
 ```
 ##### Summary
 Member accessor
 
 #### LineSource
 ```csharp
-public abstract Nullable LineSource { get }
+public abstract Nullable<(int Item1, string Item2)> LineSource { get; }
 ```
 ##### Summary
 Line number and source file of the given member

@@ -42,14 +42,14 @@ Interface for tags which are within other tags
 ### Properties
 #### Type
 ```csharp
-public abstract InnerTagType Type { get }
+public abstract InnerTagType Type { get; }
 ```
 ##### Summary
 Tag type
 
 #### Reference
 ```csharp
-public abstract string Reference { get }
+public abstract string Reference { get; }
 ```
 ##### Summary
 Tag reference
@@ -59,7 +59,7 @@ Either holds cref or name
 
 #### Content
 ```csharp
-public abstract IReadOnlyCollection Content { get }
+public abstract IReadOnlyCollection<IContent> Content { get; }
 ```
 ##### Summary
 Tag content

@@ -44,63 +44,63 @@ Interface for interface types
 ### Properties
 #### InheritedTypesFlat
 ```csharp
-public abstract IReadOnlyCollection InheritedTypesFlat { get }
+public abstract IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
 ```
 ##### Summary
 Collection of inherited types
 
 #### InheritedTypesStructured
 ```csharp
-public abstract Lazy InheritedTypesStructured { get }
+public abstract Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
 ```
 ##### Summary
 Structured inherited types
 
 #### Generics
 ```csharp
-public abstract IReadOnlyDictionary Generics { get }
+public abstract IReadOnlyDictionary<string, (Variance Item1, IReadOnlyCollection Item2)> Generics { get; }
 ```
 ##### Summary
 Generics name, and their variance and constraints
 
 #### Delegates
 ```csharp
-public abstract IReadOnlyCollection Delegates { get }
+public abstract IReadOnlyCollection<IDelegate> Delegates { get; }
 ```
 ##### Summary
 Collection of delegates
 
 #### NestedTypes
 ```csharp
-public abstract IReadOnlyCollection NestedTypes { get }
+public abstract IReadOnlyCollection<IType> NestedTypes { get; }
 ```
 ##### Summary
 Collection of nested types
 
 #### Events
 ```csharp
-public abstract IReadOnlyCollection Events { get }
+public abstract IReadOnlyCollection<IEvent> Events { get; }
 ```
 ##### Summary
 Collection of events
 
 #### Methods
 ```csharp
-public abstract IReadOnlyCollection Methods { get }
+public abstract IReadOnlyCollection<IMethod> Methods { get; }
 ```
 ##### Summary
 Collection of methods
 
 #### Properties
 ```csharp
-public abstract IReadOnlyCollection Properties { get }
+public abstract IReadOnlyCollection<IProperty> Properties { get; }
 ```
 ##### Summary
 Collection of properties
 
 #### InheritedTypeMembers
 ```csharp
-public abstract Lazy InheritedTypeMembers { get }
+public abstract Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
 ```
 ##### Summary
 Members inherited from derived types

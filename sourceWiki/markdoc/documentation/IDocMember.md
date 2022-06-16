@@ -35,28 +35,28 @@ Interface for member documentation
 ### Properties
 #### RawName
 ```csharp
-public abstract string RawName { get }
+public abstract string RawName { get; }
 ```
 ##### Summary
 Member raw name
 
 #### DisplayName
 ```csharp
-public abstract string DisplayName { get }
+public abstract string DisplayName { get; }
 ```
 ##### Summary
 Member display name
 
 #### Type
 ```csharp
-public abstract MemberType Type { get }
+public abstract MemberType Type { get; }
 ```
 ##### Summary
 Member type
 
 #### Documentation
 ```csharp
-public abstract IDocumentation Documentation { get }
+public abstract IDocumentation Documentation { get; }
 ```
 ##### Summary
 Member documentation

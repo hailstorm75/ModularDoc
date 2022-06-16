@@ -74,28 +74,28 @@ Invoked when the parent dialog window cancel button is pressed
 ### Properties
 #### Title
 ```csharp
-public abstract string Title { get }
+public abstract string Title { get; }
 ```
 ##### Summary
 Dialog title
 
 #### CanClickPositive
 ```csharp
-public abstract bool CanClickPositive { get }
+public abstract bool CanClickPositive { get; }
 ```
 ##### Summary
 Determines whether the positive button can be clicked
 
 #### CanClickNegative
 ```csharp
-public abstract bool CanClickNegative { get }
+public abstract bool CanClickNegative { get; }
 ```
 ##### Summary
 Determines whether the negative button can be clicked
 
 #### CanClickCancel
 ```csharp
-public abstract bool CanClickCancel { get }
+public abstract bool CanClickCancel { get; }
 ```
 ##### Summary
 Determines whether the cancel button can be clicked

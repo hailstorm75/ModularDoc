@@ -42,21 +42,21 @@ public TreeNode(string name, IResType value, IReadOnlyCollection<TreeNode> child
 ### Properties
 #### Name
 ```csharp
-public string Name { get }
+public string Name { get; }
 ```
 ##### Summary
 Node name
 
 #### Value
 ```csharp
-public IResType Value { get }
+public IResType Value { get; }
 ```
 ##### Summary
 Contained node type
 
 #### Children
 ```csharp
-public IReadOnlyCollection Children { get }
+public IReadOnlyCollection<TreeNode> Children { get; }
 ```
 ##### Summary
 Child nodes

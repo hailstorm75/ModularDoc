@@ -85,7 +85,7 @@ Logs given `message` as a warning
 ### Events
 #### NewLog
 ```csharp
-public event EventHandler NewLog
+public event EventHandler<LogMessage> NewLog
 ```
 ##### Summary
 Invoked when a new log is created

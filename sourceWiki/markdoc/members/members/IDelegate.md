@@ -38,21 +38,21 @@ Interface for delegate types
 ### Properties
 #### Arguments
 ```csharp
-public abstract IReadOnlyCollection Arguments { get }
+public abstract IReadOnlyCollection<IArgument> Arguments { get; }
 ```
 ##### Summary
 Delegate arguments
 
 #### Generics
 ```csharp
-public abstract IReadOnlyDictionary Generics { get }
+public abstract IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
 ```
 ##### Summary
 Method generic arguments
 
 #### Returns
 ```csharp
-public abstract IResType Returns { get }
+public abstract IResType Returns { get; }
 ```
 ##### Summary
 Method return type

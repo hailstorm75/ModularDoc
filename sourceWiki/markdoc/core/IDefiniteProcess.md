@@ -52,21 +52,21 @@ Increases the number of complete parts
 ### Properties
 #### Complete
 ```csharp
-public abstract double Complete { get }
+public abstract double Complete { get; }
 ```
 ##### Summary
 Percentage complete
 
 #### Current
 ```csharp
-public abstract int Current { get }
+public abstract int Current { get; }
 ```
 ##### Summary
 Completed parts so far
 
 #### Max
 ```csharp
-public abstract int Max { get }
+public abstract int Max { get; }
 ```
 ##### Summary
 Number of parts to be completed

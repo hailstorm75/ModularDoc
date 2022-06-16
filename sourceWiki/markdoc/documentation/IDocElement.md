@@ -30,21 +30,21 @@ Interface for element documentation
 ### Properties
 #### Name
 ```csharp
-public abstract string Name { get }
+public abstract string Name { get; }
 ```
 ##### Summary
 Element name
 
 #### Documentation
 ```csharp
-public abstract IDocumentation Documentation { get }
+public abstract IDocumentation Documentation { get; }
 ```
 ##### Summary
 Element documentation
 
 #### Members
 ```csharp
-public abstract Lazy Members { get }
+public abstract Lazy<IReadOnlyDictionary<string, IDocMember>> Members { get; }
 ```
 ##### Summary
 Element members

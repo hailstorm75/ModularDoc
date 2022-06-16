@@ -32,35 +32,35 @@ Interface for types
 ### Properties
 #### RawName
 ```csharp
-public abstract string RawName { get }
+public abstract string RawName { get; }
 ```
 ##### Summary
 Reflection fullname with namespace
 
 #### Name
 ```csharp
-public abstract string Name { get }
+public abstract string Name { get; }
 ```
 ##### Summary
 Type name
 
 #### TypeNamespace
 ```csharp
-public abstract string TypeNamespace { get }
+public abstract string TypeNamespace { get; }
 ```
 ##### Summary
 Type namespace
 
 #### IsNested
 ```csharp
-public abstract bool IsNested { get }
+public abstract bool IsNested { get; }
 ```
 ##### Summary
 Determines whether this type is nested
 
 #### Accessor
 ```csharp
-public abstract AccessorType Accessor { get }
+public abstract AccessorType Accessor { get; }
 ```
 ##### Summary
 Type accessor

@@ -57,7 +57,7 @@ Interface for list elements
 ### Methods
 #### Print
 ```csharp
-public abstract IEnumerable Print(int indent)
+public abstract IEnumerable<string> Print(int indent)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -73,7 +73,7 @@ Converted list
 ### Properties
 #### Type
 ```csharp
-public abstract ListType Type { get }
+public abstract ListType Type { get; }
 ```
 ##### Summary
 List type

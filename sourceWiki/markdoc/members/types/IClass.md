@@ -46,35 +46,35 @@ Interface for classes
 ### Properties
 #### IsStatic
 ```csharp
-public abstract bool IsStatic { get }
+public abstract bool IsStatic { get; }
 ```
 ##### Summary
 Determines whether this class is static
 
 #### IsSealed
 ```csharp
-public abstract bool IsSealed { get }
+public abstract bool IsSealed { get; }
 ```
 ##### Summary
 Determines whether this class is sealed
 
 #### IsAbstract
 ```csharp
-public abstract bool IsAbstract { get }
+public abstract bool IsAbstract { get; }
 ```
 ##### Summary
 Determines whether this class is abstract
 
 #### BaseClass
 ```csharp
-public abstract IResType BaseClass { get }
+public abstract IResType BaseClass { get; }
 ```
 ##### Summary
 Inherited base class
 
 #### Constructors
 ```csharp
-public abstract IReadOnlyCollection Constructors { get }
+public abstract IReadOnlyCollection<IConstructor> Constructors { get; }
 ```
 ##### Summary
 Class constructors

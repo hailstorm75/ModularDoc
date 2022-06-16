@@ -30,21 +30,21 @@ Interface for resolved arrays
 ### Properties
 #### ArrayType
 ```csharp
-public abstract IResType ArrayType { get }
+public abstract IResType ArrayType { get; }
 ```
 ##### Summary
 Type of given array
 
 #### IsJagged
 ```csharp
-public abstract bool IsJagged { get }
+public abstract bool IsJagged { get; }
 ```
 ##### Summary
 Determines whether the array is a jagged array type
 
 #### Dimension
 ```csharp
-public abstract int Dimension { get }
+public abstract int Dimension { get; }
 ```
 ##### Summary
 Dimension of array

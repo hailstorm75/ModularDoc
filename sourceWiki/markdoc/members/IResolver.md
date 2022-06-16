@@ -87,7 +87,7 @@ public abstract bool TryGetMemberSourceLine(int token, out int line, out string 
 ### Properties
 #### Types
 ```csharp
-public abstract Lazy Types { get }
+public abstract Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
 ```
 ##### Summary
 Resolved types
