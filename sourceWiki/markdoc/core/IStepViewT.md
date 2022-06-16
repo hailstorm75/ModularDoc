@@ -73,7 +73,7 @@ public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, I
 ### Properties
 #### Id
 ```csharp
-public virtual string Id { get }
+public virtual string Id { get; }
 ```
 ##### Summary
 Step view Id

@@ -38,7 +38,7 @@ Interface for plugin steps
 ### Methods
 #### GetStepViewAsync
 ```csharp
-public abstract Task GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
+public abstract Task<IStepView<IStepViewModel>> GetStepViewAsync(IReadOnlyDictionary<string, string> settings, IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> previousSettings)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -59,28 +59,28 @@ View id
 ### Properties
 #### Id
 ```csharp
-public abstract string Id { get }
+public abstract string Id { get; }
 ```
 ##### Summary
 Unique identifier of the step
 
 #### Name
 ```csharp
-public abstract string Name { get }
+public abstract string Name { get; }
 ```
 ##### Summary
 Step name
 
 #### StepNumber
 ```csharp
-public abstract int StepNumber { get }
+public abstract int StepNumber { get; }
 ```
 ##### Summary
 Step order number
 
 #### IsLastStep
 ```csharp
-public abstract bool IsLastStep { get }
+public abstract bool IsLastStep { get; }
 ```
 ##### Summary
 Determines whether this step is last in the step sequence

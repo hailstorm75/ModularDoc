@@ -41,7 +41,7 @@ Interface for plugins
 ### Methods
 #### GetPluginSteps
 ```csharp
-public abstract IReadOnlyCollection GetPluginSteps()
+public abstract IReadOnlyCollection<IPluginStep> GetPluginSteps()
 ```
 ##### Summary
 Get the [IPluginStep](./IPluginStep.md) instances
@@ -71,42 +71,42 @@ public abstract (IMarkDocLogger logger, IReadOnlyCollection processes, Func exec
 ### Properties
 #### Id
 ```csharp
-public abstract string Id { get }
+public abstract string Id { get; }
 ```
 ##### Summary
 Plugin id
 
 #### Name
 ```csharp
-public abstract string Name { get }
+public abstract string Name { get; }
 ```
 ##### Summary
 Plugin name
 
 #### Description
 ```csharp
-public abstract string Description { get }
+public abstract string Description { get; }
 ```
 ##### Summary
 Plugin description
 
 #### Author
 ```csharp
-public abstract string Author { get }
+public abstract string Author { get; }
 ```
 ##### Summary
 Plugin author
 
 #### Image
 ```csharp
-public abstract Stream Image { get }
+public abstract Stream Image { get; }
 ```
 ##### Summary
 Plugin image
 
 #### Steps
 ```csharp
-public abstract IReadOnlyCollection Steps { get }
+public abstract IReadOnlyCollection<string> Steps { get; }
 ```
 ##### Summary
 List of plugin step names

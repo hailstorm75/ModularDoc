@@ -33,42 +33,42 @@ Interface for resolved types
 ### Properties
 #### DisplayName
 ```csharp
-public abstract string DisplayName { get }
+public abstract string DisplayName { get; }
 ```
 ##### Summary
 Resolved type display name
 
 #### DocumentationName
 ```csharp
-public abstract string DocumentationName { get }
+public abstract string DocumentationName { get; }
 ```
 ##### Summary
 Resolved type name for documentation
 
 #### RawName
 ```csharp
-public abstract string RawName { get }
+public abstract string RawName { get; }
 ```
 ##### Summary
 Resolved type raw name
 
 #### TypeNamespace
 ```csharp
-public abstract string TypeNamespace { get }
+public abstract string TypeNamespace { get; }
 ```
 ##### Summary
 Resolved type namespace
 
 #### Reference
 ```csharp
-public abstract Lazy Reference { get }
+public abstract Lazy<IType> Reference { get; }
 ```
 ##### Summary
 Reference to known type
 
 #### IsByRef
 ```csharp
-public abstract bool IsByRef { get }
+public abstract bool IsByRef { get; }
 ```
 ##### Summary
 Is the type a reference

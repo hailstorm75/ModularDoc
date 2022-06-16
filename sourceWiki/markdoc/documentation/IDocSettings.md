@@ -24,7 +24,7 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Documentation.IDocSettings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdoc/documentation/IDocSettings.md#paths)<br>Paths to documentation sources | `get; set` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdoc/documentation/IDocSettings.md#paths)<br>Paths to documentation sources | `get, set` |
 
 ## Details
 ### Summary
@@ -38,7 +38,7 @@ Interface for [IDocResolver](./IDocResolver.md) settings
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyCollection Paths { get; set }
+public abstract IReadOnlyCollection<string> Paths { get; set; }
 ```
 ##### Summary
 Paths to documentation sources

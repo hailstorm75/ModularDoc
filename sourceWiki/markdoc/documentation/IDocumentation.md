@@ -30,21 +30,21 @@ Interface for documentation containers
 ### Properties
 #### Tags
 ```csharp
-public abstract IReadOnlyDictionary Tags { get }
+public abstract IReadOnlyDictionary<TagType, IReadOnlyCollection<ITag>> Tags { get; }
 ```
 ##### Summary
 Documentation tags
 
 #### HasInheritDoc
 ```csharp
-public abstract bool HasInheritDoc { get }
+public abstract bool HasInheritDoc { get; }
 ```
 ##### Summary
 Contains the `inheritdoc` tag
 
 #### InheritDocRef
 ```csharp
-public abstract string InheritDocRef { get }
+public abstract string InheritDocRef { get; }
 ```
 ##### Summary
 InheritDoc reference

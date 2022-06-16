@@ -42,14 +42,14 @@ Interface for documentation list tags
 ### Properties
 #### Type
 ```csharp
-public abstract ListType Type { get }
+public abstract ListType Type { get; }
 ```
 ##### Summary
 Type of list
 
 #### Headings
 ```csharp
-public abstract IReadOnlyCollection Headings { get }
+public abstract IReadOnlyCollection<IContent> Headings { get; }
 ```
 ##### Summary
 List headings
@@ -59,7 +59,7 @@ Used when the list is a [ListType](ilisttag/ListType.md).[Table](markdoc/documen
 
 #### Rows
 ```csharp
-public abstract IReadOnlyCollection Rows { get }
+public abstract IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; }
 ```
 ##### Summary
 List rows

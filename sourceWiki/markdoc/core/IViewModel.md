@@ -62,7 +62,7 @@ Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads
 ### Properties
 #### IsLoading
 ```csharp
-public abstract bool IsLoading { get }
+public abstract bool IsLoading { get; }
 ```
 ##### Summary
 Determines whether the view model is loading

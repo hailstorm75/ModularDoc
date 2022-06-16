@@ -20,7 +20,7 @@ Interface for processes
 | Type | Name | Methods |
 | --- | --- | --- |
 | `string` | [`Name`](markdoc/core/IProcess.md#name)<br>Progress name | `get` |
-| `ProcessState` | [`State`](markdoc/core/IProcess.md#state)<br>State of the given process | `get; set` |
+| `ProcessState` | [`State`](markdoc/core/IProcess.md#state)<br>State of the given process | `get, set` |
 
 ## Details
 ### Summary
@@ -33,14 +33,14 @@ Interface for processes
 ### Properties
 #### Name
 ```csharp
-public abstract string Name { get }
+public abstract string Name { get; }
 ```
 ##### Summary
 Progress name
 
 #### State
 ```csharp
-public abstract ProcessState State { get; set }
+public abstract ProcessState State { get; set; }
 ```
 ##### Summary
 State of the given process
@@ -48,7 +48,7 @@ State of the given process
 ### Events
 #### StateChanged
 ```csharp
-public event EventHandler StateChanged
+public event EventHandler<ProcessState> StateChanged
 ```
 ##### Summary
 Invoked whenever the [IProcess](markdoc/core/IProcess.md).[State](markdoc/core/IProcess.md#state) is changed

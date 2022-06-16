@@ -53,7 +53,7 @@ Interface for text elements
 ### Properties
 #### Style
 ```csharp
-public abstract TextStyle Style { get }
+public abstract TextStyle Style { get; }
 ```
 ##### Summary
 Text element style

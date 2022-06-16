@@ -47,7 +47,7 @@ Interface for page elements
 ### Properties
 #### Subpages
 ```csharp
-public abstract IReadOnlyCollection Subpages { get }
+public abstract IReadOnlyCollection<IPage> Subpages { get; }
 ```
 ##### Summary
 Pages within this given page

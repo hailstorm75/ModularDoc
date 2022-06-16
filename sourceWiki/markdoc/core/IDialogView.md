@@ -66,7 +66,7 @@ Invoked when the parent dialog window cancel button is pressed
 ### Properties
 #### Title
 ```csharp
-public abstract string Title { get }
+public abstract string Title { get; }
 ```
 ##### Summary
 Dialog view title

@@ -36,7 +36,7 @@ Interface for enums
 ### Properties
 #### Fields
 ```csharp
-public abstract IReadOnlyCollection Fields { get }
+public abstract IReadOnlyCollection<IEnumField> Fields { get; }
 ```
 ##### Summary
 Enum fields

@@ -36,7 +36,7 @@ Interface for generic resolved types
 ### Properties
 #### Generics
 ```csharp
-public abstract IReadOnlyCollection Generics { get }
+public abstract IReadOnlyCollection<IResType> Generics { get; }
 ```
 ##### Summary
 Generic parameter types
