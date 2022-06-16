@@ -110,7 +110,7 @@ module internal SignatureHelpers =
   /// <param name="input">Member to process</param>
   let getStatic (input: IMember) =
     if input.IsStatic then " static" else ""
-
+    
   /// <summary>
   /// Gets the return type from the given <paramref name="input"/> member
   /// </summary>
@@ -125,6 +125,12 @@ module internal SignatureHelpers =
        else
          ""
     
+    let rec getGenerics (input: IResType) =
+      match input with
+      | :? IResGeneric as gen ->
+        String.Format("<{0}>", String.Join(", ", gen.Generics |> Seq.map (fun x -> x.DisplayName + getGenerics x)))
+      | _ -> String.Empty
+    
     match input with
     | :? IMethod as method ->
       // If the method is a conversion operator, replace the return type with a keyword
@@ -133,15 +139,15 @@ module internal SignatureHelpers =
       | OperatorType.Explicit -> "explicit"
       | OperatorType.None
       | OperatorType.Normal
-      | _ -> if isNull method.Returns then "void" else getIsByRef method.Returns + method.Returns.DisplayName
+      | _ -> if isNull method.Returns then "void" else getIsByRef method.Returns + method.Returns.DisplayName + getGenerics method.Returns
     | :? IDelegate as deleg->
-      if isNull deleg.Returns then "void" else getIsByRef deleg.Returns + deleg.Returns.DisplayName
+      if isNull deleg.Returns then "void" else getIsByRef deleg.Returns + deleg.Returns.DisplayName + getGenerics deleg.Returns
     | :? IEvent as ev ->
-      ev.Type.DisplayName
+      ev.Type.DisplayName + getGenerics ev.Type
     | :? IProperty as prop ->
-      getIsByRef prop.Type + prop.Type.DisplayName
+      getIsByRef prop.Type + prop.Type.DisplayName + getGenerics prop.Type
     | _ -> ""
-
+  
   /// <summary>
   /// Gets the async keyword from the given <paramref name="input"/> member
   /// </summary>
@@ -177,7 +183,7 @@ module internal SignatureHelpers =
     | :? IMethod as method -> method.Inheritance |> processInheritance
     | :? IProperty as property -> property.Inheritance |> processInheritance
     | _ -> ""
-
+    
   /// <summary>
   /// Gets the property method keywords from the given <paramref name="input"/> member
   /// </summary>
@@ -189,12 +195,12 @@ module internal SignatureHelpers =
     match input with
     | :? IProperty as property ->
       let accessor acc =
-        // If the given getter or setter accessor is equal to the property accesor, exclude the keyword
+        // If the given getter or setter accessor is equal to the property accessor, exclude the keyword
         match acc with
         | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
         | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
         | _ -> ""
-      String.Join("; ", seq [
+      String.Join(", ", seq [
         // If the property has a getter..
         if property.GetAccessor.HasValue then
           // return it
@@ -203,6 +209,27 @@ module internal SignatureHelpers =
         if property.SetAccessor.HasValue then
           // return it
           yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init" else "set")
+      ])
+    | _ -> ""
+    
+  let getPropertyMethodsSignature (input: IMember) =
+    match input with
+    | :? IProperty as property ->
+      let accessor acc =
+        // If the given getter or setter accessor is equal to the property accessor, exclude the keyword
+        match acc with
+        | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
+        | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
+        | _ -> ""
+      String.Join(" ", seq [
+        // If the property has a getter..
+        if property.GetAccessor.HasValue then
+          // return it
+          yield (accessor property.GetAccessor.Value) + "get;"
+        // If the property has a setter..
+        if property.SetAccessor.HasValue then
+          // return it
+          yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init;" else "set;")
       ])
     | _ -> ""
 

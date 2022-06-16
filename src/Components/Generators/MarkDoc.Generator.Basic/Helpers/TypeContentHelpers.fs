@@ -448,7 +448,7 @@ module TypeContentHelpers =
           SignatureHelpers.getInheritance;
           SignatureHelpers.getReturn;
           SignatureHelpers.getName;
-          SignatureHelpers.getPropertyMethods
+          SignatureHelpers.getPropertyMethodsSignature
         ])
 
       // Define the content to be documented for this member
