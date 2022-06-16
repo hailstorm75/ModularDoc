@@ -19,9 +19,9 @@ Interface for views
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IViewModel`](./IViewModel.md) | [`GetViewModel`](markdoc/core/IView.md#getviewmodel)()<br>Retrieves the views view models |
-| `Task` | [`SetArguments`](markdoc/core/IView.md#setarguments)(`IEnumerable`&lt;`string`&gt; arguments) |
-| `Task` | [`SetNamedArgumentsAsync`](markdoc/core/IView.md#setnamedargumentsasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
+| [`IViewModel`](./IViewModel.md) | [`GetViewModel`](#getviewmodel)()<br>Retrieves the views view models |
+| `Task` | [`SetArguments`](#setarguments)(`IEnumerable`&lt;`string`&gt; arguments) |
+| `Task` | [`SetNamedArgumentsAsync`](#setnamedargumentsasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
 
 ## Details
 ### Summary

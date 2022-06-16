@@ -19,7 +19,7 @@ Interface for documentation printers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`Print`](markdoc/printer/IPrinter.md#print)(`IEnumerable`&lt;[`IType`](../members/types/IType.md)&gt; types, `string` path) |
+| `Task` | [`Print`](#print)(`IEnumerable`&lt;[`IType`](../members/types/IType.md)&gt; types, `string` path) |
 
 ## Details
 ### Summary

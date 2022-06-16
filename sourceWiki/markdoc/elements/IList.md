@@ -29,13 +29,13 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IList
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `ListType` | [`Type`](markdoc/elements/IList.md#type)<br>List type | `get` |
+| `ListType` | [`Type`](#type)<br>List type | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IEnumerable`&lt;`string`&gt; | [`Print`](markdoc/elements/IList.md#print)(`int` indent)<br>Prints element to a string |
+| `IEnumerable`&lt;`string`&gt; | [`Print`](#print)(`int` indent)<br>Prints element to a string |
 
 ## Details
 ### Summary

@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IPage
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IPage`](markdoc/elements/IPage.md)&gt; | [`Subpages`](markdoc/elements/IPage.md#subpages)<br>Pages within this given page | `get` |
+| `IReadOnlyCollection`&lt;[`IPage`](markdoc/elements/IPage.md)&gt; | [`Subpages`](#subpages)<br>Pages within this given page | `get` |
 
 ## Details
 ### Summary

@@ -19,9 +19,9 @@ Interface for [IMethod](./IMethod.md) arguments
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`ArgumentType`](../enums/ArgumentType.md) | [`Keyword`](markdoc/members/members/IArgument.md#keyword)<br>Argument keyword | `get` |
-| `string` | [`Name`](markdoc/members/members/IArgument.md#name)<br>Argument name | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](markdoc/members/members/IArgument.md#type)<br>Argument type | `get` |
+| [`ArgumentType`](../enums/ArgumentType.md) | [`Keyword`](#keyword)<br>Argument keyword | `get` |
+| `string` | [`Name`](#name)<br>Argument name | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](#type)<br>Argument type | `get` |
 
 ## Details
 ### Summary

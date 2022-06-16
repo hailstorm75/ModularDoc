@@ -19,10 +19,10 @@ Interface for in-house logger
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`Debug`](markdoc/core/IMarkDocLogger.md#debug)(`string` message)<br>Logs given `message` as debug information |
-| `void` | [`Error`](markdoc/core/IMarkDocLogger.md#error)(`string` message)<br>Logs given `message` as an error |
-| `void` | [`Info`](markdoc/core/IMarkDocLogger.md#info)(`string` message)<br>Logs given `message` as information |
-| `void` | [`Warning`](markdoc/core/IMarkDocLogger.md#warning)(`string` message)<br>Logs given `message` as a warning |
+| `void` | [`Debug`](#debug)(`string` message)<br>Logs given `message` as debug information |
+| `void` | [`Error`](#error)(`string` message)<br>Logs given `message` as an error |
+| `void` | [`Info`](#info)(`string` message)<br>Logs given `message` as information |
+| `void` | [`Warning`](#warning)(`string` message)<br>Logs given `message` as a warning |
 
 ## Details
 ### Summary

@@ -37,13 +37,13 @@ MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Id`](markdoc/core/IStepViewT.md#id)<br>Step view Id | `get` |
+| `string` | [`Id`](#id)<br>Step view Id | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`SetPreviousSettingsAsync`](markdoc/core/IStepViewT.md#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
+| `Task` | [`SetPreviousSettingsAsync`](#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
 
 ## Details
 ### Summary

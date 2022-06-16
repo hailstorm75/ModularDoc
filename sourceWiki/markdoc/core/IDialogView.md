@@ -22,15 +22,15 @@ MarkDoc.Core.IView --> MarkDoc.Core.IDialogView
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Title`](markdoc/core/IDialogView.md#title)<br>Dialog view title | `get` |
+| `string` | [`Title`](#title)<br>Dialog view title | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`OnCancelButtonClicked`](markdoc/core/IDialogView.md#oncancelbuttonclicked)()<br>Invoked when the parent dialog window cancel button is pressed |
-| `void` | [`OnNegativeButtonClicked`](markdoc/core/IDialogView.md#onnegativebuttonclicked)()<br>Invoked when the parent dialog window negative button is pressed |
-| `void` | [`OnPositiveButtonClicked`](markdoc/core/IDialogView.md#onpositivebuttonclicked)()<br>Invoked when the parent dialog window positive button is pressed |
+| `void` | [`OnCancelButtonClicked`](#oncancelbuttonclicked)()<br>Invoked when the parent dialog window cancel button is pressed |
+| `void` | [`OnNegativeButtonClicked`](#onnegativebuttonclicked)()<br>Invoked when the parent dialog window negative button is pressed |
+| `void` | [`OnPositiveButtonClicked`](#onpositivebuttonclicked)()<br>Invoked when the parent dialog window positive button is pressed |
 
 ## Details
 ### Summary

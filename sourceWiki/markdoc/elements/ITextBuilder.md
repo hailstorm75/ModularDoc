@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCo
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Delimiter`](markdoc/elements/ITextBuilder.md#delimiter)<br>Joined text delimiter | `get` |
+| `string` | [`Delimiter`](#delimiter)<br>Joined text delimiter | `get` |
 
 ## Details
 ### Summary

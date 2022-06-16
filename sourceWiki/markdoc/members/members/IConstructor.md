@@ -22,7 +22,7 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IConstructor
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IArgument`](./IArgument.md)&gt; | [`Arguments`](markdoc/members/members/IConstructor.md#arguments)<br>Method arguments | `get` |
+| `IReadOnlyCollection`&lt;[`IArgument`](./IArgument.md)&gt; | [`Arguments`](#arguments)<br>Method arguments | `get` |
 
 ## Details
 ### Summary

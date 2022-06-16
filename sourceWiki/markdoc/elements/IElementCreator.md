@@ -19,14 +19,14 @@ Interface for [IElement](./IElement.md) creators
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IDiagram`](./IDiagram.md) | [`CreateDiagram`](markdoc/elements/IElementCreator.md#creatediagram)(`string` name, `string` content)<br>Creates a new [IDiagram](./IDiagram.md) instance |
-| [`ILink`](./ILink.md) | [`CreateLink`](markdoc/elements/IElementCreator.md#createlink)([`IText`](./IText.md) content, `Lazy`&lt;`string`&gt; reference) |
-| [`IList`](./IList.md) | [`CreateList`](markdoc/elements/IElementCreator.md#createlist)(`IEnumerable`&lt;[`IElement`](./IElement.md)&gt; elements, `ListType` type, `string` heading, `int` level) |
-| [`IPage`](./IPage.md) | [`CreatePage`](markdoc/elements/IElementCreator.md#createpage)(`IEnumerable`&lt;[`IPage`](./IPage.md)&gt; subpages, `IEnumerable`&lt;[`IElement`](./IElement.md)&gt; content, `string` heading, `int` level) |
-| [`ISection`](./ISection.md) | [`CreateSection`](markdoc/elements/IElementCreator.md#createsection)(`IEnumerable`&lt;[`IElement`](./IElement.md)&gt; content, `string` heading, `int` level) |
-| [`ITable`](./ITable.md) | [`CreateTable`](markdoc/elements/IElementCreator.md#createtable)(`IEnumerable`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt; content, `IEnumerable`&lt;[`IText`](./IText.md)&gt; headings, `string` heading, `int` level) |
-| [`IText`](./IText.md) | [`CreateText`](markdoc/elements/IElementCreator.md#createtext)(`string` content, `TextStyle` style) |
-| [`ITextContent`](./ITextContent.md) | [`JoinTextContent`](markdoc/elements/IElementCreator.md#jointextcontent)(`IEnumerable`&lt;[`ITextContent`](./ITextContent.md)&gt; content, `string` delimiter) |
+| [`IDiagram`](./IDiagram.md) | [`CreateDiagram`](#creatediagram)(`string` name, `string` content)<br>Creates a new [IDiagram](./IDiagram.md) instance |
+| [`ILink`](./ILink.md) | [`CreateLink`](#createlink)([`IText`](./IText.md) content, `Lazy`&lt;`string`&gt; reference) |
+| [`IList`](./IList.md) | [`CreateList`](#createlist)(`IEnumerable`&lt;[`IElement`](./IElement.md)&gt; elements, `ListType` type, `string` heading, `int` level) |
+| [`IPage`](./IPage.md) | [`CreatePage`](#createpage)(`IEnumerable`&lt;[`IPage`](./IPage.md)&gt; subpages, `IEnumerable`&lt;[`IElement`](./IElement.md)&gt; content, `string` heading, `int` level) |
+| [`ISection`](./ISection.md) | [`CreateSection`](#createsection)(`IEnumerable`&lt;[`IElement`](./IElement.md)&gt; content, `string` heading, `int` level) |
+| [`ITable`](./ITable.md) | [`CreateTable`](#createtable)(`IEnumerable`&lt;`IReadOnlyCollection`&lt;[`IElement`](./IElement.md)&gt;&gt; content, `IEnumerable`&lt;[`IText`](./IText.md)&gt; headings, `string` heading, `int` level) |
+| [`IText`](./IText.md) | [`CreateText`](#createtext)(`string` content, `TextStyle` style) |
+| [`ITextContent`](./ITextContent.md) | [`JoinTextContent`](#jointextcontent)(`IEnumerable`&lt;[`ITextContent`](./ITextContent.md)&gt; content, `string` delimiter) |
 
 ## Details
 ### Summary

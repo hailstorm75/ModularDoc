@@ -28,7 +28,7 @@ MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `TViewModel` | [`ViewModel`](markdoc/core/IViewT.md#viewmodel)<br>View model | `get` |
+| `TViewModel` | [`ViewModel`](#viewmodel)<br>View model | `get` |
 
 ## Details
 ### Summary

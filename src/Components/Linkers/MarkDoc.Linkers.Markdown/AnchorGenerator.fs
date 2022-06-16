@@ -22,7 +22,7 @@ module private Anchor =
     None
 
   let private githubAnchor (input: string Lazy, page: string) =
-    lazy(page + "#" + normalizeAnchor input.Value) |> Some
+    lazy("#" + normalizeAnchor input.Value) |> Some
 
   let private gitlabAnchor (input: string Lazy, _: string) =
     lazy("#" + normalizeAnchor input.Value) |> Some

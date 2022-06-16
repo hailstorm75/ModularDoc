@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.ITable
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IText`](./IText.md)&gt; | [`Headings`](markdoc/elements/ITable.md#headings)<br>Table headers | `get` |
+| `IReadOnlyCollection`&lt;[`IText`](./IText.md)&gt; | [`Headings`](#headings)<br>Table headers | `get` |
 
 ## Details
 ### Summary

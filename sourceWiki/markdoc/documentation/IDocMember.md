@@ -19,10 +19,10 @@ Interface for member documentation
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`DisplayName`](markdoc/documentation/IDocMember.md#displayname)<br>Member display name | `get` |
-| [`IDocumentation`](./IDocumentation.md) | [`Documentation`](markdoc/documentation/IDocMember.md#documentation)<br>Member documentation | `get` |
-| `string` | [`RawName`](markdoc/documentation/IDocMember.md#rawname)<br>Member raw name | `get` |
-| `MemberType` | [`Type`](markdoc/documentation/IDocMember.md#type)<br>Member type | `get` |
+| `string` | [`DisplayName`](#displayname)<br>Member display name | `get` |
+| [`IDocumentation`](./IDocumentation.md) | [`Documentation`](#documentation)<br>Member documentation | `get` |
+| `string` | [`RawName`](#rawname)<br>Member raw name | `get` |
+| `MemberType` | [`Type`](#type)<br>Member type | `get` |
 
 ## Details
 ### Summary
