@@ -19,9 +19,9 @@ Interface for documentation tags
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Content`](markdoc/documentation/tags/ITag.md#content)<br>Tag inner content | `get` |
-| `string` | [`Reference`](markdoc/documentation/tags/ITag.md#reference)<br>Tag reference | `get` |
-| `TagType` | [`Type`](markdoc/documentation/tags/ITag.md#type)<br>Tag type | `get` |
+| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Content`](#content)<br>Tag inner content | `get` |
+| `string` | [`Reference`](#reference)<br>Tag reference | `get` |
+| `TagType` | [`Type`](#type)<br>Tag type | `get` |
 
 ## Details
 ### Summary

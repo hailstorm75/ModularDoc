@@ -19,11 +19,11 @@ Interface for type members
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`AccessorType`](../enums/AccessorType.md) | [`Accessor`](markdoc/members/members/IMember.md#accessor)<br>Member accessor | `get` |
-| `bool` | [`IsStatic`](markdoc/members/members/IMember.md#isstatic)<br>Is method static | `get` |
-| `Nullable`&lt;`(int Item1, string Item2)`&gt; | [`LineSource`](markdoc/members/members/IMember.md#linesource)<br>Line number and source file of the given member | `get` |
-| `string` | [`Name`](markdoc/members/members/IMember.md#name)<br>Member name | `get` |
-| `string` | [`RawName`](markdoc/members/members/IMember.md#rawname)<br>Raw member name | `get` |
+| [`AccessorType`](../enums/AccessorType.md) | [`Accessor`](#accessor)<br>Member accessor | `get` |
+| `bool` | [`IsStatic`](#isstatic)<br>Is method static | `get` |
+| `Nullable`&lt;`(int Item1, string Item2)`&gt; | [`LineSource`](#linesource)<br>Line number and source file of the given member | `get` |
+| `string` | [`Name`](#name)<br>Member name | `get` |
+| `string` | [`RawName`](#rawname)<br>Raw member name | `get` |
 
 ## Details
 ### Summary

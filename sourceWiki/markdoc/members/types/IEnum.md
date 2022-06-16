@@ -22,7 +22,7 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IEnum
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IEnumField`](../members/IEnumField.md)&gt; | [`Fields`](markdoc/members/types/IEnum.md#fields)<br>Enum fields | `get` |
+| `IReadOnlyCollection`&lt;[`IEnumField`](../members/IEnumField.md)&gt; | [`Fields`](#fields)<br>Enum fields | `get` |
 
 ## Details
 ### Summary

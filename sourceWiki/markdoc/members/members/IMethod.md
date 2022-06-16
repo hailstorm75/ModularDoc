@@ -25,11 +25,11 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IConstructor
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt;&gt; | [`Generics`](markdoc/members/members/IMethod.md#generics)<br>Method generic arguments | `get` |
-| [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](markdoc/members/members/IMethod.md#inheritance)<br>Method visibility | `get` |
-| `bool` | [`IsAsync`](markdoc/members/members/IMethod.md#isasync)<br>Determines whether the method is asynchronous | `get` |
-| [`OperatorType`](../enums/OperatorType.md) | [`Operator`](markdoc/members/members/IMethod.md#operator)<br>Operator type | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Returns`](markdoc/members/members/IMethod.md#returns)<br>Method return type | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt;&gt; | [`Generics`](#generics)<br>Method generic arguments | `get` |
+| [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](#inheritance)<br>Method visibility | `get` |
+| `bool` | [`IsAsync`](#isasync)<br>Determines whether the method is asynchronous | `get` |
+| [`OperatorType`](../enums/OperatorType.md) | [`Operator`](#operator)<br>Operator type | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Returns`](#returns)<br>Method return type | `get` |
 
 ## Details
 ### Summary

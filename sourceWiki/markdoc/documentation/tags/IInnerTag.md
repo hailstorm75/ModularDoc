@@ -22,9 +22,9 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.IInnerTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Content`](markdoc/documentation/tags/IInnerTag.md#content)<br>Tag content | `get` |
-| `string` | [`Reference`](markdoc/documentation/tags/IInnerTag.md#reference)<br>Tag reference | `get` |
-| `InnerTagType` | [`Type`](markdoc/documentation/tags/IInnerTag.md#type)<br>Tag type | `get` |
+| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Content`](#content)<br>Tag content | `get` |
+| `string` | [`Reference`](#reference)<br>Tag reference | `get` |
+| `InnerTagType` | [`Type`](#type)<br>Tag type | `get` |
 
 ## Details
 ### Summary

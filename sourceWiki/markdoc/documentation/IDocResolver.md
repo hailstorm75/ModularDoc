@@ -19,8 +19,8 @@ Interface for documentation resolvers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`ResolveAsync`](markdoc/documentation/IDocResolver.md#resolveasync)(`string` path)<br>Resolve xml documentation on given `path` |
-| `bool` | [`TryFindType`](markdoc/documentation/IDocResolver.md#tryfindtype)([`IType`](../members/types/IType.md) type, out [`IDocElement`](./IDocElement.md) resultType) |
+| `Task` | [`ResolveAsync`](#resolveasync)(`string` path)<br>Resolve xml documentation on given `path` |
+| `bool` | [`TryFindType`](#tryfindtype)([`IType`](../members/types/IType.md) type, out [`IDocElement`](./IDocElement.md) resultType) |
 
 ## Details
 ### Summary

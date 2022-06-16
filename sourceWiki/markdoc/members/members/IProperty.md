@@ -22,12 +22,12 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IProperty
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`GetAccessor`](markdoc/members/members/IProperty.md#getaccessor)<br>Property get accessor type | `get` |
-| [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](markdoc/members/members/IProperty.md#inheritance)<br>Property visibility | `get` |
-| `bool` | [`IsReadOnly`](markdoc/members/members/IProperty.md#isreadonly)<br>Determines whether the property is readonly | `get` |
-| `bool` | [`IsSetInit`](markdoc/members/members/IProperty.md#issetinit)<br>Is the property setter an init type | `get` |
-| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`SetAccessor`](markdoc/members/members/IProperty.md#setaccessor)<br>Property set accessor type | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](markdoc/members/members/IProperty.md#type)<br>Property type | `get` |
+| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`GetAccessor`](#getaccessor)<br>Property get accessor type | `get` |
+| [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](#inheritance)<br>Property visibility | `get` |
+| `bool` | [`IsReadOnly`](#isreadonly)<br>Determines whether the property is readonly | `get` |
+| `bool` | [`IsSetInit`](#issetinit)<br>Is the property setter an init type | `get` |
+| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`SetAccessor`](#setaccessor)<br>Property set accessor type | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](#type)<br>Property type | `get` |
 
 ## Details
 ### Summary
