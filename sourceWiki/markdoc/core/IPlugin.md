@@ -19,20 +19,20 @@ Interface for plugins
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Author`](markdoc/core/IPlugin.md#author)<br>Plugin author | `get` |
-| `string` | [`Description`](markdoc/core/IPlugin.md#description)<br>Plugin description | `get` |
-| `string` | [`Id`](markdoc/core/IPlugin.md#id)<br>Plugin id | `get` |
-| `Stream` | [`Image`](markdoc/core/IPlugin.md#image)<br>Plugin image | `get` |
-| `string` | [`Name`](markdoc/core/IPlugin.md#name)<br>Plugin name | `get` |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`Steps`](markdoc/core/IPlugin.md#steps)<br>List of plugin step names | `get` |
+| `string` | [`Author`](#author)<br>Plugin author | `get` |
+| `string` | [`Description`](#description)<br>Plugin description | `get` |
+| `string` | [`Id`](#id)<br>Plugin id | `get` |
+| `Stream` | [`Image`](#image)<br>Plugin image | `get` |
+| `string` | [`Name`](#name)<br>Plugin name | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`Steps`](#steps)<br>List of plugin step names | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](markdoc/core/IPlugin.md#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; configuration) |
-| `IReadOnlyCollection`&lt;[`IPluginStep`](./IPluginStep.md)&gt; | [`GetPluginSteps`](markdoc/core/IPlugin.md#getpluginsteps)()<br>Get the [IPluginStep](./IPluginStep.md) instances |
-| `T` | [`GetSettings`](markdoc/core/IPlugin.md#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; data) |
+| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; configuration) |
+| `IReadOnlyCollection`&lt;[`IPluginStep`](./IPluginStep.md)&gt; | [`GetPluginSteps`](#getpluginsteps)()<br>Get the [IPluginStep](./IPluginStep.md) instances |
+| `T` | [`GetSettings`](#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; data) |
 
 ## Details
 ### Summary

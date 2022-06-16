@@ -31,7 +31,7 @@ MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ILink
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Lazy`&lt;`string`&gt; | [`Reference`](markdoc/elements/ILink.md#reference)<br>Link reference | `get` |
+| `Lazy`&lt;`string`&gt; | [`Reference`](#reference)<br>Link reference | `get` |
 
 ## Details
 ### Summary

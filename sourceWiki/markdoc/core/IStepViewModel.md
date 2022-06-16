@@ -26,17 +26,17 @@ System.IDisposable --> MarkDoc.Core.IViewModel
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Description`](markdoc/core/IStepViewModel.md#description)<br>Step description | `get` |
-| `string` | [`Id`](markdoc/core/IStepViewModel.md#id)<br>Step view model Id | `get` |
-| `bool` | [`IsValid`](markdoc/core/IStepViewModel.md#isvalid)<br>Determines whether the step form is filled correctly | `get` |
-| `string` | [`Title`](markdoc/core/IStepViewModel.md#title)<br>Step name | `get` |
+| `string` | [`Description`](#description)<br>Step description | `get` |
+| `string` | [`Id`](#id)<br>Step view model Id | `get` |
+| `bool` | [`IsValid`](#isvalid)<br>Determines whether the step form is filled correctly | `get` |
+| `string` | [`Title`](#title)<br>Step name | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IReadOnlyDictionary`&lt;`string`, `string`&gt; | [`GetSettings`](markdoc/core/IStepViewModel.md#getsettings)()<br>Retrieves current settings |
-| `ValueTask` | [`SetPreviousSettings`](markdoc/core/IStepViewModel.md#setprevioussettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
+| `IReadOnlyDictionary`&lt;`string`, `string`&gt; | [`GetSettings`](#getsettings)()<br>Retrieves current settings |
+| `ValueTask` | [`SetPreviousSettings`](#setprevioussettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
 
 ## Details
 ### Summary

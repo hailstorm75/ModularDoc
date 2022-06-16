@@ -19,12 +19,12 @@ Interface for resolved types
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`DisplayName`](markdoc/members/resolvedtypes/IResType.md#displayname)<br>Resolved type display name | `get` |
-| `string` | [`DocumentationName`](markdoc/members/resolvedtypes/IResType.md#documentationname)<br>Resolved type name for documentation | `get` |
-| `bool` | [`IsByRef`](markdoc/members/resolvedtypes/IResType.md#isbyref)<br>Is the type a reference | `get` |
-| `string` | [`RawName`](markdoc/members/resolvedtypes/IResType.md#rawname)<br>Resolved type raw name | `get` |
-| `Lazy`&lt;[`IType`](../types/IType.md)&gt; | [`Reference`](markdoc/members/resolvedtypes/IResType.md#reference)<br>Reference to known type | `get` |
-| `string` | [`TypeNamespace`](markdoc/members/resolvedtypes/IResType.md#typenamespace)<br>Resolved type namespace | `get` |
+| `string` | [`DisplayName`](#displayname)<br>Resolved type display name | `get` |
+| `string` | [`DocumentationName`](#documentationname)<br>Resolved type name for documentation | `get` |
+| `bool` | [`IsByRef`](#isbyref)<br>Is the type a reference | `get` |
+| `string` | [`RawName`](#rawname)<br>Resolved type raw name | `get` |
+| `Lazy`&lt;[`IType`](../types/IType.md)&gt; | [`Reference`](#reference)<br>Reference to known type | `get` |
+| `string` | [`TypeNamespace`](#typenamespace)<br>Resolved type namespace | `get` |
 
 ## Details
 ### Summary

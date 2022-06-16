@@ -19,9 +19,9 @@ Interface for element documentation
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`IDocumentation`](./IDocumentation.md) | [`Documentation`](markdoc/documentation/IDocElement.md#documentation)<br>Element documentation | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, [`IDocMember`](./IDocMember.md)&gt;&gt; | [`Members`](markdoc/documentation/IDocElement.md#members)<br>Element members | `get` |
-| `string` | [`Name`](markdoc/documentation/IDocElement.md#name)<br>Element name | `get` |
+| [`IDocumentation`](./IDocumentation.md) | [`Documentation`](#documentation)<br>Element documentation | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, [`IDocMember`](./IDocMember.md)&gt;&gt; | [`Members`](#members)<br>Element members | `get` |
+| `string` | [`Name`](#name)<br>Element name | `get` |
 
 ## Details
 ### Summary

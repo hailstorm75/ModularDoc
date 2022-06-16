@@ -31,7 +31,7 @@ MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IText
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `TextStyle` | [`Style`](markdoc/elements/IText.md#style)<br>Text element style | `get` |
+| `TextStyle` | [`Style`](#style)<br>Text element style | `get` |
 
 ## Details
 ### Summary
