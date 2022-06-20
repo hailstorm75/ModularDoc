@@ -15,12 +15,12 @@ Interface for page elements
   class MarkDoc.Elements.IElement interfaceStyle;
   end
   subgraph MarkDoc.Elements.Extensions
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1[[IHasContent]]
+MarkDoc.Elements.Extensions.IHasContent_1[[IHasContent]]
   MarkDoc.Elements.Extensions.IHasHeading[[IHasHeading]]
   class MarkDoc.Elements.Extensions.IHasHeading interfaceStyle;
   end
 MarkDoc.Elements.IElement --> MarkDoc.Elements.IPage
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1 --> MarkDoc.Elements.IPage
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IPage
 MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IPage
 ```
 
