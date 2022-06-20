@@ -17,11 +17,11 @@ Interface for joining multiple [ITextContent](./ITextContent.md) elements
   class MarkDoc.Elements.IElement interfaceStyle;
   end
   subgraph MarkDoc.Elements.Extensions
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1[[IHasContent]]
+MarkDoc.Elements.Extensions.IHasContent_1[[IHasContent]]
   end
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.ITextBuilder
 MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1 --> MarkDoc.Elements.ITextBuilder
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ITextBuilder
 ```
 
 ## Members
