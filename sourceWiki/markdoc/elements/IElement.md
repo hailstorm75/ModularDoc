@@ -28,7 +28,7 @@ Interface for elements
 ### Methods
 #### Print
 ```csharp
-public abstract IEnumerable<string> Print()
+public IEnumerable<string> Print()
 ```
 ##### Summary
 Converts given element to a sequence of strings

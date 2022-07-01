@@ -40,7 +40,7 @@ module internal StringConverters =
   /// <param name="variance">Input variance</param>
   /// <returns>String representation of the input <paramref name="variance"/></returns>
   let varianceStr (variance: Variance) =
-    // Retuns the respective string representation of the variance type
+    // Returns the respective string representation of the variance type
     match variance with
     | Variance.Contravariant -> "in"
     | Variance.Covariant -> "out"
@@ -52,7 +52,7 @@ module internal StringConverters =
   /// <param name="accessor">Input accessor</param>
   /// <returns>String representation of the input <paramref name="accessor"/></returns>
   let accessorStr (accessor: AccessorType) =
-    // Retuns the respective string representation of the accessor type
+    // Returns the respective string representation of the accessor type
     match accessor with
     | AccessorType.Public -> "Public"
     | AccessorType.Protected -> "Protected"
@@ -66,7 +66,7 @@ module internal StringConverters =
   /// <param name="inheritance">Input inheritance</param>
   /// <returns>String representation of the input <paramref name="inheritance"/></returns>
   let inheritanceStr (inheritance: MemberInheritance) =
-    // Retuns the respective string representation of the inheritance type
+    // Returns the respective string representation of the inheritance type
     match inheritance with
     | MemberInheritance.Abstract -> "abstract"
     | MemberInheritance.Override -> "override"

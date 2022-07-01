@@ -34,7 +34,7 @@ Interface for documentation tags
 ### Properties
 #### Type
 ```csharp
-public abstract TagType Type { get; }
+public TagType Type { get; }
 ```
 ##### Summary
 Tag type
@@ -44,7 +44,7 @@ Tag type
 
 #### Reference
 ```csharp
-public abstract string Reference { get; }
+public string Reference { get; }
 ```
 ##### Summary
 Tag reference
@@ -54,7 +54,7 @@ Either holds cref or name
 
 #### Content
 ```csharp
-public abstract IReadOnlyCollection<IContent> Content { get; }
+public IReadOnlyCollection<IContent> Content { get; }
 ```
 ##### Summary
 Tag inner content

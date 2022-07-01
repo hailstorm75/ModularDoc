@@ -1,6 +1,7 @@
 ﻿namespace MarkDoc.Generator.Basic
 
 open MarkDoc.Documentation.Tags
+open MarkDoc.Members.Enums
 open MarkDoc.Members.Members
 open MarkDoc.Members.Types
 open MarkDoc.Elements

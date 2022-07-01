@@ -16,6 +16,7 @@ using MarkDoc.Members.Types;
 using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using MarkDoc.Members.Dnlib.Helpers;
+using MarkDoc.Members.Enums;
 using SharpPdb.Managed;
 
 namespace MarkDoc.Members.Dnlib
@@ -492,18 +493,18 @@ namespace MarkDoc.Members.Dnlib
       var nestedParent = ResolveParent(parent);
 
       if (subjectSig.IsEnum)
-        return new EnumDef(this, subjectSig, nestedParent);
+        return new EnumDef(this, subjectSig, nestedParent, DotNetType.Enum);
       if (subjectSig.IsValueType)
-        return new StructDef(this, subjectSig, nestedParent);
+        return new StructDef(this, subjectSig, nestedParent, DotNetType.Struct);
       if (subjectSig.IsClass)
       {
         return IsRecord(subjectSig)
-          ? new RecordDef(this, subjectSig, nestedParent)
-          : new ClassDef(this, subjectSig, nestedParent);
+          ? new RecordDef(this, subjectSig, nestedParent, DotNetType.Record)
+          : new ClassDef(this, subjectSig, nestedParent, DotNetType.Class);
       }
 
       if (subjectSig.IsInterface)
-        return new InterfaceDef(this, subjectSig, nestedParent);
+        return new InterfaceDef(this, subjectSig, nestedParent, DotNetType.Interface);
 
       // Throw an exception since the subject is none of the supported types
       throw new NotSupportedException(Resources.subjectNotSupported);
@@ -563,7 +564,7 @@ namespace MarkDoc.Members.Dnlib
       if (subject.IsEnum)
       {
         // return a resolved enum
-        yield return new EnumDef(this, subject, null);
+        yield return new EnumDef(this, subject, null, DotNetType.Enum);
         // exit
         yield break;
       }
@@ -599,13 +600,13 @@ namespace MarkDoc.Members.Dnlib
 
     private static IInterface GetTypeWithNested(Resolver resolver, TypeDef source)
     {
-      if (source.IsValueType) return new StructDef(resolver, source, null);
+      if (source.IsValueType) return new StructDef(resolver, source, null, DotNetType.Struct);
       if (source.IsClass)
         return IsRecord(source)
-          ? new RecordDef(resolver, source, null)
-          : new ClassDef(resolver, source, null);
+          ? new RecordDef(resolver, source, null, DotNetType.Record)
+          : new ClassDef(resolver, source, null, DotNetType.Class);
 
-      if (source.IsInterface) return new InterfaceDef(resolver, source, null);
+      if (source.IsInterface) return new InterfaceDef(resolver, source, null, DotNetType.Interface);
 
       // The provided signature is not supported
       throw new NotSupportedException(Resources.subjectNotSupported);

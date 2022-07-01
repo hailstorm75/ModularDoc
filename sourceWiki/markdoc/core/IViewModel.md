@@ -42,7 +42,7 @@ Interface for view models
 ### Methods
 #### SetNamedArguments
 ```csharp
-public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+public Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -51,7 +51,7 @@ public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> argum
 
 #### OnLoadedAsync
 ```csharp
-public abstract ValueTask OnLoadedAsync()
+public ValueTask OnLoadedAsync()
 ```
 ##### Summary
 Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads
@@ -62,7 +62,7 @@ Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads
 ### Properties
 #### IsLoading
 ```csharp
-public abstract bool IsLoading { get; }
+public bool IsLoading { get; }
 ```
 ##### Summary
 Determines whether the view model is loading

@@ -30,6 +30,9 @@ namespace MarkDoc.Members.Dnlib.Types
     public AccessorType Accessor { get; }
 
     /// <inheritdoc />
+    public DotNetType Type { get; }
+
+    /// <inheritdoc />
     public string TypeNamespace { get; }
 
     /// <inheritdoc />
@@ -43,7 +46,7 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    protected internal TypeDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
+    protected internal TypeDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, DotNetType type)
     {
       // If the source is null..
       if (source is null)
@@ -62,6 +65,8 @@ namespace MarkDoc.Members.Dnlib.Types
       Resolver = resolver;
       // Initialize the is nested indicator
       IsNested = parent is not null;
+
+      Type = type;
     }
 
     #region Methods

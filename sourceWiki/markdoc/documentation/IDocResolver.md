@@ -29,7 +29,7 @@ Interface for documentation resolvers
 ### Methods
 #### ResolveAsync
 ```csharp
-public abstract Task ResolveAsync(string path)
+public Task ResolveAsync(string path)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -41,7 +41,7 @@ Resolve xml documentation on given `path`
 
 #### TryFindType
 ```csharp
-public abstract bool TryFindType(IType type, out IDocElement resultType)
+public bool TryFindType(IType type, out IDocElement resultType)
 ```
 ##### Arguments
 | Type | Name | Description |

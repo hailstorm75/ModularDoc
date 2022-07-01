@@ -44,21 +44,21 @@ Interface for dialog views
 ### Methods
 #### OnPositiveButtonClicked
 ```csharp
-public abstract void OnPositiveButtonClicked()
+public void OnPositiveButtonClicked()
 ```
 ##### Summary
 Invoked when the parent dialog window positive button is pressed
 
 #### OnNegativeButtonClicked
 ```csharp
-public abstract void OnNegativeButtonClicked()
+public void OnNegativeButtonClicked()
 ```
 ##### Summary
 Invoked when the parent dialog window negative button is pressed
 
 #### OnCancelButtonClicked
 ```csharp
-public abstract void OnCancelButtonClicked()
+public void OnCancelButtonClicked()
 ```
 ##### Summary
 Invoked when the parent dialog window cancel button is pressed
@@ -66,7 +66,7 @@ Invoked when the parent dialog window cancel button is pressed
 ### Properties
 #### Title
 ```csharp
-public abstract string Title { get; }
+public string Title { get; }
 ```
 ##### Summary
 Dialog view title

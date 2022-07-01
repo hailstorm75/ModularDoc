@@ -36,7 +36,7 @@ Interface for type constructors
 ### Properties
 #### Arguments
 ```csharp
-public abstract IReadOnlyCollection<IArgument> Arguments { get; }
+public IReadOnlyCollection<IArgument> Arguments { get; }
 ```
 ##### Summary
 Method arguments

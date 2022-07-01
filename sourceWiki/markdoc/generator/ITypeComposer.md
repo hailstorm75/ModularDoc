@@ -28,7 +28,7 @@ Interface for type printers
 ### Methods
 #### Compose
 ```csharp
-public abstract IPage Compose(IType type)
+public IPage Compose(IType type)
 ```
 ##### Arguments
 | Type | Name | Description |

@@ -51,7 +51,7 @@ Interface for view models of plugin steps
 ### Methods
 #### GetSettings
 ```csharp
-public abstract IReadOnlyDictionary<string, string> GetSettings()
+public IReadOnlyDictionary<string, string> GetSettings()
 ```
 ##### Summary
 Retrieves current settings
@@ -61,7 +61,7 @@ Current form settings
 
 #### SetPreviousSettings
 ```csharp
-public abstract ValueTask SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+public ValueTask SetPreviousSettings(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -71,14 +71,14 @@ public abstract ValueTask SetPreviousSettings(IReadOnlyDictionary<string, IReadO
 ### Properties
 #### IsValid
 ```csharp
-public abstract bool IsValid { get; }
+public bool IsValid { get; }
 ```
 ##### Summary
 Determines whether the step form is filled correctly
 
 #### Id
 ```csharp
-public abstract string Id { get; }
+public string Id { get; }
 ```
 ##### Summary
 Step view model Id
@@ -88,14 +88,14 @@ This Id is required for referencing previous settings
 
 #### Title
 ```csharp
-public abstract string Title { get; }
+public string Title { get; }
 ```
 ##### Summary
 Step name
 
 #### Description
 ```csharp
-public abstract string Description { get; }
+public string Description { get; }
 ```
 ##### Summary
 Step description

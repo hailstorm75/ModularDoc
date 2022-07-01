@@ -37,7 +37,7 @@ Type resolver
 ### Methods
 #### ResolveAsync
 ```csharp
-public abstract Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
+public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -53,7 +53,7 @@ Resolves all assemblies based on the given settings
 
 #### Resolve
 ```csharp
-public abstract void Resolve(string assembly)
+public void Resolve(string assembly)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -65,7 +65,7 @@ Resolves `assembly` types
 
 #### TryFindType
 ```csharp
-public abstract bool TryFindType(string fullname, out IType result)
+public bool TryFindType(string fullname, out IType result)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -75,7 +75,7 @@ public abstract bool TryFindType(string fullname, out IType result)
 
 #### TryGetMemberSourceLine
 ```csharp
-public abstract bool TryGetMemberSourceLine(int token, out int line, out string source)
+public bool TryGetMemberSourceLine(int token, out int line, out string source)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -87,7 +87,7 @@ public abstract bool TryGetMemberSourceLine(int token, out int line, out string 
 ### Properties
 #### Types
 ```csharp
-public abstract Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
+public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
 ```
 ##### Summary
 Resolved types

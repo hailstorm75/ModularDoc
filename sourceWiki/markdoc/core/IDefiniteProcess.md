@@ -44,7 +44,7 @@ Interface for definite processes
 ### Methods
 #### IncreaseCompletion
 ```csharp
-public abstract void IncreaseCompletion()
+public void IncreaseCompletion()
 ```
 ##### Summary
 Increases the number of complete parts
@@ -52,21 +52,21 @@ Increases the number of complete parts
 ### Properties
 #### Complete
 ```csharp
-public abstract double Complete { get; }
+public double Complete { get; }
 ```
 ##### Summary
 Percentage complete
 
 #### Current
 ```csharp
-public abstract int Current { get; }
+public int Current { get; }
 ```
 ##### Summary
 Completed parts so far
 
 #### Max
 ```csharp
-public abstract int Max { get; }
+public int Max { get; }
 ```
 ##### Summary
 Number of parts to be completed
