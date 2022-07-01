@@ -1,7 +1,7 @@
-# MemberInheritance `enum`
+# DotNetType `enum`
 
 ## Description
-Member inheritance types
+Type of the represented .NET type
 
 ## Diagram
 ```mermaid
@@ -9,28 +9,28 @@ Member inheritance types
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
   subgraph MarkDoc.Members.Enums
-  MarkDoc.Members.Enums.MemberInheritance[[MemberInheritance]]
+  MarkDoc.Members.Enums.DotNetType[[DotNetType]]
   end
 ```
 
 ## Details
 ### Summary
-Member inheritance types
+Type of the represented .NET type
 
 ### Fields
-#### Normal
+#### Enum
 
 
-#### Abstract
+#### Interface
 
 
-#### Virtual
+#### Class
 
 
-#### Override
+#### Struct
 
 
-#### InterfaceMember
+#### Record
 
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

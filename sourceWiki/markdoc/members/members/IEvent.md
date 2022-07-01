@@ -37,14 +37,14 @@ Interface for events
 ### Properties
 #### Inheritance
 ```csharp
-public abstract MemberInheritance Inheritance { get; }
+public MemberInheritance Inheritance { get; }
 ```
 ##### Summary
 Event inheritance type
 
 #### Type
 ```csharp
-public abstract IResType Type { get; }
+public IResType Type { get; }
 ```
 ##### Summary
 Event type

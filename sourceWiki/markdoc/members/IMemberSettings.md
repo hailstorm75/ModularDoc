@@ -38,7 +38,7 @@ Interface for [IResolver](./IResolver.md) settings
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyCollection<string> Paths { get; }
+public IReadOnlyCollection<string> Paths { get; }
 ```
 ##### Summary
 Paths to member sources

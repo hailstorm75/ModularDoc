@@ -30,21 +30,21 @@ Interface for [IMethod](./IMethod.md) arguments
 ### Properties
 #### Name
 ```csharp
-public abstract string Name { get; }
+public string Name { get; }
 ```
 ##### Summary
 Argument name
 
 #### Keyword
 ```csharp
-public abstract ArgumentType Keyword { get; }
+public ArgumentType Keyword { get; }
 ```
 ##### Summary
 Argument keyword
 
 #### Type
 ```csharp
-public abstract IResType Type { get; }
+public IResType Type { get; }
 ```
 ##### Summary
 Argument type

@@ -41,7 +41,7 @@ Interface for plugins
 ### Methods
 #### GetPluginSteps
 ```csharp
-public abstract IReadOnlyCollection<IPluginStep> GetPluginSteps()
+public IReadOnlyCollection<IPluginStep> GetPluginSteps()
 ```
 ##### Summary
 Get the [IPluginStep](./IPluginStep.md) instances
@@ -51,7 +51,7 @@ Get the [IPluginStep](./IPluginStep.md) instances
 
 #### GetSettings
 ```csharp
-public abstract T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
+public T GetSettings<T>(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> data)
 where T : ILibrarySettings
 ```
 ##### Arguments
@@ -61,7 +61,7 @@ where T : ILibrarySettings
 
 #### GenerateExecutor
 ```csharp
-public abstract (IMarkDocLogger logger, IReadOnlyCollection processes, Func executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
+public (IMarkDocLogger logger, IReadOnlyCollection processes, Func executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -71,42 +71,42 @@ public abstract (IMarkDocLogger logger, IReadOnlyCollection processes, Func exec
 ### Properties
 #### Id
 ```csharp
-public abstract string Id { get; }
+public string Id { get; }
 ```
 ##### Summary
 Plugin id
 
 #### Name
 ```csharp
-public abstract string Name { get; }
+public string Name { get; }
 ```
 ##### Summary
 Plugin name
 
 #### Description
 ```csharp
-public abstract string Description { get; }
+public string Description { get; }
 ```
 ##### Summary
 Plugin description
 
 #### Author
 ```csharp
-public abstract string Author { get; }
+public string Author { get; }
 ```
 ##### Summary
 Plugin author
 
 #### Image
 ```csharp
-public abstract Stream Image { get; }
+public Stream Image { get; }
 ```
 ##### Summary
 Plugin image
 
 #### Steps
 ```csharp
-public abstract IReadOnlyCollection<string> Steps { get; }
+public IReadOnlyCollection<string> Steps { get; }
 ```
 ##### Summary
 List of plugin step names

@@ -43,14 +43,14 @@ Interface for struct types
 ### Properties
 #### Constructors
 ```csharp
-public abstract IReadOnlyCollection<IConstructor> Constructors { get; }
+public IReadOnlyCollection<IConstructor> Constructors { get; }
 ```
 ##### Summary
 Struct constructors
 
 #### IsReadOnly
 ```csharp
-public abstract bool IsReadOnly { get; }
+public bool IsReadOnly { get; }
 ```
 ##### Summary
 Determines whether the struct is readonly

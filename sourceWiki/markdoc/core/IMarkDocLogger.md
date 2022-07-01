@@ -35,7 +35,7 @@ Interface for in-house logger
 ### Methods
 #### Info
 ```csharp
-public abstract void Info(string message)
+public void Info(string message)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -47,7 +47,7 @@ Logs given `message` as information
 
 #### Debug
 ```csharp
-public abstract void Debug(string message)
+public void Debug(string message)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -59,7 +59,7 @@ Logs given `message` as debug information
 
 #### Error
 ```csharp
-public abstract void Error(string message)
+public void Error(string message)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -70,9 +70,8 @@ public abstract void Error(string message)
 Logs given `message` as an error
 
 #### Warning
-[*Source code*](https://github.com///blob//src/Libraries/Core/MarkDoc.Members/Types/TreeNode.cs#L14)
 ```csharp
-public abstract void Warning(string message)
+public void Warning(string message)
 ```
 ##### Arguments
 | Type | Name | Description |

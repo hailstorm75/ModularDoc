@@ -36,7 +36,7 @@ Interface for tags containing text
 ### Properties
 #### Content
 ```csharp
-public abstract string Content { get; }
+public string Content { get; }
 ```
 ##### Summary
 Text content

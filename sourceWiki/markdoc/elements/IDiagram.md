@@ -36,7 +36,7 @@ Interface for diagram elements
 ### Methods
 #### ToExternalFile
 ```csharp
-public abstract ValueTask ToExternalFile(string directory)
+public ValueTask ToExternalFile(string directory)
 ```
 ##### Arguments
 | Type | Name | Description |

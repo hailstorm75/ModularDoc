@@ -49,7 +49,7 @@ Interface for link elements
 ### Properties
 #### Reference
 ```csharp
-public abstract Lazy<string> Reference { get; }
+public Lazy<string> Reference { get; }
 ```
 ##### Summary
 Link reference

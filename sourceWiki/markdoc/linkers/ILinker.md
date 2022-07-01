@@ -37,7 +37,7 @@ Interface for creating links
 ### Methods
 #### CreateLink [1/2]
 ```csharp
-public abstract string CreateLink(IType source, IResType target)
+public string CreateLink(IType source, IResType target)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -53,7 +53,7 @@ Retrieved link
 
 #### CreateLink [2/2]
 ```csharp
-public abstract string CreateLink(IType source, IType target)
+public string CreateLink(IType source, IType target)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -69,7 +69,7 @@ Retrieved link
 
 #### CreateAnchor
 ```csharp
-public abstract Lazy<string> CreateAnchor(IType page, IMember member)
+public Lazy<string> CreateAnchor(IType page, IMember member)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -85,7 +85,7 @@ Retrieved link
 
 #### RegisterAnchor
 ```csharp
-public abstract void RegisterAnchor(IMember member, Lazy<string> anchor)
+public void RegisterAnchor(IMember member, Lazy<string> anchor)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -95,7 +95,7 @@ public abstract void RegisterAnchor(IMember member, Lazy<string> anchor)
 
 #### CreateLinkToSourceCode
 ```csharp
-public abstract string CreateLinkToSourceCode(IMember member)
+public string CreateLinkToSourceCode(IMember member)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -111,7 +111,7 @@ Link to source code line
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyDictionary<IType, string> Paths { get; }
+public IReadOnlyDictionary<IType, string> Paths { get; }
 ```
 ##### Summary
 Types path structure
