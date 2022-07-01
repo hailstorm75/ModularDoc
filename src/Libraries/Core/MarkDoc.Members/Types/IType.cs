@@ -31,5 +31,10 @@ namespace MarkDoc.Members.Types
     /// Type accessor
     /// </summary>
     AccessorType Accessor { get; }
+
+    /// <summary>
+    /// Determines the dot net type represented by this instance
+    /// </summary>
+    DotNetType Type { get; }
   }
 }

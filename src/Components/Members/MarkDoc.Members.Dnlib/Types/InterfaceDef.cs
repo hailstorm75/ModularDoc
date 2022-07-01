@@ -66,8 +66,8 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="resolver">Type resolver instance</param>
     /// <param name="source">Type source</param>
     /// <param name="parent">Nested type parent</param>
-    internal InterfaceDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent)
-      : this(resolver, source, parent, ResolveGenerics(resolver, source, parent), Enumerable.Empty<IResType>()) { }
+    internal InterfaceDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, DotNetType type)
+      : this(resolver, source, parent, ResolveGenerics(resolver, source, parent), Enumerable.Empty<IResType>(), type) { }
 
     /// <summary>
     /// Constructor for derived types
@@ -77,8 +77,8 @@ namespace MarkDoc.Members.Dnlib.Types
     /// <param name="parent">Nested type parent</param>
     /// <param name="generics">Generics of this given type</param>
     /// <param name="inheritedTypes">Inherited types</param>
-    protected InterfaceDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics, IEnumerable<IResType> inheritedTypes)
-      : base(resolver, source, parent)
+    protected InterfaceDef(Resolver resolver, dnlib.DotNet.TypeDef source, dnlib.DotNet.TypeDef? parent, IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType>)> generics, IEnumerable<IResType> inheritedTypes, DotNetType type)
+      : base(resolver, source, parent, type)
     {
       // If the source is null..
       if (source is null)
