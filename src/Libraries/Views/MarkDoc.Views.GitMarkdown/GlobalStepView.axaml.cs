@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
@@ -46,13 +47,35 @@ namespace MarkDoc.Views.GitMarkdown
 
     public static IEnumerable<TreeViewItem> GetTreeViewItems(TreeViewItem treeItem)
     {
-      yield break;
+      var items = treeItem.FindDescendantOfType<TreeViewItem>()?.GetVisualParent()?.GetVisualChildren()?.OfType<TreeViewItem>();
+      if (items is null)
+        yield break;
+
+      foreach (var item in items)
+      {
+        yield return item;
+        foreach (var subItem in GetTreeViewItems(item))
+          yield return subItem;
+      }
     }
 
-    private void Button_OnCLick(object? sender, RoutedEventArgs e)
+    private void ButtonExpandAll_OnCLick(object? sender, RoutedEventArgs e)
     {
       foreach (var treeViewItem in GetTreeViewItems(m_treeView))
-        treeViewItem.IsEnabled = true;
+      {
+        treeViewItem.IsExpanded = true;
+        treeViewItem.ApplyTemplate();
+
+        var presenter = treeViewItem.FindDescendantOfType<ItemsPresenter>();
+        if (presenter is not null)
+          presenter.ApplyTemplate();
+      }
+    }
+
+    private void ButtonCollapseAll_OnCLick(object? sender, RoutedEventArgs e)
+    {
+      foreach (var child in GetTreeViewItems(m_treeView).Reverse())
+        child.IsExpanded = false;
     }
   }
 }

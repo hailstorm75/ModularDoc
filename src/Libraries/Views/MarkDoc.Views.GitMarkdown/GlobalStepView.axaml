@@ -28,8 +28,9 @@
       </TextBox.InnerRightContent>
     </TextBox>
 
-    <StackPanel Grid.Row="1" Orientation="Horizontal">
-      <Button Click="Button_OnCLick">Expand</Button>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 5">
+      <Button Click="ButtonExpandAll_OnCLick" Margin="0, 0, 5, 0">Expand</Button>
+      <Button Click="ButtonCollapseAll_OnCLick">Collapse</Button>
     </StackPanel>
 
     <TreeView
