@@ -239,12 +239,12 @@ namespace MarkDoc.Members.Dnlib
         if (!globalSettings?.IgnoredNamespaces.Contains(processed) ?? true)
           return true;
 
-        m_logger.Info($"Skipping namespace '{processed}' in '{assembly}'");
+        m_logger.Info($"Skipping namespace '{processed}' in '{assembly}'", nameof(Resolver));
 
         return false;
       }
 
-      m_logger.Info($"Processing assembly: '{assembly}'");
+      m_logger.Info($"Processing assembly: '{assembly}'", nameof(Resolver));
 
       // If the resolved types were read..
       if (Types.IsValueCreated)
@@ -270,7 +270,7 @@ namespace MarkDoc.Members.Dnlib
           if (!globalSettings?.IgnoredTypes.Contains(type.FullName) ?? true)
             return true;
 
-          m_logger.Info($"Skipping type '{type.FullName}' in '{assembly}'");
+          m_logger.Info($"Skipping type '{type.FullName}' in '{assembly}'", nameof(Resolver));
 
           return false;
         })
@@ -283,7 +283,7 @@ namespace MarkDoc.Members.Dnlib
         {
           var result = grouping.SelectMany(ResolveTypes).ToReadOnlyCollection();
 
-          m_logger.Info($"Found '{result.Count}' types in '{assembly}'");
+          m_logger.Info($"Found '{result.Count}' types in '{assembly}'", nameof(Resolver));
 
           return result;
         });
@@ -295,7 +295,7 @@ namespace MarkDoc.Members.Dnlib
 
       m_processLogger.IncreaseCompletion();
 
-      m_logger.Debug($"Cached types from '{assembly}'");
+      m_logger.Debug($"Cached types from '{assembly}'", nameof(Resolver));
     }
 
     private void LoadPdb(string pdbPath)
