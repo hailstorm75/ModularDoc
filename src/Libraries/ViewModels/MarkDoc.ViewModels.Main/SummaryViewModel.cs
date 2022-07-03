@@ -83,7 +83,6 @@ namespace MarkDoc.ViewModels.Main
       }
     }
 
-
     #endregion
 
     #region Commands
