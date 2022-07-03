@@ -15,12 +15,12 @@ Interface for the table element
   class MarkDoc.Elements.IElement interfaceStyle;
   end
   subgraph MarkDoc.Elements.Extensions
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1<System.Collections.Generic.IReadOnlyCollection_1[[IHasContent]]
+MarkDoc.Elements.Extensions.IHasContent_1[[IHasContent]]
   MarkDoc.Elements.Extensions.IHasHeading[[IHasHeading]]
   class MarkDoc.Elements.Extensions.IHasHeading interfaceStyle;
   end
 MarkDoc.Elements.IElement --> MarkDoc.Elements.ITable
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1<System.Collections.Generic.IReadOnlyCollection_1 --> MarkDoc.Elements.ITable
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ITable
 MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.ITable
 ```
 
@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.ITable
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IText`](./IText.md)&gt; | [`Headings`](markdoc/elements/ITable.md#headings)<br>Table headers | `get` |
+| `IReadOnlyCollection`&lt;[`IText`](./IText.md)&gt; | [`Headings`](#headings)<br>Table headers | `get` |
 
 ## Details
 ### Summary
@@ -47,7 +47,7 @@ Interface for the table element
 ### Properties
 #### Headings
 ```csharp
-public abstract IReadOnlyCollection Headings { get }
+public IReadOnlyCollection<IText> Headings { get; }
 ```
 ##### Summary
 Table headers

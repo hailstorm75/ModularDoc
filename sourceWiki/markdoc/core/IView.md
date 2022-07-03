@@ -19,9 +19,9 @@ Interface for views
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IViewModel`](./IViewModel.md) | [`GetViewModel`](markdoc/core/IView.md#getviewmodel)()<br>Retrieves the views view models |
-| `Task` | [`SetArguments`](markdoc/core/IView.md#setarguments)(`IEnumerable`&lt;`string`&gt; arguments) |
-| `Task` | [`SetNamedArgumentsAsync`](markdoc/core/IView.md#setnamedargumentsasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
+| [`IViewModel`](./IViewModel.md) | [`GetViewModel`](#getviewmodel)()<br>Retrieves the views view models |
+| `Task` | [`SetArguments`](#setarguments)(`IEnumerable`&lt;`string`&gt; arguments) |
+| `Task` | [`SetNamedArgumentsAsync`](#setnamedargumentsasync)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
 
 ## Details
 ### Summary
@@ -30,7 +30,7 @@ Interface for views
 ### Methods
 #### GetViewModel
 ```csharp
-public abstract IViewModel GetViewModel()
+public IViewModel GetViewModel()
 ```
 ##### Summary
 Retrieves the views view models
@@ -40,7 +40,7 @@ View model instance
 
 #### SetArguments
 ```csharp
-public virtual async Task SetArguments(IEnumerable<string> arguments)
+public async Task SetArguments(IEnumerable<string> arguments)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -49,7 +49,7 @@ public virtual async Task SetArguments(IEnumerable<string> arguments)
 
 #### SetNamedArgumentsAsync
 ```csharp
-public abstract Task SetNamedArgumentsAsync(IReadOnlyDictionary<string, string> arguments)
+public Task SetNamedArgumentsAsync(IReadOnlyDictionary<string, string> arguments)
 ```
 ##### Arguments
 | Type | Name | Description |

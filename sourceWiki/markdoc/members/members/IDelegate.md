@@ -22,9 +22,9 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IDelegate
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IArgument`](./IArgument.md)&gt; | [`Arguments`](markdoc/members/members/IDelegate.md#arguments)<br>Delegate arguments | `get` |
-| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt;&gt; | [`Generics`](markdoc/members/members/IDelegate.md#generics)<br>Method generic arguments | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Returns`](markdoc/members/members/IDelegate.md#returns)<br>Method return type | `get` |
+| `IReadOnlyCollection`&lt;[`IArgument`](./IArgument.md)&gt; | [`Arguments`](#arguments)<br>Delegate arguments | `get` |
+| `IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt;&gt; | [`Generics`](#generics)<br>Method generic arguments | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Returns`](#returns)<br>Method return type | `get` |
 
 ## Details
 ### Summary
@@ -38,21 +38,21 @@ Interface for delegate types
 ### Properties
 #### Arguments
 ```csharp
-public abstract IReadOnlyCollection Arguments { get }
+public IReadOnlyCollection<IArgument> Arguments { get; }
 ```
 ##### Summary
 Delegate arguments
 
 #### Generics
 ```csharp
-public abstract IReadOnlyDictionary Generics { get }
+public IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
 ```
 ##### Summary
 Method generic arguments
 
 #### Returns
 ```csharp
-public abstract IResType Returns { get }
+public IResType Returns { get; }
 ```
 ##### Summary
 Method return type

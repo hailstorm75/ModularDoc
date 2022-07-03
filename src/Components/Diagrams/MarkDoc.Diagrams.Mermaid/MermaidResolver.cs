@@ -26,6 +26,24 @@ namespace MarkDoc.Diagrams.Mermaid
       m_linker = linker;
     }
 
+    private static string Normalize(string value)
+    {
+      var span = value.AsSpan();
+      var index = span.IndexOf('<');
+      span = index == -1
+        ? span
+        : span[..index];
+
+      var chars = span.ToArray();
+      for (var i = 0; i < chars.Length; i++)
+      {
+        if (chars[i] == '`')
+          chars[i] = '_';
+      }
+
+      return new string(chars);
+    }
+
     /// <inheritdoc />
     [SuppressMessage("ReSharper", "RedundantSuppressNullableWarningExpression")]
     public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
@@ -48,7 +66,7 @@ namespace MarkDoc.Diagrams.Mermaid
           return highlightedTitle;
         }
 
-        var rawTitle = type.RawName.Replace('`', '_');
+        var rawTitle = Normalize(type.RawName);
         var typeName = type switch
         {
           IRecord r => $"  {rawTitle}[[{GenerateTitle(r)}]]",
@@ -78,7 +96,7 @@ namespace MarkDoc.Diagrams.Mermaid
                 typeNodes.Add(constraint.RawName);
               }
 
-              builder.AppendLine($"{constraint.RawName.Replace('`', '_')} --> {rawTitle}{key}");
+              builder.AppendLine($"{Normalize(constraint.RawName)} --> {rawTitle}{key}");
             }
           }
 
@@ -95,12 +113,13 @@ namespace MarkDoc.Diagrams.Mermaid
         => type.Reference.Value is not null
           // ReSharper disable once AssignNullToNotNullAttribute
           ? GenerateType(type.Reference.Value)
-          : (type.TypeNamespace, $"{type.RawName.Replace('`', '_')}[[{type.DisplayName}]]");
+          : (type.TypeNamespace, $"{Normalize(type.RawName)}[[{type.DisplayName}]]");
 
       void ExtractTypes(IType parent, bool isParent)
       {
+        var parentRawName = Normalize(parent.RawName);
         AddToDictionary(types, GenerateType(parent, isParent));
-        typeNodes.Add(parent.RawName);
+        typeNodes.Add(Normalize(parentRawName));
 
         if (parent is not IInterface interfaceType)
           return;
@@ -109,29 +128,32 @@ namespace MarkDoc.Diagrams.Mermaid
         {
           foreach (var item in source)
           {
-            relations.AddLast($"{item.Name.Replace('`', '_')} --> {parentName.Replace('`', '_')}");
-            AddToDictionary(types, GenerateResType(item.Value));
-            typeNodes.Add(item.Name);
+            var itemName = Normalize(item.Name);
 
-            ProcessInheritance(item.Name, item.Children);
+            relations.AddLast($"{itemName} --> {parentName}");
+            AddToDictionary(types, GenerateResType(item.Value));
+            typeNodes.Add(itemName);
+
+            ProcessInheritance(itemName, item.Children);
           }
         }
 
-        ProcessInheritance(parent.RawName, interfaceType.InheritedTypesStructured.Value);
+        ProcessInheritance(parentRawName, interfaceType.InheritedTypesStructured.Value);
 
         if (parent is not IClass classType || classType.BaseClass is null)
           return;
 
         var baseType = GenerateResType(classType.BaseClass!);
+        var baseRawName = Normalize(classType.BaseClass!.RawName);
 
-        relations.AddLast($"{classType.BaseClass!.RawName.Replace('`', '_')} --> {parent.RawName.Replace('`', '_')}");
+        relations.AddLast($"{Normalize(baseRawName)} --> {parentRawName}");
         AddToDictionary(types, baseType);
-        typeNodes.Add(classType.BaseClass.RawName);
+        typeNodes.Add(baseRawName);
       }
 
       ExtractTypes(type, true);
 
-      diagram = (type.RawName.Replace('`', '_'), $"flowchart LR{Environment.NewLine}{STYLES}{Environment.NewLine}{string.Join(Environment.NewLine, PackTypes(types).Concat(relations))}");
+      diagram = (Normalize(type.RawName), $"flowchart LR{Environment.NewLine}{STYLES}{Environment.NewLine}{string.Join(Environment.NewLine, PackTypes(types).Concat(relations))}");
       return true;
     }
 

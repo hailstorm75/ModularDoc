@@ -19,7 +19,7 @@ Interface for elements
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IEnumerable`&lt;`string`&gt; | [`Print`](markdoc/elements/IElement.md#print)()<br>Converts given element to a sequence of strings |
+| `IEnumerable`&lt;`string`&gt; | [`Print`](#print)()<br>Converts given element to a sequence of strings |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Interface for elements
 ### Methods
 #### Print
 ```csharp
-public abstract IEnumerable Print()
+public IEnumerable<string> Print()
 ```
 ##### Summary
 Converts given element to a sequence of strings

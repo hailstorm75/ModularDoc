@@ -37,13 +37,13 @@ MarkDoc.Core.IView --> MarkDoc.Core.IView_1
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Id`](markdoc/core/IStepViewT.md#id)<br>Step view Id | `get` |
+| `string` | [`Id`](#id)<br>Step view Id | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`SetPreviousSettingsAsync`](markdoc/core/IStepViewT.md#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
+| `Task` | [`SetPreviousSettingsAsync`](#setprevioussettingsasync)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; settings) |
 
 ## Details
 ### Summary
@@ -63,7 +63,7 @@ Interface for views of plugin steps
 ### Methods
 #### SetPreviousSettingsAsync
 ```csharp
-public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+public async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -73,7 +73,7 @@ public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, I
 ### Properties
 #### Id
 ```csharp
-public virtual string Id { get }
+public string Id { get; }
 ```
 ##### Summary
 Step view Id

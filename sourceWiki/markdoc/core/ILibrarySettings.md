@@ -19,7 +19,7 @@ Interface for settings of libraries
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Guid` | [`Id`](markdoc/core/ILibrarySettings.md#id)<br>Settings id | `get` |
+| `Guid` | [`Id`](#id)<br>Settings id | `get` |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Interface for settings of libraries
 ### Properties
 #### Id
 ```csharp
-public abstract Guid Id { get }
+public Guid Id { get; }
 ```
 ##### Summary
 Settings id

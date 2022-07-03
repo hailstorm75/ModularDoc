@@ -17,11 +17,11 @@ Interface for joining multiple [ITextContent](./ITextContent.md) elements
   class MarkDoc.Elements.IElement interfaceStyle;
   end
   subgraph MarkDoc.Elements.Extensions
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1[[IHasContent]]
+MarkDoc.Elements.Extensions.IHasContent_1[[IHasContent]]
   end
 MarkDoc.Elements.ITextContent --> MarkDoc.Elements.ITextBuilder
 MarkDoc.Elements.IElement --> MarkDoc.Elements.ITextContent
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1 --> MarkDoc.Elements.ITextBuilder
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.ITextBuilder
 ```
 
 ## Members
@@ -29,7 +29,7 @@ MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCo
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Delimiter`](markdoc/elements/ITextBuilder.md#delimiter)<br>Joined text delimiter | `get` |
+| `string` | [`Delimiter`](#delimiter)<br>Joined text delimiter | `get` |
 
 ## Details
 ### Summary
@@ -47,7 +47,7 @@ Interface for joining multiple [ITextContent](./ITextContent.md) elements
 ### Properties
 #### Delimiter
 ```csharp
-public abstract string Delimiter { get }
+public string Delimiter { get; }
 ```
 ##### Summary
 Joined text delimiter

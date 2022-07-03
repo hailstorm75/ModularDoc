@@ -19,9 +19,9 @@ Interface for [IMethod](./IMethod.md) arguments
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`ArgumentType`](../enums/ArgumentType.md) | [`Keyword`](markdoc/members/members/IArgument.md#keyword)<br>Argument keyword | `get` |
-| `string` | [`Name`](markdoc/members/members/IArgument.md#name)<br>Argument name | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](markdoc/members/members/IArgument.md#type)<br>Argument type | `get` |
+| [`ArgumentType`](../enums/ArgumentType.md) | [`Keyword`](#keyword)<br>Argument keyword | `get` |
+| `string` | [`Name`](#name)<br>Argument name | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](#type)<br>Argument type | `get` |
 
 ## Details
 ### Summary
@@ -30,21 +30,21 @@ Interface for [IMethod](./IMethod.md) arguments
 ### Properties
 #### Name
 ```csharp
-public abstract string Name { get }
+public string Name { get; }
 ```
 ##### Summary
 Argument name
 
 #### Keyword
 ```csharp
-public abstract ArgumentType Keyword { get }
+public ArgumentType Keyword { get; }
 ```
 ##### Summary
 Argument keyword
 
 #### Type
 ```csharp
-public abstract IResType Type { get }
+public IResType Type { get; }
 ```
 ##### Summary
 Argument type

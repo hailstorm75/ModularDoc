@@ -22,15 +22,15 @@ MarkDoc.Core.IProcess --> MarkDoc.Core.IDefiniteProcess
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `double` | [`Complete`](markdoc/core/IDefiniteProcess.md#complete)<br>Percentage complete | `get` |
-| `int` | [`Current`](markdoc/core/IDefiniteProcess.md#current)<br>Completed parts so far | `get` |
-| `int` | [`Max`](markdoc/core/IDefiniteProcess.md#max)<br>Number of parts to be completed | `get` |
+| `double` | [`Complete`](#complete)<br>Percentage complete | `get` |
+| `int` | [`Current`](#current)<br>Completed parts so far | `get` |
+| `int` | [`Max`](#max)<br>Number of parts to be completed | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`IncreaseCompletion`](markdoc/core/IDefiniteProcess.md#increasecompletion)()<br>Increases the number of complete parts |
+| `void` | [`IncreaseCompletion`](#increasecompletion)()<br>Increases the number of complete parts |
 
 ## Details
 ### Summary
@@ -44,7 +44,7 @@ Interface for definite processes
 ### Methods
 #### IncreaseCompletion
 ```csharp
-public abstract void IncreaseCompletion()
+public void IncreaseCompletion()
 ```
 ##### Summary
 Increases the number of complete parts
@@ -52,21 +52,21 @@ Increases the number of complete parts
 ### Properties
 #### Complete
 ```csharp
-public abstract double Complete { get }
+public double Complete { get; }
 ```
 ##### Summary
 Percentage complete
 
 #### Current
 ```csharp
-public abstract int Current { get }
+public int Current { get; }
 ```
 ##### Summary
 Completed parts so far
 
 #### Max
 ```csharp
-public abstract int Max { get }
+public int Max { get; }
 ```
 ##### Summary
 Number of parts to be completed

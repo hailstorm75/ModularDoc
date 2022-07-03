@@ -19,9 +19,9 @@ Logger message structure
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Message`](markdoc/core/LogMessage.md#message)<br>Log message | `get` |
-| `DateTime` | [`Time`](markdoc/core/LogMessage.md#time)<br>Log time | `get` |
-| `LogType` | [`Type`](markdoc/core/LogMessage.md#type)<br>Log type | `get` |
+| `string` | [`Message`](#message)<br>Log message | `get` |
+| `DateTime` | [`Time`](#time)<br>Log time | `get` |
+| `LogType` | [`Type`](#type)<br>Log type | `get` |
 
 ## Details
 ### Summary
@@ -30,21 +30,21 @@ Logger message structure
 ### Properties
 #### Type
 ```csharp
-public LogType Type { get }
+public LogType Type { get; }
 ```
 ##### Summary
 Log type
 
 #### Message
 ```csharp
-public string Message { get }
+public string Message { get; }
 ```
 ##### Summary
 Log message
 
 #### Time
 ```csharp
-public DateTime Time { get }
+public DateTime Time { get; }
 ```
 ##### Summary
 Log time

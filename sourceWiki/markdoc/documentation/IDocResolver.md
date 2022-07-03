@@ -19,8 +19,8 @@ Interface for documentation resolvers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`ResolveAsync`](markdoc/documentation/IDocResolver.md#resolveasync)(`string` path)<br>Resolve xml documentation on given `path` |
-| `bool` | [`TryFindType`](markdoc/documentation/IDocResolver.md#tryfindtype)([`IType`](../members/types/IType.md) type, out [`IDocElement`](./IDocElement.md) resultType) |
+| `Task` | [`ResolveAsync`](#resolveasync)(`string` path)<br>Resolve xml documentation on given `path` |
+| `bool` | [`TryFindType`](#tryfindtype)([`IType`](../members/types/IType.md) type, out [`IDocElement`](./IDocElement.md) resultType) |
 
 ## Details
 ### Summary
@@ -29,7 +29,7 @@ Interface for documentation resolvers
 ### Methods
 #### ResolveAsync
 ```csharp
-public abstract Task ResolveAsync(string path)
+public Task ResolveAsync(string path)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -41,7 +41,7 @@ Resolve xml documentation on given `path`
 
 #### TryFindType
 ```csharp
-public abstract bool TryFindType(IType type, out IDocElement resultType)
+public bool TryFindType(IType type, out IDocElement resultType)
 ```
 ##### Arguments
 | Type | Name | Description |

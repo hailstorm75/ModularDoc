@@ -19,12 +19,12 @@ Interface for resolved types
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`DisplayName`](markdoc/members/resolvedtypes/IResType.md#displayname)<br>Resolved type display name | `get` |
-| `string` | [`DocumentationName`](markdoc/members/resolvedtypes/IResType.md#documentationname)<br>Resolved type name for documentation | `get` |
-| `bool` | [`IsByRef`](markdoc/members/resolvedtypes/IResType.md#isbyref)<br>Is the type a reference | `get` |
-| `string` | [`RawName`](markdoc/members/resolvedtypes/IResType.md#rawname)<br>Resolved type raw name | `get` |
-| `Lazy`&lt;[`IType`](../types/IType.md)&gt; | [`Reference`](markdoc/members/resolvedtypes/IResType.md#reference)<br>Reference to known type | `get` |
-| `string` | [`TypeNamespace`](markdoc/members/resolvedtypes/IResType.md#typenamespace)<br>Resolved type namespace | `get` |
+| `string` | [`DisplayName`](#displayname)<br>Resolved type display name | `get` |
+| `string` | [`DocumentationName`](#documentationname)<br>Resolved type name for documentation | `get` |
+| `bool` | [`IsByRef`](#isbyref)<br>Is the type a reference | `get` |
+| `string` | [`RawName`](#rawname)<br>Resolved type raw name | `get` |
+| `Lazy`&lt;[`IType`](../types/IType.md)&gt; | [`Reference`](#reference)<br>Reference to known type | `get` |
+| `string` | [`TypeNamespace`](#typenamespace)<br>Resolved type namespace | `get` |
 
 ## Details
 ### Summary
@@ -33,42 +33,42 @@ Interface for resolved types
 ### Properties
 #### DisplayName
 ```csharp
-public abstract string DisplayName { get }
+public string DisplayName { get; }
 ```
 ##### Summary
 Resolved type display name
 
 #### DocumentationName
 ```csharp
-public abstract string DocumentationName { get }
+public string DocumentationName { get; }
 ```
 ##### Summary
 Resolved type name for documentation
 
 #### RawName
 ```csharp
-public abstract string RawName { get }
+public string RawName { get; }
 ```
 ##### Summary
 Resolved type raw name
 
 #### TypeNamespace
 ```csharp
-public abstract string TypeNamespace { get }
+public string TypeNamespace { get; }
 ```
 ##### Summary
 Resolved type namespace
 
 #### Reference
 ```csharp
-public abstract Lazy Reference { get }
+public Lazy<IType> Reference { get; }
 ```
 ##### Summary
 Reference to known type
 
 #### IsByRef
 ```csharp
-public abstract bool IsByRef { get }
+public bool IsByRef { get; }
 ```
 ##### Summary
 Is the type a reference

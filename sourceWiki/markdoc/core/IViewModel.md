@@ -23,14 +23,14 @@ System.IDisposable --> MarkDoc.Core.IViewModel
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `bool` | [`IsLoading`](markdoc/core/IViewModel.md#isloading)<br>Determines whether the view model is loading | `get` |
+| `bool` | [`IsLoading`](#isloading)<br>Determines whether the view model is loading | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `ValueTask` | [`OnLoadedAsync`](markdoc/core/IViewModel.md#onloadedasync)()<br>Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads |
-| `Task` | [`SetNamedArguments`](markdoc/core/IViewModel.md#setnamedarguments)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
+| `ValueTask` | [`OnLoadedAsync`](#onloadedasync)()<br>Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads |
+| `Task` | [`SetNamedArguments`](#setnamedarguments)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; arguments) |
 
 ## Details
 ### Summary
@@ -42,7 +42,7 @@ Interface for view models
 ### Methods
 #### SetNamedArguments
 ```csharp
-public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
+public Task SetNamedArguments(IReadOnlyDictionary<string, string> arguments)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -51,7 +51,7 @@ public abstract Task SetNamedArguments(IReadOnlyDictionary<string, string> argum
 
 #### OnLoadedAsync
 ```csharp
-public abstract ValueTask OnLoadedAsync()
+public ValueTask OnLoadedAsync()
 ```
 ##### Summary
 Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads
@@ -62,7 +62,7 @@ Executed when the [IView&lt;out TViewModel&gt;](./IViewT.md) loads
 ### Properties
 #### IsLoading
 ```csharp
-public abstract bool IsLoading { get }
+public bool IsLoading { get; }
 ```
 ##### Summary
 Determines whether the view model is loading

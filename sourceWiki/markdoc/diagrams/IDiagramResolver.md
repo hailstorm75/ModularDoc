@@ -19,7 +19,7 @@ Interface for diagram resolvers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `bool` | [`TryGenerateDiagram`](markdoc/diagrams/IDiagramResolver.md#trygeneratediagram)([`IType`](../members/types/IType.md) type, out `(string name, string content)` diagram) |
+| `bool` | [`TryGenerateDiagram`](#trygeneratediagram)([`IType`](../members/types/IType.md) type, out `(string name, string content)` diagram) |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Interface for diagram resolvers
 ### Methods
 #### TryGenerateDiagram
 ```csharp
-public abstract bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
+public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
 ```
 ##### Arguments
 | Type | Name | Description |

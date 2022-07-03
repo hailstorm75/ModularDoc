@@ -19,11 +19,12 @@ Interface for types
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`AccessorType`](../enums/AccessorType.md) | [`Accessor`](markdoc/members/types/IType.md#accessor)<br>Type accessor | `get` |
-| `bool` | [`IsNested`](markdoc/members/types/IType.md#isnested)<br>Determines whether this type is nested | `get` |
-| `string` | [`Name`](markdoc/members/types/IType.md#name)<br>Type name | `get` |
-| `string` | [`RawName`](markdoc/members/types/IType.md#rawname)<br>Reflection fullname with namespace | `get` |
-| `string` | [`TypeNamespace`](markdoc/members/types/IType.md#typenamespace)<br>Type namespace | `get` |
+| [`AccessorType`](../enums/AccessorType.md) | [`Accessor`](#accessor)<br>Type accessor | `get` |
+| `bool` | [`IsNested`](#isnested)<br>Determines whether this type is nested | `get` |
+| `string` | [`Name`](#name)<br>Type name | `get` |
+| `string` | [`RawName`](#rawname)<br>Reflection fullname with namespace | `get` |
+| [`DotNetType`](../enums/DotNetType.md) | [`Type`](#type)<br>Determines the dot net type represented by this instance | `get` |
+| `string` | [`TypeNamespace`](#typenamespace)<br>Type namespace | `get` |
 
 ## Details
 ### Summary
@@ -32,37 +33,44 @@ Interface for types
 ### Properties
 #### RawName
 ```csharp
-public abstract string RawName { get }
+public string RawName { get; }
 ```
 ##### Summary
 Reflection fullname with namespace
 
 #### Name
 ```csharp
-public abstract string Name { get }
+public string Name { get; }
 ```
 ##### Summary
 Type name
 
 #### TypeNamespace
 ```csharp
-public abstract string TypeNamespace { get }
+public string TypeNamespace { get; }
 ```
 ##### Summary
 Type namespace
 
 #### IsNested
 ```csharp
-public abstract bool IsNested { get }
+public bool IsNested { get; }
 ```
 ##### Summary
 Determines whether this type is nested
 
 #### Accessor
 ```csharp
-public abstract AccessorType Accessor { get }
+public AccessorType Accessor { get; }
 ```
 ##### Summary
 Type accessor
+
+#### Type
+```csharp
+public DotNetType Type { get; }
+```
+##### Summary
+Determines the dot net type represented by this instance
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

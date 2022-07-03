@@ -19,8 +19,8 @@ Interface for types which have headings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Heading`](markdoc/elements/extensions/IHasHeading.md#heading)<br>Heading text | `get` |
-| `int` | [`Level`](markdoc/elements/extensions/IHasHeading.md#level)<br>Heading level | `get` |
+| `string` | [`Heading`](#heading)<br>Heading text | `get` |
+| `int` | [`Level`](#level)<br>Heading level | `get` |
 
 ## Details
 ### Summary
@@ -29,14 +29,14 @@ Interface for types which have headings
 ### Properties
 #### Heading
 ```csharp
-public abstract string Heading { get }
+public string Heading { get; }
 ```
 ##### Summary
 Heading text
 
 #### Level
 ```csharp
-public abstract int Level { get }
+public int Level { get; }
 ```
 ##### Summary
 Heading level

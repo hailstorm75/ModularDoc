@@ -19,7 +19,7 @@ Interface for type printers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| [`IPage`](../elements/IPage.md) | [`Compose`](markdoc/generator/ITypeComposer.md#compose)([`IType`](../members/types/IType.md) type)<br>Prints a [IPage](../elements/IPage.md) from the provided `type` |
+| [`IPage`](../elements/IPage.md) | [`Compose`](#compose)([`IType`](../members/types/IType.md) type)<br>Prints a [IPage](../elements/IPage.md) from the provided `type` |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Interface for type printers
 ### Methods
 #### Compose
 ```csharp
-public abstract IPage Compose(IType type)
+public IPage Compose(IType type)
 ```
 ##### Arguments
 | Type | Name | Description |

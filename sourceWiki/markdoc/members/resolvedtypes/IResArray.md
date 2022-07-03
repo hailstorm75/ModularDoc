@@ -19,9 +19,9 @@ Interface for resolved arrays
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`IResType`](./IResType.md) | [`ArrayType`](markdoc/members/resolvedtypes/IResArray.md#arraytype)<br>Type of given array | `get` |
-| `int` | [`Dimension`](markdoc/members/resolvedtypes/IResArray.md#dimension)<br>Dimension of array | `get` |
-| `bool` | [`IsJagged`](markdoc/members/resolvedtypes/IResArray.md#isjagged)<br>Determines whether the array is a jagged array type | `get` |
+| [`IResType`](./IResType.md) | [`ArrayType`](#arraytype)<br>Type of given array | `get` |
+| `int` | [`Dimension`](#dimension)<br>Dimension of array | `get` |
+| `bool` | [`IsJagged`](#isjagged)<br>Determines whether the array is a jagged array type | `get` |
 
 ## Details
 ### Summary
@@ -30,21 +30,21 @@ Interface for resolved arrays
 ### Properties
 #### ArrayType
 ```csharp
-public abstract IResType ArrayType { get }
+public IResType ArrayType { get; }
 ```
 ##### Summary
 Type of given array
 
 #### IsJagged
 ```csharp
-public abstract bool IsJagged { get }
+public bool IsJagged { get; }
 ```
 ##### Summary
 Determines whether the array is a jagged array type
 
 #### Dimension
 ```csharp
-public abstract int Dimension { get }
+public int Dimension { get; }
 ```
 ##### Summary
 Dimension of array
