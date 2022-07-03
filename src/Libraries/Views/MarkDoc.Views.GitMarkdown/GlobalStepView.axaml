@@ -7,7 +7,7 @@
   xmlns:gitMarkdown="clr-namespace:MarkDoc.ViewModels.GitMarkdown;assembly=MarkDoc.ViewModels.GitMarkdown"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Grid RowDefinitions="Auto, *">
+  <Grid RowDefinitions="Auto,Auto, *">
     <TextBox
       Margin="0,0,0,10"
       Text="{Binding PathToOutput}"
@@ -15,7 +15,11 @@
       VerticalContentAlignment="Center"
       Watermark="Output directory">
       <TextBox.InnerRightContent>
-        <Button Background="Transparent" Padding="4" Margin="0, 0, 10, 0" Command="{Binding BrowseCommand}">
+        <Button
+          Background="Transparent"
+          Command="{Binding BrowseCommand}"
+          Margin="0,0,10,0"
+          Padding="4">
           <ToolTip.Tip>
             <Label Content="Browse" />
           </ToolTip.Tip>
@@ -24,8 +28,13 @@
       </TextBox.InnerRightContent>
     </TextBox>
 
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 5">
+      <Button Click="ButtonExpandAll_OnCLick" Margin="0, 0, 5, 0">Expand</Button>
+      <Button Click="ButtonCollapseAll_OnCLick">Collapse</Button>
+    </StackPanel>
+
     <TreeView
-      Grid.Row="1"
+      Grid.Row="2"
       Items="{Binding AvailableNamespaces}"
       Name="AvailableNamespacesTree"
       SelectionMode="Single">
