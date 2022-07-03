@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -21,15 +21,14 @@ namespace MarkDoc.ViewModels.Main
   {
     #region Fields
 
-    private readonly ConcurrentBag<LogMessage> m_concurrentLogMessages = new();
     private readonly NavigationManager m_navigationManager;
     private readonly IDialogManager m_dialogManager;
     private readonly CancellationTokenSource m_cancellationTokenSource;
     private IReadOnlyDictionary<string, string> m_pluginSettings = new Dictionary<string, string>();
     private Configuration m_pluginConfiguration;
     private bool m_loading;
-    private bool groupLogsBySource;
-    private bool groupLogsByType;
+    private bool m_groupLogsBySource;
+    private bool m_groupLogsByType;
 
     #endregion
 
@@ -63,10 +62,10 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public bool GroupLogsBySource
     {
-      get => groupLogsBySource;
+      get => m_groupLogsBySource;
       set
       {
-        groupLogsBySource = value;
+        m_groupLogsBySource = value;
         this.RaisePropertyChanged(nameof(GroupLogsBySource));
         this.RaisePropertyChanged(nameof(LogMessages));
       }
@@ -75,10 +74,10 @@ namespace MarkDoc.ViewModels.Main
     /// <inheritdoc />
     public bool GroupLogsByType
     {
-      get => groupLogsByType;
+      get => m_groupLogsByType;
       set
       {
-        groupLogsByType = value;
+        m_groupLogsByType = value;
         this.RaisePropertyChanged(nameof(GroupLogsByType));
         this.RaisePropertyChanged(nameof(LogMessages));
       }
@@ -130,8 +129,6 @@ namespace MarkDoc.ViewModels.Main
     [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
     public override async ValueTask OnLoadedAsync()
     {
-      LogMessages.Clear();
-      m_concurrentLogMessages.Clear();
       Loading = true;
 
       try
@@ -156,18 +153,21 @@ namespace MarkDoc.ViewModels.Main
         foreach (var process in Processes)
           process.StateChanged += ProcessOnStateChanged;
 
+        Observable.FromEventPattern<EventHandler<LogMessage>, LogMessage>(
+            add => logger.NewLog += add,
+            remove => logger.NewLog -= remove)
+          .Select(x => x.EventArgs)
+          .Buffer(TimeSpan.FromMilliseconds(100))
+          .Synchronize()
+          .ObserveOn(SynchronizationContext.Current!)
+          .Subscribe(LogMessages.AddRange, m_cancellationTokenSource.Token);
+
         try
         {
-          logger.NewLog += LoggerOnNewLog;
-
           await executor(m_cancellationTokenSource.Token).ConfigureAwait(true);
         }
         finally
         {
-          logger.NewLog -= LoggerOnNewLog;
-          LogMessages.AddRange(m_concurrentLogMessages);
-          this.RaisePropertyChanged(nameof(LogMessages));
-
           foreach (var process in Processes)
             process.StateChanged -= ProcessOnStateChanged;
         }
@@ -189,12 +189,6 @@ namespace MarkDoc.ViewModels.Main
           this.RaisePropertyChanged(nameof(ProcessesComplete));
           break;
       }
-    }
-
-    private void LoggerOnNewLog(object? sender, LogMessage e)
-    {
-      m_concurrentLogMessages.Add(e);
-      this.RaisePropertyChanged(nameof(LogMessages));
     }
 
     /// <inheritdoc />
