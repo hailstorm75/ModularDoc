@@ -49,7 +49,7 @@ module internal TagHelpers =
 
     // Get tag content
     let processed = tag.Content
-                    // Get tag content untill the first invalid tag
+                    // Get tag content until the first invalid tag
                     |> Seq.take count
                     // Convert tag content to elements
                     |> Seq.map (fun content -> ContentProcessor.processContent(input, content, tools))

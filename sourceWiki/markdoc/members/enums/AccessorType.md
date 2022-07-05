@@ -19,15 +19,19 @@ Types of member accessors
 
 ### Fields
 #### Public
-
+##### Summary
+Visible to everyone
 
 #### Protected
-
+##### Summary
+Visible to children
 
 #### Internal
-
+##### Summary
+Visible within library
 
 #### ProtectedInternal
-
+##### Summary
+Visible to children within the library
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)
