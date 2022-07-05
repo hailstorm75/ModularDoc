@@ -66,7 +66,6 @@ namespace MarkDoc.ViewModels.GitMarkdown
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public ReactiveCommand<Unit, bool> AddCommand { get; }
 
-
     /// <summary>
     /// Command for validating present commands
     /// </summary>
