@@ -4,7 +4,6 @@ open MarkDoc.Generator.Basic
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 open MarkDoc.Members.Enums
-open SomeHelpers
 open System
 
 module internal SignatureHelpers =

@@ -564,7 +564,7 @@ module TypeContentHelpers =
         composeSections processed 4
         |> Seq.map applyTools
 
-      // Note: Unecessary evil to comply with the generic program flow
+      // Note: Unnecessary evil to comply with the generic program flow
       let intermediate tools _ =
         (if Seq.isEmpty content then seq [ TextHelpers.empty tools |> ElementHelpers.toElement ] else content)
 
