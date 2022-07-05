@@ -67,12 +67,6 @@ namespace MarkDoc.ViewModels.GitMarkdown
     public ReactiveCommand<Unit, bool> AddCommand { get; }
 
     /// <summary>
-    /// Command for adding multiple new paths
-    /// </summary>
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public ICommand AddMultipleCommand { get; }
-
-    /// <summary>
     /// Command for validating present commands
     /// </summary>
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
@@ -91,16 +85,11 @@ namespace MarkDoc.ViewModels.GitMarkdown
     /// </summary>
     public AssemblyStepViewModel(IDialogManager dialogManager)
     {
-      var canExecuteAddPath = this
-        .WhenAnyValue(viewModel => viewModel.PathToAssembly)
-        .Select(IsValidPath);
-
       var canExecuteValidatePaths = this
         .WhenAnyValue(viewModel => viewModel.Paths)
         .Select(x => x.Count > 0);
 
-      AddCommand = ReactiveCommand.Create(AddPath, canExecuteAddPath);
-      AddMultipleCommand = ReactiveCommand.CreateFromTask(AddMultiplePaths);
+      AddCommand = ReactiveCommand.CreateFromTask(AddAssemblies);
       ValidateCommand = ReactiveCommand.Create(ValidatePaths, canExecuteValidatePaths);
       BrowseCommand = ReactiveCommand.CreateFromTask(BrowseAsync);
       RemoveCommand = ReactiveCommand.Create<string>(RemovePath);
@@ -161,15 +150,14 @@ namespace MarkDoc.ViewModels.GitMarkdown
       UpdateCanProceed();
     }
 
-    private bool AddPath()
+    private async Task<bool> AddAssemblies()
     {
-      var path = PathToAssembly;
+      var result = string.IsNullOrWhiteSpace(PathToAssembly)
+        ? await AddMultipleAssemblies().ConfigureAwait(true)
+        : AddSingleAssembly();
 
-      if (m_pathsInsensitive.Contains(path))
+      if (!result)
         return false;
-
-      m_pathsInsensitive.Add(path);
-      Paths.AddSorted(path);
 
       OnPropertyChanged(nameof(Paths));
       UpdateCanProceed();
@@ -177,11 +165,30 @@ namespace MarkDoc.ViewModels.GitMarkdown
       return true;
     }
 
-    private async Task AddMultiplePaths()
+    private bool AddSingleAssembly()
+    {
+      var path = PathToAssembly;
+
+      if (m_pathsInsensitive.Contains(path))
+        return false;
+
+      if (!IsValidPath(PathToAssembly))
+        return false;
+
+      m_pathsInsensitive.Add(path);
+      Paths.AddSorted(path);
+
+      m_pathToAssembly = string.Empty;
+      OnPropertyChanged(nameof(PathToAssembly));
+
+      return true;
+    }
+
+    private async Task<bool> AddMultipleAssemblies()
     {
       var result = await m_dialogManager.TrySelectFilesAsync("Select .NET assemblies", new[] { (new[] { "dll" } as IEnumerable<string>, "Assembly") }, true);
       if (result.IsEmpty)
-        return;
+        return false;
 
       foreach (var path in result.Get())
       {
@@ -194,6 +201,8 @@ namespace MarkDoc.ViewModels.GitMarkdown
 
       OnPropertyChanged(nameof(Paths));
       UpdateCanProceed();
+
+      return true;
     }
 
     private void ValidatePaths()

@@ -37,14 +37,14 @@ Interface for resolved tuples
 ### Properties
 #### Fields
 ```csharp
-public abstract IReadOnlyCollection<(string Item1, IResType Item2)> Fields { get; }
+public IReadOnlyCollection<(string Item1, IResType Item2)> Fields { get; }
 ```
 ##### Summary
 Tuple fields
 
 #### IsValueTuple
 ```csharp
-public abstract bool IsValueTuple { get; }
+public bool IsValueTuple { get; }
 ```
 ##### Summary
 Determines whether the tuple is a value tuple

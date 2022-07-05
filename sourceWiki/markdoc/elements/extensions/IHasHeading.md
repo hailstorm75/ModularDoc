@@ -29,14 +29,14 @@ Interface for types which have headings
 ### Properties
 #### Heading
 ```csharp
-public abstract string Heading { get; }
+public string Heading { get; }
 ```
 ##### Summary
 Heading text
 
 #### Level
 ```csharp
-public abstract int Level { get; }
+public int Level { get; }
 ```
 ##### Summary
 Heading level

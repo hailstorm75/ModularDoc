@@ -40,35 +40,35 @@ Interface for global settings
 ### Properties
 #### IgnoredNamespaces
 ```csharp
-public abstract IReadOnlyCollection<string> IgnoredNamespaces { get; }
+public IReadOnlyCollection<string> IgnoredNamespaces { get; }
 ```
 ##### Summary
 Globally ignored namespaces
 
 #### IgnoredTypes
 ```csharp
-public abstract IReadOnlyCollection<string> IgnoredTypes { get; }
+public IReadOnlyCollection<string> IgnoredTypes { get; }
 ```
 ##### Summary
 Globally ignored types
 
 #### CheckedIgnoredNamespaces
 ```csharp
-public abstract IReadOnlyCollection<string> CheckedIgnoredNamespaces { get; }
+public IReadOnlyCollection<string> CheckedIgnoredNamespaces { get; }
 ```
 ##### Summary
 Globally ignored but previously selected namespaces
 
 #### CheckedIgnoredTypes
 ```csharp
-public abstract IReadOnlyCollection<string> CheckedIgnoredTypes { get; }
+public IReadOnlyCollection<string> CheckedIgnoredTypes { get; }
 ```
 ##### Summary
 Globally ignored but previously selected types
 
 #### OutputPath
 ```csharp
-public abstract string OutputPath { get; }
+public string OutputPath { get; }
 ```
 ##### Summary
 Output directory

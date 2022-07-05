@@ -30,7 +30,7 @@ Interface for views
 ### Methods
 #### GetViewModel
 ```csharp
-public abstract IViewModel GetViewModel()
+public IViewModel GetViewModel()
 ```
 ##### Summary
 Retrieves the views view models
@@ -40,7 +40,7 @@ View model instance
 
 #### SetArguments
 ```csharp
-public virtual async Task SetArguments(IEnumerable<string> arguments)
+public async Task SetArguments(IEnumerable<string> arguments)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -49,7 +49,7 @@ public virtual async Task SetArguments(IEnumerable<string> arguments)
 
 #### SetNamedArgumentsAsync
 ```csharp
-public abstract Task SetNamedArgumentsAsync(IReadOnlyDictionary<string, string> arguments)
+public Task SetNamedArgumentsAsync(IReadOnlyDictionary<string, string> arguments)
 ```
 ##### Arguments
 | Type | Name | Description |

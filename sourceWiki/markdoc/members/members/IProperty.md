@@ -41,21 +41,21 @@ Interface for properties
 ### Properties
 #### Inheritance
 ```csharp
-public abstract MemberInheritance Inheritance { get; }
+public MemberInheritance Inheritance { get; }
 ```
 ##### Summary
 Property visibility
 
 #### Type
 ```csharp
-public abstract IResType Type { get; }
+public IResType Type { get; }
 ```
 ##### Summary
 Property type
 
 #### IsReadOnly
 ```csharp
-public abstract bool IsReadOnly { get; }
+public bool IsReadOnly { get; }
 ```
 ##### Summary
 Determines whether the property is readonly
@@ -65,21 +65,21 @@ Applicable only for [IStruct](../types/IStruct.md) properties
 
 #### GetAccessor
 ```csharp
-public abstract Nullable<AccessorType> GetAccessor { get; }
+public Nullable<AccessorType> GetAccessor { get; }
 ```
 ##### Summary
 Property get accessor type
 
 #### SetAccessor
 ```csharp
-public abstract Nullable<AccessorType> SetAccessor { get; }
+public Nullable<AccessorType> SetAccessor { get; }
 ```
 ##### Summary
 Property set accessor type
 
 #### IsSetInit
 ```csharp
-public abstract bool IsSetInit { get; }
+public bool IsSetInit { get; }
 ```
 ##### Summary
 Is the property setter an init type

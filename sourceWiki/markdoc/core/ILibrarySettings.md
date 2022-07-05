@@ -28,7 +28,7 @@ Interface for settings of libraries
 ### Properties
 #### Id
 ```csharp
-public abstract Guid Id { get; }
+public Guid Id { get; }
 ```
 ##### Summary
 Settings id

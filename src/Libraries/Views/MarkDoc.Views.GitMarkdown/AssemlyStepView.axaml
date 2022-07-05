@@ -10,8 +10,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:system="clr-namespace:System;assembly=System.Runtime"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <UserControl.Resources>
     <converters:PathToFileConverter x:Key="FileConverter" />
     <converters:PathToDirectoryConverter x:Key="DirectoryConverter" />
@@ -26,44 +25,32 @@
       Watermark="Select a .NET assembly">
       <TextBox.InnerRightContent>
         <StackPanel Orientation="Horizontal">
-          <Button Background="Transparent" Padding="4" Command="{Binding BrowseCommand}">
+          <Button
+            Background="Transparent"
+            Command="{Binding BrowseCommand}"
+            Padding="4">
             <ToolTip.Tip>
               <Label Content="Browse" />
             </ToolTip.Tip>
-            <avalonia:Icon Value="fa-search" Foreground="{DynamicResource TextControlForeground}" />
+            <avalonia:Icon Foreground="{DynamicResource TextControlForeground}" Value="fa-search" />
           </Button>
 
-          <controls:SplitButton Command="{Binding AddCommand}" Margin="5,0,10,0">
+          <Button Command="{Binding AddCommand}" Margin="5,0,10,0">
             <ToolTip.Tip>
               Add assembly
             </ToolTip.Tip>
-            <controls:SplitButton.Flyout>
-              <Flyout Placement="Bottom">
-                <Button Command="{Binding AddMultipleCommand}">
-                  <ToolTip.Tip>
-                    Add multiple assemblies at once
-                  </ToolTip.Tip>
-                  <DockPanel LastChildFill="True">
-                    <avalonia:Icon
-                      DockPanel.Dock="Left"
-                      FontSize="10"
-                      Value="fa-plus" />
-                    <TextBlock DockPanel.Dock="Right" Margin="5, 0, 0, 0">Add multiple</TextBlock>
-                  </DockPanel>
-                </Button>
-              </Flyout>
-            </controls:SplitButton.Flyout>
-            <controls:SplitButton.Content>
-              <avalonia:Icon
-                FontSize="10"
-                Value="fa-plus" />
-            </controls:SplitButton.Content>
-          </controls:SplitButton>
+            <Button.Content>
+              <avalonia:Icon FontSize="10" Value="fa-plus" />
+            </Button.Content>
+          </Button>
         </StackPanel>
       </TextBox.InnerRightContent>
     </TextBox>
 
-    <Button Grid.Row="1" Command="{Binding ValidateCommand}" Margin="0,0,0,10">
+    <Button
+      Command="{Binding ValidateCommand}"
+      Grid.Row="1"
+      Margin="0,0,0,10">
       <DockPanel LastChildFill="True">
         <avalonia:Icon
           DockPanel.Dock="Left"
@@ -126,5 +113,4 @@
       </ListBox>
     </ScrollViewer>
   </Grid>
-
 </UserControl>

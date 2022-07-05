@@ -198,10 +198,11 @@ namespace MarkDoc.Members.Dnlib.Members
     private static MemberInheritance ResolveInheritance(IEnumerable<dnlib.DotNet.MethodDef> methods)
     {
       var method = methods.First();
-      return (method.IsVirtual, method.IsAbstract) switch
+      return (method.IsVirtual, method.IsAbstract, method.DeclaringType.IsInterface) switch
       {
-        (_, true) => MemberInheritance.Abstract,
-        (true, false) => (method.Attributes & MethodAttributes.NewSlot) == 0
+        (_, _, true) => MemberInheritance.InterfaceMember,
+        (_, true, false) => MemberInheritance.Abstract,
+        (true, false, false) => (method.Attributes & MethodAttributes.NewSlot) == 0
           ? MemberInheritance.Override
           : MemberInheritance.Virtual,
         _ => MemberInheritance.Normal

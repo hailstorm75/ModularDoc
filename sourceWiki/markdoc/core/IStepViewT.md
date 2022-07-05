@@ -63,7 +63,7 @@ Interface for views of plugin steps
 ### Methods
 #### SetPreviousSettingsAsync
 ```csharp
-public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
+public async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> settings)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -73,7 +73,7 @@ public virtual async Task SetPreviousSettingsAsync(IReadOnlyDictionary<string, I
 ### Properties
 #### Id
 ```csharp
-public virtual string Id { get; }
+public string Id { get; }
 ```
 ##### Summary
 Step view Id

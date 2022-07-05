@@ -44,63 +44,63 @@ Interface for interface types
 ### Properties
 #### InheritedTypesFlat
 ```csharp
-public abstract IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
+public IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
 ```
 ##### Summary
 Collection of inherited types
 
 #### InheritedTypesStructured
 ```csharp
-public abstract Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
+public Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
 ```
 ##### Summary
 Structured inherited types
 
 #### Generics
 ```csharp
-public abstract IReadOnlyDictionary<string, (Variance Item1, IReadOnlyCollection Item2)> Generics { get; }
+public IReadOnlyDictionary<string, (Variance Item1, IReadOnlyCollection Item2)> Generics { get; }
 ```
 ##### Summary
 Generics name, and their variance and constraints
 
 #### Delegates
 ```csharp
-public abstract IReadOnlyCollection<IDelegate> Delegates { get; }
+public IReadOnlyCollection<IDelegate> Delegates { get; }
 ```
 ##### Summary
 Collection of delegates
 
 #### NestedTypes
 ```csharp
-public abstract IReadOnlyCollection<IType> NestedTypes { get; }
+public IReadOnlyCollection<IType> NestedTypes { get; }
 ```
 ##### Summary
 Collection of nested types
 
 #### Events
 ```csharp
-public abstract IReadOnlyCollection<IEvent> Events { get; }
+public IReadOnlyCollection<IEvent> Events { get; }
 ```
 ##### Summary
 Collection of events
 
 #### Methods
 ```csharp
-public abstract IReadOnlyCollection<IMethod> Methods { get; }
+public IReadOnlyCollection<IMethod> Methods { get; }
 ```
 ##### Summary
 Collection of methods
 
 #### Properties
 ```csharp
-public abstract IReadOnlyCollection<IProperty> Properties { get; }
+public IReadOnlyCollection<IProperty> Properties { get; }
 ```
 ##### Summary
 Collection of properties
 
 #### InheritedTypeMembers
 ```csharp
-public abstract Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
+public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
 ```
 ##### Summary
 Members inherited from derived types

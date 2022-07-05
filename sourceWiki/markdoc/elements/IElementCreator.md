@@ -35,7 +35,7 @@ Interface for [IElement](./IElement.md) creators
 ### Methods
 #### CreateList
 ```csharp
-public abstract IList CreateList(IEnumerable<IElement> elements, ListType type, string heading, int level)
+public IList CreateList(IEnumerable<IElement> elements, ListType type, string heading, int level)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -47,7 +47,7 @@ public abstract IList CreateList(IEnumerable<IElement> elements, ListType type, 
 
 #### CreateSection
 ```csharp
-public abstract ISection CreateSection(IEnumerable<IElement> content, string heading, int level)
+public ISection CreateSection(IEnumerable<IElement> content, string heading, int level)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -58,7 +58,7 @@ public abstract ISection CreateSection(IEnumerable<IElement> content, string hea
 
 #### CreateTable
 ```csharp
-public abstract ITable CreateTable(IEnumerable<IReadOnlyCollection<IElement>> content, IEnumerable<IText> headings, string heading, int level)
+public ITable CreateTable(IEnumerable<IReadOnlyCollection<IElement>> content, IEnumerable<IText> headings, string heading, int level)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -70,7 +70,7 @@ public abstract ITable CreateTable(IEnumerable<IReadOnlyCollection<IElement>> co
 
 #### CreatePage
 ```csharp
-public abstract IPage CreatePage(IEnumerable<IPage> subpages, IEnumerable<IElement> content, string heading, int level)
+public IPage CreatePage(IEnumerable<IPage> subpages, IEnumerable<IElement> content, string heading, int level)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -82,7 +82,7 @@ public abstract IPage CreatePage(IEnumerable<IPage> subpages, IEnumerable<IEleme
 
 #### CreateText
 ```csharp
-public abstract IText CreateText(string content, TextStyle style)
+public IText CreateText(string content, TextStyle style)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -92,7 +92,7 @@ public abstract IText CreateText(string content, TextStyle style)
 
 #### CreateDiagram
 ```csharp
-public abstract IDiagram CreateDiagram(string name, string content)
+public IDiagram CreateDiagram(string name, string content)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -108,7 +108,7 @@ Creates a new [IDiagram](./IDiagram.md) instance
 
 #### CreateLink
 ```csharp
-public abstract ILink CreateLink(IText content, Lazy<string> reference)
+public ILink CreateLink(IText content, Lazy<string> reference)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -118,7 +118,7 @@ public abstract ILink CreateLink(IText content, Lazy<string> reference)
 
 #### JoinTextContent
 ```csharp
-public abstract ITextContent JoinTextContent(IEnumerable<ITextContent> content, string delimiter)
+public ITextContent JoinTextContent(IEnumerable<ITextContent> content, string delimiter)
 ```
 ##### Arguments
 | Type | Name | Description |

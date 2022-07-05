@@ -170,7 +170,7 @@ module internal SignatureHelpers =
   let getInheritance (input: IMember) =
     let processInheritance inheritance =
       // If the member has no inheritance traits..
-      if (inheritance = MemberInheritance.Normal) then
+      if (inheritance = MemberInheritance.Normal || inheritance = MemberInheritance.InterfaceMember) then
         // return nothing
         ""
       // Otherwise..

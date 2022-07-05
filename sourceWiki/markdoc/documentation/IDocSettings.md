@@ -38,7 +38,7 @@ Interface for [IDocResolver](./IDocResolver.md) settings
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyCollection<string> Paths { get; set; }
+public IReadOnlyCollection<string> Paths { get; set; }
 ```
 ##### Summary
 Paths to documentation sources

@@ -28,7 +28,7 @@ Interface for diagram resolvers
 ### Methods
 #### TryGenerateDiagram
 ```csharp
-public abstract bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
+public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
 ```
 ##### Arguments
 | Type | Name | Description |

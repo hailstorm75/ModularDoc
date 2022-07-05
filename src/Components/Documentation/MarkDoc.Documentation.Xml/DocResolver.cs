@@ -61,7 +61,7 @@ namespace MarkDoc.Documentation.Xml
     /// <inheritdoc />
     public async Task ResolveAsync(string path)
     {
-      m_logger.Info($"Processing file: '{path}'");
+      m_logger.Info($"Processing file: '{path}'", nameof(DocResolver));
 
       // Open the XML documentation file
       using var file = File.OpenText(path);
@@ -83,7 +83,7 @@ namespace MarkDoc.Documentation.Xml
           // cache the item
           var itemName = cache(item);
           // log cached item name
-          m_logger.Info($"Cached item '{itemName}' from file '{path}'");
+          m_logger.Info($"Cached item '{itemName}' from file '{path}'", nameof(DocResolver));
         }
       }
 
@@ -211,7 +211,7 @@ namespace MarkDoc.Documentation.Xml
         // Return the empty type
         resultType = doc;
 
-        m_logger.Warning($"No documentation found for type '{doc.Name}'");
+        m_logger.Warning($"No documentation found for type '{doc.Name}'", nameof(DocResolver));
       }
       // Otherwise..
       else
