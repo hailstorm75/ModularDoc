@@ -19,18 +19,23 @@ Type of the represented .NET type
 
 ### Fields
 #### Enum
-
+##### Summary
+Enum type
 
 #### Interface
-
+##### Summary
+Interface type
 
 #### Class
-
+##### Summary
+Class type
 
 #### Struct
-
+##### Summary
+Struct type
 
 #### Record
-
+##### Summary
+Record type
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

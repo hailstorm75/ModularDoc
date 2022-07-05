@@ -35,6 +35,7 @@ Virtual member
 Override member
 
 #### InterfaceMember
-
+##### Summary
+Member is defined within an interface
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)
