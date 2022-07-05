@@ -19,15 +19,19 @@ Method operator types
 
 ### Fields
 #### None
-
+##### Summary
+Operator type undefined
 
 #### Normal
-
+##### Summary
+No operator
 
 #### Implicit
-
+##### Summary
+Implicit operator
 
 #### Explicit
-
+##### Summary
+Explicit operator
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

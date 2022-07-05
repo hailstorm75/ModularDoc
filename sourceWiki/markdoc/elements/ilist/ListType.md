@@ -19,9 +19,11 @@ Possible list types
 
 ### Fields
 #### Numbered
-
+##### Summary
+List items will be numbered
 
 #### Dotted
-
+##### Summary
+List items will be dotted
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

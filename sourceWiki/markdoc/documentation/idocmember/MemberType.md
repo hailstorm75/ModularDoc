@@ -19,15 +19,19 @@ Member types
 
 ### Fields
 #### Method
-
+##### Summary
+Member is a method
 
 #### Property
-
+##### Summary
+Member is a property
 
 #### Field
-
+##### Summary
+Member is a field
 
 #### Event
-
+##### Summary
+Member is an event
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

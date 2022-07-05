@@ -19,12 +19,15 @@ Type of given list
 
 ### Fields
 #### Number
-
+##### Summary
+Numbered list
 
 #### Bullet
-
+##### Summary
+Bullet list
 
 #### Table
-
+##### Summary
+Table list
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

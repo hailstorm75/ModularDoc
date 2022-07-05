@@ -19,15 +19,19 @@ Member inheritance types
 
 ### Fields
 #### Normal
-
+##### Summary
+No inheritance
 
 #### Abstract
-
+##### Summary
+Abstract member
 
 #### Virtual
-
+##### Summary
+Virtual member
 
 #### Override
-
+##### Summary
+Override member
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)
