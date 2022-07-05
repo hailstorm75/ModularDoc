@@ -78,7 +78,7 @@ module TypeContentHelpers =
   /// <returns></returns>
   let registerSection (input, name, content) tools level =
     // Register an anchor to the given member section
-    tools.linker.RegisterAnchor(input, lazy(name))
+    tools.linker.RegisterAnchor(input, lazy name)
     // Initialize the section
     ElementHelpers.initialize ((content tools input, name, level) |> Section) tools
 
@@ -555,7 +555,6 @@ module TypeContentHelpers =
             Summary;
             Remarks;
             Example;
-            Returns;
             SeeAlso
           ]
         let processed = ContentHelpers.processContents sections input
