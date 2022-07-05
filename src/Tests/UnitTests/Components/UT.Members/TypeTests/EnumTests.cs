@@ -149,7 +149,7 @@ namespace UT.Members.TypeTests
     {
       var query = GetEnum(resolver, name);
 
-      var fieldA = $"{expectedNamespace}.{name} {expectedNamespace}.{name}.FieldA";
+      var fieldA = $"{expectedNamespace}.{name}.FieldA";
       Assert.False(query?.Fields.FirstOrDefault(field => field.RawName.Equals(fieldA)) == null, $"{resolver.GetType().FullName}: The '{name}' field raw names are invalid. Expected '{fieldA}' != Actual '{query?.Fields.First(field => field.Name.Equals("FieldA")).RawName}'.");
     }
 
