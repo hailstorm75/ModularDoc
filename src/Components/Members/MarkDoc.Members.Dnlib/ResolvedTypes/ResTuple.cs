@@ -35,7 +35,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="isValueTuple">Is the given tuple a value tuple</param>
     /// <param name="generics"></param>
     /// <param name="dynamicsMap">Map indicating what types are dynamic</param>
-    /// <param name="tupleMap"></param>
+    /// <param name="tupleMap">Map indicating value tuple names</param>
     /// <param name="isByRef">Indicates whether the type is by references</param>
     internal ResTuple(Resolver resolver,
       TypeSig source,
