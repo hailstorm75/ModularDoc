@@ -110,8 +110,20 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
             : $"Item{i + 1}",
           resolver.Resolve(x, generics, false, GetGenerics(i, dynamicsMap, genericType.CountTypes()), GetTupleNames(i))))
         .ToReadOnlyCollection();
+
+      string ProcessValueTupleField((string, IResType) field)
+      {
+        var t = field.Item2 switch
+        {
+          IResGeneric g => $"{g.DisplayName}<{string.Join(", ", g.Generics.Select(i => i.DisplayName))}>",
+          _ => field.Item2.DisplayName
+        };
+
+        return $"{t}{(field.Item1.Length == 0 ? string.Empty : " ")}{field.Item1}";
+      }
+
       return isValueTuple
-        ? $"({string.Join(", ", fields.Select(field => $"{field.Item2.DisplayName}{(field.Item1.Length == 0 ? string.Empty : " ")}{field.Item1}"))})"
+        ? $"({string.Join(", ", fields.Select(ProcessValueTupleField))})"
         : $"Tuple<{string.Join(",", fields.Select(field => field.Item2.DisplayName))}>";
     }
   }
