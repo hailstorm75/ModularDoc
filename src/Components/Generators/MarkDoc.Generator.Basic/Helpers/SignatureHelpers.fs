@@ -4,7 +4,6 @@ open MarkDoc.Generator.Basic
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 open MarkDoc.Members.Enums
-open SomeHelpers
 open System
 
 module internal SignatureHelpers =
@@ -171,7 +170,7 @@ module internal SignatureHelpers =
   let getInheritance (input: IMember) =
     let processInheritance inheritance =
       // If the member has no inheritance traits..
-      if (inheritance = MemberInheritance.Normal) then
+      if (inheritance = MemberInheritance.Normal || inheritance = MemberInheritance.InterfaceMember) then
         // return nothing
         ""
       // Otherwise..

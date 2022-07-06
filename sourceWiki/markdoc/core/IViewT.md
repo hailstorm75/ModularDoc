@@ -47,7 +47,7 @@ Interface for views
 ### Properties
 #### ViewModel
 ```csharp
-public abstract TViewModel ViewModel { get; }
+public TViewModel ViewModel { get; }
 ```
 ##### Summary
 View model

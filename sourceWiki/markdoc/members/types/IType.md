@@ -23,6 +23,7 @@ Interface for types
 | `bool` | [`IsNested`](#isnested)<br>Determines whether this type is nested | `get` |
 | `string` | [`Name`](#name)<br>Type name | `get` |
 | `string` | [`RawName`](#rawname)<br>Reflection fullname with namespace | `get` |
+| [`DotNetType`](../enums/DotNetType.md) | [`Type`](#type)<br>Determines the dot net type represented by this instance | `get` |
 | `string` | [`TypeNamespace`](#typenamespace)<br>Type namespace | `get` |
 
 ## Details
@@ -32,37 +33,44 @@ Interface for types
 ### Properties
 #### RawName
 ```csharp
-public abstract string RawName { get; }
+public string RawName { get; }
 ```
 ##### Summary
 Reflection fullname with namespace
 
 #### Name
 ```csharp
-public abstract string Name { get; }
+public string Name { get; }
 ```
 ##### Summary
 Type name
 
 #### TypeNamespace
 ```csharp
-public abstract string TypeNamespace { get; }
+public string TypeNamespace { get; }
 ```
 ##### Summary
 Type namespace
 
 #### IsNested
 ```csharp
-public abstract bool IsNested { get; }
+public bool IsNested { get; }
 ```
 ##### Summary
 Determines whether this type is nested
 
 #### Accessor
 ```csharp
-public abstract AccessorType Accessor { get; }
+public AccessorType Accessor { get; }
 ```
 ##### Summary
 Type accessor
+
+#### Type
+```csharp
+public DotNetType Type { get; }
+```
+##### Summary
+Determines the dot net type represented by this instance
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

@@ -47,7 +47,7 @@ Interface for joining multiple [ITextContent](./ITextContent.md) elements
 ### Properties
 #### Delimiter
 ```csharp
-public abstract string Delimiter { get; }
+public string Delimiter { get; }
 ```
 ##### Summary
 Joined text delimiter

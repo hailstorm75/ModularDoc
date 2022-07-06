@@ -33,14 +33,14 @@ Interface for processes
 ### Properties
 #### Name
 ```csharp
-public abstract string Name { get; }
+public string Name { get; }
 ```
 ##### Summary
 Progress name
 
 #### State
 ```csharp
-public abstract ProcessState State { get; set; }
+public ProcessState State { get; set; }
 ```
 ##### Summary
 State of the given process

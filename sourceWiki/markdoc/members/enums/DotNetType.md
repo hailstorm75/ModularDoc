@@ -1,37 +1,41 @@
-# MemberType `enum`
+# DotNetType `enum`
 
 ## Description
-Member types
+Type of the represented .NET type
 
 ## Diagram
 ```mermaid
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph MarkDoc.Documentation.IDocMember
-  MarkDoc.Documentation.IDocMember.MemberType[[MemberType]]
+  subgraph MarkDoc.Members.Enums
+  MarkDoc.Members.Enums.DotNetType[[DotNetType]]
   end
 ```
 
 ## Details
 ### Summary
-Member types
+Type of the represented .NET type
 
 ### Fields
-#### Method
+#### Enum
 ##### Summary
-Member is a method
+Enum type
 
-#### Property
+#### Interface
 ##### Summary
-Member is a property
+Interface type
 
-#### Field
+#### Class
 ##### Summary
-Member is a field
+Class type
 
-#### Event
+#### Struct
 ##### Summary
-Member is an event
+Struct type
+
+#### Record
+##### Summary
+Record type
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

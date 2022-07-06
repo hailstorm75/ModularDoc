@@ -34,7 +34,7 @@ Interface for elements which have content
 ### Properties
 #### Content
 ```csharp
-public abstract T Content { get; }
+public T Content { get; }
 ```
 ##### Summary
 Element content

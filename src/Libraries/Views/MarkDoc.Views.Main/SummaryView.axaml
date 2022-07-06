@@ -137,9 +137,38 @@
 
     <GridSplitter Grid.Row="3"/>
 
-    <DataGrid Grid.Row="4" Items="{Binding LogMessages}" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader">
+    <DataGrid Grid.Row="4" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto">
+      <DataGrid.Items>
+        <Binding Path="LogMessages" >
+          <Binding.Converter>
+            <converters:LogGroupingConverter GroupBySource="{Binding GroupLogsBySource}" GroupByType="{Binding GroupLogsByType}"/>
+          </Binding.Converter>
+        </Binding>
+      </DataGrid.Items>
       <DataGrid.Columns>
-        <DataGridTemplateColumn Header="Type" CanUserReorder="False">
+        <DataGridTemplateColumn CanUserReorder="False">
+        <DataGridTemplateColumn.Header>
+          <DockPanel LastChildFill="True">
+            <TextBlock Text="Type" DockPanel.Dock="Left" VerticalAlignment="Center" />
+            <Button DockPanel.Dock="Right" Margin="5, 0, 0, 0">
+              <ToolTip.Tip>
+                Group by
+              </ToolTip.Tip>
+              <Button.Flyout>
+                <Flyout>
+                  <StackPanel>
+                    <TextBlock Text="Group by" FontSize="16" FontWeight="Bold" Margin="0, 0, 0, 5"/>
+                    <ToggleButton Content="Source" IsChecked="{Binding GroupLogsBySource}" Width="100" Margin="0, 0, 0, 5"/>
+                    <ToggleButton Content="Type" IsChecked="{Binding GroupLogsByType}" Width="100"/>
+                  </StackPanel>
+                </Flyout>
+              </Button.Flyout>
+              <Button.Content>
+                <avalonia:Icon Value="fa-object-group"/>
+              </Button.Content>
+            </Button>
+          </DockPanel>
+        </DataGridTemplateColumn.Header>
           <DataTemplate DataType="{x:Type core:LogMessage}">
             <Border>
               <avalonia:Icon

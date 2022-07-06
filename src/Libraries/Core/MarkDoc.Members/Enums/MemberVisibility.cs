@@ -20,6 +20,10 @@
     /// <summary>
     /// Override member
     /// </summary>
-    Override
+    Override,
+    /// <summary>
+    /// Member is defined within an interface
+    /// </summary>
+    InterfaceMember,
   }
 }

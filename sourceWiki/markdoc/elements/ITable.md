@@ -47,7 +47,7 @@ Interface for the table element
 ### Properties
 #### Headings
 ```csharp
-public abstract IReadOnlyCollection<IText> Headings { get; }
+public IReadOnlyCollection<IText> Headings { get; }
 ```
 ##### Summary
 Table headers

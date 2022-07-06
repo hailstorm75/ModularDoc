@@ -28,7 +28,7 @@ Interface for documentation printers
 ### Methods
 #### Print
 ```csharp
-public abstract Task Print(IEnumerable<IType> types, string path)
+public Task Print(IEnumerable<IType> types, string path)
 ```
 ##### Arguments
 | Type | Name | Description |

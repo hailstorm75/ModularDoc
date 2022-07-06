@@ -20,6 +20,7 @@ Logger message structure
 | Type | Name | Methods |
 | --- | --- | --- |
 | `string` | [`Message`](#message)<br>Log message | `get` |
+| `string` | [`Source`](#source)<br>Log source | `get` |
 | `DateTime` | [`Time`](#time)<br>Log time | `get` |
 | `LogType` | [`Type`](#type)<br>Log type | `get` |
 
@@ -48,5 +49,12 @@ public DateTime Time { get; }
 ```
 ##### Summary
 Log time
+
+#### Source
+```csharp
+public string Source { get; }
+```
+##### Summary
+Log source
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

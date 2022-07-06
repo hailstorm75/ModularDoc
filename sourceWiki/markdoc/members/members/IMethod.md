@@ -46,35 +46,35 @@ Interface for methods
 ### Properties
 #### Inheritance
 ```csharp
-public abstract MemberInheritance Inheritance { get; }
+public MemberInheritance Inheritance { get; }
 ```
 ##### Summary
 Method visibility
 
 #### Generics
 ```csharp
-public abstract IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
+public IReadOnlyDictionary<string, IReadOnlyCollection<IResType>> Generics { get; }
 ```
 ##### Summary
 Method generic arguments
 
 #### IsAsync
 ```csharp
-public abstract bool IsAsync { get; }
+public bool IsAsync { get; }
 ```
 ##### Summary
 Determines whether the method is asynchronous
 
 #### Operator
 ```csharp
-public abstract OperatorType Operator { get; }
+public OperatorType Operator { get; }
 ```
 ##### Summary
 Operator type
 
 #### Returns
 ```csharp
-public abstract IResType Returns { get; }
+public IResType Returns { get; }
 ```
 ##### Summary
 Method return type
