@@ -117,18 +117,40 @@ module internal SignatureHelpers =
   /// <remarks>
   /// Valid only for <see cref="IMethod"/>, <see cref="IDelegate"/>, <see cref="IEvent"/>, and <see cref="IProperty"/> member types
   /// </remarks>
-  let getReturn (input: IMember) =
+  let rec getReturn (input: IMember) =
     let getIsByRef (returns: IResType) =
       if returns.IsByRef then
         "ref "
        else
          ""
-    
+
     let rec getGenerics (input: IResType) =
+      let rec getTupleItems (input: IResType) =
+        match input with
+        | :? IResTuple as tup when tup.IsValueTuple->
+          String.Format("({0})",
+            String.Join(", ",
+              tup.Fields
+              |> Seq.map (fun x ->
+                  let dec = x.ToTuple()
+                  let t = dec |> snd |> (fun x -> getTupleItems x + getGenerics x)
+                  if dec |> fst |> String.IsNullOrEmpty then
+                    t
+                  else
+                    t + " " + fst dec
+                )
+              ))
+        | _ -> input.DisplayName
+      
       match input with
       | :? IResGeneric as gen ->
-        String.Format("<{0}>", String.Join(", ", gen.Generics |> Seq.map (fun x -> x.DisplayName + getGenerics x)))
+        String.Format("<{0}>", String.Join(", ", gen.Generics |> Seq.map (fun x -> getTupleItems x + getGenerics x)))
       | _ -> String.Empty
+      
+    let getReturn (input: IResType) =
+      input.DisplayName + getGenerics input
+    let getReturnWithRes (input: IResType) =
+      getIsByRef input + getReturn input
     
     match input with
     | :? IMethod as method ->
@@ -138,13 +160,13 @@ module internal SignatureHelpers =
       | OperatorType.Explicit -> "explicit"
       | OperatorType.None
       | OperatorType.Normal
-      | _ -> if isNull method.Returns then "void" else getIsByRef method.Returns + method.Returns.DisplayName + getGenerics method.Returns
+      | _ -> if isNull method.Returns then "void" else getReturnWithRes method.Returns
     | :? IDelegate as deleg->
-      if isNull deleg.Returns then "void" else getIsByRef deleg.Returns + deleg.Returns.DisplayName + getGenerics deleg.Returns
+      if isNull deleg.Returns then "void" else getReturnWithRes deleg.Returns
     | :? IEvent as ev ->
-      ev.Type.DisplayName + getGenerics ev.Type
+      getReturn ev.Type
     | :? IProperty as prop ->
-      getIsByRef prop.Type + prop.Type.DisplayName + getGenerics prop.Type
+      getReturnWithRes prop.Type
     | _ -> ""
   
   /// <summary>
