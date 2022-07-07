@@ -30,7 +30,7 @@ Interface for plugins
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `(IMarkDocLogger logger, IReadOnlyCollection processes, Func executor)` | [`GenerateExecutor`](#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; configuration) |
+| ([`IMarkDocLogger`](./IMarkDocLogger.md) logger, `IReadOnlyCollection`&lt;[`IProcess`](./IProcess.md)&gt; processes, `Func`&lt;`CancellationToken`, `ValueTask`&gt; executor) | [`GenerateExecutor`](#generateexecutor)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; configuration) |
 | `IReadOnlyCollection`&lt;[`IPluginStep`](./IPluginStep.md)&gt; | [`GetPluginSteps`](#getpluginsteps)()<br>Get the [IPluginStep](./IPluginStep.md) instances |
 | `T` | [`GetSettings`](#getsettings)(`IReadOnlyDictionary`&lt;`string`, `IReadOnlyDictionary`&lt;`string`, `string`&gt;&gt; data) |
 
@@ -61,7 +61,7 @@ where T : ILibrarySettings
 
 #### GenerateExecutor
 ```csharp
-public (IMarkDocLogger logger, IReadOnlyCollection processes, Func executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
+public (IMarkDocLogger logger, IReadOnlyCollection<IProcess> processes, Func<CancellationToken, ValueTask> executor) GenerateExecutor(IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> configuration)
 ```
 ##### Arguments
 | Type | Name | Description |

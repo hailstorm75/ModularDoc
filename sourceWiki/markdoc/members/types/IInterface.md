@@ -24,7 +24,7 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 | --- | --- | --- |
 | `IReadOnlyCollection`&lt;[`IDelegate`](../members/IDelegate.md)&gt; | [`Delegates`](#delegates)<br>Collection of delegates | `get` |
 | `IReadOnlyCollection`&lt;[`IEvent`](../members/IEvent.md)&gt; | [`Events`](#events)<br>Collection of events | `get` |
-| `IReadOnlyDictionary`&lt;`string`, `(Variance Item1, IReadOnlyCollection Item2)`&gt; | [`Generics`](#generics)<br>Generics name, and their variance and constraints | `get` |
+| `IReadOnlyDictionary`&lt;`string`, ([`Variance`](../enums/Variance.md) variance, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; constraints)&gt; | [`Generics`](#generics)<br>Generics name, and their variance and constraints | `get` |
 | `Lazy`&lt;`IReadOnlyDictionary`&lt;[`IMember`](../members/IMember.md), [`IInterface`](markdoc/members/types/IInterface.md)&gt;&gt; | [`InheritedTypeMembers`](#inheritedtypemembers)<br>Members inherited from derived types | `get` |
 | `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; | [`InheritedTypesFlat`](#inheritedtypesflat)<br>Collection of inherited types | `get` |
 | `Lazy`&lt;`IReadOnlyCollection`&lt;[`TreeNode`](./TreeNode.md)&gt;&gt; | [`InheritedTypesStructured`](#inheritedtypesstructured)<br>Structured inherited types | `get` |
@@ -58,7 +58,7 @@ Structured inherited types
 
 #### Generics
 ```csharp
-public IReadOnlyDictionary<string, (Variance Item1, IReadOnlyCollection Item2)> Generics { get; }
+public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
 ```
 ##### Summary
 Generics name, and their variance and constraints

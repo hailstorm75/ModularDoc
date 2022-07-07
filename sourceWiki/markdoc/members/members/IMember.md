@@ -21,7 +21,7 @@ Interface for type members
 | --- | --- | --- |
 | [`AccessorType`](../enums/AccessorType.md) | [`Accessor`](#accessor)<br>Member accessor | `get` |
 | `bool` | [`IsStatic`](#isstatic)<br>Is method static | `get` |
-| `Nullable`&lt;`(int Item1, string Item2)`&gt; | [`LineSource`](#linesource)<br>Line number and source file of the given member | `get` |
+| `Nullable`&lt;(`int` line, `string` source)&gt; | [`LineSource`](#linesource)<br>Line number and source file of the given member | `get` |
 | `string` | [`Name`](#name)<br>Member name | `get` |
 | `string` | [`RawName`](#rawname)<br>Raw member name | `get` |
 
@@ -60,7 +60,7 @@ Member accessor
 
 #### LineSource
 ```csharp
-public Nullable<(int Item1, string Item2)> LineSource { get; }
+public Nullable<(int line, string source)> LineSource { get; }
 ```
 ##### Summary
 Line number and source file of the given member

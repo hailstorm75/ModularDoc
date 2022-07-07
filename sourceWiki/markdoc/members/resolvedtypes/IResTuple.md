@@ -22,7 +22,7 @@ MarkDoc.Members.ResolvedTypes.IResType --> MarkDoc.Members.ResolvedTypes.IResTup
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`(string Item1, IResType Item2)`&gt; | [`Fields`](#fields)<br>Tuple fields | `get` |
+| `IReadOnlyCollection`&lt;(`string` name, [`IResType`](./IResType.md) type)&gt; | [`Fields`](#fields)<br>Tuple fields | `get` |
 | `bool` | [`IsValueTuple`](#isvaluetuple)<br>Determines whether the tuple is a value tuple | `get` |
 
 ## Details
@@ -37,7 +37,7 @@ Interface for resolved tuples
 ### Properties
 #### Fields
 ```csharp
-public IReadOnlyCollection<(string Item1, IResType Item2)> Fields { get; }
+public IReadOnlyCollection<(string name, IResType type)> Fields { get; }
 ```
 ##### Summary
 Tuple fields
