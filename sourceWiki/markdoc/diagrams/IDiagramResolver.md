@@ -19,7 +19,7 @@ Interface for diagram resolvers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `bool` | [`TryGenerateDiagram`](#trygeneratediagram)([`IType`](../members/types/IType.md) type, out `(string name, string content)` diagram) |
+| `bool` | [`TryGenerateDiagram`](#trygeneratediagram)([`IType`](../members/types/IType.md) type, out (`string` name, `string` content) diagram) |
 
 ## Details
 ### Summary
@@ -34,6 +34,6 @@ public bool TryGenerateDiagram(IType type, out (string name, string content) dia
 | Type | Name | Description |
 | --- | --- | --- |
 | [`IType`](../members/types/IType.md) | type |   |
-| `out` `(string name, string content)` | diagram |   |
+| `out` (`string` name, `string` content) | diagram |   |
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

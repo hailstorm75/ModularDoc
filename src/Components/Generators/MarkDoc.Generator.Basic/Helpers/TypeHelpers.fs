@@ -178,9 +178,31 @@ module internal TypeHelpers =
 
     // Process the resolved type based on whether it is generic or not
     match item with
+    | :? IResTuple as tup ->
+      (seq [
+        "(" |> Normal;
+        (
+          tup.Fields
+          |> Seq.map (fun tupleField ->
+                       (seq [
+                         let t = tupleField.ToTuple()
+                         yield processResType source (t |> snd) tools
+                         if fst t |> String.IsNullOrEmpty |> not then
+                           yield " " + fst t |> Normal
+                       ], "") |> JoinedText
+                     ),
+          ", "
+        ) |> JoinedText;
+        ")" |> Normal
+      ], "") |> JoinedText
     | :? IResGeneric as generic ->
       // Compose the resolved type signature
-      (seq [ tryLink generic; "<" |> Normal; (generic.Generics |> Seq.map (fun n -> processResType source n tools), ", ") |> JoinedText; ">" |> Normal ], "") |> JoinedText
+      (seq [
+        tryLink generic;
+        "<" |> Normal;
+        (generic.Generics |> Seq.map (fun n -> processResType source n tools), ", ") |> JoinedText;
+        ">" |> Normal
+      ], "") |> JoinedText
     | :? IResArray as arr ->
       let braces = if arr.IsJagged then
                      String.Join("", Enumerable.Repeat("[]", arr.Dimension))

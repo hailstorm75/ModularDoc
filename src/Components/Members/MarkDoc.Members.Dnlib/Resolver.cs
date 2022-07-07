@@ -380,7 +380,7 @@ namespace MarkDoc.Members.Dnlib
       if (signature.ElementType is ElementType.GenericInst && IsGeneric(signature))
         return IsTuple(signature, out var valueTuple)
           ? new ResTuple(this, signature, valueTuple, generics, dynamicsMap, tupleMap, isByRef)
-          : new ResGeneric(this, signature, generics, dynamicsMap, isByRef);
+          : new ResGeneric(this, signature, generics, dynamicsMap, tupleMap, isByRef);
       if (signature.ElementType is ElementType.ByRef or ElementType.CModReqd)
         return Resolve(signature, generics, true, dynamicsMap, tupleMap);
       if (signature.ElementType is ElementType.ValueType &&
