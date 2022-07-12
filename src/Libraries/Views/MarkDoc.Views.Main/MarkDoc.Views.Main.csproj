@@ -16,8 +16,8 @@
     <PackageReference Include="FluentAvaloniaUI" Version="1.2.1" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="5.1.0" />
     <PackageReference Include="ReactiveUI" Version="18.2.9" />
-    <PackageReference Include="SkiaSharp" Version="2.88.0-preview.179" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0-preview.179" />
+    <PackageReference Include="SkiaSharp" Version="2.88.1-preview.79" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.1-preview.79" />
   </ItemGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
