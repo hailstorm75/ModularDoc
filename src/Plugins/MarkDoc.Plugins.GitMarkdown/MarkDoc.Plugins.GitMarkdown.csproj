@@ -45,7 +45,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.4.0" />
-    <PackageReference Include="Castle.Core" Version="4.4.1" />
+    <PackageReference Include="Castle.Core" Version="5.0.0" />
     <PackageReference Include="dnlib" Version="3.5.0" />
     <PackageReference Include="FSharp.Core" Version="6.0.5" />
   </ItemGroup>
