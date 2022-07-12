@@ -15,11 +15,11 @@
     <EmbeddedResource Remove="Assets\Resources.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.12" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.12" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.12" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.12" />
-    <PackageReference Include="FluentAvaloniaUI" Version="1.2.1" />
+    <PackageReference Include="Avalonia" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.16" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.16" />
+    <PackageReference Include="FluentAvaloniaUI" Version="1.4.1" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="5.1.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.1-preview.79" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.1-preview.79" />
