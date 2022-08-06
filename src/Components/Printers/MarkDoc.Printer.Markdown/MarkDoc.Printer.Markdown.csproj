@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -20,10 +20,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj">
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj"/>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj"/>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj"/>
-    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj"/>
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" />
   </ItemGroup>
 
 </Project>

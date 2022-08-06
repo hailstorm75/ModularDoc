@@ -42,27 +42,6 @@ namespace MarkDoc.Helpers
       => input;
 
     /// <summary>
-    /// Returns distinct elements from a sequence by using the default equality comparer to compare values by a given key.
-    /// </summary>
-    /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
-    /// <typeparam name="TKey">The type of keys by which the elements from <paramref name="source"/> will be compared by.</typeparam>
-    /// <param name="source">A sequence of values to order.</param>
-    /// <param name="keySelector">A retrieve function to select each sequence items given key.</param>
-    /// <returns>An System.Collections.Generic.IEnumerable`1 that contains distinct elements from the source sequence.</returns>
-    public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-    {
-      if (source is null)
-        throw new ArgumentNullException(nameof(source));
-      if (keySelector is null)
-        throw new ArgumentNullException(nameof(keySelector));
-
-      var seenKeys = new HashSet<TKey>();
-      foreach (var element in source)
-        if (seenKeys.Add(keySelector(element)))
-          yield return element;
-    }
-
-    /// <summary>
     /// Get the key of the <paramrem name="grouping"/>
     /// </summary>
     /// <param name="grouping">Grouping to process</param>
