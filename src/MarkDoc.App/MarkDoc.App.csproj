@@ -42,6 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" />
     <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
     <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels.Main\MarkDoc.ViewModels.Main.csproj" />
     <ProjectReference Include="..\Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj" />

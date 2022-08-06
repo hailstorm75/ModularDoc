@@ -35,12 +35,20 @@
     <ProjectReference Include="..\..\Components\Linkers\MarkDoc.Linkers.Markdown\MarkDoc.Linkers.Markdown.fsproj" />
     <ProjectReference Include="..\..\Components\Members\MarkDoc.Members.Dnlib\MarkDoc.Members.Dnlib.csproj" />
     <ProjectReference Include="..\..\Components\Printers\MarkDoc.Printer.Markdown\MarkDoc.Printer.Markdown.csproj" />
-    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
-    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
-    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
     <ProjectReference Include="..\..\Libraries\ViewModels\MarkDoc.ViewModels.GitMarkdown\MarkDoc.ViewModels.GitMarkdown.csproj" />
     <ProjectReference Include="..\..\Libraries\Views\MarkDoc.Views.GitMarkdown\MarkDoc.Views.GitMarkdown.csproj" />
-    <ProjectReference Include="..\..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
+    <ProjectReference Include="..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\..\Libraries\ViewModels\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" Private="false" IncludeAssets="compile" />
   </ItemGroup>
 
   <ItemGroup>
