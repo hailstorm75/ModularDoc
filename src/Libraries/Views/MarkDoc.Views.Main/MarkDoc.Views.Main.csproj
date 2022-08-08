@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <ItemGroup>
