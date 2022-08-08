@@ -17,7 +17,6 @@ using IType = MarkDoc.Members.Types.IType;
 using TypeDef = dnlib.DotNet.TypeDef;
 using MarkDoc.Members.Dnlib.Helpers;
 using MarkDoc.Members.Enums;
-using SharpPdb.Managed;
 
 namespace MarkDoc.Members.Dnlib
 {
@@ -303,18 +302,18 @@ namespace MarkDoc.Members.Dnlib
       if (!File.Exists(pdbPath))
         return;
 
-      var pdbFile = PdbFileReader.OpenPdb(pdbPath);
-      var sequencePoints = pdbFile.Functions
-        .Where(x => x.SequencePoints.Any())
-        .Select(x =>
-        {
-          var point = x.SequencePoints[0];
+      //var pdbFile = PdbFileReader.OpenPdb(pdbPath);
+      //var sequencePoints = pdbFile.Functions
+      //  .Where(x => x.SequencePoints.Any())
+      //  .Select(x =>
+      //  {
+      //    var point = x.SequencePoints[0];
 
-          return (x.Token, point.StartLine, point.Source.Name);
-        });
+      //    return (x.Token, point.StartLine, point.Source.Name);
+      //  });
 
-      foreach (var (token, startLine, source) in sequencePoints)
-        m_memberLines.TryAdd(token, (source, startLine));
+      //foreach (var (token, startLine, source) in sequencePoints)
+      //  m_memberLines.TryAdd(token, (source, startLine));
     }
 
     internal IResType Resolve(TypeSig signature,

@@ -8,6 +8,14 @@
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
     <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <PackageIcon>logo.ico</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/hailstorm75/MarkDoc.Core</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseFile>C:\Users\Denis\Source\Repos\MarkDoc.Core\LICENSE</PackageLicenseFile>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -17,6 +25,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.16" />
@@ -56,6 +70,12 @@
     <ProjectReference Include="..\Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj" Private="false" IncludeAssets="compile" />
     <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" Private="false" IncludeAssets="compile" />
     <ProjectReference Include="..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" Private="false" IncludeAssets="compile" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Assets\logo.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
