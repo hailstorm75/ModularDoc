@@ -41,17 +41,21 @@
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" />
-    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
-    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels.Main\MarkDoc.ViewModels.Main.csproj" />
-    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels.Main\MarkDoc.ViewModels.Main.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" Private="false" IncludeAssets="compile" />
+    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" Private="false" IncludeAssets="compile" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
