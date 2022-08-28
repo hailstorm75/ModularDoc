@@ -28,7 +28,6 @@ Node of a tree structure
 
 ### Constructors
 #### TreeNode
-[*Source code*](https://github.com///blob//src/Libraries/Core/MarkDoc.Members/Types/TreeNode.cs#L29)
 ```csharp
 public TreeNode(string name, IResType value, IReadOnlyCollection<TreeNode> children)
 ```

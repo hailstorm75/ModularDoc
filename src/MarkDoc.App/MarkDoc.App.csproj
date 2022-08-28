@@ -33,12 +33,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="Avalonia" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.16" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.16" />
     <PackageReference Include="Avalonia.Diagnostics" Version="0.10.16" />
+    <PackageReference Include="Avalonia.FreeDesktop" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Native" Version="0.10.16" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.16" />
+    <PackageReference Include="Avalonia.ReactiveUI.Events" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Remote.Protocol" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Skia" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Win32" Version="0.10.16" />
+    <PackageReference Include="Avalonia.X11" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Xaml.Interactions" Version="0.10.16" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.16" />
     <PackageReference Include="FluentAvaloniaUI" Version="1.4.1" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="5.1.0" />
+    <PackageReference Include="ReactiveUI" Version="18.3.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.1-preview.79" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.1-preview.79" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
@@ -55,21 +68,51 @@
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels.Main\MarkDoc.ViewModels.Main.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" Private="false" IncludeAssets="compile" />
-    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" Private="false" IncludeAssets="compile" />
+    <Reference Include="MarkDoc.Constants">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Constants.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Core">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Diagrams">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Diagrams.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Documentation">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Documentation.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Elements">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Elements.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Generator">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Generator.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Helpers">
+      <HintPath>..\..\bin\Debug\Libraries\Helpers\MarkDoc.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Linkers">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Linkers.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Members">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Members.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.MVVM.Helpers">
+      <HintPath>..\..\bin\Debug\Libraries\ViewModels.Main\MarkDoc.MVVM.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Printer">
+      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Printer.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.ViewModels">
+      <HintPath>..\..\bin\Debug\Libraries\ViewModels\MarkDoc.ViewModels.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.ViewModels.Main">
+      <HintPath>..\..\bin\Debug\Libraries\ViewModels.Main\MarkDoc.ViewModels.Main.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Views">
+      <HintPath>..\..\bin\Debug\Libraries\Views\MarkDoc.Views.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkDoc.Views.Main">
+      <HintPath>..\..\bin\Debug\Libraries\Views\MarkDoc.Views.Main.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="Assets\logo.ico">
