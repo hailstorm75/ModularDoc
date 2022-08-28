@@ -57,10 +57,6 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
-    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <AvaloniaResource Update="Assets\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -72,51 +68,21 @@
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MarkDoc.Constants">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Constants.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Core">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Diagrams">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Diagrams.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Documentation">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Documentation.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Elements">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Elements.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Generator">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Generator.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Helpers">
-      <HintPath>..\..\bin\Debug\Libraries\Helpers\MarkDoc.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Linkers">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Linkers.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Members">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Members.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.MVVM.Helpers">
-      <HintPath>..\..\bin\Debug\Libraries\ViewModels.Main\MarkDoc.MVVM.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Printer">
-      <HintPath>..\..\bin\Debug\Libraries\Core\MarkDoc.Printer.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.ViewModels">
-      <HintPath>..\..\bin\Debug\Libraries\ViewModels\MarkDoc.ViewModels.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.ViewModels.Main">
-      <HintPath>..\..\bin\Debug\Libraries\ViewModels.Main\MarkDoc.ViewModels.Main.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Views">
-      <HintPath>..\..\bin\Debug\Libraries\Views\MarkDoc.Views.dll</HintPath>
-    </Reference>
-    <Reference Include="MarkDoc.Views.Main">
-      <HintPath>..\..\bin\Debug\Libraries\Views.Main\MarkDoc.Views.Main.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Diagrams\MarkDoc.Diagrams.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Elements\MarkDoc.Elements.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Generator\MarkDoc.Generator.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Linkers\MarkDoc.Linkers.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Members\MarkDoc.Members.csproj" />
+    <ProjectReference Include="..\Libraries\Core\MarkDoc.Printer\MarkDoc.Printer.csproj" />
+    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
+    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
+    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" />
+    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
+    <ProjectReference Include="..\Libraries\ViewModels\MarkDoc.ViewModels.Main\MarkDoc.ViewModels.Main.csproj" />
+    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views.Main\MarkDoc.Views.Main.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Assets\logo.ico">
