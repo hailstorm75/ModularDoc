@@ -7,6 +7,7 @@
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
+    <UseCommonOutputDirectory>true</UseCommonOutputDirectory>    
   </PropertyGroup>
   
   <ItemGroup>
@@ -22,11 +23,11 @@
   </ItemGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Debug\Libraries\Views</OutputPath>
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Views.Main</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\..\..\bin\Release\Libraries\Views</OutputPath>
+    <OutputPath>..\..\..\..\bin\Release\Libraries\Views.Main</OutputPath>
   </PropertyGroup>
   
   <ItemGroup>

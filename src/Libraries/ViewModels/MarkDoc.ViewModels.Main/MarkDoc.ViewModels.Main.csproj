@@ -7,6 +7,7 @@
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
+    <UseCommonOutputDirectory>true</UseCommonOutputDirectory>    
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\MarkDoc.Constants\MarkDoc.Constants.csproj" />
+    <ProjectReference Include="..\..\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
     <ProjectReference Include="..\..\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
     <ProjectReference Include="..\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" />
   </ItemGroup>

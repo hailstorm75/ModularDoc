@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
     <ProjectReference Include="..\..\ViewModels\MarkDoc.ViewModels\MarkDoc.ViewModels.csproj" />
     <ProjectReference Include="..\..\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
     <ProjectReference Include="..\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />

@@ -57,6 +57,10 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Libraries\Helpers\MarkDoc.MVVM.Helpers\MarkDoc.MVVM.Helpers.csproj" />
+    <ProjectReference Include="..\Libraries\Views\MarkDoc.Views\MarkDoc.Views.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <AvaloniaResource Update="Assets\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -111,7 +115,7 @@
       <HintPath>..\..\bin\Debug\Libraries\Views\MarkDoc.Views.dll</HintPath>
     </Reference>
     <Reference Include="MarkDoc.Views.Main">
-      <HintPath>..\..\bin\Debug\Libraries\Views\MarkDoc.Views.Main.dll</HintPath>
+      <HintPath>..\..\bin\Debug\Libraries\Views.Main\MarkDoc.Views.Main.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
