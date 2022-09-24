@@ -29,5 +29,32 @@ namespace MarkDoc.Documentation.Xml.Tags
       // Initialize the content
       Content = text.Value.Trim();
     }
+
+    protected TextTag(string content)
+    {
+      if (content is null)
+        throw new ArgumentNullException(nameof(content));
+
+      Content = content;
+    }
+  }
+
+  [DebuggerDisplay("{" + nameof(Content) + "}")]
+  public class CodeTag
+    : TextTag
+  {
+    /// <inheritdoc />
+    internal CodeTag(XText text)
+      : base(ProcessCode(text))
+    {
+    }
+
+    private static string ProcessCode(XText text)
+    {
+      var code = text.Value;
+      var whitespaceEndIndex = code.Length - code.AsSpan().TrimStart().Length;
+      var whitespace = code.Substring(1, whitespaceEndIndex - 1);
+      return code.AsSpan()[1..].ToString().Replace(whitespace, string.Empty);
+    }
   }
 }

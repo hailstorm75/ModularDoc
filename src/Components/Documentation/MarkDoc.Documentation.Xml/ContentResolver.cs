@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using MarkDoc.Documentation.Tags;
@@ -19,6 +20,8 @@ namespace MarkDoc.Documentation.Xml
     public static IEnumerable<IContent> Resolve(XNode source)
       => source switch
       {
+        XText element when element.Parent!.Name.LocalName.Equals("CODE", StringComparison.OrdinalIgnoreCase)
+          => new[] { new CodeTag(element) },
         // Text
         XText element => new[] { new TextTag(element) },
         // Complex
