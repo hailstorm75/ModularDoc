@@ -4,7 +4,6 @@ open MarkDoc.Generator.Basic
 open MarkDoc.Members.ResolvedTypes
 open MarkDoc.Members.Members
 open MarkDoc.Members.Enums
-open SomeHelpers
 open System
 
 module internal SignatureHelpers =
@@ -110,7 +109,7 @@ module internal SignatureHelpers =
   /// <param name="input">Member to process</param>
   let getStatic (input: IMember) =
     if input.IsStatic then " static" else ""
-
+    
   /// <summary>
   /// Gets the return type from the given <paramref name="input"/> member
   /// </summary>
@@ -118,12 +117,40 @@ module internal SignatureHelpers =
   /// <remarks>
   /// Valid only for <see cref="IMethod"/>, <see cref="IDelegate"/>, <see cref="IEvent"/>, and <see cref="IProperty"/> member types
   /// </remarks>
-  let getReturn (input: IMember) =
+  let rec getReturn (input: IMember) =
     let getIsByRef (returns: IResType) =
       if returns.IsByRef then
         "ref "
        else
          ""
+
+    let rec getGenerics (input: IResType) =
+      let rec getTupleItems (input: IResType) =
+        match input with
+        | :? IResTuple as tup when tup.IsValueTuple->
+          String.Format("({0})",
+            String.Join(", ",
+              tup.Fields
+              |> Seq.map (fun x ->
+                  let dec = x.ToTuple()
+                  let t = dec |> snd |> (fun x -> getTupleItems x + getGenerics x)
+                  if dec |> fst |> String.IsNullOrEmpty then
+                    t
+                  else
+                    t + " " + fst dec
+                )
+              ))
+        | _ -> input.DisplayName
+      
+      match input with
+      | :? IResGeneric as gen ->
+        String.Format("<{0}>", String.Join(", ", gen.Generics |> Seq.map (fun x -> getTupleItems x + getGenerics x)))
+      | _ -> String.Empty
+      
+    let getReturn (input: IResType) =
+      input.DisplayName + getGenerics input
+    let getReturnWithRes (input: IResType) =
+      getIsByRef input + getReturn input
     
     match input with
     | :? IMethod as method ->
@@ -133,15 +160,15 @@ module internal SignatureHelpers =
       | OperatorType.Explicit -> "explicit"
       | OperatorType.None
       | OperatorType.Normal
-      | _ -> if isNull method.Returns then "void" else getIsByRef method.Returns + method.Returns.DisplayName
+      | _ -> if isNull method.Returns then "void" else getReturnWithRes method.Returns
     | :? IDelegate as deleg->
-      if isNull deleg.Returns then "void" else getIsByRef deleg.Returns + deleg.Returns.DisplayName
+      if isNull deleg.Returns then "void" else getReturnWithRes deleg.Returns
     | :? IEvent as ev ->
-      ev.Type.DisplayName
+      getReturn ev.Type
     | :? IProperty as prop ->
-      getIsByRef prop.Type + prop.Type.DisplayName
+      getReturnWithRes prop.Type
     | _ -> ""
-
+  
   /// <summary>
   /// Gets the async keyword from the given <paramref name="input"/> member
   /// </summary>
@@ -165,7 +192,7 @@ module internal SignatureHelpers =
   let getInheritance (input: IMember) =
     let processInheritance inheritance =
       // If the member has no inheritance traits..
-      if (inheritance = MemberInheritance.Normal) then
+      if (inheritance = MemberInheritance.Normal || inheritance = MemberInheritance.InterfaceMember) then
         // return nothing
         ""
       // Otherwise..
@@ -177,7 +204,7 @@ module internal SignatureHelpers =
     | :? IMethod as method -> method.Inheritance |> processInheritance
     | :? IProperty as property -> property.Inheritance |> processInheritance
     | _ -> ""
-
+    
   /// <summary>
   /// Gets the property method keywords from the given <paramref name="input"/> member
   /// </summary>
@@ -189,12 +216,12 @@ module internal SignatureHelpers =
     match input with
     | :? IProperty as property ->
       let accessor acc =
-        // If the given getter or setter accessor is equal to the property accesor, exclude the keyword
+        // If the given getter or setter accessor is equal to the property accessor, exclude the keyword
         match acc with
         | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
         | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
         | _ -> ""
-      String.Join("; ", seq [
+      String.Join(", ", seq [
         // If the property has a getter..
         if property.GetAccessor.HasValue then
           // return it
@@ -203,6 +230,27 @@ module internal SignatureHelpers =
         if property.SetAccessor.HasValue then
           // return it
           yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init" else "set")
+      ])
+    | _ -> ""
+    
+  let getPropertyMethodsSignature (input: IMember) =
+    match input with
+    | :? IProperty as property ->
+      let accessor acc =
+        // If the given getter or setter accessor is equal to the property accessor, exclude the keyword
+        match acc with
+        | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
+        | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
+        | _ -> ""
+      String.Join(" ", seq [
+        // If the property has a getter..
+        if property.GetAccessor.HasValue then
+          // return it
+          yield (accessor property.GetAccessor.Value) + "get;"
+        // If the property has a setter..
+        if property.SetAccessor.HasValue then
+          // return it
+          yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init;" else "set;")
       ])
     | _ -> ""
 

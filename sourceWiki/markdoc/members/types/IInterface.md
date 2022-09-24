@@ -22,15 +22,15 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IDelegate`](../members/IDelegate.md)&gt; | [`Delegates`](markdoc/members/types/IInterface.md#delegates)<br>Collection of delegates | `get` |
-| `IReadOnlyCollection`&lt;[`IEvent`](../members/IEvent.md)&gt; | [`Events`](markdoc/members/types/IInterface.md#events)<br>Collection of events | `get` |
-| `IReadOnlyDictionary`&lt;`string`, `(Variance Item1, IReadOnlyCollection Item2)`&gt; | [`Generics`](markdoc/members/types/IInterface.md#generics)<br>Generics name, and their variance and constraints | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&lt;[`IMember`](../members/IMember.md), [`IInterface`](markdoc/members/types/IInterface.md)&gt;&gt; | [`InheritedTypeMembers`](markdoc/members/types/IInterface.md#inheritedtypemembers)<br>Members inherited from derived types | `get` |
-| `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; | [`InheritedTypesFlat`](markdoc/members/types/IInterface.md#inheritedtypesflat)<br>Collection of inherited types | `get` |
-| `Lazy`&lt;`IReadOnlyCollection`&lt;[`TreeNode`](./TreeNode.md)&gt;&gt; | [`InheritedTypesStructured`](markdoc/members/types/IInterface.md#inheritedtypesstructured)<br>Structured inherited types | `get` |
-| `IReadOnlyCollection`&lt;[`IMethod`](../members/IMethod.md)&gt; | [`Methods`](markdoc/members/types/IInterface.md#methods)<br>Collection of methods | `get` |
-| `IReadOnlyCollection`&lt;[`IType`](./IType.md)&gt; | [`NestedTypes`](markdoc/members/types/IInterface.md#nestedtypes)<br>Collection of nested types | `get` |
-| `IReadOnlyCollection`&lt;[`IProperty`](../members/IProperty.md)&gt; | [`Properties`](markdoc/members/types/IInterface.md#properties)<br>Collection of properties | `get` |
+| `IReadOnlyCollection`&lt;[`IDelegate`](../members/IDelegate.md)&gt; | [`Delegates`](#delegates)<br>Collection of delegates | `get` |
+| `IReadOnlyCollection`&lt;[`IEvent`](../members/IEvent.md)&gt; | [`Events`](#events)<br>Collection of events | `get` |
+| `IReadOnlyDictionary`&lt;`string`, ([`Variance`](../enums/Variance.md) variance, `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; constraints)&gt; | [`Generics`](#generics)<br>Generics name, and their variance and constraints | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;[`IMember`](../members/IMember.md), [`IInterface`](markdoc/members/types/IInterface.md)&gt;&gt; | [`InheritedTypeMembers`](#inheritedtypemembers)<br>Members inherited from derived types | `get` |
+| `IReadOnlyCollection`&lt;[`IResType`](../resolvedtypes/IResType.md)&gt; | [`InheritedTypesFlat`](#inheritedtypesflat)<br>Collection of inherited types | `get` |
+| `Lazy`&lt;`IReadOnlyCollection`&lt;[`TreeNode`](./TreeNode.md)&gt;&gt; | [`InheritedTypesStructured`](#inheritedtypesstructured)<br>Structured inherited types | `get` |
+| `IReadOnlyCollection`&lt;[`IMethod`](../members/IMethod.md)&gt; | [`Methods`](#methods)<br>Collection of methods | `get` |
+| `IReadOnlyCollection`&lt;[`IType`](./IType.md)&gt; | [`NestedTypes`](#nestedtypes)<br>Collection of nested types | `get` |
+| `IReadOnlyCollection`&lt;[`IProperty`](../members/IProperty.md)&gt; | [`Properties`](#properties)<br>Collection of properties | `get` |
 
 ## Details
 ### Summary
@@ -44,63 +44,63 @@ Interface for interface types
 ### Properties
 #### InheritedTypesFlat
 ```csharp
-public abstract IReadOnlyCollection InheritedTypesFlat { get }
+public IReadOnlyCollection<IResType> InheritedTypesFlat { get; }
 ```
 ##### Summary
 Collection of inherited types
 
 #### InheritedTypesStructured
 ```csharp
-public abstract Lazy InheritedTypesStructured { get }
+public Lazy<IReadOnlyCollection<TreeNode>> InheritedTypesStructured { get; }
 ```
 ##### Summary
 Structured inherited types
 
 #### Generics
 ```csharp
-public abstract IReadOnlyDictionary Generics { get }
+public IReadOnlyDictionary<string, (Variance variance, IReadOnlyCollection<IResType> constraints)> Generics { get; }
 ```
 ##### Summary
 Generics name, and their variance and constraints
 
 #### Delegates
 ```csharp
-public abstract IReadOnlyCollection Delegates { get }
+public IReadOnlyCollection<IDelegate> Delegates { get; }
 ```
 ##### Summary
 Collection of delegates
 
 #### NestedTypes
 ```csharp
-public abstract IReadOnlyCollection NestedTypes { get }
+public IReadOnlyCollection<IType> NestedTypes { get; }
 ```
 ##### Summary
 Collection of nested types
 
 #### Events
 ```csharp
-public abstract IReadOnlyCollection Events { get }
+public IReadOnlyCollection<IEvent> Events { get; }
 ```
 ##### Summary
 Collection of events
 
 #### Methods
 ```csharp
-public abstract IReadOnlyCollection Methods { get }
+public IReadOnlyCollection<IMethod> Methods { get; }
 ```
 ##### Summary
 Collection of methods
 
 #### Properties
 ```csharp
-public abstract IReadOnlyCollection Properties { get }
+public IReadOnlyCollection<IProperty> Properties { get; }
 ```
 ##### Summary
 Collection of properties
 
 #### InheritedTypeMembers
 ```csharp
-public abstract Lazy InheritedTypeMembers { get }
+public Lazy<IReadOnlyDictionary<IMember, IInterface>> InheritedTypeMembers { get; }
 ```
 ##### Summary
 Members inherited from derived types

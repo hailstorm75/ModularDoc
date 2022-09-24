@@ -15,12 +15,12 @@ Interface for list elements
   class MarkDoc.Elements.IElement interfaceStyle;
   end
   subgraph MarkDoc.Elements.Extensions
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1[[IHasContent]]
+MarkDoc.Elements.Extensions.IHasContent_1[[IHasContent]]
   MarkDoc.Elements.Extensions.IHasHeading[[IHasHeading]]
   class MarkDoc.Elements.Extensions.IHasHeading interfaceStyle;
   end
 MarkDoc.Elements.IElement --> MarkDoc.Elements.IList
-MarkDoc.Elements.Extensions.IHasContent_1<System.Collections.Generic.IReadOnlyCollection_1 --> MarkDoc.Elements.IList
+MarkDoc.Elements.Extensions.IHasContent_1 --> MarkDoc.Elements.IList
 MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IList
 ```
 
@@ -29,13 +29,13 @@ MarkDoc.Elements.Extensions.IHasHeading --> MarkDoc.Elements.IList
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `ListType` | [`Type`](markdoc/elements/IList.md#type)<br>List type | `get` |
+| `ListType` | [`Type`](#type)<br>List type | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `IEnumerable`&lt;`string`&gt; | [`Print`](markdoc/elements/IList.md#print)(`int` indent)<br>Prints element to a string |
+| `IEnumerable`&lt;`string`&gt; | [`Print`](#print)(`int` indent)<br>Prints element to a string |
 
 ## Details
 ### Summary
@@ -57,7 +57,7 @@ Interface for list elements
 ### Methods
 #### Print
 ```csharp
-public abstract IEnumerable Print(int indent)
+public IEnumerable<string> Print(int indent)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -73,7 +73,7 @@ Converted list
 ### Properties
 #### Type
 ```csharp
-public abstract ListType Type { get }
+public ListType Type { get; }
 ```
 ##### Summary
 List type

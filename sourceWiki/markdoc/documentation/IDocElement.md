@@ -19,9 +19,9 @@ Interface for element documentation
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`IDocumentation`](./IDocumentation.md) | [`Documentation`](markdoc/documentation/IDocElement.md#documentation)<br>Element documentation | `get` |
-| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, [`IDocMember`](./IDocMember.md)&gt;&gt; | [`Members`](markdoc/documentation/IDocElement.md#members)<br>Element members | `get` |
-| `string` | [`Name`](markdoc/documentation/IDocElement.md#name)<br>Element name | `get` |
+| [`IDocumentation`](./IDocumentation.md) | [`Documentation`](#documentation)<br>Element documentation | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, [`IDocMember`](./IDocMember.md)&gt;&gt; | [`Members`](#members)<br>Element members | `get` |
+| `string` | [`Name`](#name)<br>Element name | `get` |
 
 ## Details
 ### Summary
@@ -30,21 +30,21 @@ Interface for element documentation
 ### Properties
 #### Name
 ```csharp
-public abstract string Name { get }
+public string Name { get; }
 ```
 ##### Summary
 Element name
 
 #### Documentation
 ```csharp
-public abstract IDocumentation Documentation { get }
+public IDocumentation Documentation { get; }
 ```
 ##### Summary
 Element documentation
 
 #### Members
 ```csharp
-public abstract Lazy Members { get }
+public Lazy<IReadOnlyDictionary<string, IDocMember>> Members { get; }
 ```
 ##### Summary
 Element members

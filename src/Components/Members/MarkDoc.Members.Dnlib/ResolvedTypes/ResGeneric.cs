@@ -30,12 +30,13 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
     /// <param name="source">Type source</param>
     /// <param name="generics">List of known generics</param>
     /// <param name="dynamicsMap">Map indicating what types are dynamic</param>
+    /// <param name="tupleMap">Map indicating value tuple names</param>
     /// <param name="isByRef">Indicates whether the type is by references</param>
-    internal ResGeneric(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, IEnumerable<bool>? dynamicsMap, bool isByRef = false)
-      : base(resolver, source, ResolveName(source), ResolveRawName(resolver, source, dynamicsMap, generics, out var genericsProcessed), source.FullName, isByRef)
+    internal ResGeneric(Resolver resolver, TypeSig source, IReadOnlyDictionary<string, string>? generics, IEnumerable<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap, bool isByRef = false)
+      : base(resolver, source, ResolveName(source), ResolveRawName(resolver, source, dynamicsMap, tupleMap, generics, out var genericsProcessed), source.FullName, isByRef)
       => Generics = genericsProcessed;
 
-    private static string ResolveRawName(Resolver resolver, TypeSig source, IEnumerable<bool>? dynamicsMap, IReadOnlyDictionary<string, string>? generics, out IReadOnlyCollection<IResType> genericsProcessed)
+    private static string ResolveRawName(Resolver resolver, TypeSig source, IEnumerable<bool>? dynamicsMap, IReadOnlyList<string>? tupleMap, IReadOnlyDictionary<string, string>? generics, out IReadOnlyCollection<IResType> genericsProcessed)
     {
       static string ResolveGenerics(string type, IReadOnlyDictionary<string, string>? generics)
       {
@@ -85,7 +86,7 @@ namespace MarkDoc.Members.Dnlib.ResolvedTypes
 
       genericsProcessed = genericType.GenericArguments
         // Process the generic arguments
-        .Select((x, i) => resolver.Resolve(x, generics, false, GetGenerics(i, dynamicsMap, parametersTree)))
+        .Select((x, i) => resolver.Resolve(x, generics, false, GetGenerics(i, dynamicsMap, parametersTree), tupleMap))
         // Materialize the collection
         .ToReadOnlyCollection();
 

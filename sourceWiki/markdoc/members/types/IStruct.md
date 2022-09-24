@@ -25,8 +25,8 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IConstructor`](../members/IConstructor.md)&gt; | [`Constructors`](markdoc/members/types/IStruct.md#constructors)<br>Struct constructors | `get` |
-| `bool` | [`IsReadOnly`](markdoc/members/types/IStruct.md#isreadonly)<br>Determines whether the struct is readonly | `get` |
+| `IReadOnlyCollection`&lt;[`IConstructor`](../members/IConstructor.md)&gt; | [`Constructors`](#constructors)<br>Struct constructors | `get` |
+| `bool` | [`IsReadOnly`](#isreadonly)<br>Determines whether the struct is readonly | `get` |
 
 ## Details
 ### Summary
@@ -43,14 +43,14 @@ Interface for struct types
 ### Properties
 #### Constructors
 ```csharp
-public abstract IReadOnlyCollection Constructors { get }
+public IReadOnlyCollection<IConstructor> Constructors { get; }
 ```
 ##### Summary
 Struct constructors
 
 #### IsReadOnly
 ```csharp
-public abstract bool IsReadOnly { get }
+public bool IsReadOnly { get; }
 ```
 ##### Summary
 Determines whether the struct is readonly

@@ -19,7 +19,7 @@ Interface for settings creators
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `T` | [`CreateSettings`](markdoc/core/ISettingsCreator.md#createsettings)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; data) |
+| `T` | [`CreateSettings`](#createsettings)(`IReadOnlyDictionary`&lt;`string`, `string`&gt; data) |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Interface for settings creators
 ### Methods
 #### CreateSettings
 ```csharp
-public abstract T CreateSettings<T>(IReadOnlyDictionary<string, string> data)
+public T CreateSettings<T>(IReadOnlyDictionary<string, string> data)
 where T : ILibrarySettings
 ```
 ##### Arguments

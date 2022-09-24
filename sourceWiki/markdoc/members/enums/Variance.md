@@ -19,12 +19,15 @@ Generic argument variance types
 
 ### Fields
 #### NonVariant
-
+##### Summary
+No variance
 
 #### Covariant
-
+##### Summary
+Covariance
 
 #### Contravariant
-
+##### Summary
+Contra variance
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

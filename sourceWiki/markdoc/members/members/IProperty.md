@@ -22,12 +22,12 @@ MarkDoc.Members.Members.IMember --> MarkDoc.Members.Members.IProperty
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`GetAccessor`](markdoc/members/members/IProperty.md#getaccessor)<br>Property get accessor type | `get` |
-| [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](markdoc/members/members/IProperty.md#inheritance)<br>Property visibility | `get` |
-| `bool` | [`IsReadOnly`](markdoc/members/members/IProperty.md#isreadonly)<br>Determines whether the property is readonly | `get` |
-| `bool` | [`IsSetInit`](markdoc/members/members/IProperty.md#issetinit)<br>Is the property setter an init type | `get` |
-| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`SetAccessor`](markdoc/members/members/IProperty.md#setaccessor)<br>Property set accessor type | `get` |
-| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](markdoc/members/members/IProperty.md#type)<br>Property type | `get` |
+| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`GetAccessor`](#getaccessor)<br>Property get accessor type | `get` |
+| [`MemberInheritance`](../enums/MemberInheritance.md) | [`Inheritance`](#inheritance)<br>Property visibility | `get` |
+| `bool` | [`IsReadOnly`](#isreadonly)<br>Determines whether the property is readonly | `get` |
+| `bool` | [`IsSetInit`](#issetinit)<br>Is the property setter an init type | `get` |
+| `Nullable`&lt;[`AccessorType`](../enums/AccessorType.md)&gt; | [`SetAccessor`](#setaccessor)<br>Property set accessor type | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`Type`](#type)<br>Property type | `get` |
 
 ## Details
 ### Summary
@@ -41,21 +41,21 @@ Interface for properties
 ### Properties
 #### Inheritance
 ```csharp
-public abstract MemberInheritance Inheritance { get }
+public MemberInheritance Inheritance { get; }
 ```
 ##### Summary
 Property visibility
 
 #### Type
 ```csharp
-public abstract IResType Type { get }
+public IResType Type { get; }
 ```
 ##### Summary
 Property type
 
 #### IsReadOnly
 ```csharp
-public abstract bool IsReadOnly { get }
+public bool IsReadOnly { get; }
 ```
 ##### Summary
 Determines whether the property is readonly
@@ -65,21 +65,21 @@ Applicable only for [IStruct](../types/IStruct.md) properties
 
 #### GetAccessor
 ```csharp
-public abstract Nullable GetAccessor { get }
+public Nullable<AccessorType> GetAccessor { get; }
 ```
 ##### Summary
 Property get accessor type
 
 #### SetAccessor
 ```csharp
-public abstract Nullable SetAccessor { get }
+public Nullable<AccessorType> SetAccessor { get; }
 ```
 ##### Summary
 Property set accessor type
 
 #### IsSetInit
 ```csharp
-public abstract bool IsSetInit { get }
+public bool IsSetInit { get; }
 ```
 ##### Summary
 Is the property setter an init type

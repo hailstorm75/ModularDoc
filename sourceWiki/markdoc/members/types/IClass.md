@@ -25,11 +25,11 @@ MarkDoc.Members.Types.IType --> MarkDoc.Members.Types.IInterface
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| [`IResType`](../resolvedtypes/IResType.md) | [`BaseClass`](markdoc/members/types/IClass.md#baseclass)<br>Inherited base class | `get` |
-| `IReadOnlyCollection`&lt;[`IConstructor`](../members/IConstructor.md)&gt; | [`Constructors`](markdoc/members/types/IClass.md#constructors)<br>Class constructors | `get` |
-| `bool` | [`IsAbstract`](markdoc/members/types/IClass.md#isabstract)<br>Determines whether this class is abstract | `get` |
-| `bool` | [`IsSealed`](markdoc/members/types/IClass.md#issealed)<br>Determines whether this class is sealed | `get` |
-| `bool` | [`IsStatic`](markdoc/members/types/IClass.md#isstatic)<br>Determines whether this class is static | `get` |
+| [`IResType`](../resolvedtypes/IResType.md) | [`BaseClass`](#baseclass)<br>Inherited base class | `get` |
+| `IReadOnlyCollection`&lt;[`IConstructor`](../members/IConstructor.md)&gt; | [`Constructors`](#constructors)<br>Class constructors | `get` |
+| `bool` | [`IsAbstract`](#isabstract)<br>Determines whether this class is abstract | `get` |
+| `bool` | [`IsSealed`](#issealed)<br>Determines whether this class is sealed | `get` |
+| `bool` | [`IsStatic`](#isstatic)<br>Determines whether this class is static | `get` |
 
 ## Details
 ### Summary
@@ -46,35 +46,35 @@ Interface for classes
 ### Properties
 #### IsStatic
 ```csharp
-public abstract bool IsStatic { get }
+public bool IsStatic { get; }
 ```
 ##### Summary
 Determines whether this class is static
 
 #### IsSealed
 ```csharp
-public abstract bool IsSealed { get }
+public bool IsSealed { get; }
 ```
 ##### Summary
 Determines whether this class is sealed
 
 #### IsAbstract
 ```csharp
-public abstract bool IsAbstract { get }
+public bool IsAbstract { get; }
 ```
 ##### Summary
 Determines whether this class is abstract
 
 #### BaseClass
 ```csharp
-public abstract IResType BaseClass { get }
+public IResType BaseClass { get; }
 ```
 ##### Summary
 Inherited base class
 
 #### Constructors
 ```csharp
-public abstract IReadOnlyCollection Constructors { get }
+public IReadOnlyCollection<IConstructor> Constructors { get; }
 ```
 ##### Summary
 Class constructors

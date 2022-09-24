@@ -22,7 +22,7 @@ MarkDoc.Elements.IElement --> MarkDoc.Elements.IDiagram
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `ValueTask` | [`ToExternalFile`](markdoc/elements/IDiagram.md#toexternalfile)(`string` directory)<br>Exports the diagram to an external file |
+| `ValueTask` | [`ToExternalFile`](#toexternalfile)(`string` directory)<br>Exports the diagram to an external file |
 
 ## Details
 ### Summary
@@ -36,7 +36,7 @@ Interface for diagram elements
 ### Methods
 #### ToExternalFile
 ```csharp
-public abstract ValueTask ToExternalFile(string directory)
+public ValueTask ToExternalFile(string directory)
 ```
 ##### Arguments
 | Type | Name | Description |

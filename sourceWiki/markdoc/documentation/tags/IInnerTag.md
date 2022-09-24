@@ -22,9 +22,9 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.IInnerTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Content`](markdoc/documentation/tags/IInnerTag.md#content)<br>Tag content | `get` |
-| `string` | [`Reference`](markdoc/documentation/tags/IInnerTag.md#reference)<br>Tag reference | `get` |
-| `InnerTagType` | [`Type`](markdoc/documentation/tags/IInnerTag.md#type)<br>Tag type | `get` |
+| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Content`](#content)<br>Tag content | `get` |
+| `string` | [`Reference`](#reference)<br>Tag reference | `get` |
+| `InnerTagType` | [`Type`](#type)<br>Tag type | `get` |
 
 ## Details
 ### Summary
@@ -42,14 +42,14 @@ Interface for tags which are within other tags
 ### Properties
 #### Type
 ```csharp
-public abstract InnerTagType Type { get }
+public InnerTagType Type { get; }
 ```
 ##### Summary
 Tag type
 
 #### Reference
 ```csharp
-public abstract string Reference { get }
+public string Reference { get; }
 ```
 ##### Summary
 Tag reference
@@ -59,7 +59,7 @@ Either holds cref or name
 
 #### Content
 ```csharp
-public abstract IReadOnlyCollection Content { get }
+public IReadOnlyCollection<IContent> Content { get; }
 ```
 ##### Summary
 Tag content

@@ -22,7 +22,7 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.ITextTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `string` | [`Content`](markdoc/documentation/tags/ITextTag.md#content)<br>Text content | `get` |
+| `string` | [`Content`](#content)<br>Text content | `get` |
 
 ## Details
 ### Summary
@@ -36,7 +36,7 @@ Interface for tags containing text
 ### Properties
 #### Content
 ```csharp
-public abstract string Content { get }
+public string Content { get; }
 ```
 ##### Summary
 Text content

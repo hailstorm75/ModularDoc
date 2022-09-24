@@ -46,7 +46,7 @@ namespace MarkDoc.App.Managers
           };
           dialogFilter.Extensions.AddRange(extensions);
 
-          dialog.Filters.Add(dialogFilter);
+          dialog.Filters!.Add(dialogFilter);
         }
 
         var result = await dialog.ShowAsync(m_windowProvider());

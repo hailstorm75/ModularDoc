@@ -24,7 +24,7 @@ MarkDoc.Core.ILibrarySettings --> MarkDoc.Members.IMemberSettings
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](markdoc/members/IMemberSettings.md#paths)<br>Paths to member sources | `get` |
+| `IReadOnlyCollection`&lt;`string`&gt; | [`Paths`](#paths)<br>Paths to member sources | `get` |
 
 ## Details
 ### Summary
@@ -38,7 +38,7 @@ Interface for [IResolver](./IResolver.md) settings
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyCollection Paths { get }
+public IReadOnlyCollection<string> Paths { get; }
 ```
 ##### Summary
 Paths to member sources

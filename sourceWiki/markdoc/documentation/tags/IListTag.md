@@ -22,9 +22,9 @@ MarkDoc.Documentation.Tags.IContent --> MarkDoc.Documentation.Tags.IListTag
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Headings`](markdoc/documentation/tags/IListTag.md#headings)<br>List headings | `get` |
-| `IReadOnlyCollection`&lt;`IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt;&gt; | [`Rows`](markdoc/documentation/tags/IListTag.md#rows)<br>List rows | `get` |
-| `ListType` | [`Type`](markdoc/documentation/tags/IListTag.md#type)<br>Type of list | `get` |
+| `IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt; | [`Headings`](#headings)<br>List headings | `get` |
+| `IReadOnlyCollection`&lt;`IReadOnlyCollection`&lt;[`IContent`](./IContent.md)&gt;&gt; | [`Rows`](#rows)<br>List rows | `get` |
+| `ListType` | [`Type`](#type)<br>Type of list | `get` |
 
 ## Details
 ### Summary
@@ -42,24 +42,24 @@ Interface for documentation list tags
 ### Properties
 #### Type
 ```csharp
-public abstract ListType Type { get }
+public ListType Type { get; }
 ```
 ##### Summary
 Type of list
 
 #### Headings
 ```csharp
-public abstract IReadOnlyCollection Headings { get }
+public IReadOnlyCollection<IContent> Headings { get; }
 ```
 ##### Summary
 List headings
 
 ##### Remarks
-Used when the list is a [ListType](ilisttag/ListType.md).[Table](markdoc/documentation/tags/IListTag.md#table)
+Used when the list is a [ListType](ilisttag/ListType.md).[Table](#table)
 
 #### Rows
 ```csharp
-public abstract IReadOnlyCollection Rows { get }
+public IReadOnlyCollection<IReadOnlyCollection<IContent>> Rows { get; }
 ```
 ##### Summary
 List rows

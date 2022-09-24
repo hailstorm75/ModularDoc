@@ -38,6 +38,16 @@ namespace MarkDoc.ViewModels
     /// </summary>
     int ProcessesTotal { get; }
 
+    /// <summary>
+    /// Determines whether logs a grouped by their source
+    /// </summary>
+    bool GroupLogsBySource { get; set; }
+
+    /// <summary>
+    /// Determines whether logs a grouped by their types
+    /// </summary>
+    bool GroupLogsByType { get; set; }
+
     #endregion
 
     #region Commands

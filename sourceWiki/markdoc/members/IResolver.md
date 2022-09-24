@@ -19,16 +19,16 @@ Type resolver
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IType`](types/IType.md)&gt;&gt;&gt; | [`Types`](markdoc/members/IResolver.md#types)<br>Resolved types | `get` |
+| `Lazy`&lt;`IReadOnlyDictionary`&lt;`string`, `IReadOnlyCollection`&lt;[`IType`](types/IType.md)&gt;&gt;&gt; | [`Types`](#types)<br>Resolved types | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `void` | [`Resolve`](markdoc/members/IResolver.md#resolve)(`string` assembly)<br>Resolves `assembly` types |
-| `Task` | [`ResolveAsync`](markdoc/members/IResolver.md#resolveasync)([`IMemberSettings`](./IMemberSettings.md) memberSettings, [`IGlobalSettings`](../core/IGlobalSettings.md) globalSettings)<br>Resolves all assemblies based on the given settings |
-| `bool` | [`TryFindType`](markdoc/members/IResolver.md#tryfindtype)(`string` fullname, out [`IType`](types/IType.md) result) |
-| `bool` | [`TryGetMemberSourceLine`](markdoc/members/IResolver.md#trygetmembersourceline)(`int` token, out `int` line, out `string` source) |
+| `void` | [`Resolve`](#resolve)(`string` assembly)<br>Resolves `assembly` types |
+| `Task` | [`ResolveAsync`](#resolveasync)([`IMemberSettings`](./IMemberSettings.md) memberSettings, [`IGlobalSettings`](../core/IGlobalSettings.md) globalSettings)<br>Resolves all assemblies based on the given settings |
+| `bool` | [`TryFindType`](#tryfindtype)(`string` fullname, out [`IType`](types/IType.md) result) |
+| `bool` | [`TryGetMemberSourceLine`](#trygetmembersourceline)(`int` token, out `int` line, out `string` source) |
 
 ## Details
 ### Summary
@@ -37,7 +37,7 @@ Type resolver
 ### Methods
 #### ResolveAsync
 ```csharp
-public abstract Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
+public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -53,7 +53,7 @@ Resolves all assemblies based on the given settings
 
 #### Resolve
 ```csharp
-public abstract void Resolve(string assembly)
+public void Resolve(string assembly)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -65,7 +65,7 @@ Resolves `assembly` types
 
 #### TryFindType
 ```csharp
-public abstract bool TryFindType(string fullname, out IType result)
+public bool TryFindType(string fullname, out IType result)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -75,7 +75,7 @@ public abstract bool TryFindType(string fullname, out IType result)
 
 #### TryGetMemberSourceLine
 ```csharp
-public abstract bool TryGetMemberSourceLine(int token, out int line, out string source)
+public bool TryGetMemberSourceLine(int token, out int line, out string source)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -87,7 +87,7 @@ public abstract bool TryGetMemberSourceLine(int token, out int line, out string 
 ### Properties
 #### Types
 ```csharp
-public abstract Lazy Types { get }
+public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
 ```
 ##### Summary
 Resolved types

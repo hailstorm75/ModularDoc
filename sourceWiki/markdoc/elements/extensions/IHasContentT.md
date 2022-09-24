@@ -20,7 +20,7 @@ Interface for elements which have content
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `T` | [`Content`](markdoc/elements/extensions/IHasContentT.md#content)<br>Element content | `get` |
+| `T` | [`Content`](#content)<br>Element content | `get` |
 
 ## Details
 ### Summary
@@ -34,7 +34,7 @@ Interface for elements which have content
 ### Properties
 #### Content
 ```csharp
-public abstract T Content { get }
+public T Content { get; }
 ```
 ##### Summary
 Element content

@@ -17,12 +17,9 @@ namespace MarkDoc.App
     // Avalonia configuration, don't remove; also used by visual designer.
     private static AppBuilder BuildAvaloniaApp()
       => AppBuilder.Configure<App>()
-        .AfterSetup(AfterSetupCallback)
         .UsePlatformDetect()
         .LogToTrace()
+        .WithIcons(container => container.Register<FontAwesomeIconProvider>())
         .UseReactiveUI();
-
-    private static void AfterSetupCallback(AppBuilder appBuilder)
-      => IconProvider.Register<FontAwesomeIconProvider>();
   }
 }

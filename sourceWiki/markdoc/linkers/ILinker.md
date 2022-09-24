@@ -19,16 +19,16 @@ Interface for creating links
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyDictionary`&lt;[`IType`](../members/types/IType.md), `string`&gt; | [`Paths`](markdoc/linkers/ILinker.md#paths)<br>Types path structure | `get` |
+| `IReadOnlyDictionary`&lt;[`IType`](../members/types/IType.md), `string`&gt; | [`Paths`](#paths)<br>Types path structure | `get` |
 
 ### Methods
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Lazy`&lt;`string`&gt; | [`CreateAnchor`](markdoc/linkers/ILinker.md#createanchor)([`IType`](../members/types/IType.md) page, [`IMember`](../members/members/IMember.md) member)<br>Creates an anchor to a given `member` |
-| `string` | [`CreateLink`](markdoc/linkers/ILinker.md#createlink-12)(`...`)<br>Creates a link to a given type `target` |
-| `string` | [`CreateLinkToSourceCode`](markdoc/linkers/ILinker.md#createlinktosourcecode)([`IMember`](../members/members/IMember.md) member)<br>Creates a link path to the source code location of the given `member` |
-| `void` | [`RegisterAnchor`](markdoc/linkers/ILinker.md#registeranchor)([`IMember`](../members/members/IMember.md) member, `Lazy`&lt;`string`&gt; anchor) |
+| `Lazy`&lt;`string`&gt; | [`CreateAnchor`](#createanchor)([`IType`](../members/types/IType.md) page, [`IMember`](../members/members/IMember.md) member)<br>Creates an anchor to a given `member` |
+| `string` | [`CreateLink`](#createlink-12)(`...`)<br>Creates a link to a given type `target` |
+| `string` | [`CreateLinkToSourceCode`](#createlinktosourcecode)([`IMember`](../members/members/IMember.md) member)<br>Creates a link path to the source code location of the given `member` |
+| `void` | [`RegisterAnchor`](#registeranchor)([`IMember`](../members/members/IMember.md) member, `Lazy`&lt;`string`&gt; anchor) |
 
 ## Details
 ### Summary
@@ -37,7 +37,7 @@ Interface for creating links
 ### Methods
 #### CreateLink [1/2]
 ```csharp
-public abstract string CreateLink(IType source, IResType target)
+public string CreateLink(IType source, IResType target)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -53,7 +53,7 @@ Retrieved link
 
 #### CreateLink [2/2]
 ```csharp
-public abstract string CreateLink(IType source, IType target)
+public string CreateLink(IType source, IType target)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -69,7 +69,7 @@ Retrieved link
 
 #### CreateAnchor
 ```csharp
-public abstract Lazy CreateAnchor(IType page, IMember member)
+public Lazy<string> CreateAnchor(IType page, IMember member)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -85,7 +85,7 @@ Retrieved link
 
 #### RegisterAnchor
 ```csharp
-public abstract void RegisterAnchor(IMember member, Lazy<string> anchor)
+public void RegisterAnchor(IMember member, Lazy<string> anchor)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -95,7 +95,7 @@ public abstract void RegisterAnchor(IMember member, Lazy<string> anchor)
 
 #### CreateLinkToSourceCode
 ```csharp
-public abstract string CreateLinkToSourceCode(IMember member)
+public string CreateLinkToSourceCode(IMember member)
 ```
 ##### Arguments
 | Type | Name | Description |
@@ -111,7 +111,7 @@ Link to source code line
 ### Properties
 #### Paths
 ```csharp
-public abstract IReadOnlyDictionary Paths { get }
+public IReadOnlyDictionary<IType, string> Paths { get; }
 ```
 ##### Summary
 Types path structure

@@ -19,7 +19,7 @@ Interface for documentation printers
 #### Public  methods
 | Returns | Name |
 | --- | --- |
-| `Task` | [`Print`](markdoc/printer/IPrinter.md#print)(`IEnumerable`&lt;[`IType`](../members/types/IType.md)&gt; types, `string` path) |
+| `Task` | [`Print`](#print)(`IEnumerable`&lt;[`IType`](../members/types/IType.md)&gt; types, `string` path) |
 
 ## Details
 ### Summary
@@ -28,7 +28,7 @@ Interface for documentation printers
 ### Methods
 #### Print
 ```csharp
-public abstract Task Print(IEnumerable<IType> types, string path)
+public Task Print(IEnumerable<IType> types, string path)
 ```
 ##### Arguments
 | Type | Name | Description |

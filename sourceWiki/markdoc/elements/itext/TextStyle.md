@@ -19,18 +19,23 @@ Text styles
 
 ### Fields
 #### Normal
-
+##### Summary
+No style
 
 #### Italic
-
+##### Summary
+Italic style
 
 #### Bold
-
+##### Summary
+Bold style
 
 #### CodeInline
-
+##### Summary
+Single line code style
 
 #### Code
-
+##### Summary
+Multi-line code style
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

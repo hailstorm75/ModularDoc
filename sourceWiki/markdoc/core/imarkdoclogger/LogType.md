@@ -19,15 +19,19 @@ Logging level types
 
 ### Fields
 #### Info
-
+##### Summary
+Information logging level
 
 #### Error
-
+##### Summary
+Error logging level
 
 #### Warning
-
+##### Summary
+Warning logging level
 
 #### Debug
-
+##### Summary
+Debug logging level
 
 *Generated with* [*MarkDoc*](https://github.com/hailstorm75/MarkDoc.Core)

@@ -22,7 +22,7 @@ MarkDoc.Members.ResolvedTypes.IResType --> MarkDoc.Members.ResolvedTypes.IResGen
 #### Public  properties
 | Type | Name | Methods |
 | --- | --- | --- |
-| `IReadOnlyCollection`&lt;[`IResType`](./IResType.md)&gt; | [`Generics`](markdoc/members/resolvedtypes/IResGeneric.md#generics)<br>Generic parameter types | `get` |
+| `IReadOnlyCollection`&lt;[`IResType`](./IResType.md)&gt; | [`Generics`](#generics)<br>Generic parameter types | `get` |
 
 ## Details
 ### Summary
@@ -36,7 +36,7 @@ Interface for generic resolved types
 ### Properties
 #### Generics
 ```csharp
-public abstract IReadOnlyCollection Generics { get }
+public IReadOnlyCollection<IResType> Generics { get; }
 ```
 ##### Summary
 Generic parameter types
