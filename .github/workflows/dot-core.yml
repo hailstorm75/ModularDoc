@@ -14,7 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1.8.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.x'
     - name: Install dependencies
       run: dotnet restore src/MarkDoc.sln
     - name: Build
@@ -26,7 +28,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1.8.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.x'
     - name: Install dependencies
       run: dotnet restore src/MarkDoc.sln && dotnet restore tests/MarkDoc.Tests.sln
     - name: Build project
