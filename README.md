@@ -40,6 +40,18 @@ Detailed instructions on how to do exactly that are still to be written; however
 
 Run it at your own risk, the code is still under development.
 
+## Performance
+
+Comparison of MarkDoc to Doxygen *v1.9.5* and DocFX *v2.59.4*. Each tool was run four times on Windows OS via Windows PowerShell through the `Measure-Command` script block.
+
+| Run           | MarkDoc     | Doxygen     | DocFX        |
+| ------------- | ----------- | ----------- | ------------ |
+| 1             |      864 ms |     3609 ms |     34268 ms |
+| 2             |      968 ms |     1784 ms |     28662 ms |
+| 3             |      869 ms |     1664 ms |     28681 ms |
+| 4             |      846 ms |     1660 ms |     28681 ms |
+| **Average**   |  **887 ms** | **2179 ms** | **30022 ms** |
+
 ## Technical description
 
 This project aims to be as modular as possible to support specifics of each **Git** platform and, if so be desired, to generate not only Markdown but other output types such as HTML, LaTeX, or whatever might be required in the future.
