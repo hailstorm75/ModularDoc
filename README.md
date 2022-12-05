@@ -1,48 +1,51 @@
 [![.NET](https://github.com/hailstorm75/MarkDoc.Core/actions/workflows/dot-core.yml/badge.svg)](https://github.com/hailstorm75/MarkDoc.Core/actions/workflows/dot-core.yml) [![CodeFactor](https://www.codefactor.io/repository/github/hailstorm75/markdoc.core/badge)](https://www.codefactor.io/repository/github/hailstorm75/markdoc.core) ![GitHub issues](https://img.shields.io/github/issues/hailstorm75/MarkDoc.Core) ![GitHub repo size](https://img.shields.io/github/repo-size/hailstorm75/MarkDoc.Core)
 
-# MarkDoc.Core
-Markdown documentation generator for .NET libraries written in C# 9 and lower.
-
-Additional details and a list of supported versions of .NET frameworks will be provided later.
-
-In the current project state, the `Members` library is considered stable with 95% test coverage and can be used as a reflection library outside of this project that makes exploring assembly types much easier thanks a higher level of abstraction.
-The `Documentation` library is still to be tested and is considered to be unstable; nevertheless, the manual tests proved that most common assemblies will have their documentation parsed correctly.
-The biggest task, aside from testing all of the core libraries, is to create a modular UI that is, preferably, cross-platform.
-
-Like this project idea and would like to see it grow? Give it a star and follow for the latest updates.
+# Description
+The most modular plugin-based documentation generator for your .NET libraries (currently officially supporting C# 9 and lower).
 
 [I'm writing a Bachelor's thesis about this project](https://github.com/hailstorm75/MarkDoc.Thesis).
 
-## Produced result
+## What does modular mean?
 
-This is my second attempt at creating such a tool. The first one is on [GitLab](https://gitlab.com/hailstorm75/markdoc). You can try it out for your self; however, it only supports .NET Framework libraries with NO DEPENDENCIES.
+Generating documentation isn't for everyone. And those who do need it can have very specific needs. That's why MarkDoc is written in such a way, that almost everything is decoupled and can be replaced by you! But that is for the most extreme cases.
 
-The result which it produces can be seen in the [Wiki](https://github.com/hailstorm75/MarkDoc.Core/wiki) or the repository [source code](https://github.com/hailstorm75/MarkDoc.Core/tree/unstable/sourceWiki)
+The most important feature is pluginability. Using plugins you chose how your documentation is generated. A plugin determines what is the required input, what is/are the output format(s), how the documentation is structured and processed. As of now, these are the available plugins:
 
-The generated structure is inspired by the one outputted by Doxygen. If you do not like it, you can always create your own - everything is modular and you can swap out components, libraries, create new plugins... 
-Detailed instructions on how to do exactly that are still to be written; however, you can explore the current implementation of the GitMarkdown plugin as a reference for your own project.
+ - Markdown for Git - generates Markdown documentation for GitHub, GitLab, and Bitbucket
+ 
+Adding new plugins will extend the tools functionality. E.g., generate Markdown for DocFX, generate diagrams only, generate HTML...
 
-## Preview
+There no simple way of describing MarkDoc, as it very abstract, and defined by the plugins available.
+
+### Plugin: Markdown for Git
+
+- This plugin uses relfection for gathering types and their members from assemblies, and reads the XML documentation generated on your project build
+- The generated output is a Markdown file per type (interface, class, struct, record, enum...)
+- It also provides inheritance diagrams via MermaidJS
+- The structure of the documentation is inspired by Doxygen, and is not configurable
+- The file structure of the generated files can be configured to be flat, or structured into folders
+
+If you have no *.xml* files in your bin folder, then you can enable it per-project.
+You can follow this MSDN [https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#documentationfile), or modify the build property group in your **csproj** to something like [this](https://github.com/hailstorm75/MarkDoc.Core/blob/8656b3c338a7373d035ed41ab8f004b492e0ae70/src/Libraries/Core/MarkDoc.Printer/MarkDoc.Printer.csproj#L13):
+
+```xml
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\Core</OutputPath>
+    <DocumentationFile>..\..\..\..\bin\Debug\Libraries\Core\MarkDoc.Printer.xml</DocumentationFile>
+  </PropertyGroup>
+```
+
+#### Produced result:
+ - [Generated for source code](https://github.com/hailstorm75/MarkDoc.Core/tree/unstable/sourceWiki) - the documentation is stored in the repository right next to your source code
+ - [Generated for the GitHub Wiki](https://github.com/hailstorm75/MarkDoc.Core/wiki) - GitHub has poor Wiki management, each generated Markdown file has to be manually uploaded. **The generated examples here are out of date and contain fixed bugs. Use it only as a visual example of the result**
+ 
+#### Preview:
 
 ![screen](https://user-images.githubusercontent.com/16069996/153456188-5f9678cf-efc8-4764-8bc4-6e5b1c034c0d.gif)
 
-## Running it
+#### Performance:
 
-> It has been discovered, that running the application via the `dotnet cli` results in a crash due to incorrect loading of plugins. So, for now, please use Rider/VS20**
-
- 1. Run the MarkDoc.App
- 2. Select the available plugin
- 3. Provide paths to assemblies
- 4. Navigate to the next step and validate whether all of your assemblies have their corresponding documentation files
- 5. Navigate to the next step and select your target **Git** hosting platform
- 6. Navigate to the next step and provide a path to a folder for output, optionally deselect namespaces/types to skip them
- 7. Navigate to the next step and press execute (subject to change)
-
-Run it at your own risk, the code is still under development.
-
-## Performance
-
-Comparison of MarkDoc to Doxygen *v1.9.5* and DocFX *v2.59.4*. Each tool was run four times on Windows OS via Windows PowerShell through the `Measure-Command` script block.
+Comparison of MarkDoc's Markdown to Git to Doxygen *v1.9.5* and DocFX *v2.59.4*. Each tool was run four times on Windows OS via Windows PowerShell through the `Measure-Command` script block.
 
 | Run           | MarkDoc     | Doxygen     | DocFX        |
 | ------------- | ----------- | ----------- | ------------ |
@@ -52,61 +55,77 @@ Comparison of MarkDoc to Doxygen *v1.9.5* and DocFX *v2.59.4*. Each tool was run
 | 4             |      846 ms |     1660 ms |     28681 ms |
 | **Average**   |  **887 ms** | **2179 ms** | **30022 ms** |
 
-## Technical description
+## How does it work?
 
-This project aims to be as modular as possible to support specifics of each **Git** platform and, if so be desired, to generate not only Markdown but other output types such as HTML, LaTeX, or whatever might be required in the future.
-With this in mind, the project is separated into the following **component** types:
+Using **MarkDoc.App** you select one of the available plugins, go through its configuration steps, and finally save the configuration for further reuse.
 
-|          Part | Description                                                                          |
-|--------------:|--------------------------------------------------------------------------------------|
-|       Members | Retrieve library types structure                                                     |
-| Documentation | Retrieve library types documentation                                                 |
-|      Elements | Documentation building blocks                                                        |
-|    Generators | Binds the types to their documentation and generates the documentation output        |
-|       Linkers | Define the documentation file output structure and allow linking types between files |
-|      Printers | Saves the generated output to files                                                  |
+Then you can open the previously created configuration either via **MarkDoc.App**, or using **MarkDoc.CLI**. The CLI application isn't polished yet, and only supprots executing the provided path to the configuration:
 
-The parts above are represented as interfaces and thus allow creating decoupled component implementations.
+`./MarkDoc.CLI.exe PATH_TO_THE_CONFIG.mconf`
 
-### Relational chart
+## How do I run the tool?
 
-> Note: may vary depending on component implementations
+The tool does not have any releases at this time. You have to build it locally. You need at least .NET 6 SDK installed.
+
+ 1. Clone the repository `git clone https://github.com/hailstorm75/MarkDoc.Core.git`
+ 2. Build the solution dotnet `build src/MarkDoc.sln --configuration Release`
+ 3. Run the `bin/MarkDoc.App.exe`
+
+You can skip steps 2 and 3 if you are using an IDE such as Visual Studio 2019 (and higher) or JetBrains Rider, and use the regular build/run commands.
+
+Next you select the desired plugin and follow the steps until completion.
+
+You can also run `bin/MarkDoc.CLI.exe` to execute the created configuration via the **MarkDoc.App**:
+
+`./bin/MarkDoc.CLI.exe PATH_TO_THE_CONFIG.mconf`
+
+Run it at your own risk, the code is still under development.
+
+## How to extend the tool?
+
+The architecture is split into interfaces, components, and applications:
 
 ```mermaid
-flowchart TB
-    inputFolder[Input Folder]
-    member[Member resolver]
-    documentation[Documentation resolver]
-    printer[Printer]
-    outputFolder[Output folder]
-    
-    inputFolder -- Dll, EXE --> member
-    inputFolder -- XML --> documentation
-    subgraph Composer
-        direction RL
-        elements[Markdown elements]
-        linker[Git Linker]
+flowchart LR
+    interface1[Interface]
+    interface2[Interface]
+    interface3[Interface]
+
+    subgraph plugin1[Plugin]
+      direction BT
+      component1[Component]
+      component2[Component]
+      component3[Component]
     end
-    member -- IType --> Composer
-    documentation -- IDocElement --> Composer
-    Composer -- IElement --> printer
-    printer -- Documentation file --> outputFolder
+
+    subgraph plugin2[Plugin]
+      direction BT
+      component4[Component]
+      component5[Component]
+      component6[Component]
+    end
+
+    MarkDoc.App
+    MarkDoc.CLI
+
+    interface1 --> component1
+    interface1 --> component4
+    interface2 --> component2
+    interface2 --> component5
+    interface3 --> component3
+    interface3 --> component6
+
+    plugin1 --> MarkDoc.App
+    plugin2 --> MarkDoc.App
+
+    plugin1 --> MarkDoc.CLI
+    plugin2 --> MarkDoc.CLI
 ```
 
-# Roadmap
-
- 1. Create a console application for configuration execution
- 2. Bug fixes
- 3. Expand unit tests
- 4. Rewrite the F# TypeComposer library
- 5. Add a plugin for creating diagrams only
- 6. Add a plugin for creating static HTML pages
-    1. Enable it to use docFX templates
-    2. Provide MarkDoc custom templates
- 7. Add a plugin for uploading documentation files to GitHubs wiki
- 8. ...
-
-Alongside development, it is crucial that a Wiki is created to document the whole architecture, so that others can contribute and/or use the application.
+ - **Interfaces** define abstract contracts that must be implemented by components. Interfaces allow components to communicate between each other without tight coupling. E.g., type and member provider is an abstract interface - no concrete information on how said data is retrieved, only that it is provided
+ - **Components** are concrete implementations of interfaces. E.g., reflection-based type and member provider - this component uses relfection to analyze assemblies and provide type and member data
+  - **Plugins** are bundles of concrete components. Plugins provide configuration steps for said components, and an endpoint for executing them
+  - **Applications** are consumers of **plugins** that either display them to the user for further configuration, or execute them based on the provided configuration
 
 # External libraries
 
