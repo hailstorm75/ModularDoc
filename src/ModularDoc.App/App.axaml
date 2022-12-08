@@ -1,0 +1,60 @@
+<Application
+  x:Class="ModularDoc.App.App"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Application.Styles>
+    <styling:FluentAvaloniaTheme />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml" />
+    <Style Selector="HeaderedContentControl">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Grid RowDefinitions="Auto, *">
+            <Border
+              Background="{DynamicResource ControlFillColorDefaultBrush}"
+              BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+              BorderThickness="1,1,1,0"
+              CornerRadius="{Binding Source={StaticResource OverlayCornerRadius}, Converter={StaticResource TopCornerRadiusFilterConverter}}"
+              Grid.Row="0">
+              <DockPanel>
+                <Border
+                  Background="{DynamicResource ControlStrongStrokeColorDefault}"
+                  DockPanel.Dock="Bottom"
+                  Height="1"
+                  Margin="1,0,1,0"
+                  VerticalAlignment="Bottom" />
+
+                <ContentPresenter
+                  Content="{TemplateBinding Header}"
+                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                  HorizontalContentAlignment="Stretch"
+                  Name="HeaderPresenter"
+                  Padding="12,8"
+                  TextBlock.FontSize="24"
+                  TextBlock.FontWeight="SemiBold"
+                  VerticalContentAlignment="Center" />
+              </DockPanel>
+            </Border>
+
+            <Border
+              Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+              BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+              BorderThickness="1,0,1,1"
+              Grid.Row="1"
+              Name="ControlPreviewAreaHost">
+              <ContentPresenter
+                Content="{TemplateBinding Content}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                Margin="12,12,0,12"
+                Name="ExamplePresenter"
+                VerticalAlignment="Stretch"
+                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Border>
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </Application.Styles>
+</Application>

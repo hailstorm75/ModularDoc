@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Debug\Components\Generators</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Release\Components\Generators</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Tools.fs" />
+    <Compile Include="Helpers\StringConverters.fs" />
+    <Compile Include="Helpers\SomeHelpers.fs" />
+    <Compile Include="Helpers\TextHelpers.fs" />
+    <Compile Include="Helpers\ElementHelpers.fs" />
+    <Compile Include="Helpers\TypeHelpers.fs" />
+    <Compile Include="Helpers\ContentProcessor.fs" />
+    <Compile Include="Helpers\TagHelpers.fs" />
+    <Compile Include="Helpers\ContentHelpers.fs" />
+    <Compile Include="Helpers\SignatureHelpers.fs" />
+    <Compile Include="Helpers\TypeContentHelpers.fs" />
+    <Compile Include="TypeComposer.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Diagrams\ModularDoc.Diagrams.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Documentation\ModularDoc.Documentation.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Elements\ModularDoc.Elements.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Generator\ModularDoc.Generator.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Members\ModularDoc.Members.csproj">
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\Helpers\ModularDoc.Helpers\ModularDoc.Helpers.csproj">
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="7.0.0" />
+  </ItemGroup>
+</Project>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using MarkDoc.Members;
-using MarkDoc.Members.Enums;
-using MarkDoc.Members.Types;
+using ModularDoc.Members;
+using ModularDoc.Members.Enums;
+using ModularDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
 

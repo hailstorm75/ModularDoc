@@ -6,8 +6,8 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
-using MarkDoc.Core;
-using MarkDoc.Members;
+using ModularDoc;
+using ModularDoc.Members;
 using Moq;
 
 namespace UT.Members.Data
@@ -31,7 +31,7 @@ namespace UT.Members.Data
     {
       var path = Path.GetFullPath("../../../Components/Members");
       var assemblies = Directory
-        .EnumerateFiles(path, "MarkDoc*.dll", SearchOption.TopDirectoryOnly)
+        .EnumerateFiles(path, "ModularDoc*.dll", SearchOption.TopDirectoryOnly)
         .Select(Assembly.LoadFrom);
 
       foreach (var assembly in assemblies)
@@ -49,10 +49,10 @@ namespace UT.Members.Data
 
     private static void Mock(ContainerBuilder builder)
     {
-      var logger = new Mock<IMarkDocLogger>().Object;
+      var logger = new Mock<IModularDocLogger>().Object;
       var process = new Mock<IDefiniteProcess>().Object;
 
-      builder.RegisterInstance(logger).As<IMarkDocLogger>();
+      builder.RegisterInstance(logger).As<IModularDocLogger>();
       builder.RegisterInstance(process).As<IDefiniteProcess>();
     }
 

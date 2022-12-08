@@ -1,0 +1,229 @@
+﻿<UserControl
+  mc:Ignorable="d"
+  x:Class="ModularDoc.Views.Main.SummaryView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:avalonia="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:core="clr-namespace:ModularDoc;assembly=ModularDoc"
+  xmlns:converters="clr-namespace:ModularDoc.Views.Main.Converters">
+  <Grid Margin="15" RowDefinitions="Auto,Auto,*,4,*,Auto">
+    <DockPanel Grid.Row="0" Margin="5,0,0,15">
+      <Button
+        Command="{Binding BackCommand}"
+        DockPanel.Dock="Left"
+        Height="35"
+        Margin="0,0,10,0"
+        Padding="0.5,1,0,0"
+        Width="35">
+        <Button.Content>
+          <avalonia:Icon
+            FontSize="10"
+            Value="fa-arrow-left" />
+        </Button.Content>
+      </Button>
+      <Label
+        Content="{Binding Title}"
+        DockPanel.Dock="Right"
+        FontSize="24" />
+    </DockPanel>
+
+    <ProgressBar Grid.Row="1" Maximum="{Binding ProcessesTotal}" Value="{Binding ProcessesComplete}" Minimum="0" />
+
+    <ListBox Grid.Row="2" Items="{Binding Processes}" SelectionMode="Single">
+      <ListBox.DataTemplates>
+        <DataTemplate DataType="{x:Type core:IDefiniteProcess}">
+          <DockPanel LastChildFill="True">
+            <Border DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0, 0, 5, 0" Width="16">
+              <ToolTip.Tip>
+                <TextBlock TextWrapping="Wrap">
+                  <TextBlock.Text>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToStringConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ToolTip.Tip>
+
+              <Grid RowDefinitions="Auto">
+                <avalonia:Icon FontSize="16" VerticalAlignment="Center">
+                  <avalonia:Icon.Value>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToIconConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Value>
+                  <avalonia:Icon.Foreground>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToColorConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Foreground>
+                  <avalonia:Icon.IsVisible>
+                    <Binding Path="State" ConverterParameter="negate">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.IsVisible>
+                </avalonia:Icon>
+              </Grid>
+            </Border>
+
+            <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
+          </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type core:IIndefiniteProcess}">
+          <DockPanel LastChildFill="True">
+            <Border DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0, 0, 5, 0" Width="16">
+              <ToolTip.Tip>
+                <TextBlock TextWrapping="Wrap">
+                  <TextBlock.Text>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToStringConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ToolTip.Tip>
+
+              <Grid RowDefinitions="Auto">
+                <avalonia:Icon FontSize="16" VerticalAlignment="Center">
+                  <avalonia:Icon.Value>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToIconConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Value>
+                  <avalonia:Icon.Foreground>
+                    <Binding Path="State" >
+                      <Binding.Converter>
+                        <converters:ProcessStateToColorConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.Foreground>
+                  <avalonia:Icon.IsVisible>
+                    <Binding Path="State" ConverterParameter="negate">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </avalonia:Icon.IsVisible>
+                </avalonia:Icon>
+
+                <ProgressBar DockPanel.Dock="Left" IsIndeterminate="True">
+                  <ProgressBar.IsVisible>
+                    <Binding Path="State">
+                      <Binding.Converter>
+                        <converters:ProcessStateToVisibilityConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </ProgressBar.IsVisible>
+                </ProgressBar>
+              </Grid>
+            </Border>
+            <Label DockPanel.Dock="Right" Content="{Binding Name}" VerticalAlignment="Center"/>
+          </DockPanel>
+        </DataTemplate>
+      </ListBox.DataTemplates>
+    </ListBox>
+
+    <GridSplitter Grid.Row="3"/>
+
+    <DataGrid Grid.Row="4" AutoGenerateColumns="False" SelectionMode="Single" ClipboardCopyMode="ExcludeHeader" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto">
+      <DataGrid.Items>
+        <Binding Path="LogMessages" >
+          <Binding.Converter>
+            <converters:LogGroupingConverter GroupBySource="{Binding GroupLogsBySource}" GroupByType="{Binding GroupLogsByType}"/>
+          </Binding.Converter>
+        </Binding>
+      </DataGrid.Items>
+      <DataGrid.Columns>
+        <DataGridTemplateColumn CanUserReorder="False">
+        <DataGridTemplateColumn.Header>
+          <DockPanel LastChildFill="True">
+            <TextBlock Text="Type" DockPanel.Dock="Left" VerticalAlignment="Center" />
+            <Button DockPanel.Dock="Right" Margin="5, 0, 0, 0">
+              <ToolTip.Tip>
+                Group by
+              </ToolTip.Tip>
+              <Button.Flyout>
+                <Flyout>
+                  <StackPanel>
+                    <TextBlock Text="Group by" FontSize="16" FontWeight="Bold" Margin="0, 0, 0, 5"/>
+                    <ToggleButton Content="Source" IsChecked="{Binding GroupLogsBySource}" Width="100" Margin="0, 0, 0, 5"/>
+                    <ToggleButton Content="Type" IsChecked="{Binding GroupLogsByType}" Width="100"/>
+                  </StackPanel>
+                </Flyout>
+              </Button.Flyout>
+              <Button.Content>
+                <avalonia:Icon Value="fa-object-group"/>
+              </Button.Content>
+            </Button>
+          </DockPanel>
+        </DataGridTemplateColumn.Header>
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Border>
+              <avalonia:Icon
+                HorizontalAlignment="Center"
+                FontSize="14">
+                <avalonia:Icon.Foreground>
+                  <Binding Path="Type">
+                    <Binding.Converter>
+                      <converters:LogTypeToColorConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </avalonia:Icon.Foreground>
+                <avalonia:Icon.Value>
+                  <Binding Path="Type" >
+                    <Binding.Converter>
+                      <converters:LogTypeToIconConverter/>
+                    </Binding.Converter>
+                  </Binding>
+                </avalonia:Icon.Value>
+              </avalonia:Icon>
+              <ToolTip.Tip>
+                <TextBlock TextWrapping="Wrap">
+                  <TextBlock.Text>
+                    <Binding Path="Type" >
+                      <Binding.Converter>
+                        <converters:LogTypeToStringConverter/>
+                      </Binding.Converter>
+                    </Binding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </ToolTip.Tip>
+            </Border>
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="Time" CanUserSort="True" CanUserReorder="False">
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Label Content="{Binding Time}" VerticalAlignment="Center"/>
+          </DataTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="Message" CanUserSort="False" Width="*" CanUserReorder="False">
+          <DataTemplate DataType="{x:Type core:LogMessage}">
+            <Border VerticalAlignment="Center">
+              <ToolTip.Tip>
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+              </ToolTip.Tip>
+              <Label Content="{Binding Message}" />
+            </Border>
+          </DataTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <Grid Grid.Row="5" ColumnDefinitions="*, Auto, Auto" Margin="0 5 0 0">
+      <Button Grid.Column="1" Command="{Binding SaveConfigurationCommand}">Save configuration</Button>
+      <Button Grid.Column="2" Command="{Binding DoneCommand}" Margin="5 0 0 0">Done</Button>
+    </Grid>
+  </Grid>
+</UserControl>

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
-using MarkDoc.Core;
-using MarkDoc.Documentation;
-using MarkDoc.Members;
+using ModularDoc;
+using ModularDoc.Documentation;
+using ModularDoc.Members;
 using Moq;
 
 namespace UT.Documentation.Data
@@ -32,7 +32,7 @@ namespace UT.Documentation.Data
     {
       var path = Path.GetFullPath("../../../Components/Documentation");
       var assemblies = Directory
-        .EnumerateFiles(path, "MarkDoc*.dll", SearchOption.TopDirectoryOnly)
+        .EnumerateFiles(path, "ModularDoc*.dll", SearchOption.TopDirectoryOnly)
         .Select(Assembly.LoadFrom);
 
       foreach (var assembly in assemblies)
@@ -51,7 +51,7 @@ namespace UT.Documentation.Data
     private static void Mock(ContainerBuilder builder)
     {
       var resolver = new Mock<IResolver>().Object;
-      var logger = new Mock<IMarkDocLogger>().Object;
+      var logger = new Mock<IModularDocLogger>().Object;
       var process = new Mock<IDefiniteProcess>().Object;
       var doc = new Mock<IDocSettings>().Object;
       var global = new Mock<IGlobalSettings>();
@@ -63,7 +63,7 @@ namespace UT.Documentation.Data
 
       builder.RegisterInstance(global.Object).As<IGlobalSettings>();
       builder.RegisterInstance(member.Object).As<IMemberSettings>();
-      builder.RegisterInstance(logger).As<IMarkDocLogger>();
+      builder.RegisterInstance(logger).As<IModularDocLogger>();
       builder.RegisterInstance(process).As<IDefiniteProcess>();
       builder.RegisterInstance(resolver).As<IResolver>();
       builder.RegisterInstance(doc).As<IDocSettings>();

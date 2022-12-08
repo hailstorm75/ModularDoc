@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\bin\Debug\Plugins\GitMarkdown</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\bin\Release\Plugins\GitMarkdown</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Components\Diagrams\ModularDoc.Diagrams.Mermaid\ModularDoc.Diagrams.Mermaid.csproj" />
+    <ProjectReference Include="..\..\Components\Diagrams\ModularDoc.Diagrams.PlantUML\ModularDoc.Diagrams.PlantUML.csproj" />
+    <ProjectReference Include="..\..\Components\Documentation\ModularDoc.Documentation.Xml\ModularDoc.Documentation.Xml.csproj" />
+    <ProjectReference Include="..\..\Components\Elements\ModularDoc.Elements.Markdown\ModularDoc.Elements.Markdown.csproj" />
+    <ProjectReference Include="..\..\Components\Generators\ModularDoc.Generator.Basic\ModularDoc.Generator.Basic.fsproj" />
+    <ProjectReference Include="..\..\Components\Linkers\ModularDoc.Linkers.Markdown\ModularDoc.Linkers.Markdown.fsproj" />
+    <ProjectReference Include="..\..\Components\Members\ModularDoc.Members.Dnlib\ModularDoc.Members.Dnlib.csproj" />
+    <ProjectReference Include="..\..\Components\Printers\ModularDoc.Printer.Markdown\ModularDoc.Printer.Markdown.csproj" />
+    <ProjectReference Include="..\..\Libraries\Core\ModularDoc\ModularDoc.csproj" />
+    <ProjectReference Include="..\..\Libraries\Core\ModularDoc.Elements\ModularDoc.Elements.csproj" />
+    <ProjectReference Include="..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\Libraries\ViewModels\ModularDoc.ViewModels.GitMarkdown\ModularDoc.ViewModels.GitMarkdown.csproj" />
+    <ProjectReference Include="..\..\Libraries\Views\ModularDoc.Views.GitMarkdown\ModularDoc.Views.GitMarkdown.csproj" />
+    <ProjectReference Include="..\..\Libraries\Views\ModularDoc.Views\ModularDoc.Views.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="Castle.Core" Version="5.1.0" />
+    <PackageReference Include="dnlib" Version="3.6.0" />
+    <PackageReference Include="FSharp.Core" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>
