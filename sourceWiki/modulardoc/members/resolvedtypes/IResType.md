@@ -1,0 +1,76 @@
+# IResType `interface`
+
+## Description
+Interface for resolved types
+
+## Diagram
+```mermaid
+  flowchart LR
+  classDef interfaceStyle stroke-dasharray: 5 5;
+  classDef abstractStyle stroke-width:4px
+  subgraph ModularDoc.Members.ResolvedTypes
+  ModularDoc.Members.ResolvedTypes.IResType[[IResType]]
+  class ModularDoc.Members.ResolvedTypes.IResType interfaceStyle;
+  end
+```
+
+## Members
+### Properties
+#### Public  properties
+| Type | Name | Methods |
+| --- | --- | --- |
+| `string` | [`DisplayName`](#displayname)<br>Resolved type display name | `get` |
+| `string` | [`DocumentationName`](#documentationname)<br>Resolved type name for documentation | `get` |
+| `bool` | [`IsByRef`](#isbyref)<br>Is the type a reference | `get` |
+| `string` | [`RawName`](#rawname)<br>Resolved type raw name | `get` |
+| `Lazy`&lt;[`IType`](../types/IType.md)&gt; | [`Reference`](#reference)<br>Reference to known type | `get` |
+| `string` | [`TypeNamespace`](#typenamespace)<br>Resolved type namespace | `get` |
+
+## Details
+### Summary
+Interface for resolved types
+
+### Properties
+#### DisplayName
+```csharp
+public string DisplayName { get; }
+```
+##### Summary
+Resolved type display name
+
+#### DocumentationName
+```csharp
+public string DocumentationName { get; }
+```
+##### Summary
+Resolved type name for documentation
+
+#### RawName
+```csharp
+public string RawName { get; }
+```
+##### Summary
+Resolved type raw name
+
+#### TypeNamespace
+```csharp
+public string TypeNamespace { get; }
+```
+##### Summary
+Resolved type namespace
+
+#### Reference
+```csharp
+public Lazy<IType> Reference { get; }
+```
+##### Summary
+Reference to known type
+
+#### IsByRef
+```csharp
+public bool IsByRef { get; }
+```
+##### Summary
+Is the type a reference
+
+*Generated with* [*ModularDoc*](https://github.com/hailstorm75/ModularDoc)
