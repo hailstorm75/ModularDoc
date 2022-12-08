@@ -1,0 +1,37 @@
+<Window
+  Icon="/Assets/logo.ico"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d"
+  x:Class="ModularDoc.App.Views.DialogView"
+  Title="{Binding Title}"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Grid RowDefinitions="*, Auto">
+    <ContentControl Grid.Row="0" Name="MainContent" />
+    <Grid
+      ColumnDefinitions="Auto, Auto, Auto"
+      Grid.Row="1"
+      HorizontalAlignment="Right">
+      <Button
+        IsVisible="{Binding PositiveVisible}"
+        Command="{Binding PositiveClickCommand}"
+        Content="Yes"
+        Grid.Column="0" />
+      <Button
+        IsVisible="{Binding NegativeVisible}"
+        Command="{Binding NegativeClickCommand}"
+        Content="No"
+        Grid.Column="1" />
+      <Button
+        IsVisible="{Binding CancelVisible}"
+        Command="{Binding CancelClickCommand}"
+        Content="Cancel"
+        Grid.Column="2" />
+    </Grid>
+  </Grid>
+
+</Window>

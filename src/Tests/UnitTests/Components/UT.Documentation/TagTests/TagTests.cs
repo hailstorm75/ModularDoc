@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MarkDoc.Documentation;
-using MarkDoc.Documentation.Tags;
-using MarkDoc.Helpers;
-using MarkDoc.Members.Types;
+using ModularDoc.Documentation;
+using ModularDoc.Documentation.Tags;
+using ModularDoc.Helpers;
+using ModularDoc.Members.Types;
 using Moq;
 using UT.Documentation.Data;
 using Xunit;

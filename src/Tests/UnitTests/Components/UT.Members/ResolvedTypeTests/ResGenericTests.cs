@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MarkDoc.Helpers;
-using MarkDoc.Members.Members;
-using MarkDoc.Members.ResolvedTypes;
-using MarkDoc.Members.Types;
+using ModularDoc.Helpers;
+using ModularDoc.Members.Members;
+using ModularDoc.Members.ResolvedTypes;
+using ModularDoc.Members.Types;
 using UT.Members.Data;
 using Xunit;
 

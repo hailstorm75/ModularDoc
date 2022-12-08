@@ -6,7 +6,7 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Denis Akopyan</Authors>
-    <PackageProjectUrl>https://github.com/hailstorm75/MarkDoc.Core</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -30,9 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Libraries\Core\MarkDoc.Core\MarkDoc.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\Libraries\Core\MarkDoc.Documentation\MarkDoc.Documentation.csproj" />
-    <ProjectReference Include="..\..\..\..\Libraries\Helpers\MarkDoc.Helpers\MarkDoc.Helpers.csproj" />
+    <ProjectReference Include="..\..\..\..\Libraries\Core\ModularDoc\ModularDoc.csproj" />
+    <ProjectReference Include="..\..\..\..\Libraries\Core\ModularDoc.Documentation\ModularDoc.Documentation.csproj" />
+    <ProjectReference Include="..\..\..\..\Libraries\Helpers\ModularDoc.Helpers\ModularDoc.Helpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

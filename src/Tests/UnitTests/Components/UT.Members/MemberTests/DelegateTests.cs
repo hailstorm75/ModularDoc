@@ -1,7 +1,7 @@
-using MarkDoc.Members.Members;
-using MarkDoc.Members.Types;
-using MarkDoc.Members.Enums;
-using MarkDoc.Helpers;
+using ModularDoc.Members.Members;
+using ModularDoc.Members.Types;
+using ModularDoc.Members.Enums;
+using ModularDoc.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System;

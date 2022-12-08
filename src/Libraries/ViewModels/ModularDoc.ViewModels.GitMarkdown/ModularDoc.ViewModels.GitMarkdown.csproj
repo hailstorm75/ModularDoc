@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Authors>Denis Akopyan</Authors>
+    <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Debug\Libraries\ViewModels.GitMarkdown</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\..\bin\Release\Libraries\ViewModels.GitMarkdown</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Components\Documentation\ModularDoc.Documentation.Xml\ModularDoc.Documentation.Xml.csproj" />
+    <ProjectReference Include="..\..\..\Components\Linkers\ModularDoc.Linkers.Markdown\ModularDoc.Linkers.Markdown.fsproj" />
+    <ProjectReference Include="..\..\..\Components\Members\ModularDoc.Members.Dnlib\ModularDoc.Members.Dnlib.csproj" />
+    <ProjectReference Include="..\..\Helpers\ModularDoc.MVVM.Helpers\ModularDoc.MVVM.Helpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DynamicData" Version="7.12.11" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>
