@@ -18,9 +18,9 @@ jobs:
       with:
         dotnet-version: '6.x'
     - name: Install dependencies
-      run: dotnet restore src/MarkDoc.sln
+      run: dotnet restore src/ModularDoc.sln
     - name: Build
-      run: dotnet build src/MarkDoc.sln --configuration Release --no-restore
+      run: dotnet build src/ModularDoc.sln --configuration Release --no-restore
 
   test:
     runs-on: ubuntu-latest
@@ -32,15 +32,15 @@ jobs:
       with:
         dotnet-version: '6.x'
     - name: Install dependencies
-      run: dotnet restore src/MarkDoc.sln && dotnet restore tests/MarkDoc.Tests.sln
+      run: dotnet restore src/ModularDoc.sln && dotnet restore tests/ModularDoc.Tests.sln
     - name: Build project
-      run: dotnet build src/MarkDoc.sln --configuration Debug --no-restore
+      run: dotnet build src/ModularDoc.sln --configuration Debug --no-restore
     - name: Build tests
-      run: dotnet build tests/MarkDoc.Tests.sln --configuration Debug --no-restore
+      run: dotnet build tests/ModularDoc.Tests.sln --configuration Debug --no-restore
     - name: Install tooling for conversion
       run: dotnet tool install -g trx2junit
     - name: Run tests
-      run: dotnet test src/MarkDoc.sln --logger "trx"
+      run: dotnet test src/ModularDoc.sln --logger "trx"
     - name: Extract test results
       run: |
         mkdir artifacts
