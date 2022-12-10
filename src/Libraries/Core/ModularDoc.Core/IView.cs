@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ModularDoc
+namespace ModularDoc.Core
 {
   /// <summary>
   /// Interface for views

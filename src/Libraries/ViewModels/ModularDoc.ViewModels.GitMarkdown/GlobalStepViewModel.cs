@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 using ModularDoc.Members;
 using ModularDoc.MVVM.Helpers;

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.MVVM.Helpers
 {

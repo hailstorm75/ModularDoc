@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.Members
 {

@@ -7,6 +7,7 @@ using System.Threading;
 using Autofac;
 using Autofac.Core;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 
 namespace ModularDoc.MVVM.Helpers
@@ -27,7 +28,7 @@ namespace ModularDoc.MVVM.Helpers
       var root = Path.Combine(execPath!, "Plugins");
       var plugins = Directory.EnumerateDirectories(root);
       var assemblies = plugins
-        .SelectMany(path => Directory.EnumerateFiles(path, "ModularDoc.Plugins.*.dll", SearchOption.TopDirectoryOnly))
+        .SelectMany(path => Directory.EnumerateFiles(path, "ModularDoc.Core.Plugins.*.dll", SearchOption.TopDirectoryOnly))
         .Select(Assembly.LoadFrom);
 
       foreach (var assembly in assemblies)

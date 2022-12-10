@@ -6,6 +6,7 @@ using Avalonia.Collections;
 using Avalonia.Data.Converters;
 using Castle.Core.Internal;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.Views.Main.Converters
 {

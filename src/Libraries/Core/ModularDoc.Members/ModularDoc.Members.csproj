@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\ModularDoc.Helpers\ModularDoc.Helpers.csproj" />
-    <ProjectReference Include="..\ModularDoc\ModularDoc.csproj" />
+    <ProjectReference Include="..\ModularDoc.Core\ModularDoc.Core.csproj" />
   </ItemGroup>
 
 </Project>

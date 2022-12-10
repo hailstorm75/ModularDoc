@@ -14,6 +14,7 @@ using ModularDoc.Views;
 using ModularDoc.Views.Main;
 using System;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.App
 {

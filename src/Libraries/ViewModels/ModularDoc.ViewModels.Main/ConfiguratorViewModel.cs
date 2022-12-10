@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ModularDoc.Constants;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 using ModularDoc.MVVM.Helpers;
 using ReactiveUI;

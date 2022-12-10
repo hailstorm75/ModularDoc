@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 using ModularDoc.MVVM.Helpers;
 

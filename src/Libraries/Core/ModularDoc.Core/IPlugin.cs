@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ModularDoc
+namespace ModularDoc.Core
 {
   /// <summary>
   /// Interface for plugins

@@ -1,4 +1,4 @@
-﻿namespace ModularDoc
+﻿namespace ModularDoc.Core
 {
   /// <summary>
   /// Interface for definite processes

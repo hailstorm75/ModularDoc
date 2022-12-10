@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Documentation;
 using ModularDoc.MVVM.Helpers;
 

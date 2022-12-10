@@ -9,6 +9,7 @@ using ModularDoc.Members.Dnlib.Properties;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Members.Dnlib.ResolvedTypes;
 using ModularDoc.Members.Dnlib.Types;
 using ModularDoc.Members.ResolvedTypes;

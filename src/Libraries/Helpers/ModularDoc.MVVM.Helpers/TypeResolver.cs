@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.MVVM.Helpers
 {

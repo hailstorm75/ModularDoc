@@ -26,7 +26,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc\ModularDoc.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Core\ModularDoc.Core.csproj" />
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Members\ModularDoc.Members.csproj">
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Helpers\ModularDoc.Helpers\ModularDoc.Helpers.csproj">

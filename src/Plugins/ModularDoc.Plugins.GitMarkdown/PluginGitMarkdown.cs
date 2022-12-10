@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Diagrams;
 using ModularDoc.Diagrams.Mermaid;
 using ModularDoc.Documentation;
@@ -49,10 +50,10 @@ namespace ModularDoc.Plugins.GitMarkdown
     public string Description => "Markdown documentation generating plugin for GitHub, GitLab, and Bitbucket";
 
     /// <inheritdoc />
-    public string Author => "ModularDoc";
+    public string Author => "ModularDoc.Core";
 
     /// <inheritdoc />
-    public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("ModularDoc.Plugins.GitMarkdown.icon.png");
+    public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("ModularDoc.Core.Plugins.GitMarkdown.icon.png");
 
     /// <inheritdoc />
     public IReadOnlyCollection<string> Steps => STEPS.Value;

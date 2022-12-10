@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.Helpers
 {

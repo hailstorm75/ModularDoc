@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ModularDoc
+namespace ModularDoc.Core
 {
   /// <summary>
   /// Interface for global settings

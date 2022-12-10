@@ -3,7 +3,7 @@
   mc:Ignorable="d"
   x:Class="ModularDoc.Views.Main.ConfiguratorView"
   xmlns="https://github.com/avaloniaui"
-  xmlns:core="clr-namespace:ModularDoc;assembly=ModularDoc"
+  xmlns:core="clr-namespace:ModularDoc.Core;assembly=ModularDoc.Core"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

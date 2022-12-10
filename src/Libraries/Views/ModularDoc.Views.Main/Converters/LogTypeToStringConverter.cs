@@ -2,6 +2,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.Views.Main.Converters
 {

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using ModularDoc;
+using ModularDoc.Core;
 
 namespace ModularDoc.ViewModels
 {

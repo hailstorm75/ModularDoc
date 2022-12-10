@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UT.Members", "Tests\UnitTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UT.Documentation", "Tests\UnitTests\Components\UT.Documentation\UT.Documentation.csproj", "{6EF35B63-D581-40C2-ACD1-F9C522E3B996}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc", "Libraries\Core\ModularDoc\ModularDoc.csproj", "{47E5570F-400D-4B6F-9102-8F258AEEC8EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Core", "Libraries\Core\ModularDoc.Core\ModularDoc.Core.csproj", "{47E5570F-400D-4B6F-9102-8F258AEEC8EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModularDoc.App", "ModularDoc.App\ModularDoc.App.csproj", "{DDD5D300-8F67-4E94-B5FD-404BA53DD3EA}"
 EndProject

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Generator;
 using ModularDoc.Linkers;
 using ModularDoc.Members.Types;

@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 using ReactiveUI;
 

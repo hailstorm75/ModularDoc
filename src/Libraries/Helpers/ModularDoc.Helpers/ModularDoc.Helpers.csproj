@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\ModularDoc\ModularDoc.csproj" />
+    <ProjectReference Include="..\..\Core\ModularDoc.Core\ModularDoc.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

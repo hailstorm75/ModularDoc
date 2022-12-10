@@ -1,4 +1,5 @@
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Members;
 using ModularDoc.MVVM.Helpers;
 

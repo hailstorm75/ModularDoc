@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using ModularDoc;
+using ModularDoc.Core;
 using ReactiveUI;
 
 namespace ModularDoc.Helpers

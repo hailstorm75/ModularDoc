@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ModularDoc
+namespace ModularDoc.Core
 {
   /// <summary>
   /// Interface for view models of plugin steps

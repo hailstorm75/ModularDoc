@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Members.Types;
 
 namespace ModularDoc.Members

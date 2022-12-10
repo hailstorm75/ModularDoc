@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ModularDoc
+namespace ModularDoc.Core
 {
   /// <summary>
   /// Logger message structure

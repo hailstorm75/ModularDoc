@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Members.Types;
 using Cache =
   System.Collections.Concurrent.ConcurrentDictionary<string, (ModularDoc.Documentation.IDocElement? type,

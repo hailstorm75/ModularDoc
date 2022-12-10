@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using ModularDoc;
+using ModularDoc.Core;
 using ReactiveUI;
 
 namespace ModularDoc.MVVM.Helpers

@@ -9,6 +9,7 @@ using DynamicData;
 using DynamicData.Binding;
 using ModularDoc.Constants;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 using ModularDoc.MVVM.Helpers;
 using ReactiveUI;

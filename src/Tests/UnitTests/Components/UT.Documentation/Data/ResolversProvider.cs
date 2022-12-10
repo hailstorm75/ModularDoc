@@ -7,6 +7,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Documentation;
 using ModularDoc.Members;
 using Moq;
@@ -32,7 +33,7 @@ namespace UT.Documentation.Data
     {
       var path = Path.GetFullPath("../../../Components/Documentation");
       var assemblies = Directory
-        .EnumerateFiles(path, "ModularDoc*.dll", SearchOption.TopDirectoryOnly)
+        .EnumerateFiles(path, "ModularDoc.Core*.dll", SearchOption.TopDirectoryOnly)
         .Select(Assembly.LoadFrom);
 
       foreach (var assembly in assemblies)

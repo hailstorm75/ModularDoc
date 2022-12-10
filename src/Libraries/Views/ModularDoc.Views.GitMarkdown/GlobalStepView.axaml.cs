@@ -2,6 +2,7 @@
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.MVVM.Helpers;
 
 namespace ModularDoc.Views.GitMarkdown

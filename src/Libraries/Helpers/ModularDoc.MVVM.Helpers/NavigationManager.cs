@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 
 namespace ModularDoc.MVVM.Helpers

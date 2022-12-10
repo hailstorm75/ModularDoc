@@ -1,5 +1,6 @@
 ﻿using System;
 using ModularDoc;
+using ModularDoc.Core;
 using ReactiveUI;
 
 namespace ModularDoc.MVVM.Helpers

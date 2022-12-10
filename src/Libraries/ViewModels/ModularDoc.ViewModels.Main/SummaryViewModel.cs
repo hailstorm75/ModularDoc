@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ModularDoc.Constants;
 using ModularDoc;
+using ModularDoc.Core;
 using ModularDoc.Helpers;
 using ModularDoc.MVVM.Helpers;
 using ReactiveUI;
@@ -219,7 +220,7 @@ namespace ModularDoc.ViewModels.Main
 
     private async Task SaveConfiguration()
     {
-      var result = await m_dialogManager.TrySaveFileAsync("Save configuration", "pluginConfig", ("mconf", "ModularDoc config")).ConfigureAwait(false);
+      var result = await m_dialogManager.TrySaveFileAsync("Save configuration", "pluginConfig", ("mconf", "ModularDoc.Core config")).ConfigureAwait(false);
       if (result.IsEmpty)
         return;
 

@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Core\ModularDoc\ModularDoc.csproj" />
+    <ProjectReference Include="..\Libraries\Core\ModularDoc.Core\ModularDoc.Core.csproj" />
     <ProjectReference Include="..\Libraries\Helpers\ModularDoc.MVVM.Helpers\ModularDoc.MVVM.Helpers.csproj" />
   </ItemGroup>
   
