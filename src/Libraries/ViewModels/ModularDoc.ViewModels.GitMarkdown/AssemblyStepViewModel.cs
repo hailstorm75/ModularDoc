@@ -134,7 +134,7 @@ namespace ModularDoc.ViewModels.GitMarkdown
 
     private async Task BrowseAsync()
     {
-      var result = await m_dialogManager.TrySelectFilesAsync("Select a .NET assembly", new [] { (new[] { "dll" } as IEnumerable<string>, "Assembly") });
+      var result = await m_dialogManager.TrySelectFilesAsync("Select a .NET assembly", new [] { (new[] { "dll" } as IEnumerable<string>, "Assembly") }, true);
       if (result.IsEmpty)
         return;
 
