@@ -32,7 +32,7 @@ namespace UT.Members.Data
     {
       var path = Path.GetFullPath("../../../Components/Members");
       var assemblies = Directory
-        .EnumerateFiles(path, "ModularDoc.Core*.dll", SearchOption.TopDirectoryOnly)
+        .EnumerateFiles(path, "ModularDoc.*.dll", SearchOption.TopDirectoryOnly)
         .Select(Assembly.LoadFrom);
 
       foreach (var assembly in assemblies)
