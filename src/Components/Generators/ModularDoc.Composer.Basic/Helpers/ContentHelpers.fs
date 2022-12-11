@@ -1,4 +1,4 @@
-﻿namespace ModularDoc.Generator.Basic
+﻿namespace ModularDoc.Composer.Basic
 
 open ModularDoc.Documentation.Tags
 open ModularDoc.Members.Enums

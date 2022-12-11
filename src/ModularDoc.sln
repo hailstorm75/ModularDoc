@@ -37,13 +37,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Printers", "Printers", "{EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Members", "Members", "{1F2E98DE-4A6A-4BC9-B7DC-8919BCDDFCAF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generators", "Generators", "{6BFDB182-4F53-43FD-A8E3-B94435CC1A05}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Composers", "Composers", "{6BFDB182-4F53-43FD-A8E3-B94435CC1A05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Documentation.Xml", "Components\Documentation\ModularDoc.Documentation.Xml\ModularDoc.Documentation.Xml.csproj", "{042245B9-4C91-45CA-92AE-E741C54EB859}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Elements.Markdown", "Components\Elements\ModularDoc.Elements.Markdown\ModularDoc.Elements.Markdown.csproj", "{AF1C3FAB-6B1B-4D59-80DD-89B82DE69129}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModularDoc.Generator.Basic", "Components\Generators\ModularDoc.Generator.Basic\ModularDoc.Generator.Basic.fsproj", "{C080C99A-2230-4FF5-9F59-4F627693B1F0}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModularDoc.Composer.Basic", "Components\Generators\ModularDoc.Composer.Basic\ModularDoc.Composer.Basic.fsproj", "{C080C99A-2230-4FF5-9F59-4F627693B1F0}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModularDoc.Linkers.Markdown", "Components\Linkers\ModularDoc.Linkers.Markdown\ModularDoc.Linkers.Markdown.fsproj", "{25D04744-3C29-45C2-B829-1B35B2FAFF4B}"
 EndProject

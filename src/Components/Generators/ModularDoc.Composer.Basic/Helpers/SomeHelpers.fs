@@ -1,4 +1,4 @@
-﻿namespace ModularDoc.Generator.Basic
+﻿namespace ModularDoc.Composer.Basic
 
 module internal SomeHelpers =
   /// <summary>

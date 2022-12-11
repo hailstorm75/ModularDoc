@@ -1,6 +1,6 @@
-﻿namespace ModularDoc.Generator.Basic
+﻿namespace ModularDoc.Composer.Basic
 
-open ModularDoc.Generator.Basic
+open ModularDoc.Composer.Basic
 open ModularDoc.Members.ResolvedTypes
 open ModularDoc.Members.Members
 open ModularDoc.Members.Enums
