@@ -1,8 +1,8 @@
-﻿namespace ModularDoc.Linkers.Markdown
+﻿namespace ModularDoc.Linker.Markdown
 
 open System
 open ModularDoc.Members
-open ModularDoc.Linkers
+open ModularDoc.Linker
 open ModularDoc.Members.ResolvedTypes
 open ModularDoc.Members.Types
 open ModularDoc.Members.Members
@@ -11,7 +11,7 @@ open System.Collections.Concurrent
 /// <summary>
 /// Markdown linker class
 /// </summary>
-type Linker(memberResolver, linkerSettings: ILinkerSettings) =
+type MarkdownLinker(memberResolver, linkerSettings: ILinkerSettings) =
   let evalBoolString (input: string): bool =
     let mutable result = false
     if bool.TryParse(input, &result) then

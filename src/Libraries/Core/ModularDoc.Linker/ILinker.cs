@@ -4,7 +4,7 @@ using ModularDoc.Members.Members;
 using ModularDoc.Members.ResolvedTypes;
 using ModularDoc.Members.Types;
 
-namespace ModularDoc.Linkers
+namespace ModularDoc.Linker
 {
   /// <summary>
   /// Interface for creating links

@@ -21,7 +21,7 @@
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Elements\ModularDoc.Elements.csproj">
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Composer\ModularDoc.Composer.csproj" />
-    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linker\ModularDoc.Linker.csproj" />
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Members\ModularDoc.Members.csproj" />
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Printer\ModularDoc.Printer.csproj" />
   </ItemGroup>

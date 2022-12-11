@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-using ModularDoc.Linkers;
+using ModularDoc.Linker;
 using ModularDoc.Members.ResolvedTypes;
 using ModularDoc.Members.Types;
 

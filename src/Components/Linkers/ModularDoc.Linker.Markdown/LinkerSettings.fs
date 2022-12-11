@@ -1,8 +1,8 @@
-﻿namespace ModularDoc.Linkers.Markdown
+﻿namespace ModularDoc.Linker.Markdown
 
 open System
 open System.Collections.Generic
-open ModularDoc.Linkers
+open ModularDoc.Linker
 
 type LinkerSettings(data: IReadOnlyDictionary<string, string>) =
   member val Platform = data.[LinkerSettings.ENTRY_PLATFORM] with get, set

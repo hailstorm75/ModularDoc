@@ -1,7 +1,7 @@
 ﻿namespace ModularDoc.Composer.Basic
 
 open ModularDoc.Diagrams
-open ModularDoc.Linkers
+open ModularDoc.Linker
 open ModularDoc.Members
 open ModularDoc.Elements
 open ModularDoc.Documentation

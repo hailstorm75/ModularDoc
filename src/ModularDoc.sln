@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Elements", "Libr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Composer", "Libraries\Core\ModularDoc.Composer\ModularDoc.Composer.csproj", "{FCEC3248-C3CC-4D67-908E-C854F8A638F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Linkers", "Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj", "{48F73C04-EEA7-418B-BC7C-A1E797434E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Linker", "Libraries\Core\ModularDoc.Linker\ModularDoc.Linker.csproj", "{48F73C04-EEA7-418B-BC7C-A1E797434E4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Members", "Libraries\Core\ModularDoc.Members\ModularDoc.Members.csproj", "{5F69CC8D-7B2C-40F7-B1E2-8EE8DA76DCC8}"
 EndProject
@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Elements.Markdow
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModularDoc.Composer.Basic", "Components\Generators\ModularDoc.Composer.Basic\ModularDoc.Composer.Basic.fsproj", "{C080C99A-2230-4FF5-9F59-4F627693B1F0}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModularDoc.Linkers.Markdown", "Components\Linkers\ModularDoc.Linkers.Markdown\ModularDoc.Linkers.Markdown.fsproj", "{25D04744-3C29-45C2-B829-1B35B2FAFF4B}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModularDoc.Linker.Markdown", "Components\Linkers\ModularDoc.Linker.Markdown\ModularDoc.Linker.Markdown.fsproj", "{25D04744-3C29-45C2-B829-1B35B2FAFF4B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Members.Dnlib", "Components\Members\ModularDoc.Members.Dnlib\ModularDoc.Members.Dnlib.csproj", "{3B7C3E71-1299-4F6C-AB88-15BBC6D75C59}"
 EndProject

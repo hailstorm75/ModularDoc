@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Components\Documentation\ModularDoc.Documentation.Xml\ModularDoc.Documentation.Xml.csproj" />
-    <ProjectReference Include="..\..\..\Components\Linkers\ModularDoc.Linkers.Markdown\ModularDoc.Linkers.Markdown.fsproj" />
+    <ProjectReference Include="..\..\..\Components\Linkers\ModularDoc.Linker.Markdown\ModularDoc.Linker.Markdown.fsproj" />
     <ProjectReference Include="..\..\..\Components\Members\ModularDoc.Members.Dnlib\ModularDoc.Members.Dnlib.csproj" />
     <ProjectReference Include="..\..\Helpers\ModularDoc.MVVM.Helpers\ModularDoc.MVVM.Helpers.csproj" />
   </ItemGroup>

@@ -7,11 +7,12 @@
     <Nullable>enable</Nullable>
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
+    <RootNamespace>ModularDoc.Linkers</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\..\..\bin\Debug\Libraries\Core</OutputPath>
-    <DocumentationFile>..\..\..\..\bin\Debug\Libraries\Core\ModularDoc.Linkers.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\..\bin\Debug\Libraries\Core\ModularDoc.Linker.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

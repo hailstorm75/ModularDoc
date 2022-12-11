@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ModularDoc;
 using ModularDoc.Composer;
 using ModularDoc.Core;
-using ModularDoc.Linkers;
+using ModularDoc.Linker;
 using ModularDoc.Members.Types;
 
 namespace ModularDoc.Printer.Markdown

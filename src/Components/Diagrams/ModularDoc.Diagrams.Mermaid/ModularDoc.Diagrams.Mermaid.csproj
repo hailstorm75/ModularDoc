@@ -19,6 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Diagrams\ModularDoc.Diagrams.csproj" />
-    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linker\ModularDoc.Linker.csproj" />
   </ItemGroup>
 </Project>

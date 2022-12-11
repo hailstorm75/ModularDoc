@@ -34,7 +34,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Composer\ModularDoc.Composer.csproj">
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linker\ModularDoc.Linker.csproj">
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Members\ModularDoc.Members.csproj">
     </ProjectReference>

@@ -32,12 +32,12 @@
     <ProjectReference Include="..\..\Components\Documentation\ModularDoc.Documentation.Xml\ModularDoc.Documentation.Xml.csproj" />
     <ProjectReference Include="..\..\Components\Elements\ModularDoc.Elements.Markdown\ModularDoc.Elements.Markdown.csproj" />
     <ProjectReference Include="..\..\Components\Generators\ModularDoc.Composer.Basic\ModularDoc.Composer.Basic.fsproj" />
-    <ProjectReference Include="..\..\Components\Linkers\ModularDoc.Linkers.Markdown\ModularDoc.Linkers.Markdown.fsproj" />
+    <ProjectReference Include="..\..\Components\Linkers\ModularDoc.Linker.Markdown\ModularDoc.Linker.Markdown.fsproj" />
     <ProjectReference Include="..\..\Components\Members\ModularDoc.Members.Dnlib\ModularDoc.Members.Dnlib.csproj" />
     <ProjectReference Include="..\..\Components\Printers\ModularDoc.Printer.Markdown\ModularDoc.Printer.Markdown.csproj" />
     <ProjectReference Include="..\..\Libraries\Core\ModularDoc.Core\ModularDoc.Core.csproj" />
     <ProjectReference Include="..\..\Libraries\Core\ModularDoc.Elements\ModularDoc.Elements.csproj" />
-    <ProjectReference Include="..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj" />
+    <ProjectReference Include="..\..\Libraries\Core\ModularDoc.Linker\ModularDoc.Linker.csproj" />
     <ProjectReference Include="..\..\Libraries\ViewModels\ModularDoc.ViewModels.GitMarkdown\ModularDoc.ViewModels.GitMarkdown.csproj" />
     <ProjectReference Include="..\..\Libraries\Views\ModularDoc.Views.GitMarkdown\ModularDoc.Views.GitMarkdown.csproj" />
     <ProjectReference Include="..\..\Libraries\Views\ModularDoc.Views\ModularDoc.Views.csproj" />

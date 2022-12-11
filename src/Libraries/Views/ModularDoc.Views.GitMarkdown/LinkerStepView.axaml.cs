@@ -1,6 +1,5 @@
-﻿using ModularDoc;
-using ModularDoc.Core;
-using ModularDoc.Linkers;
+﻿using ModularDoc.Core;
+using ModularDoc.Linker;
 using ModularDoc.MVVM.Helpers;
 
 namespace ModularDoc.Views.GitMarkdown

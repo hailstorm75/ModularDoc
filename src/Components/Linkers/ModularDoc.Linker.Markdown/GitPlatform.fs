@@ -1,4 +1,4 @@
-﻿namespace ModularDoc.Linkers.Markdown
+﻿namespace ModularDoc.Linker.Markdown
 
 open System.ComponentModel
 

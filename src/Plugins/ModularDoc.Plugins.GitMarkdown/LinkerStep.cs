@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ModularDoc;
 using ModularDoc.Core;
-using ModularDoc.Linkers;
+using ModularDoc.Linker;
 using ModularDoc.MVVM.Helpers;
 
 namespace ModularDoc.Plugins.GitMarkdown

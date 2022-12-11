@@ -1,6 +1,6 @@
-﻿namespace ModularDoc.Linkers.Markdown
+﻿namespace ModularDoc.Linker.Markdown
 
-open ModularDoc.Linkers.Markdown
+open ModularDoc.Linker.Markdown
 open ModularDoc.Members.Members
 open System
 open System.IO

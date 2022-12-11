@@ -5,6 +5,10 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
+    <AssemblyName>ModularDoc.Linker.Markdown</AssemblyName>
+    <RootNamespace>ModularDoc.Linker.Markdown</RootNamespace>
+    <PackageId>ModularDoc.Linker.Markdown</PackageId>
+    <Product>ModularDoc.Linker.Markdown</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +19,7 @@
     <Compile Include="LinkGenerator.fs" />
     <Compile Include="AnchorGenerator.fs" />
     <Compile Include="SourceCodeLinkGenerator.fs" />
-    <Compile Include="Linker.fs" />
+    <Compile Include="MarkdownLinker.fs" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,7 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Elements\ModularDoc.Elements.csproj">
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj">
+    <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Linker\ModularDoc.Linker.csproj">
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\Core\ModularDoc.Members\ModularDoc.Members.csproj">
     </ProjectReference>

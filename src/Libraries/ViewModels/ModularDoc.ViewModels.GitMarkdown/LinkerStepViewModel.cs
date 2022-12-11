@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using ModularDoc.Linkers;
-using ModularDoc.Linkers.Markdown;
+using ModularDoc.Linker;
+using ModularDoc.Linker.Markdown;
 using ModularDoc.MVVM.Helpers;
 
 namespace ModularDoc.ViewModels.GitMarkdown

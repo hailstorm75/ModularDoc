@@ -17,8 +17,8 @@ using ModularDoc.Elements;
 using ModularDoc.Elements.Markdown;
 using ModularDoc.Composer.Basic;
 using ModularDoc.Helpers;
-using ModularDoc.Linkers;
-using ModularDoc.Linkers.Markdown;
+using ModularDoc.Linker;
+using ModularDoc.Linker.Markdown;
 using ModularDoc.Members;
 using ModularDoc.Members.Dnlib;
 using ModularDoc.Members.Types;
@@ -81,7 +81,7 @@ namespace ModularDoc.Plugins.GitMarkdown
       builder.RegisterType<Resolver>().As<IResolver>().SingleInstance();
       builder.RegisterType<DocResolver>().As<IDocResolver>().SingleInstance();
       builder.RegisterType<Creator>().As<IElementCreator>().SingleInstance();
-      builder.RegisterType<Linker>().As<ILinker>().SingleInstance();
+      builder.RegisterType<MarkdownLinker>().As<ILinker>().SingleInstance();
       builder.RegisterType<TypeComposer>().As<ITypeComposer>().SingleInstance();
       builder.RegisterType<PrinterMarkdown>().As<IPrinter>().SingleInstance();
       builder.RegisterType<MermaidResolver>().As<IDiagramResolver>().SingleInstance();
@@ -156,7 +156,7 @@ namespace ModularDoc.Plugins.GitMarkdown
         await Task.WhenAll(resolver.ResolveAsync(memberSettings, globalSettings), docResolver.ResolveAsync())
           .ConfigureAwait(false);
 
-        var linker = new Linker(resolver, linkerSettings);
+        var linker = new MarkdownLinker(resolver, linkerSettings);
         var diagrams = linkerSettings.Platform.Equals("3", StringComparison.InvariantCultureIgnoreCase)
           ? new EmptyDiagramResolver()
           : new MermaidResolver(linker) as IDiagramResolver;

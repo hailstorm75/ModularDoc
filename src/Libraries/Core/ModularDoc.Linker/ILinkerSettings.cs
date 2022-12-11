@@ -1,7 +1,7 @@
 ﻿using ModularDoc;
 using ModularDoc.Core;
 
-namespace ModularDoc.Linkers
+namespace ModularDoc.Linker
 {
   /// <summary>
   /// Interface for <see cref="ILinker"/> object settings
