@@ -8,9 +8,9 @@ Interface for plugins
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IPlugin[[IPlugin]]
-  class ModularDoc.IPlugin interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IPlugin[[IPlugin]]
+  class ModularDoc.Core.IPlugin interfaceStyle;
   end
 ```
 

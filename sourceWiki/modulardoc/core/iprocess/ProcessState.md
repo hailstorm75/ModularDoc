@@ -8,8 +8,8 @@ Enumeration of possible states of a [IProcess](../IProcess.md)
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc.IProcess
-  ModularDoc.IProcess.ProcessState[[ProcessState]]
+  subgraph ModularDoc.Core.IProcess
+  ModularDoc.Core.IProcess.ProcessState[[ProcessState]]
   end
 ```
 

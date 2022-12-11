@@ -8,8 +8,8 @@ Logging level types
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc.IModularDocLogger
-  ModularDoc.IModularDocLogger.LogType[[LogType]]
+  subgraph ModularDoc.Core.IModularDocLogger
+  ModularDoc.Core.IModularDocLogger.LogType[[LogType]]
   end
 ```
 

@@ -8,9 +8,9 @@ Interface for plugin steps
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IPluginStep[[IPluginStep]]
-  class ModularDoc.IPluginStep interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IPluginStep[[IPluginStep]]
+  class ModularDoc.Core.IPluginStep interfaceStyle;
   end
 ```
 

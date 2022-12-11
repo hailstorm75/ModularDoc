@@ -8,9 +8,9 @@ Interface for creating links
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc.Linkers
-  ModularDoc.Linkers.ILinker[[ILinker]]
-  class ModularDoc.Linkers.ILinker interfaceStyle;
+  subgraph ModularDoc.Linker
+  ModularDoc.Linker.ILinker[[ILinker]]
+  class ModularDoc.Linker.ILinker interfaceStyle;
   end
 ```
 

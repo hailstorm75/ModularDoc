@@ -8,17 +8,17 @@ Interface for view models of plugin steps
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IStepViewModel[[IStepViewModel]]
-  class ModularDoc.IStepViewModel interfaceStyle;
-  ModularDoc.IViewModel[[IViewModel]]
-  class ModularDoc.IViewModel interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IStepViewModel[[IStepViewModel]]
+  class ModularDoc.Core.IStepViewModel interfaceStyle;
+  ModularDoc.Core.IViewModel[[IViewModel]]
+  class ModularDoc.Core.IViewModel interfaceStyle;
   end
   subgraph System
 System.IDisposable[[IDisposable]]
   end
-ModularDoc.IViewModel --> ModularDoc.IStepViewModel
-System.IDisposable --> ModularDoc.IViewModel
+ModularDoc.Core.IViewModel --> ModularDoc.Core.IStepViewModel
+System.IDisposable --> ModularDoc.Core.IViewModel
 ```
 
 ## Members

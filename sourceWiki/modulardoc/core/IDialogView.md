@@ -8,13 +8,13 @@ Interface for dialog views
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IDialogView[[IDialogView]]
-  class ModularDoc.IDialogView interfaceStyle;
-  ModularDoc.IView[[IView]]
-  class ModularDoc.IView interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IDialogView[[IDialogView]]
+  class ModularDoc.Core.IDialogView interfaceStyle;
+  ModularDoc.Core.IView[[IView]]
+  class ModularDoc.Core.IView interfaceStyle;
   end
-ModularDoc.IView --> ModularDoc.IDialogView
+ModularDoc.Core.IView --> ModularDoc.Core.IDialogView
 ```
 
 ## Members

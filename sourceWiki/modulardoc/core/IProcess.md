@@ -8,9 +8,9 @@ Interface for processes
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IProcess[[IProcess]]
-  class ModularDoc.IProcess interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IProcess[[IProcess]]
+  class ModularDoc.Core.IProcess interfaceStyle;
   end
 ```
 
@@ -51,6 +51,6 @@ State of the given process
 public event EventHandler<ProcessState> StateChanged
 ```
 ##### Summary
-Invoked whenever the [IProcess](modulardoc/IProcess.md).[State](#state) is changed
+Invoked whenever the [IProcess](modulardoc/core/IProcess.md).[State](#state) is changed
 
 *Generated with* [*ModularDoc*](https://github.com/hailstorm75/ModularDoc)

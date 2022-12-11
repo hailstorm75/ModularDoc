@@ -8,19 +8,19 @@ Interface for views
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IViewModel[[IViewModel]]
-  class ModularDoc.IViewModel interfaceStyle;
-  ModularDoc.IView_1[[IView< TViewModel >]]
-  class ModularDoc.IView_1 interfaceStyle;
-  ModularDoc.IView_1TViewModel((TViewModel));
-  ModularDoc.IView_1 -- where --o ModularDoc.IView_1TViewModel
-ModularDoc.IViewModel --> ModularDoc.IView_1TViewModel
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IViewModel[[IViewModel]]
+  class ModularDoc.Core.IViewModel interfaceStyle;
+  ModularDoc.Core.IView_1[[IView< TViewModel >]]
+  class ModularDoc.Core.IView_1 interfaceStyle;
+  ModularDoc.Core.IView_1TViewModel((TViewModel));
+  ModularDoc.Core.IView_1 -- where --o ModularDoc.Core.IView_1TViewModel
+ModularDoc.Core.IViewModel --> ModularDoc.Core.IView_1TViewModel
 
-  ModularDoc.IView[[IView]]
-  class ModularDoc.IView interfaceStyle;
+  ModularDoc.Core.IView[[IView]]
+  class ModularDoc.Core.IView interfaceStyle;
   end
-ModularDoc.IView --> ModularDoc.IView_1
+ModularDoc.Core.IView --> ModularDoc.Core.IView_1
 ```
 
 ## Members

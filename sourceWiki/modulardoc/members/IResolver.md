@@ -26,7 +26,7 @@ Type resolver
 | Returns | Name |
 | --- | --- |
 | `void` | [`Resolve`](#resolve)(`string` assembly)<br>Resolves `assembly` types |
-| `Task` | [`ResolveAsync`](#resolveasync)([`IMemberSettings`](./IMemberSettings.md) memberSettings, [`IGlobalSettings`](../IGlobalSettings.md) globalSettings)<br>Resolves all assemblies based on the given settings |
+| `Task` | [`ResolveAsync`](#resolveasync)([`IMemberSettings`](./IMemberSettings.md) memberSettings, [`IGlobalSettings`](../core/IGlobalSettings.md) globalSettings)<br>Resolves all assemblies based on the given settings |
 | `bool` | [`TryFindType`](#tryfindtype)(`string` fullname, out [`IType`](types/IType.md) result) |
 | `bool` | [`TryGetMemberSourceLine`](#trygetmembersourceline)(`int` token, out `int` line, out `string` source) |
 
@@ -43,7 +43,7 @@ public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalS
 | Type | Name | Description |
 | --- | --- | --- |
 | [`IMemberSettings`](./IMemberSettings.md) | memberSettings |   |
-| [`IGlobalSettings`](../IGlobalSettings.md) | globalSettings |   |
+| [`IGlobalSettings`](../core/IGlobalSettings.md) | globalSettings |   |
 
 ##### Summary
 Resolves all assemblies based on the given settings

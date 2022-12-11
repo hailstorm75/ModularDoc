@@ -12,11 +12,11 @@ Interface for [IDocResolver](./IDocResolver.md) settings
   ModularDoc.Documentation.IDocSettings[[IDocSettings]]
   class ModularDoc.Documentation.IDocSettings interfaceStyle;
   end
-  subgraph ModularDoc
-  ModularDoc.ILibrarySettings[[ILibrarySettings]]
-  class ModularDoc.ILibrarySettings interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.ILibrarySettings[[ILibrarySettings]]
+  class ModularDoc.Core.ILibrarySettings interfaceStyle;
   end
-ModularDoc.ILibrarySettings --> ModularDoc.Documentation.IDocSettings
+ModularDoc.Core.ILibrarySettings --> ModularDoc.Documentation.IDocSettings
 ```
 
 ## Members
@@ -33,7 +33,7 @@ Interface for [IDocResolver](./IDocResolver.md) settings
 ### Inheritance
  - [
 `ILibrarySettings`
-](../ILibrarySettings.md)
+](../core/ILibrarySettings.md)
 
 ### Properties
 #### Paths

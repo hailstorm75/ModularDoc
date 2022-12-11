@@ -8,9 +8,9 @@ Interface for in-house logger
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IModularDocLogger[[IModularDocLogger]]
-  class ModularDoc.IModularDocLogger interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IModularDocLogger[[IModularDocLogger]]
+  class ModularDoc.Core.IModularDocLogger interfaceStyle;
   end
 ```
 

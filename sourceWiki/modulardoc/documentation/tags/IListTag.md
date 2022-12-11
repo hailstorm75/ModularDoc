@@ -55,7 +55,7 @@ public IReadOnlyCollection<IContent> Headings { get; }
 List headings
 
 ##### Remarks
-Used when the list is a [ListType](ilisttag/ListType.md).Table
+Used when the list is a [ListType](ilisttag/ListType.md).[Table](#table)
 
 #### Rows
 ```csharp

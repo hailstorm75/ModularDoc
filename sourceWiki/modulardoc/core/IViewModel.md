@@ -8,14 +8,14 @@ Interface for view models
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IViewModel[[IViewModel]]
-  class ModularDoc.IViewModel interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IViewModel[[IViewModel]]
+  class ModularDoc.Core.IViewModel interfaceStyle;
   end
   subgraph System
 System.IDisposable[[IDisposable]]
   end
-System.IDisposable --> ModularDoc.IViewModel
+System.IDisposable --> ModularDoc.Core.IViewModel
 ```
 
 ## Members

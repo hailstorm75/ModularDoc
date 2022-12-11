@@ -8,9 +8,9 @@ Interface for settings of libraries
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.ILibrarySettings[[ILibrarySettings]]
-  class ModularDoc.ILibrarySettings interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.ILibrarySettings[[ILibrarySettings]]
+  class ModularDoc.Core.ILibrarySettings interfaceStyle;
   end
 ```
 

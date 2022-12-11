@@ -12,11 +12,11 @@ Interface for [IResolver](./IResolver.md) settings
   ModularDoc.Members.IMemberSettings[[IMemberSettings]]
   class ModularDoc.Members.IMemberSettings interfaceStyle;
   end
-  subgraph ModularDoc
-  ModularDoc.ILibrarySettings[[ILibrarySettings]]
-  class ModularDoc.ILibrarySettings interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.ILibrarySettings[[ILibrarySettings]]
+  class ModularDoc.Core.ILibrarySettings interfaceStyle;
   end
-ModularDoc.ILibrarySettings --> ModularDoc.Members.IMemberSettings
+ModularDoc.Core.ILibrarySettings --> ModularDoc.Members.IMemberSettings
 ```
 
 ## Members
@@ -33,7 +33,7 @@ Interface for [IResolver](./IResolver.md) settings
 ### Inheritance
  - [
 `ILibrarySettings`
-](../ILibrarySettings.md)
+](../core/ILibrarySettings.md)
 
 ### Properties
 #### Paths

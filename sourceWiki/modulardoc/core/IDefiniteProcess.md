@@ -8,13 +8,13 @@ Interface for definite processes
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IDefiniteProcess[[IDefiniteProcess]]
-  class ModularDoc.IDefiniteProcess interfaceStyle;
-  ModularDoc.IProcess[[IProcess]]
-  class ModularDoc.IProcess interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IDefiniteProcess[[IDefiniteProcess]]
+  class ModularDoc.Core.IDefiniteProcess interfaceStyle;
+  ModularDoc.Core.IProcess[[IProcess]]
+  class ModularDoc.Core.IProcess interfaceStyle;
   end
-ModularDoc.IProcess --> ModularDoc.IDefiniteProcess
+ModularDoc.Core.IProcess --> ModularDoc.Core.IDefiniteProcess
 ```
 
 ## Members

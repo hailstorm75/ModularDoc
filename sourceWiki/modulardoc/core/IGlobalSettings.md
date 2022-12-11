@@ -8,13 +8,13 @@ Interface for global settings
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IGlobalSettings[[IGlobalSettings]]
-  class ModularDoc.IGlobalSettings interfaceStyle;
-  ModularDoc.ILibrarySettings[[ILibrarySettings]]
-  class ModularDoc.ILibrarySettings interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IGlobalSettings[[IGlobalSettings]]
+  class ModularDoc.Core.IGlobalSettings interfaceStyle;
+  ModularDoc.Core.ILibrarySettings[[ILibrarySettings]]
+  class ModularDoc.Core.ILibrarySettings interfaceStyle;
   end
-ModularDoc.ILibrarySettings --> ModularDoc.IGlobalSettings
+ModularDoc.Core.ILibrarySettings --> ModularDoc.Core.IGlobalSettings
 ```
 
 ## Members

@@ -8,17 +8,17 @@ Interface for dialog view models
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.IDialogViewModel[[IDialogViewModel]]
-  class ModularDoc.IDialogViewModel interfaceStyle;
-  ModularDoc.IViewModel[[IViewModel]]
-  class ModularDoc.IViewModel interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.IDialogViewModel[[IDialogViewModel]]
+  class ModularDoc.Core.IDialogViewModel interfaceStyle;
+  ModularDoc.Core.IViewModel[[IViewModel]]
+  class ModularDoc.Core.IViewModel interfaceStyle;
   end
   subgraph System
 System.IDisposable[[IDisposable]]
   end
-ModularDoc.IViewModel --> ModularDoc.IDialogViewModel
-System.IDisposable --> ModularDoc.IViewModel
+ModularDoc.Core.IViewModel --> ModularDoc.Core.IDialogViewModel
+System.IDisposable --> ModularDoc.Core.IViewModel
 ```
 
 ## Members

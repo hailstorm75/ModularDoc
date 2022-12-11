@@ -8,9 +8,9 @@ Interface for type printers
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc.Generator
-  ModularDoc.Generator.ITypeComposer[[ITypeComposer]]
-  class ModularDoc.Generator.ITypeComposer interfaceStyle;
+  subgraph ModularDoc.Composer
+  ModularDoc.Composer.ITypeComposer[[ITypeComposer]]
+  class ModularDoc.Composer.ITypeComposer interfaceStyle;
   end
 ```
 

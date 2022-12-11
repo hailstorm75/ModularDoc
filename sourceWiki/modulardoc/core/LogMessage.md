@@ -8,9 +8,9 @@ Logger message structure
   flowchart LR
   classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px
-  subgraph ModularDoc
-  ModularDoc.LogMessage[[LogMessage]]
-  class ModularDoc.LogMessage interfaceStyle;
+  subgraph ModularDoc.Core
+  ModularDoc.Core.LogMessage[[LogMessage]]
+  class ModularDoc.Core.LogMessage interfaceStyle;
   end
 ```
 
