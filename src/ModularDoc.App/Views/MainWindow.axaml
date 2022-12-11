@@ -1,7 +1,7 @@
 <Window
   Icon="/Assets/logo.ico"
   Name="WindowHost"
-  Title="ModularDoc.Core"
+  Title="ModularDoc"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d"

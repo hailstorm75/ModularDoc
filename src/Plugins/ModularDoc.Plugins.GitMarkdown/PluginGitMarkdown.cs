@@ -52,7 +52,7 @@ namespace ModularDoc.Plugins.GitMarkdown
     public string Author => "ModularDoc.Core";
 
     /// <inheritdoc />
-    public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("ModularDoc.Core.Plugins.GitMarkdown.icon.png");
+    public Stream? Image => Assembly.GetExecutingAssembly().GetManifestResourceStream("ModularDoc.Plugins.GitMarkdown.icon.png");
 
     /// <inheritdoc />
     public IReadOnlyCollection<string> Steps => STEPS.Value;
