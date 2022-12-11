@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Documentation", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Elements", "Libraries\Core\ModularDoc.Elements\ModularDoc.Elements.csproj", "{4B5DB3D8-2EB2-4F46-AB7B-7529F3975F5E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Generator", "Libraries\Core\ModularDoc.Generator\ModularDoc.Generator.csproj", "{FCEC3248-C3CC-4D67-908E-C854F8A638F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Composer", "Libraries\Core\ModularDoc.Composer\ModularDoc.Composer.csproj", "{FCEC3248-C3CC-4D67-908E-C854F8A638F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModularDoc.Linkers", "Libraries\Core\ModularDoc.Linkers\ModularDoc.Linkers.csproj", "{48F73C04-EEA7-418B-BC7C-A1E797434E4E}"
 EndProject

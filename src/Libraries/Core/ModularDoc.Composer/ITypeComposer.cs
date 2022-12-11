@@ -1,7 +1,7 @@
 ﻿using ModularDoc.Elements;
 using ModularDoc.Members.Types;
 
-namespace ModularDoc.Generator
+namespace ModularDoc.Composer
 {
   /// <summary>
   /// Interface for type printers

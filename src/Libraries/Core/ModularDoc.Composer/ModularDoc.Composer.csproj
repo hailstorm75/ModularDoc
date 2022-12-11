@@ -7,11 +7,15 @@
     <Nullable>enable</Nullable>
     <Authors>Denis Akopyan</Authors>
     <PackageProjectUrl>https://github.com/hailstorm75/ModularDoc</PackageProjectUrl>
+    <AssemblyName>ModularDoc.Composer</AssemblyName>
+    <RootNamespace>ModularDoc.Composer</RootNamespace>
+    <PackageId>ModularDoc.Composer</PackageId>
+    <Product>ModularDoc.Composer</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\..\..\bin\Debug\Libraries\Core</OutputPath>
-    <DocumentationFile>..\..\..\..\bin\Debug\Libraries\Core\ModularDoc.Generator.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\..\bin\Debug\Libraries\Core\ModularDoc.Composer.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

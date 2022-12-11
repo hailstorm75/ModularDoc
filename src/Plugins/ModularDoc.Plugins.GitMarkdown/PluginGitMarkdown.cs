@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using ModularDoc;
+using ModularDoc.Composer;
 using ModularDoc.Core;
 using ModularDoc.Diagrams;
 using ModularDoc.Diagrams.Mermaid;

@@ -1,7 +1,7 @@
 ﻿namespace ModularDoc.Generator.Basic
 
 open System
-open ModularDoc.Generator
+open ModularDoc.Composer
 open ModularDoc.Members.Types
 open ModularDoc.Elements
 open ModularDoc.Documentation.Tags
