@@ -139,7 +139,10 @@ module internal TypeHelpers =
 
     let cutMethod() = 
       // Remove the namespace and declaring type
-      reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.') + 1)
+      if reference.IndexOf('(') <> -1 then
+        reference.Substring(reference.AsSpan(0, reference.IndexOf('(')).LastIndexOf('.') + 1)
+      else
+        reference.Substring(reference.AsSpan().LastIndexOf('.') + 1)
     let cutMember() = 
       // Remove the namespace and declaring type
       reference.Substring(reference.LastIndexOf('.') + 1)
