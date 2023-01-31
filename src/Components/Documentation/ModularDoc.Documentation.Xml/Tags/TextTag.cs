@@ -30,7 +30,7 @@ namespace ModularDoc.Documentation.Xml.Tags
       Content = text.Value.Trim();
     }
 
-    protected TextTag(string content)
+    internal TextTag(string content)
     {
       if (content is null)
         throw new ArgumentNullException(nameof(content));
