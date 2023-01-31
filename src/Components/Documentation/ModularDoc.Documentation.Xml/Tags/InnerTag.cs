@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using ModularDoc.Documentation.Tags;
 using ModularDoc.Helpers;
@@ -39,18 +40,54 @@ namespace ModularDoc.Documentation.Xml.Tags
 
       Type = ResolveType(source);
       Reference = ResolveReference(Type, source);
-      Content = source
+
+      var rawContent = source
         // Select the documentation tags
         .Nodes()
         // Resolve the tags
         .Select(ContentResolver.Resolve)
         // Flatten the sequence
-        .SelectMany(Linq.XtoX)
-        // Materialize to a collection
-        .ToReadOnlyCollection();
+        .SelectMany(Linq.XtoX);
+
+      Content = Type switch
+      {
+        IInnerTag.InnerTagType.Code => MergeContent(rawContent).ToReadOnlyCollection(),
+        IInnerTag.InnerTagType.CodeSingle => MergeContent(rawContent).ToReadOnlyCollection(),
+        _ => rawContent.ToReadOnlyCollection()
+      };
     }
 
     #region Methods
+
+    private static IEnumerable<IContent> MergeContent(IEnumerable<IContent> content)
+    {
+      var builder = new StringBuilder();
+      foreach (var item in content)
+      {
+        switch (item)
+        {
+          case ITextTag text:
+            builder.Append(text.Content);
+            break;
+          case IInnerTag inner:
+            var innerContent = inner.Type switch
+            {
+              IInnerTag.InnerTagType.Code => (inner.Content.First() as ITextTag)?.Content,
+              IInnerTag.InnerTagType.CodeSingle => (inner.Content.First() as ITextTag)?.Content,
+              IInnerTag.InnerTagType.ParamRef => inner.Reference,
+              IInnerTag.InnerTagType.TypeRef => inner.Reference,
+              IInnerTag.InnerTagType.SeeAlso => inner.Reference,
+              IInnerTag.InnerTagType.See => inner.Reference,
+              _ => string.Empty
+            };
+
+            builder.Append(innerContent);
+            break;
+        }
+      }
+
+      yield return new TextTag(builder.ToString());
+    }
 
     private static IInnerTag.InnerTagType ResolveType(XElement source)
       => source.Name.LocalName.ToUpperInvariant() switch
