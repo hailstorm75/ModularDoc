@@ -32,6 +32,29 @@ module internal ContentProcessor =
       |> SomeHelpers.whereSome
       // Initialize content into elements
       |> Seq.map (ElementHelpers.initialize >> applyTools)
+      
+    let processSeeOrSeeAlso(tag: IInnerTag) =
+      let items = (tag.Reference, tag.Link, tag.Content)
+      match items with
+      | reference, link, _ when link.Length = 0 && reference.Length = 0 ->
+        None
+      | reference, link, _ when link.Length = 0 ->
+        TypeHelpers.processReference input reference tools |> toSomeText
+      | reference, link, content when reference.Length <> 0 && link.Length <> 0 && content.Count = 0 ->
+        let r = TypeHelpers.processReference input reference tools
+        let l = JoinedText (seq [Normal "("; LinkContent (Normal link, lazy link); Normal ")"], "")
+        
+        JoinedText(seq [r; l], " ") |> toSomeText
+      | reference, link, content when reference.Length <> 0 && link.Length <> 0 && content.Count <> 0 ->
+        let r = TypeHelpers.processReference input reference tools
+        let l = JoinedText (seq [Normal "("; LinkContent (getInlineText tag |> Seq.exactlyOne |> Normal, lazy link); Normal ")"], "")
+        
+        JoinedText(seq [r; l], " ") |> toSomeText
+      | _, link, content when link.Length <> 0 && content.Count = 0 ->
+        LinkContent (Normal link, lazy link) |> toSomeText
+      | _, link, content when link.Length <> 0 && content.Count <> 0 ->
+        LinkContent (getInlineText tag |> Seq.exactlyOne |> Normal, lazy link) |> toSomeText
+      | _ -> None
 
     // Process the content based on its type
     match content with
@@ -48,9 +71,9 @@ module internal ContentProcessor =
         -> inner.Reference |> InlineCode |> toSomeText
       | IInnerTag.InnerTagType.See
       | IInnerTag.InnerTagType.SeeAlso
-        -> TypeHelpers.processReference input inner.Reference tools |> toSomeText
+        -> processSeeOrSeeAlso inner
       | IInnerTag.InnerTagType.Para
-        -> Environment.NewLine |> Normal |> toSomeText
+        -> Environment.NewLine + Environment.NewLine |> Normal |> toSomeText
       | _ -> None
     | :? IListTag as list ->
       match list.Type with

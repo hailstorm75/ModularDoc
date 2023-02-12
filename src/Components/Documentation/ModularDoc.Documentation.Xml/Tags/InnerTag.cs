@@ -23,6 +23,9 @@ namespace ModularDoc.Documentation.Xml.Tags
     public string Reference { get; }
 
     /// <inheritdoc />
+    public string Link { get; }
+
+    /// <inheritdoc />
     public IReadOnlyCollection<IContent> Content { get; }
 
     #endregion
@@ -40,6 +43,9 @@ namespace ModularDoc.Documentation.Xml.Tags
 
       Type = ResolveType(source);
       Reference = ResolveReference(Type, source);
+      Link = Type is IInnerTag.InnerTagType.See or IInnerTag.InnerTagType.SeeAlso
+        ? source.Attributes().FirstOrDefault(x => x.Name.LocalName.Equals("href", StringComparison.InvariantCultureIgnoreCase))?.Value ?? string.Empty
+        : string.Empty;
 
       var rawContent = source
         // Select the documentation tags
