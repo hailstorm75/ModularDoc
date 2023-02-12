@@ -53,6 +53,7 @@ namespace ModularDoc.Documentation.Tags
     /// Tag type
     /// </summary>
     InnerTagType Type { get; }
+
     /// <summary>
     /// Tag reference
     /// </summary>
@@ -60,6 +61,15 @@ namespace ModularDoc.Documentation.Tags
     /// Either holds cref or name
     /// </remarks>
     string Reference { get; }
+
+    /// <summary>
+    /// Hyperlink reference
+    /// </summary>
+    /// <remarks>
+    /// Primarily for the See/SeeAlso tags. Holds value from href
+    /// </remarks>
+    string Link { get; }
+
     /// <summary>
     /// Tag content
     /// </summary>
