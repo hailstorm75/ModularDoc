@@ -51,10 +51,7 @@ namespace ModularDoc.Documentation.Xml.Tags
 
     private static string ProcessCode(XText text)
     {
-      var code = text.Value;
-      var whitespaceEndIndex = code.Length - code.AsSpan().TrimStart().Length;
-      var whitespace = code.Substring(1, whitespaceEndIndex - 1);
-      return code.AsSpan()[1..].ToString().Replace(whitespace, string.Empty);
+      return text.Value;
     }
   }
 }
