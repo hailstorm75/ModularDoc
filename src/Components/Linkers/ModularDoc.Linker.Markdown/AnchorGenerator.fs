@@ -28,7 +28,7 @@ module private Anchor =
     lazy("#" + normalizeAnchor input.Value) |> Some
 
   let private azureAnchor (input: string Lazy, _: string) =
-    lazy("?anchor=" + normalizeAnchor input.Value) |> Some
+    lazy("#" + normalizeAnchor input.Value) |> Some
 
   /// <summary>
   /// Creates an anchor for a given <paramref name="input"/> and <paramref name="platform"/>

@@ -20,12 +20,12 @@ namespace ModularDoc.Elements.Markdown
     /// <summary>
     /// Default constructor
     /// </summary>
-    public Diagram(string name, string diagramProvider, string content, bool external, string urlToRaw)
+    public Diagram(string name, (string start, string end) tags, string diagramProvider, string content, bool external, string urlToRaw)
     {
       m_name = name;
-      m_content = @$"```{diagramProvider}
+      m_content = @$"{tags.start}{diagramProvider}
   {content}
-```";
+{tags.end}";
     }
 
     /// <inheritdoc />
