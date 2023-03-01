@@ -153,6 +153,7 @@ namespace ModularDoc.ViewModels.GitMarkdown
       Options.Add(new Selection("GitHub", (int)GitPlatform.GitHub));
       Options.Add(new Selection("GitLab", (int)GitPlatform.GitLab));
       Options.Add(new Selection("Bitbucket", (int)GitPlatform.Bitbucket));
+      Options.Add(new Selection("Azure DevOps", (int)GitPlatform.Azure));
 
       Selected = Options.First();
       UpdateCanProceed();

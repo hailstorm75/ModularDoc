@@ -24,6 +24,7 @@ type MarkdownLinker(memberResolver, linkerSettings: ILinkerSettings) =
   let m_settings = linkerSettings :?> LinkerSettings
   let m_platform = match m_settings.Platform with
                    | "3" -> GitPlatform.Bitbucket
+                   | "2" -> GitPlatform.Azure
                    | "1" -> GitPlatform.GitLab
                    | "0" -> GitPlatform.GitHub
                    | _ -> raise (NotSupportedException("Unsupported platform selected for the linking process"))
