@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using dnlib.DotNet;
+using ModularDoc.Members.Dnlib.Helpers;
 using ModularDoc.Members.ResolvedTypes;
 using IType = ModularDoc.Members.Types.IType;
 
@@ -162,6 +163,10 @@ namespace ModularDoc.Members.Dnlib.ResolvedTypes
 
       // Get the source name
       var name = source.Name.String;
+      var match = RegexHelpers.FILE_ACCESSOR_REGEX.Match(name);
+      if (match.Success)
+        name = match.Groups["typeName"].Value;
+
       // Find the generics
       var genericsIndex = name.IndexOf('`', StringComparison.InvariantCulture);
 

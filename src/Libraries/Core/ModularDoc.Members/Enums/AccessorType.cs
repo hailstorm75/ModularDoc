@@ -20,6 +20,10 @@
     /// <summary>
     /// Visible to children within the library
     /// </summary>
-    ProtectedInternal
+    ProtectedInternal,
+    /// <summary>
+    /// Visible within the file
+    /// </summary>
+    File
   }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using dnlib.DotNet;
+using ModularDoc.Members.Dnlib.Helpers;
 using ModularDoc.Members.Enums;
 using IType = ModularDoc.Members.Types.IType;
 
@@ -11,7 +12,11 @@ namespace ModularDoc.Members.Dnlib.Types
   public abstract class TypeDef
     : IType
   {
+    #region Fields
+
     private static readonly char[] GENERIC_CHAR = { '`' };
+
+    #endregion
 
     #region Properties
 
@@ -53,12 +58,18 @@ namespace ModularDoc.Members.Dnlib.Types
         // throw an exception
         throw new ArgumentNullException(nameof(source));
 
+      var fileAccessorMatch = RegexHelpers.FILE_ACCESSOR_REGEX.Match(source.Name);
+
       // Initialize the accessor
-      Accessor = ResolveAccessor(source);
+      Accessor = fileAccessorMatch.Success
+        ? AccessorType.File
+        : ResolveAccessor(source);
       // Initialize the namespace
       TypeNamespace = ResolveNamespace(source);
       // Initialize the name
-      Name = ResolveName(source, parent);
+      Name = fileAccessorMatch.Success
+        ? fileAccessorMatch.Groups["typeName"].Value
+        : ResolveName(source, parent);
       // Initialize the raw name
       RawName = source.ReflectionFullName.Replace('+', '.');
       // Initialize the resolver

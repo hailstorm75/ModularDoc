@@ -60,7 +60,11 @@ namespace ModularDoc.Members.Dnlib.Members
         // throw an exception
         throw new ArgumentNullException(nameof(name));
 
-      Name = name;
+      var match = RegexHelpers.FILE_ACCESSOR_REGEX.Match(name);
+
+      Name = match.Success
+        ? match.Groups["typeName"].Value
+        : name;
       IsStatic = source.IsStatic;
       Arguments = ResolveArguments(resolver, source).ToReadOnlyCollection();
       var rawName = source.FullName.Substring(source.FullName.IndexOf(' ', StringComparison.InvariantCulture) + 1).Replace("::", ".", StringComparison.InvariantCulture);
