@@ -160,7 +160,12 @@ namespace ModularDoc.Plugins.GitMarkdown
         var diagrams = linkerSettings.Platform.Equals("3", StringComparison.InvariantCultureIgnoreCase)
           ? new EmptyDiagramResolver()
           : new MermaidResolver(linker) as IDiagramResolver;
-        var composer = new TypeComposer(new Creator(false, linker.GetRawUrl()), docResolver, resolver, linker, diagrams);
+
+        var tag = linkerSettings.Platform.Equals(((int)GitPlatform.Azure).ToString(), StringComparison.InvariantCultureIgnoreCase)
+          ? ":::"
+          : "```";
+
+        var composer = new TypeComposer(new Creator(false, (tag, tag), linker.GetRawUrl()), docResolver, resolver, linker, diagrams);
         var printer = new PrinterMarkdown(composer, linker, printerProcess);
 
         await printer.Print(resolver.Types.Value.Values.SelectMany(Linq.XtoX), globalSettings.OutputPath)
@@ -243,21 +248,29 @@ namespace ModularDoc.Plugins.GitMarkdown
 
     internal sealed class Creator : IElementCreator
     {
+      #region Fields
+
       private readonly bool m_externalDiagrams;
+      private readonly (string start, string end) m_diagramTags;
       private readonly string m_rawUrl;
+
+      #endregion
 
       /// <summary>
       /// Default constructor
       /// </summary>
-      public Creator(bool externalDiagrams, string rawUrl)
+      /// <param name="externalDiagrams">Diagram provider name</param>
+      /// <param name="diagramTags">Tags that wrap the diagram content</param>
+      public Creator(bool externalDiagrams, (string start, string end) diagramTags, string rawUrl)
       {
         m_externalDiagrams = externalDiagrams;
+        m_diagramTags = diagramTags;
         m_rawUrl = rawUrl;
       }
 
       /// <inheritdoc />
       public IDiagram CreateDiagram(string name, string content)
-        => new Diagram(name, "mermaid", content, m_externalDiagrams, m_rawUrl);
+        => new Diagram(name, m_diagramTags, "mermaid", content, m_externalDiagrams, m_rawUrl);
 
       public ILink CreateLink(IText content, Lazy<string> reference)
         => new Link(content, reference);

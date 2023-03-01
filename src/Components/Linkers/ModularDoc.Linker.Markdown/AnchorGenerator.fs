@@ -21,15 +21,14 @@ module private Anchor =
     // TODO: Not supported
     None
 
-  let private githubAnchor (input: string Lazy, page: string) =
+  let private githubAnchor (input: string Lazy, _: string) =
     lazy("#" + normalizeAnchor input.Value) |> Some
 
   let private gitlabAnchor (input: string Lazy, _: string) =
     lazy("#" + normalizeAnchor input.Value) |> Some
 
-  let private azureAnchor (_: string Lazy, _: string) =
-    None
-//    lazy "?anchor=" |> Some
+  let private azureAnchor (input: string Lazy, _: string) =
+    lazy("#" + normalizeAnchor input.Value) |> Some
 
   /// <summary>
   /// Creates an anchor for a given <paramref name="input"/> and <paramref name="platform"/>
