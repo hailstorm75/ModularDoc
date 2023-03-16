@@ -13,6 +13,7 @@ namespace UT.Members.Data
     public const string PROTECTED_NESTED_ENUM = "NestedEnumProtected";
     public const string PROTECTED_INTERNAL_NESTED_ENUM = "NestedEnumProtectedInternal";
     public const string INTERNAL_NESTED_ENUM = "NestedEnumInternal";
+    public const string FILE_ENUM = "EnumTypeFile";
 
     #endregion
 
@@ -24,6 +25,7 @@ namespace UT.Members.Data
     public const string PROTECTED_NESTED_INTERFACE = "INestedInterfaceProtected";
     public const string PROTECTED_INTERNAL_NESTED_INTERFACE = "INestedInterfaceProtectedInternal";
     public const string INTERNAL_NESTED_INTERFACE = "INestedInterfaceInternal";
+    public const string FILE_INTERFACE = "IInterfaceTypeFile";
     public const string PUBLIC_INHERITED_INTERFACE = "IInheritedInterface";
     public const string PUBLIC_INHERITING_AND_INHERITED_INTERFACE = "IInheritingAndInheritedInterface";
     public const string PUBLIC_INHERITING_INTERFACE = "IInheritingInterface";
@@ -45,6 +47,7 @@ namespace UT.Members.Data
     public const string PROTECTED_NESTED_STRUCT = "NestedStructProtected";
     public const string PROTECTED_INTERNAL_NESTED_STRUCT = "NestedStructProtectedInternal";
     public const string INTERNAL_NESTED_STRUCT = "NestedStructInternal";
+    public const string FILE_STRUCT = "StructTypeFile";
     public const string PUBLIC_GENERIC_STRUCT = "GenericStruct";
     public const string PUBLIC_NESTED_GENERIC_STRUCT = "NestedGenericStruct";
     public const string PUBLIC_INHERITING_STRUCT = "InheritingStruct";
@@ -68,6 +71,7 @@ namespace UT.Members.Data
     public const string PROTECTED_NESTED_RECORD = "NestedRecordProtected";
     public const string PROTECTED_INTERNAL_NESTED_RECORD = "NestedRecordProtectedInternal";
     public const string INTERNAL_NESTED_RECORD = "NestedRecordInternal";
+    public const string FILE_RECORD = "RecordTypeFile";
     public const string PUBLIC_GENERIC_RECORD = "GenericRecord";
     public const string PUBLIC_NESTED_GENERIC_RECORD = "NestedGenericRecord";
     public const string PUBLIC_INHERITING_RECORD = "InheritingRecord";
@@ -90,6 +94,7 @@ namespace UT.Members.Data
     public const string PROTECTED_NESTED_CLASS = "NestedClassProtected";
     public const string PROTECTED_INTERNAL_NESTED_CLASS = "NestedClassProtectedInternal";
     public const string INTERNAL_NESTED_CLASS = "NestedClassInternal";
+    public const string FILE_CLASS = "ClassTypeFile";
     public const string PUBLIC_GENERIC_CLASS = "GenericClass";
     public const string PUBLIC_NESTED_GENERIC_CLASS = "NestedGenericClass";
     public const string PUBLIC_INHERITING_CLASS = "InheritingClass";

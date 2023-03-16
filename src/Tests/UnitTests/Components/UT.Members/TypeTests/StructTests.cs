@@ -40,6 +40,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.PROTECTED_NESTED_STRUCT, AccessorType.Protected},
         new object[] {Constants.PROTECTED_INTERNAL_NESTED_STRUCT, AccessorType.ProtectedInternal},
         new object[] {Constants.INTERNAL_NESTED_STRUCT, AccessorType.Internal},
+        new object[] {Constants.FILE_STRUCT, AccessorType.File},
       };
 
       return data.ComposeData();

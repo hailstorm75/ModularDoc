@@ -40,6 +40,7 @@ namespace UT.Members.TypeTests
         (Constants.PROTECTED_NESTED_ENUM, AccessorType.Protected),
         (Constants.PROTECTED_INTERNAL_NESTED_ENUM, AccessorType.ProtectedInternal),
         (Constants.INTERNAL_NESTED_ENUM, AccessorType.Internal),
+        (Constants.FILE_ENUM, AccessorType.File),
       };
 
       foreach (var (name, accessor) in data)

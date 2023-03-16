@@ -58,6 +58,7 @@ module internal StringConverters =
     | AccessorType.Protected -> "Protected"
     | AccessorType.Internal -> "Internal"
     | AccessorType.ProtectedInternal -> "Protected internal"
+    | AccessorType.File -> "File"
     | _ -> ""
 
   /// <summary>
