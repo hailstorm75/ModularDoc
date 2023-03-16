@@ -10,6 +10,7 @@ namespace ModularDoc.Members
   public interface IMemberSettings
     : ILibrarySettings
   {
+    public const string ENTRY_PROCESS_PRIVATE = "processPrivate";
     /// <summary>
     /// Configuration name for assembly paths
     /// </summary>
@@ -23,5 +24,10 @@ namespace ModularDoc.Members
     /// Paths to member sources
     /// </summary>
     IReadOnlyCollection<string> Paths { get; }
+
+    /// <summary>
+    /// Determines whether private types and members are processed
+    /// </summary>
+    bool ProcessPrivate { get; }
   }
 }

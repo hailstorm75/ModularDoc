@@ -24,6 +24,10 @@
     /// <summary>
     /// Visible within the file
     /// </summary>
-    File
+    File,
+    /// <summary>
+    /// Private visibility
+    /// </summary>
+    Private
   }
 }

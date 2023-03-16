@@ -107,7 +107,7 @@ namespace ModularDoc.Members.Dnlib.Types
       NestedTypes = source.NestedTypes
         // Select types which are valid nested types
         .Where(typeDef => !typeDef.IsDelegate
-                          && !typeDef.IsNestedPrivate
+                          && (resolver.ProcessPrivate || !typeDef.IsNestedPrivate)
                           && !typeDef.Name.String.StartsWith('<'))
         // Resolve the nested types
         .Select(typeDef => Resolver.ResolveType(typeDef, source))
@@ -128,8 +128,7 @@ namespace ModularDoc.Members.Dnlib.Types
         // Select members which are non-private methods
         .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                             && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                            // && !methodDef.Access.HasFlag(MethodAttributes.Assembly)
-                            && !methodDef.IsPrivate
+                            && (resolver.ProcessPrivate || !methodDef.IsPrivate)
                             && !methodDef.IsConstructor
                             && !eventMethods.Contains(methodDef.Name.String))
         // Initialize methods

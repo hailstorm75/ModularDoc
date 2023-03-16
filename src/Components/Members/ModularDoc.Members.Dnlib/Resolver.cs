@@ -59,6 +59,9 @@ namespace ModularDoc.Members.Dnlib
     /// <inheritdoc />
     public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; } = null!;
 
+    /// <inheritdoc />
+    public bool ProcessPrivate { get; private set; }
+
     #endregion
 
     #region Constructors
@@ -203,6 +206,7 @@ namespace ModularDoc.Members.Dnlib
 
     public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
     {
+      ProcessPrivate = memberSettings.ProcessPrivate;
       m_processLogger.State = IProcess.ProcessState.Running;
 
       NewTypes();
