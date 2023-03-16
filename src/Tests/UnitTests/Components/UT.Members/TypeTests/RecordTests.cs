@@ -55,6 +55,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.PROTECTED_NESTED_RECORD, AccessorType.Protected},
         new object[] {Constants.PROTECTED_INTERNAL_NESTED_RECORD, AccessorType.ProtectedInternal},
         new object[] {Constants.INTERNAL_NESTED_RECORD, AccessorType.Internal},
+        new object[] {Constants.FILE_RECORD, AccessorType.File},
       };
 
       return data.ComposeData();

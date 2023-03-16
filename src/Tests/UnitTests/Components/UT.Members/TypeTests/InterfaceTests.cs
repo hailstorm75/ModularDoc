@@ -42,6 +42,7 @@ namespace UT.Members.TypeTests
         new object[] {Constants.PROTECTED_NESTED_INTERFACE, AccessorType.Protected},
         new object[] {Constants.PROTECTED_INTERNAL_NESTED_INTERFACE, AccessorType.ProtectedInternal},
         new object[] {Constants.INTERNAL_NESTED_INTERFACE, AccessorType.Internal},
+        new object[] {Constants.FILE_INTERFACE, AccessorType.File},
       };
 
       return data.ComposeData();
