@@ -33,7 +33,7 @@ namespace ModularDoc.Members.Dnlib
       Paths = paths.Split(IMemberSettings.PATH_DELIMITER);
 
       if (!data.TryGetValue(IMemberSettings.ENTRY_PROCESS_PRIVATE, out var processPrivateString)
-          || bool.TryParse(processPrivateString, out var processPrivate))
+          || !bool.TryParse(processPrivateString, out var processPrivate))
         ProcessPrivate = false;
       else
         ProcessPrivate = processPrivate;

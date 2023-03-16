@@ -50,6 +50,11 @@ namespace ModularDoc.ViewModels.GitMarkdown
 
     public ObservableCollection<string> Paths { get; } = new();
 
+    /// <summary>
+    /// Determines whether private types and members are processed
+    /// </summary>
+    public bool ProcessPrivate { get; set; }
+
     #endregion
 
     #region Commands
@@ -119,6 +124,11 @@ namespace ModularDoc.ViewModels.GitMarkdown
       Paths.AddRange(pathsSerialized.Split(IMemberSettings.PATH_DELIMITER));
       m_pathsInsensitive.AddRange(Paths);
 
+      ProcessPrivate = arguments.TryGetValue(IMemberSettings.ENTRY_PROCESS_PRIVATE, out var processPrivate)
+                       && bool.TryParse(processPrivate, out var result)
+                       && result;
+      OnPropertyChanged(nameof(ProcessPrivate));
+
       UpdateCanProceed();
       return Task.CompletedTask;
     }
@@ -129,6 +139,9 @@ namespace ModularDoc.ViewModels.GitMarkdown
       {
         {
           IMemberSettings.ENTRY_PATHS, string.Join(IMemberSettings.PATH_DELIMITER, Paths)
+        },
+        {
+          IMemberSettings.ENTRY_PROCESS_PRIVATE, ProcessPrivate.ToString()
         }
       };
 
