@@ -47,25 +47,18 @@
       </TextBox.InnerRightContent>
     </TextBox>
 
-    <ToggleSwitch
-      Grid.Row="1"
-      IsChecked="{Binding ProcessPrivate}"
-      Margin="0,0,0,10"
-      OffContent="Skip private"
-      OnContent="Process private" />
-    <!--  <Button  -->
-    <!--  Command="{Binding ValidateCommand}"  -->
-    <!--  Grid.Row="1"  -->
-    <!--  Margin="0,0,0,10">  -->
-    <!--   <DockPanel LastChildFill="True"> -->
-    <!--  <avalonia:Icon  -->
-    <!--  DockPanel.Dock="Left"  -->
-    <!--  FontSize="10"  -->
-    <!--  Margin="0,0,5,0"  -->
-    <!--  Value="fa-check" />  -->
-    <!--     <TextBlock DockPanel.Dock="Right">Validate paths</TextBlock> -->
-    <!--   </DockPanel> -->
-    <!-- </Button> -->
+    <StackPanel Grid.Row="1"
+                Orientation="Horizontal"
+                Margin="0,0,0,10">
+      <ToggleSwitch
+        IsChecked="{Binding ProcessPrivate}"
+        OffContent="Skip private"
+        OnContent="Process private" />
+      <ToggleSwitch
+        IsChecked="{Binding ProcessFields}"
+        OffContent="Ignore fields"
+        OnContent="Process fields" />
+    </StackPanel>
 
     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
       <ListBox Items="{Binding Paths}">
