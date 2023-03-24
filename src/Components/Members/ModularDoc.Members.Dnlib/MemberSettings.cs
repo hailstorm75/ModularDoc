@@ -17,6 +17,9 @@ namespace ModularDoc.Members.Dnlib
     /// <inheritdoc />
     public bool ProcessPrivate { get; }
 
+    /// <inheritdoc />
+    public bool ProcessFields { get; }
+
     #endregion
 
     /// <summary>
@@ -37,6 +40,12 @@ namespace ModularDoc.Members.Dnlib
         ProcessPrivate = false;
       else
         ProcessPrivate = processPrivate;
+
+      if (!data.TryGetValue(IMemberSettings.ENTRY_PROCESS_FIELDS, out var processFieldsString)
+          || !bool.TryParse(processFieldsString, out var processFields))
+        ProcessFields = false;
+      else
+        ProcessFields = processFields;
     }
   }
 }

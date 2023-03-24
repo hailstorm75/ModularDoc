@@ -10,6 +10,13 @@ namespace ModularDoc.Members
   public interface IMemberSettings
     : ILibrarySettings
   {
+    /// <summary>
+    /// Configuration name for checking whether type fields are processed
+    /// </summary>
+    public const string ENTRY_PROCESS_FIELDS = "processFields";
+    /// <summary>
+    /// Configuration name for checking whether private members and types are processed
+    /// </summary>
     public const string ENTRY_PROCESS_PRIVATE = "processPrivate";
     /// <summary>
     /// Configuration name for assembly paths
@@ -29,5 +36,10 @@ namespace ModularDoc.Members
     /// Determines whether private types and members are processed
     /// </summary>
     bool ProcessPrivate { get; }
+
+    /// <summary>
+    /// Determines whether type fields are processed
+    /// </summary>
+    bool ProcessFields { get; }
   }
 }

@@ -32,6 +32,9 @@ namespace ModularDoc.Members.Dnlib.Types
     public IReadOnlyCollection<IConstructor> Constructors { get; }
 
     /// <inheritdoc />
+    public IReadOnlyCollection<ModularDoc.Members.Members.IField> Fields { get; }
+
+    /// <inheritdoc />
     public bool IsStatic { get; }
 
     /// <inheritdoc />
@@ -61,12 +64,21 @@ namespace ModularDoc.Members.Dnlib.Types
         // Select valid constructors
         .Where(methodDef => !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Getter)
                             && !methodDef.SemanticsAttributes.HasFlag(MethodSemanticsAttributes.Setter)
-                            && !methodDef.IsPrivate
+                            && (resolver.ProcessPrivate || !methodDef.IsPrivate)
                             && methodDef.IsConstructor)
         // Initialize constructors
         .Select(x => new ConstructorDef(resolver, x, parent != null))
         // Materialize the collection
         .ToReadOnlyCollection();
+
+      if (resolver.ProcessFields)
+        Fields = source.Fields
+          .Where(field => (resolver.ProcessPrivate || !field.IsPrivate)
+             && !field.Name.StartsWith("<"))
+          .Select(field => new Members.FieldDef(resolver, field, parent != null))
+          .ToReadOnlyCollection();
+      else
+        Fields = Array.Empty<ModularDoc.Members.Members.IField>();
 
       // Determine whether this type is static
       IsStatic = source.IsSealed && source.IsAbstract;
