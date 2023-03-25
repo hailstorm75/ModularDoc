@@ -18,7 +18,6 @@ namespace UT.Members.MemberTests
       {
         new object[] { Constants.PROPERTY_GET_SET, true, true },
         new object[] { Constants.PROPERTY_GET, true, false },
-        new object[] { Constants.PROPERTY_SET, false, true }
       };
 
       return data.ComposeData(
@@ -47,16 +46,16 @@ namespace UT.Members.MemberTests
         new object[] { Constants.PROPERTY_PUBLIC, AccessorType.Public, AccessorType.Public, AccessorType.Public },
         new object[] { Constants.PROPERTY_PROTECTED, AccessorType.Protected, AccessorType.Protected, AccessorType.Protected },
         new object[] { Constants.PROPERTY_INTERNAL, AccessorType.Internal, AccessorType.Internal, AccessorType.Internal },
-        new object[] { Constants.PROPERTY_PRIVATE, null!, null!, null! },
+        new object[] { Constants.PROPERTY_PRIVATE, AccessorType.Private, AccessorType.Private, AccessorType.Private },
         new object[] { Constants.PROPERTY_PUBLIC_GET_PROTECTED, AccessorType.Public, AccessorType.Protected, AccessorType.Public },
         new object[] { Constants.PROPERTY_PUBLIC_GET_INTERNAL, AccessorType.Public, AccessorType.Internal, AccessorType.Public },
-        new object[] { Constants.PROPERTY_PUBLIC_GET_PRIVATE, AccessorType.Public, null!, AccessorType.Public },
+        new object[] { Constants.PROPERTY_PUBLIC_GET_PRIVATE, AccessorType.Public, AccessorType.Private, AccessorType.Public },
         new object[] { Constants.PROPERTY_PUBLIC_SET_PROTECTED, AccessorType.Public, AccessorType.Public, AccessorType.Protected },
         new object[] { Constants.PROPERTY_PUBLIC_SET_INTERNAL, AccessorType.Public, AccessorType.Public, AccessorType.Internal },
-        new object[] { Constants.PROPERTY_PUBLIC_SET_PRIVATE, AccessorType.Public, AccessorType.Public, null! },
+        new object[] { Constants.PROPERTY_PUBLIC_SET_PRIVATE, AccessorType.Public, AccessorType.Public, AccessorType.Private },
         new object[] { Constants.PROPERTY_PROTECTED_INTERNAL, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal },
-        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL_GET_PRIVATE, AccessorType.ProtectedInternal, null!, AccessorType.ProtectedInternal },
-        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL_SET_PRIVATE, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, null! },
+        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL_GET_PRIVATE, AccessorType.ProtectedInternal, AccessorType.Private, AccessorType.ProtectedInternal },
+        new object[] { Constants.PROPERTY_PROTECTED_INTERNAL_SET_PRIVATE, AccessorType.ProtectedInternal, AccessorType.ProtectedInternal, AccessorType.Private },
       };
 
       return data.ComposeData(

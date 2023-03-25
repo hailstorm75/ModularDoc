@@ -59,10 +59,10 @@ namespace ModularDoc.Members.Dnlib
     public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; } = null!;
 
     /// <inheritdoc />
-    public bool ProcessPrivate { get; private set; }
+    public bool ProcessPrivate { get; private set; } = true;
 
     /// <inheritdoc />
-    public bool ProcessFields { get; private set; }
+    public bool ProcessFields { get; private set; } = true;
 
     #endregion
 
