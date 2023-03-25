@@ -25,8 +25,17 @@ namespace ModularDoc.Members.Dnlib.Members
     {
       IsStatic = source.IsStatic;
       Name = source.Name;
-      RawName = source.FullName;
+      RawName = ResolveRawName(source);
       Accessor = ResolveAccessor(source);
+    }
+
+    private static string ResolveRawName(dnlib.DotNet.FieldDef source)
+    {
+      var rawName = source.FullName.AsSpan(source.FullName.IndexOf(' ', StringComparison.InvariantCultureIgnoreCase) + 1);
+
+      return rawName.ToString()
+        .Replace("::", ".", StringComparison.InvariantCultureIgnoreCase)
+        .Replace("/", ".", StringComparison.InvariantCultureIgnoreCase);
     }
 
     private static AccessorType ResolveAccessor(dnlib.DotNet.FieldDef field)

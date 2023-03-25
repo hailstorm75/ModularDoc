@@ -64,6 +64,10 @@ type TypeContentType =
   /// <summary>
   /// Enum fields documentation
   /// </summary>
+  | TypeEnumFields
+  /// <summary>
+  /// Type fields documentation
+  /// </summary>
   | TypeFields
 
 module TypeContentHelpers =
@@ -572,6 +576,37 @@ module TypeContentHelpers =
     // Process the composed data
     genericProcessor extractor processField tools
 
+  let private typeFields (input: IType) tools = 
+    let extractor = 
+      // If the input can have events, return the events. Otherwise return an empty collection
+      match input with
+      | :? IClass as x -> x.Fields
+      | _ -> LinkedList<IField>() :> IReadOnlyCollection<IField>
+    let processField (_, field: IField) =
+      let signature =
+        SignatureHelpers.generateSignature "{0}{1} {2} {3}" (seq [
+          SignatureHelpers.getAccessor
+          SignatureHelpers.getStatic;
+          SignatureHelpers.getReturn;
+          SignatureHelpers.getName
+        ])
+
+      // Define the content to be documented for this member
+      let content =
+        seq [
+          Summary;
+          Value;
+          Remarks;
+          Example;
+          SeeAlso
+        ]
+
+      (field, field.Name, joinContentWSig content signature input)
+
+    // Process the composed data
+    genericProcessor extractor processField tools
+
+
   /// <summary>
   /// Composes documentation content for the given <paramref name="input"/> type
   /// </summary>
@@ -594,7 +629,8 @@ module TypeContentHelpers =
       | TypeMethods -> (methods, "Methods")
       | TypeNested -> (nested, "Nested types")
       | TypeEvents -> (events, "Events")
-      | TypeFields -> (enumFields, "Fields")
+      | TypeEnumFields -> (enumFields, "Fields")
+      | TypeFields -> (typeFields, "Fields")
 
     content
     // Process every case and append the result

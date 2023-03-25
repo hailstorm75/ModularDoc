@@ -54,11 +54,12 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
         TypeNested;
         TypeSeeAlso;
         TypeConstructors;
+        TypeFields;
         TypeMethods;
         TypeProperties;
         TypeEvents;
         TypeDelegates;
-        TypeFields
+        TypeEnumFields
       ]
       // Process the section types to generate content
       |> TypeContentHelpers.processContents input tools
