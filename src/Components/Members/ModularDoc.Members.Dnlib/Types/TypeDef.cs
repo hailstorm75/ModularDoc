@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using dnlib.DotNet;
+using ModularDoc.Helpers;
 using ModularDoc.Members.Dnlib.Helpers;
 using ModularDoc.Members.Enums;
+using ModularDoc.Members.ResolvedTypes;
 using IType = ModularDoc.Members.Types.IType;
 
 namespace ModularDoc.Members.Dnlib.Types
@@ -43,6 +47,9 @@ namespace ModularDoc.Members.Dnlib.Types
     /// <inheritdoc />
     public string RawName { get; }
 
+    /// <inheritdoc />
+    public IReadOnlyCollection<IResAttribute> Attributes { get; }
+
     #endregion
 
     /// <summary>
@@ -76,6 +83,10 @@ namespace ModularDoc.Members.Dnlib.Types
       Resolver = resolver;
       // Initialize the is nested indicator
       IsNested = parent is not null;
+
+      Attributes = source.CustomAttributes
+        .Select(resolver.ResolveAttribute)
+        .ToReadOnlyCollection();
 
       Type = type;
     }

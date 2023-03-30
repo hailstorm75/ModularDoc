@@ -1,4 +1,6 @@
-﻿using ModularDoc.Members.Enums;
+﻿using System.Collections.Generic;
+using ModularDoc.Members.Enums;
+using ModularDoc.Members.ResolvedTypes;
 
 namespace ModularDoc.Members.Types
 {
@@ -36,5 +38,10 @@ namespace ModularDoc.Members.Types
     /// Determines the dot net type represented by this instance
     /// </summary>
     DotNetType Type { get; }
+
+    /// <summary>
+    /// Type attributes
+    /// </summary>
+    IReadOnlyCollection<IResAttribute> Attributes { get; }
   }
 }

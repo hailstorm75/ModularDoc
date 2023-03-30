@@ -331,6 +331,19 @@ namespace ModularDoc.Members.Dnlib
       ParamDef? metadata = null)
       => Resolve(signature, generics, false, metadata?.GetDynamicTypes(signature), metadata?.GetValueTupleNames());
 
+    internal IResAttribute ResolveAttribute(CustomAttribute attribute)
+    {
+      // If the type was cached..
+      if (m_resCache.TryGetValue(attribute.TypeFullName, out var resolution) && resolution is IResAttribute resAttribute)
+        // return the cached type
+        return resAttribute;
+
+      var newAttribute = new ResAttribute(this, attribute.AttributeType.ToTypeSig());
+      m_resCache.AddOrUpdate(attribute.TypeFullName, newAttribute, (_, _) => newAttribute);
+
+      return newAttribute;
+    }
+
     /// <summary>
     /// Resolves type to a <see cref="IResType"/>
     /// </summary>
