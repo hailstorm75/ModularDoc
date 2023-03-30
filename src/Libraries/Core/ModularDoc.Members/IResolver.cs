@@ -17,6 +17,11 @@ namespace ModularDoc.Members
     /// </summary>
     Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; }
 
+    /// <summary>
+    /// Determines whether to process private types and members
+    /// </summary>
+    bool ProcessPrivate { get; }
+
     #region Methods
 
     /// <summary>

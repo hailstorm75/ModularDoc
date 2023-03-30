@@ -117,6 +117,7 @@ namespace ModularDoc.Members.Dnlib.Members
       => method.Access switch
       {
         dnlib.DotNet.MethodAttributes.Public => AccessorType.Public,
+        dnlib.DotNet.MethodAttributes.Private => AccessorType.Private,
         dnlib.DotNet.MethodAttributes.Family => AccessorType.Protected,
         dnlib.DotNet.MethodAttributes.Assembly => AccessorType.Internal,
         dnlib.DotNet.MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,

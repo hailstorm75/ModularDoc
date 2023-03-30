@@ -84,20 +84,21 @@ namespace ModularDoc.Members.Dnlib.Types
 
     private static AccessorType ResolveAccessor(dnlib.DotNet.TypeDef type)
     {
-      // If the type is public..
-      if (type.Visibility == TypeAttributes.Public || (type.IsNested && type.Visibility == TypeAttributes.NestedPublic))
-        // return public
-        return AccessorType.Public;
-      // If the type is nested protected
-      if (type.Visibility == TypeAttributes.NestedFamily)
-        // return protected
-        return AccessorType.Protected;
-      // If the type is nested protected internal
-      if (type.Visibility == TypeAttributes.NestedFamORAssem)
-        // return protected internal
-        return AccessorType.ProtectedInternal;
-      // Otherwise return internal
-      return AccessorType.Internal;
+      return type.Visibility switch
+      {
+        // If the type is public..
+        TypeAttributes.Public => AccessorType.Public,
+        // If the type is nested public..
+        TypeAttributes.NestedPublic => AccessorType.Public,
+        // If the type is nested protected
+        TypeAttributes.NestedFamily => AccessorType.Protected,
+        // If the type is nested protected internal
+        TypeAttributes.NestedFamORAssem => AccessorType.ProtectedInternal,
+        // If the type is nested private
+        TypeAttributes.NestedPrivate => AccessorType.Private,
+        // Otherwise return internal
+        _ => AccessorType.Internal
+      };
     }
 
     private static string ResolveNamespace(dnlib.DotNet.TypeDef source)

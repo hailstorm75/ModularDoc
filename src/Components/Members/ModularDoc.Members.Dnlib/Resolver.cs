@@ -8,7 +8,6 @@ using System.Linq;
 using ModularDoc.Members.Dnlib.Properties;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using ModularDoc;
 using ModularDoc.Core;
 using ModularDoc.Members.Dnlib.ResolvedTypes;
 using ModularDoc.Members.Dnlib.Types;
@@ -58,6 +57,12 @@ namespace ModularDoc.Members.Dnlib
 
     /// <inheritdoc />
     public Lazy<IReadOnlyDictionary<string, IReadOnlyCollection<IType>>> Types { get; private set; } = null!;
+
+    /// <inheritdoc />
+    public bool ProcessPrivate { get; private set; } = true;
+
+    /// <inheritdoc />
+    public bool ProcessFields { get; private set; } = true;
 
     #endregion
 
@@ -203,6 +208,9 @@ namespace ModularDoc.Members.Dnlib
 
     public Task ResolveAsync(IMemberSettings memberSettings, IGlobalSettings globalSettings)
     {
+      ProcessPrivate = memberSettings.ProcessPrivate;
+      ProcessFields = memberSettings.ProcessFields;
+
       m_processLogger.State = IProcess.ProcessState.Running;
 
       NewTypes();

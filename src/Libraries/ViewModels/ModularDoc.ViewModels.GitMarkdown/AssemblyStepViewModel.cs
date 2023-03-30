@@ -23,7 +23,7 @@ namespace ModularDoc.ViewModels.GitMarkdown
 
     #endregion
 
-    private readonly HashSet<string> m_pathsInsensitive = new (StringComparer.InvariantCultureIgnoreCase);
+    private readonly HashSet<string> m_pathsInsensitive = new(StringComparer.InvariantCultureIgnoreCase);
     private readonly IDialogManager m_dialogManager;
     private string m_pathToAssembly = string.Empty;
 
@@ -49,6 +49,16 @@ namespace ModularDoc.ViewModels.GitMarkdown
     }
 
     public ObservableCollection<string> Paths { get; } = new();
+
+    /// <summary>
+    /// Determines whether private types and members are processed
+    /// </summary>
+    public bool ProcessPrivate { get; set; }
+
+    /// <summary>
+    /// Determines whether type fields are processed
+    /// </summary>
+    public bool ProcessFields { get; set; }
 
     #endregion
 
@@ -119,6 +129,16 @@ namespace ModularDoc.ViewModels.GitMarkdown
       Paths.AddRange(pathsSerialized.Split(IMemberSettings.PATH_DELIMITER));
       m_pathsInsensitive.AddRange(Paths);
 
+      ProcessPrivate = arguments.TryGetValue(IMemberSettings.ENTRY_PROCESS_PRIVATE, out var processPrivateString)
+                       && bool.TryParse(processPrivateString, out var processPrivate)
+                       && processPrivate;
+      OnPropertyChanged(nameof(ProcessPrivate));
+
+      ProcessFields = arguments.TryGetValue(IMemberSettings.ENTRY_PROCESS_FIELDS, out var processFieldsString)
+                       && bool.TryParse(processFieldsString, out var processFields)
+                       && processFields;
+      OnPropertyChanged(nameof(ProcessFields));
+
       UpdateCanProceed();
       return Task.CompletedTask;
     }
@@ -129,12 +149,18 @@ namespace ModularDoc.ViewModels.GitMarkdown
       {
         {
           IMemberSettings.ENTRY_PATHS, string.Join(IMemberSettings.PATH_DELIMITER, Paths)
+        },
+        {
+          IMemberSettings.ENTRY_PROCESS_PRIVATE, ProcessPrivate.ToString()
+        },
+        {
+          IMemberSettings.ENTRY_PROCESS_FIELDS, ProcessFields.ToString()
         }
       };
 
     private async Task BrowseAsync()
     {
-      var result = await m_dialogManager.TrySelectFilesAsync("Select a .NET assembly", new [] { (new[] { "dll" } as IEnumerable<string>, "Assembly") }, true);
+      var result = await m_dialogManager.TrySelectFilesAsync("Select a .NET assembly", new[] { (new[] { "dll" } as IEnumerable<string>, "Assembly") }, true);
       if (result.IsEmpty)
         return;
 

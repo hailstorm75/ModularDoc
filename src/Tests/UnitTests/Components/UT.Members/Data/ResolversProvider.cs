@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
-using ModularDoc;
 using ModularDoc.Core;
 using ModularDoc.Members;
 using Moq;

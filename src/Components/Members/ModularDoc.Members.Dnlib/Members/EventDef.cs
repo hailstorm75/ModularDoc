@@ -80,6 +80,7 @@ namespace ModularDoc.Members.Dnlib.Members
     private static AccessorType ResolveAccessor(dnlib.DotNet.MethodDef method)
       => method.Access switch
       {
+        MethodAttributes.Private => AccessorType.Private,
         MethodAttributes.Public => AccessorType.Public,
         MethodAttributes.Family => AccessorType.Protected,
         MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,

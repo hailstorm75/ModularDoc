@@ -55,6 +55,7 @@ module internal StringConverters =
     // Returns the respective string representation of the accessor type
     match accessor with
     | AccessorType.Public -> "Public"
+    | AccessorType.Private -> "Private"
     | AccessorType.Protected -> "Protected"
     | AccessorType.Internal -> "Internal"
     | AccessorType.ProtectedInternal -> "Protected internal"

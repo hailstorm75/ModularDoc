@@ -93,7 +93,7 @@ namespace ModularDoc.Members.Dnlib.Members
     internal static PropertyDef? Initialize(Resolver resolver, dnlib.DotNet.PropertyDef source)
     {
       // Select non-private property methods
-      var methods = source.SetMethods.Concat(source.GetMethods).Where(x => !x.IsPrivate).ToArray();
+      var methods = source.SetMethods.Concat(source.GetMethods).Where(x => (resolver.ProcessPrivate || !x.IsPrivate)).ToArray();
 
       // If no methods were selected..
       if (methods.Length == 0)
@@ -162,6 +162,7 @@ namespace ModularDoc.Members.Dnlib.Members
         MethodAttributes.Family => AccessorType.Protected,
         MethodAttributes.Assembly => AccessorType.Internal,
         MethodAttributes.FamORAssem => AccessorType.ProtectedInternal,
+        MethodAttributes.Private => AccessorType.Private,
         // Unresolved accessor
         _ => null
       };
@@ -191,6 +192,8 @@ namespace ModularDoc.Members.Dnlib.Members
         return AccessorType.Internal;
       if (accessors.Any(x => x.Equals(AccessorType.ProtectedInternal)))
         return AccessorType.ProtectedInternal;
+      if (accessors.Any(x => x.Equals(AccessorType.Private)))
+        return AccessorType.Private;
 
       throw new NotSupportedException(Resources.accessorTypeInvalid);
     }

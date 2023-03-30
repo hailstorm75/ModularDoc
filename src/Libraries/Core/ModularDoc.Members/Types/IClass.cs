@@ -34,5 +34,10 @@ namespace ModularDoc.Members.Types
     /// Class constructors
     /// </summary>
     IReadOnlyCollection<IConstructor> Constructors { get; }
+
+    /// <summary>
+    /// Class fields
+    /// </summary>
+    IReadOnlyCollection<IField> Fields { get; }
   }
 }

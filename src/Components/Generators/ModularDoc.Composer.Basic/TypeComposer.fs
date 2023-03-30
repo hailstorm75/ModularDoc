@@ -54,11 +54,12 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
         TypeNested;
         TypeSeeAlso;
         TypeConstructors;
+        TypeFields;
         TypeMethods;
         TypeProperties;
         TypeEvents;
         TypeDelegates;
-        TypeFields
+        TypeEnumFields
       ]
       // Process the section types to generate content
       |> TypeContentHelpers.processContents input tools
@@ -95,22 +96,26 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
     
   let getTypeName (input: IType) =
     let name = TypeHelpers.getTypeName input
-    let tName = match input with
-                | :? IInterface ->
-                  match input with
-                  | :? IStruct as x ->
-                    if x.IsReadOnly then "readonly struct" else "struct"
-                  | :? IRecord -> "record"
-                  | :? IClass -> "class"
-                  | _ ->  "interface"
-                | :? IEnum -> "enum"
-                | _ -> ""
-                |> InlineCode
-                |> TextHelpers.processText
-                <| m_tools
+    let accessorName = StringConverters.accessorStr input.Accessor
+    let typeName = match input with
+                   | :? IInterface ->
+                     match input with
+                     | :? IStruct as x ->
+                       if x.IsReadOnly then "readonly struct" else "struct"
+                     | :? IRecord -> "record"
+                     | :? IClass -> "class"
+                     | _ ->  "interface"
+                   | :? IEnum -> "enum"
+                   | _ -> ""
 
-    let content = tName.Print () |> Seq.head
-    name + " " + content
+    let additionalFileInfo = accessorName + " " + typeName
+                             |> InlineCode
+                             |> TextHelpers.processText
+                             <| m_tools
+
+    let additionalFileInfoFormatted = additionalFileInfo.Print () |> Seq.head
+
+    name + " " + additionalFileInfoFormatted
     
   interface ITypeComposer with
     /// <inheritdoc />

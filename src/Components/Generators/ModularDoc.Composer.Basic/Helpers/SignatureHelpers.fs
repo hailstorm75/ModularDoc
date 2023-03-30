@@ -218,6 +218,7 @@ module internal SignatureHelpers =
       let accessor acc =
         // If the given getter or setter accessor is equal to the property accessor, exclude the keyword
         match acc with
+        | AccessorType.Private -> if property.Accessor.Equals acc then "" else "private "
         | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
         | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
         | _ -> ""
@@ -239,6 +240,7 @@ module internal SignatureHelpers =
       let accessor acc =
         // If the given getter or setter accessor is equal to the property accessor, exclude the keyword
         match acc with
+        | AccessorType.Private -> if property.Accessor.Equals acc then "" else "private "
         | AccessorType.Protected -> if property.Accessor.Equals acc then "" else "protected "
         | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
         | _ -> ""
