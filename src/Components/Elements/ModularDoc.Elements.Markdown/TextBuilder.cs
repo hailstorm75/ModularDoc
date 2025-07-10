@@ -7,7 +7,7 @@ namespace ModularDoc.Elements.Markdown
   /// <summary>
   /// Class for joining multiple <see cref="ITextContent"/> elements
   /// </summary>
-  public class TextBuilder
+  public sealed class TextBuilder
     : ITextBuilder
   {
     #region Properties

@@ -200,6 +200,12 @@ namespace UT.Members.ResolvedTypeTests
     private static IEnumerable<string> ExtractGenericTypeNames(IEnumerable<IResType> types)
     {
       var actualGenerics = new LinkedList<string>();
+
+      foreach (var type in types)
+        Process(type);
+
+      return actualGenerics;
+
       void Process(IResType resType)
       {
         switch (resType)
@@ -220,11 +226,6 @@ namespace UT.Members.ResolvedTypeTests
             break;
         }
       }
-
-      foreach (var type in types)
-        Process(type);
-
-      return actualGenerics;
     }
 
     private static IMethod? GetMethod(IInterface type, string name, bool throwIfNull = false)

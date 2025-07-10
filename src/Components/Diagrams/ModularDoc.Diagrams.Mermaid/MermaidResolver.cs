@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,169 +7,166 @@ using ModularDoc.Linker;
 using ModularDoc.Members.ResolvedTypes;
 using ModularDoc.Members.Types;
 
-namespace ModularDoc.Diagrams.Mermaid
-{
-  public class MermaidResolver
-    : IDiagramResolver
-  {
-    private readonly ILinker m_linker;
+namespace ModularDoc.Diagrams.Mermaid;
 
-    private const string STYLES = @"  classDef interfaceStyle stroke-dasharray: 5 5;
+public sealed class MermaidResolver
+  : IDiagramResolver
+{
+  private const string STYLES = @"  classDef interfaceStyle stroke-dasharray: 5 5;
   classDef abstractStyle stroke-width:4px";
 
-    /// <summary>
-    /// Default constructor
-    /// </summary>
-    public MermaidResolver(ILinker linker)
+  /// <summary>
+  /// Default constructor
+  /// </summary>
+  public MermaidResolver(ILinker linker)
+  {
+  }
+
+  private static string Normalize(string value)
+  {
+    var span = value.AsSpan();
+    var index = span.IndexOf('<');
+    span = index == -1
+      ? span
+      : span[..index];
+
+    var chars = span.ToArray();
+    for (var i = 0; i < chars.Length; i++)
     {
-      m_linker = linker;
+      if (chars[i] == '`')
+        chars[i] = '_';
     }
 
-    private static string Normalize(string value)
+    return new string(chars);
+  }
+
+  /// <inheritdoc />
+  [SuppressMessage("ReSharper", "RedundantSuppressNullableWarningExpression")]
+  public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
+  {
+    var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
+    var typeNodes = new HashSet<string>();
+    var relations = new LinkedList<string>();
+
+    ExtractTypes(type, true);
+
+    diagram = (Normalize(type.RawName), $"flowchart LR{Environment.NewLine}{STYLES}{Environment.NewLine}{string.Join(Environment.NewLine, PackTypes(types).Concat(relations))}");
+    return true;
+
+    // ReSharper disable once VariableHidesOuterVariable
+    (string nameSpace, string typeDiagram) GenerateType(IType type, bool isParent = false)
     {
-      var span = value.AsSpan();
-      var index = span.IndexOf('<');
-      span = index == -1
-        ? span
-        : span[..index];
-
-      var chars = span.ToArray();
-      for (var i = 0; i < chars.Length; i++)
+      var rawTitle = Normalize(type.RawName);
+      var typeName = type switch
       {
-        if (chars[i] == '`')
-          chars[i] = '_';
-      }
+        IRecord r => $"  {rawTitle}[[{GenerateTitle(r)}]]",
+        IClass c => $"  {rawTitle}[[{GenerateTitle(c)}]]" + (c.IsAbstract ? $"{Environment.NewLine}  class {rawTitle} abstractStyle;" : string.Empty),
+        IInterface i => $"  {rawTitle}[[{GenerateTitle(i)}]]{Environment.NewLine}  class {rawTitle} interfaceStyle;",
+        IEnum => $"  {rawTitle}[[{GenerateTitle()}]]",
+        _ => throw new NotSupportedException("The given type is not supported")
+      };
 
-      return new string(chars);
-    }
-
-    /// <inheritdoc />
-    [SuppressMessage("ReSharper", "RedundantSuppressNullableWarningExpression")]
-    public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
-    {
-      var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
-      var typeNodes = new HashSet<string>();
-      var relations = new LinkedList<string>();
-
-      // ReSharper disable once VariableHidesOuterVariable
-      (string nameSpace, string typeDiagram) GenerateType(IType type, bool isParent = false)
+      if (type is IInterface inter && inter.Generics.Keys.Any())
       {
-        string GenerateTitle(IInterface? inter = default)
+        var builder = new StringBuilder();
+        foreach (var (key, (_, constraints)) in inter.Generics)
         {
-          var generics = inter is not null && inter.Generics.Keys.Any()
-            ? $"< {string.Join(",", inter.Generics.Keys)} >"
-            : string.Empty;
+          if (!constraints.Any())
+            continue;
 
-          var highlightedTitle = $"{type.Name}{generics}";
+          builder.AppendLine($"  {rawTitle}{key}(({key}));");
+          builder.AppendLine($"  {rawTitle} -- where --o {rawTitle}{key}");
 
-          return highlightedTitle;
-        }
-
-        var rawTitle = Normalize(type.RawName);
-        var typeName = type switch
-        {
-          IRecord r => $"  {rawTitle}[[{GenerateTitle(r)}]]",
-          IClass c => $"  {rawTitle}[[{GenerateTitle(c)}]]" + (c.IsAbstract ? $"{Environment.NewLine}  class {rawTitle} abstractStyle;" : string.Empty),
-          IInterface i => $"  {rawTitle}[[{GenerateTitle(i)}]]{Environment.NewLine}  class {rawTitle} interfaceStyle;",
-          IEnum => $"  {rawTitle}[[{GenerateTitle()}]]",
-          _ => throw new NotSupportedException("The given type is not supported")
-        };
-
-        if (type is IInterface inter && inter.Generics.Keys.Any())
-        {
-          var builder = new StringBuilder();
-          foreach (var (key, (_, constraints)) in inter.Generics)
+          foreach (var constraint in constraints)
           {
-            if (!constraints.Any())
-              continue;
-
-            builder.AppendLine($"  {rawTitle}{key}(({key}));");
-            builder.AppendLine($"  {rawTitle} -- where --o {rawTitle}{key}");
-
-            foreach (var constraint in constraints)
+            if (!typeNodes!.Contains(constraint.RawName))
             {
-              if (!typeNodes!.Contains(constraint.RawName))
-              {
-                var res = GenerateResType(constraint);
-                AddToDictionary(types!, res);
-                typeNodes.Add(constraint.RawName);
-              }
-
-              builder.AppendLine($"{Normalize(constraint.RawName)} --> {rawTitle}{key}");
+              var res = GenerateResType(constraint);
+              AddToDictionary(types!, res);
+              typeNodes.Add(constraint.RawName);
             }
-          }
 
-          typeName += $"{Environment.NewLine}{builder}";
+            builder.AppendLine($"{Normalize(constraint.RawName)} --> {rawTitle}{key}");
+          }
         }
 
-        // var link = m_linker.CreateLink(type);
-
-        return (type.TypeNamespace, typeName);
+        typeName += $"{Environment.NewLine}{builder}";
       }
 
-      // ReSharper disable once VariableHidesOuterVariable
-      (string nameSpace, string typeDiagram) GenerateResType(IResType type)
-        => type.Reference.Value is not null
-          // ReSharper disable once AssignNullToNotNullAttribute
-          ? GenerateType(type.Reference.Value)
-          : (type.TypeNamespace, $"{Normalize(type.RawName)}[[{type.DisplayName}]]");
+      // var link = m_linker.CreateLink(type);
 
-      void ExtractTypes(IType parent, bool isParent)
+      return (type.TypeNamespace, typeName);
+
+      string GenerateTitle(IInterface? inter = null)
       {
-        var parentRawName = Normalize(parent.RawName);
-        AddToDictionary(types, GenerateType(parent, isParent));
-        typeNodes.Add(Normalize(parentRawName));
+        var generics = inter is not null && inter.Generics.Keys.Any()
+          ? $"< {string.Join(",", inter.Generics.Keys)} >"
+          : string.Empty;
 
-        if (parent is not IInterface interfaceType)
-          return;
+        var highlightedTitle = $"{type.Name}{generics}";
 
-        void ProcessInheritance(string parentName, IEnumerable<TreeNode> source)
-        {
-          foreach (var item in source)
-          {
-            var itemName = Normalize(item.Name);
-
-            relations.AddLast($"{itemName} --> {parentName}");
-            AddToDictionary(types, GenerateResType(item.Value));
-            typeNodes.Add(itemName);
-
-            ProcessInheritance(itemName, item.Children);
-          }
-        }
-
-        ProcessInheritance(parentRawName, interfaceType.InheritedTypesStructured.Value);
-
-        if (parent is not IClass classType || classType.BaseClass is null)
-          return;
-
-        var baseType = GenerateResType(classType.BaseClass!);
-        var baseRawName = Normalize(classType.BaseClass!.RawName);
-
-        relations.AddLast($"{Normalize(baseRawName)} --> {parentRawName}");
-        AddToDictionary(types, baseType);
-        typeNodes.Add(baseRawName);
+        return highlightedTitle;
       }
-
-      ExtractTypes(type, true);
-
-      diagram = (Normalize(type.RawName), $"flowchart LR{Environment.NewLine}{STYLES}{Environment.NewLine}{string.Join(Environment.NewLine, PackTypes(types).Concat(relations))}");
-      return true;
     }
 
-    private static IEnumerable<string> PackTypes(IReadOnlyDictionary<string, LinkedList<string>> types)
-      => types.Select(type => $"  subgraph {type.Key}{Environment.NewLine}{string.Join(Environment.NewLine, type.Value)}{Environment.NewLine}  end");
+    // ReSharper disable once VariableHidesOuterVariable
+    (string nameSpace, string typeDiagram) GenerateResType(IResType type)
+      => type.Reference.Value is not null
+        // ReSharper disable once AssignNullToNotNullAttribute
+        ? GenerateType(type.Reference.Value)
+        : (type.TypeNamespace, $"{Normalize(type.RawName)}[[{type.DisplayName}]]");
 
-    private static void AddToDictionary(IDictionary<string, LinkedList<string>> target, (string key, string value) data)
+    void ExtractTypes(IType parent, bool isParent)
     {
-      var (key, value) = data;
-      if (target.ContainsKey(key))
-        target[key].AddLast(value);
-      else
+      var parentRawName = Normalize(parent.RawName);
+      AddToDictionary(types, GenerateType(parent, isParent));
+      typeNodes.Add(Normalize(parentRawName));
+
+      if (parent is not IInterface interfaceType)
+        return;
+
+      ProcessInheritance(parentRawName, interfaceType.InheritedTypesStructured.Value);
+
+      if (parent is not IClass classType || classType.BaseClass is null)
+        return;
+
+      var baseType = GenerateResType(classType.BaseClass!);
+      var baseRawName = Normalize(classType.BaseClass!.RawName);
+
+      relations.AddLast($"{Normalize(baseRawName)} --> {parentRawName}");
+      AddToDictionary(types, baseType);
+      typeNodes.Add(baseRawName);
+      return;
+
+      void ProcessInheritance(string parentName, IEnumerable<TreeNode> source)
       {
-        var list = new LinkedList<string>();
-        list.AddLast(value);
-        target.Add(key, list);
+        foreach (var item in source)
+        {
+          var itemName = Normalize(item.Name);
+
+          relations.AddLast($"{itemName} --> {parentName}");
+          AddToDictionary(types, GenerateResType(item.Value));
+          typeNodes.Add(itemName);
+
+          ProcessInheritance(itemName, item.Children);
+        }
       }
+    }
+  }
+
+  private static IEnumerable<string> PackTypes(IReadOnlyDictionary<string, LinkedList<string>> types)
+    => types.Select(type => $"  subgraph {type.Key}{Environment.NewLine}{string.Join(Environment.NewLine, type.Value)}{Environment.NewLine}  end");
+
+  private static void AddToDictionary(IDictionary<string, LinkedList<string>> target, (string key, string value) data)
+  {
+    var (key, value) = data;
+    if (target.ContainsKey(key))
+      target[key].AddLast(value);
+    else
+    {
+      var list = new LinkedList<string>();
+      list.AddLast(value);
+      target.Add(key, list);
     }
   }
 }

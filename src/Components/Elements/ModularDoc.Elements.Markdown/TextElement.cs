@@ -6,9 +6,9 @@ using static ModularDoc.Elements.IText;
 namespace ModularDoc.Elements.Markdown
 {
   /// <summary>
-  /// Class for markdown text
+  /// Class for Markdown text
   /// </summary>
-  public class TextElement
+  public sealed class TextElement
     : BaseElement, IText
   {
     private readonly bool m_isDiagram;
@@ -39,7 +39,7 @@ namespace ModularDoc.Elements.Markdown
     /// <inheritdoc />
     public override IEnumerable<string> Print()
     {
-      // If there is not content..
+      // If there is no content...
       if (string.IsNullOrEmpty(Content))
         // print an empty
         yield return string.Empty;
@@ -47,12 +47,12 @@ namespace ModularDoc.Elements.Markdown
         yield return @$"```plantuml
   {Content}
 ```";
-      // Otherwise..
+      // Otherwise...
       else
-        // depending on the text style..
+        // depending on the text style...
         yield return Style switch
         {
-          // output an non-stylized text
+          // output a non-stylized text
           TextStyle.Normal
             => Content.CleanInvalid(),
           // output inline code

@@ -6,9 +6,9 @@ using ModularDoc.Helpers;
 namespace ModularDoc.Elements.Markdown
 {
   /// <summary>
-  /// Class for markdown tables
+  /// Class for Markdown tables
   /// </summary>
-  public class Table
+  public sealed class Table
     : BaseElement, ITable
   {
     #region Constants
@@ -52,7 +52,7 @@ namespace ModularDoc.Elements.Markdown
     /// <inheritdoc />
     public override IEnumerable<string> Print()
     {
-      // If there is a heading..
+      // If there is a heading...
       if (!string.IsNullOrEmpty(Heading))
       {
         // print the heading
@@ -63,12 +63,12 @@ namespace ModularDoc.Elements.Markdown
 
       // Begin column headers with a vertical delimiter
       yield return DEL_VERTICAL;
-      // For every heading..
+      // For every heading...
       foreach (var heading in Headings)
       {
         // start heading with whitespace
         yield return " ";
-        // for every part of a heading..
+        // for every part of a heading...
         foreach (var line in heading.Print())
           // print it
           yield return line;
@@ -81,12 +81,12 @@ namespace ModularDoc.Elements.Markdown
 
       // Being the horizontal line with a vertical delimiter
       yield return DEL_VERTICAL;
-      // For the number of headings..
+      // For the number of headings...
       for (var i = 0; i < Headings.Count; i++)
         // print parts of the horizontal line
         yield return $" {DEL_HORIZONTAL}{DEL_HORIZONTAL}{DEL_HORIZONTAL} {DEL_VERTICAL}";
 
-      // For every row..
+      // For every row...
       foreach (var p in ProcessContentRows())
         yield return p;
     }
@@ -102,14 +102,14 @@ namespace ModularDoc.Elements.Markdown
 
         // assume none of columns are filled by this row
         var colCount = 0;
-        // for every (but not more than headings) row item..
+        // for every (but not more than headings) row item...
         foreach (var item in row.Take(Headings.Count))
         {
           // increment the filled row count
           colCount++;
           // start row item with whitespace
           yield return " ";
-          // for every part of a row item..
+          // for every part of a row item...
           foreach (var line in item.Print())
             // fix characters and print it
             yield return line.ReplaceNewline();
@@ -117,7 +117,7 @@ namespace ModularDoc.Elements.Markdown
           yield return $" {DEL_VERTICAL}";
         }
 
-        // if there are more headings than there are row items..
+        // if there are more headings than there are row items...
         if (Headings.Count <= colCount)
           continue;
         for (var i = 0; i < Headings.Count - colCount; i++)

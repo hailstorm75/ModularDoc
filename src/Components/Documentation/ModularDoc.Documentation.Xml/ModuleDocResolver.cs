@@ -1,15 +1,14 @@
 ﻿using Autofac;
 
-namespace ModularDoc.Documentation.Xml
+namespace ModularDoc.Documentation.Xml;
+
+/// <summary>
+/// Class for exporting the <see cref="DocResolver"/> to Autofac IoC
+/// </summary>
+public sealed class ModuleDocResolver
+  : Module
 {
-  /// <summary>
-  /// Class for exporting the <see cref="DocResolver"/> to Autofac IoC
-  /// </summary>
-  public class ModuleDocResolver
-    : Module
-  {
-    /// <inheritdoc />
-    protected override void Load(ContainerBuilder builder)
-      => builder.RegisterType<DocResolver>().As<IDocResolver>();
-  }
+  /// <inheritdoc />
+  protected override void Load(ContainerBuilder builder)
+    => builder.RegisterType<DocResolver>().As<IDocResolver>();
 }

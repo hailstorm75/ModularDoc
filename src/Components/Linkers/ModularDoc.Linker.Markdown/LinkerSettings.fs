@@ -5,13 +5,13 @@ open System.Collections.Generic
 open ModularDoc.Linker
 
 type LinkerSettings(data: IReadOnlyDictionary<string, string>) =
-  member val Platform = data.[LinkerSettings.ENTRY_PLATFORM] with get, set
-  member val GitPlatformUser = data.[LinkerSettings.PLATFORM_USER] with get, set
-  member val GitPlatformBranch = data.[LinkerSettings.PLATFORM_BRANCH] with get, set
-  member val GitPlatformRepository = data.[LinkerSettings.PLATFORM_REPOSITORY] with get, set
-  member val LinksToSourceCodeEnabled = data.[LinkerSettings.ENABLE_LINKS_TO_SOURCE] with get, set
-  member val OutputTargetWiki = data.[LinkerSettings.OUTPUT_TARGET_WIKI] with get, set
-  member val OutputStructured = data.[LinkerSettings.OUTPUT_STRUCTURED] with get, set
+  member val Platform = data[LinkerSettings.ENTRY_PLATFORM] with get, set
+  member val GitPlatformUser = data[LinkerSettings.PLATFORM_USER] with get, set
+  member val GitPlatformBranch = data[LinkerSettings.PLATFORM_BRANCH] with get, set
+  member val GitPlatformRepository = data[LinkerSettings.PLATFORM_REPOSITORY] with get, set
+  member val LinksToSourceCodeEnabled = data[LinkerSettings.ENABLE_LINKS_TO_SOURCE] with get, set
+  member val OutputTargetWiki = data[LinkerSettings.OUTPUT_TARGET_WIKI] with get, set
+  member val OutputStructured = data[LinkerSettings.OUTPUT_STRUCTURED] with get, set
 
   static member val ENTRY_PLATFORM = "platform"
   static member val PLATFORM_USER = "platformUser"

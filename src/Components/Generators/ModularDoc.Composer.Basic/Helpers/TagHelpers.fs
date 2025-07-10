@@ -38,7 +38,7 @@ module internal TagHelpers =
 
     // Get the read more indicator
     let readMore =
-      // If the content was cut off..
+      // If the content was cut off...
       if (count <> tag.Content.Count) then
         // indicate there is more to read
         Some("..." |> Normal |> TextElement)
@@ -87,13 +87,13 @@ module internal TagHelpers =
     let list = LinkedList<ITextContent>()
     // Process the tag content
     let content = seq [
-      // For each element..
+      // For each element...
       for element in elements do
-        // if the element is text..
+        // if the element is text...
         if (element :? ITextContent && (not (element :? IText) || (element :?> IText).Style <> IText.TextStyle.Code)) then
           // add it to the buffer
           list.AddLast (element :?> ITextContent) |> ignore
-        // otherwise if the element is not text and the buffer is empty..
+        // otherwise if the element is not text and the buffer is empty...
         elif (list.Count = 0) then
           // return the element as is
           yield element
@@ -110,7 +110,7 @@ module internal TagHelpers =
           yield element
     ]
 
-    // If there is no tag content..
+    // If there is no tag content...
     if (Seq.isEmpty content) then
       // compose and return the buffered text content
       seq [ tools.creator.JoinTextContent(list, " ") |> ElementHelpers.toElement ]
@@ -130,12 +130,12 @@ module internal TagHelpers =
     seq [
       // Prepare output variable
       let mutable typeDoc: IDocElement = null
-      // If documentation for the given type exists..
-      if (tools.docResolver.TryFindType(input, &typeDoc)) then
+      // If documentation for the given type exists...
+      if tools.docResolver.TryFindType(input, &typeDoc) then
         // prepare output variable
         let mutable result: IReadOnlyCollection<ITag> = null
-        // if documentation of specified type exists..
-        if (typeDoc.Documentation.Tags.TryGetValue(tag, &result)) then
+        // if documentation of specified type exists...
+        if typeDoc.Documentation.Tags.TryGetValue(tag, &result) then
           // return the documentation tag
           result
     ]
@@ -154,16 +154,16 @@ module internal TagHelpers =
     seq [
       // Prepare output variable
       let mutable typeDoc: IDocElement = null
-      // If documentation for the given type exists..
-      if (tools.docResolver.TryFindType(input, &typeDoc)) then
+      // If documentation for the given type exists...
+      if tools.docResolver.TryFindType(input, &typeDoc) then
         // prepare output variable
         let mutable memberDoc: IDocMember = null
-        // if the type has the given member defined..
-        if (typeDoc.Members.Value.TryGetValue(mem.RawName, &memberDoc)) then
+        // if the type has the given member defined...
+        if typeDoc.Members.Value.TryGetValue(mem.RawName, &memberDoc) then
           // prepare output variable
           let mutable result: IReadOnlyCollection<ITag> = null
-          // if documentation of specified type exists..
-          if (memberDoc.Documentation.Tags.TryGetValue(tag, &result)) then
+          // if documentation of specified type exists...
+          if memberDoc.Documentation.Tags.TryGetValue(tag, &result) then
             // return the documentation tag
             result
     ]

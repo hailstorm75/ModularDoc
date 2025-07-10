@@ -1,52 +1,51 @@
 ﻿using System;
 
-namespace ModularDoc.Core
+namespace ModularDoc.Core;
+
+/// <summary>
+/// Interface for processes
+/// </summary>
+public interface IProcess
 {
   /// <summary>
-  /// Interface for processes
+  /// Invoked whenever the <see cref="State"/> is changed
   /// </summary>
-  public interface IProcess
+  event EventHandler<ProcessState>? StateChanged;
+
+  /// <summary>
+  /// Progress name
+  /// </summary>
+  public string Name { get; }
+
+  /// <summary>
+  /// State of the given process
+  /// </summary>
+  public ProcessState State { get; set; }
+
+  /// <summary>
+  /// Enumeration of possible states of a <see cref="IProcess"/>
+  /// </summary>
+  public enum ProcessState
   {
     /// <summary>
-    /// Invoked whenever the <see cref="State"/> is changed
+    /// The process is waiting
     /// </summary>
-    event EventHandler<ProcessState>? StateChanged;
-
+    Idle,
     /// <summary>
-    /// Progress name
+    /// The process is running
     /// </summary>
-    public string Name { get; }
-
+    Running,
     /// <summary>
-    /// State of the given process
+    /// The process has finished successfully
     /// </summary>
-    public ProcessState State { get; set; }
-
+    Success,
     /// <summary>
-    /// Enumeration of possible states of a <see cref="IProcess"/>
+    /// The process has finished unsuccessfully
     /// </summary>
-    public enum ProcessState
-    {
-      /// <summary>
-      /// The process is waiting
-      /// </summary>
-      Idle,
-      /// <summary>
-      /// The process is running
-      /// </summary>
-      Running,
-      /// <summary>
-      /// The process has finished successfully
-      /// </summary>
-      Success,
-      /// <summary>
-      /// The process has finished unsuccessfully
-      /// </summary>
-      Failure,
-      /// <summary>
-      /// The process has been cancelled
-      /// </summary>
-      Cancelled
-    }
+    Failure,
+    /// <summary>
+    /// The process has been cancelled
+    /// </summary>
+    Cancelled
   }
 }

@@ -17,7 +17,7 @@ module internal TypeHelpers =
       let joinGenerics (i: seq<string>) =
         "<" + String.Join(", ", i) + ">"
 
-      // If there are generics..
+      // If there are generics...
       if not (Seq.isEmpty generics) then
         // return the type name with generics
         input.Name + joinGenerics generics
@@ -64,7 +64,7 @@ module internal TypeHelpers =
     match input with
     | :? IInterface as i ->
       // Find the member based on the member key
-      match memberFull.[0] with
+      match memberFull[0] with
       | 'M' -> i.Methods |> findMember
       | 'P' -> i.Properties |> findMember
       | 'E' -> i.Events |> findMember
@@ -82,16 +82,16 @@ module internal TypeHelpers =
   let processReference (input: IType) (reference: string) tools =
     let typeReference (reference: string) =
       let mutable result: IType = null
-      // If the reference type is known..
-      if tools.typeResolver.TryFindType(reference.[2..], &result) then
+      // If the reference type is known...
+      if tools.typeResolver.TryFindType(reference[2..], &result) then
         // return the referenced type name and with a link to the known type
-        LinkContent ((getTypeName result) |> Normal, lazy(tools.linker.CreateLink(input, result)))
+        LinkContent ((getTypeName result) |> Normal, lazy tools.linker.CreateLink(input, result))
       // Otherwise..
       else
         let slice = reference.AsSpan(reference.LastIndexOf('.') + 1)
         // try to find generics
         let index = slice.IndexOf('`')
-        // if generics were found..
+        // if generics were found...
         if index <> -1 then
           let generateGenerics = 
             // Find the number of generics
@@ -109,19 +109,19 @@ module internal TypeHelpers =
     let memberReference cutter =
       // Get the member reference without the namespace
       let memberString: string = cutter()
-      // Get the declaring type referencee
-      let typeString = reference.[..reference.Length - memberString.Length - 2]
+      // Get the declaring type reference
+      let typeString = reference[..reference.Length - memberString.Length - 2]
       // Get the known declaring type name
       let typeRef = typeReference typeString
 
       // Create an anchor to the documented member
       let memberAnchor = 
         let mutable result: IType = null
-        // If the declaring type is known..
-        if tools.typeResolver.TryFindType(typeString.[2..], &result) then
+        // If the declaring type is known...
+        if tools.typeResolver.TryFindType(typeString[2..], &result) then
           // get the member from the declaring type
           let mem = tryFindMember result reference memberString
-          // if the member is known..
+          // if the member is known...
           if Option.isSome mem then
             // create an anchor to the member and return it
             LinkContent (Normal memberString, tools.linker.CreateAnchor(input, mem |> Option.get))
@@ -148,7 +148,7 @@ module internal TypeHelpers =
       reference.Substring(reference.LastIndexOf('.') + 1)
 
     // Process the reference based on its key
-    match reference.[0] with
+    match reference[0] with
     | 'T' -> typeReference reference
     | 'E' -> typeReference reference
     | 'M' -> memberReference cutMethod
@@ -170,7 +170,7 @@ module internal TypeHelpers =
     let tryLink (item: IResType) =
       // Link to the known resolved type
       let link = tools.linker.CreateLink(source, item)
-      // If the link is valid..
+      // If the link is valid...
       if not (String.IsNullOrEmpty link) then
         // return the name wrapped into a link
         (InlineCode item.DisplayName, lazy link) |> LinkContent

@@ -57,7 +57,7 @@ module private SourceLinker =
        Some $"https://gitlab.com/{username}/{repository}/-/blob/{branch}/{path}#L{fst x}"
      | None -> None
 
-  let azureLink (target: IMember) username repository branch =
+  let azureLink (_: IMember) _ _ _ =
     None
 
   let createSourceLink (target: IMember) (platform: GitPlatform) (username: string) (repository: string) (branch: string) =

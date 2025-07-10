@@ -26,7 +26,7 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
     |> Seq.map (createSection >> ElementHelpers.initialize)
 
   let printIntroduction (input: IType) tools =
-    // If there is a summary for the given type..
+    // If there is a summary for the given type...
     match TagHelpers.findTypeTag input ITag.TagType.Summary tools |> Seq.tryExactlyOne with
     // print the summary
     | Some x -> Some(seq [ ElementHelpers.initialize (TagHelpers.tagShort input x tools |> TextElement) ])
@@ -119,8 +119,8 @@ type TypeComposer(creator, docResolver, memberResolver, linker, diagramResolver)
     
   interface ITypeComposer with
     /// <inheritdoc />
-    member __.Compose input =
-      // If the input is null..
+    member _.Compose input =
+      // If the input is null...
       if (isNull input) then
         // throw an exception
         raise (ArgumentNullException("input"))

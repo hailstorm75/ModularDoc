@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModularDoc.Elements.Markdown
 {
-  public class Diagram
+  public sealed class Diagram
     : IDiagram
   {
     private readonly string m_name;

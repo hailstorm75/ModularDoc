@@ -21,7 +21,7 @@ module internal SignatureHelpers =
                    | :? IDelegate as del -> del.Generics.Keys
                    | _ -> Seq.empty
 
-    // If there are no generics..
+    // If there are no generics...
     if Seq.isEmpty generics then
       // return empty
       ""
@@ -44,7 +44,7 @@ module internal SignatureHelpers =
                    | :? IDelegate as del -> del.Generics |> Some
                    | _ -> None
                   
-    // If there are no generics..
+    // If there are no generics...
     if Option.isNone generics then
       // return empty
       ""
@@ -56,7 +56,7 @@ module internal SignatureHelpers =
         for i in Option.get generics do
           yield String.Format(format, i.Key, String.Join(", ", i.Value |> Seq.map (fun c -> c.DisplayName)))
       ]
-      // If there are no constraints..
+      // If there are no constraints...
       if Seq.isEmpty constraints then
         // return nothing
         ""
@@ -191,7 +191,7 @@ module internal SignatureHelpers =
   /// </remarks>
   let getInheritance (input: IMember) =
     let processInheritance inheritance =
-      // If the member has no inheritance traits..
+      // If the member has no inheritance traits...
       if (inheritance = MemberInheritance.Normal || inheritance = MemberInheritance.InterfaceMember) then
         // return nothing
         ""
@@ -223,11 +223,11 @@ module internal SignatureHelpers =
         | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
         | _ -> ""
       String.Join(", ", seq [
-        // If the property has a getter..
+        // If the property has a getter...
         if property.GetAccessor.HasValue then
           // return it
           yield (accessor property.GetAccessor.Value) + "get"
-        // If the property has a setter..
+        // If the property has a setter...
         if property.SetAccessor.HasValue then
           // return it
           yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init" else "set")
@@ -245,11 +245,11 @@ module internal SignatureHelpers =
         | AccessorType.Internal -> if property.Accessor.Equals acc then "" else "internal "
         | _ -> ""
       String.Join(" ", seq [
-        // If the property has a getter..
+        // If the property has a getter...
         if property.GetAccessor.HasValue then
           // return it
           yield (accessor property.GetAccessor.Value) + "get;"
-        // If the property has a setter..
+        // If the property has a setter...
         if property.SetAccessor.HasValue then
           // return it
           yield (accessor property.SetAccessor.Value) + (if property.IsSetInit then "init;" else "set;")
@@ -262,6 +262,7 @@ module internal SignatureHelpers =
   /// <param name="format">The formatting of the signature</param>
   /// <param name="processors">Processors which extract the signature parts from the given member</param>
   /// <param name="input">The member for which the signature is to be generated</param>
+  /// <param name="tools"></param>
   let generateSignature format (processors: (IMember -> string) seq) (input: IMember) (tools: Tools) =
     let x input (col: obj[]) =
       String.Format(input, col)

@@ -1,15 +1,14 @@
 ﻿using ModularDoc;
 using ModularDoc.Core;
 
-namespace ModularDoc.Helpers
+namespace ModularDoc.Helpers;
+
+public class IndefiniteProcess
+  : BaseProcess, IIndefiniteProcess
 {
-  public class IndefiniteProcess
-    : BaseProcess, IIndefiniteProcess
+  /// <inheritdoc />
+  public IndefiniteProcess(string name)
+    : base(name)
   {
-    /// <inheritdoc />
-    public IndefiniteProcess(string name)
-      : base(name)
-    {
-    }
   }
 }

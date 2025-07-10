@@ -4,95 +4,94 @@ using System.Linq;
 using ModularDoc.Members.ResolvedTypes;
 using ModularDoc.Members.Types;
 
-namespace ModularDoc.Diagrams.PlantUML
+namespace ModularDoc.Diagrams.PlantUML;
+
+public sealed class PlantUmlResolver
+  : IDiagramResolver
 {
-  public class PlantUmlResolver
-    : IDiagramResolver
+  /// <inheritdoc />
+  public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
   {
-    /// <inheritdoc />
-    public bool TryGenerateDiagram(IType type, out (string name, string content) diagram)
+    var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
+    var relations = new LinkedList<string>();
+
+    ExtractTypes(type, true);
+
+    diagram = (type.RawName.Replace('`', '_'), string.Join(Environment.NewLine, PackTypes(types).Concat(relations)));
+    return true;
+
+    // ReSharper disable once VariableHidesOuterVariable
+    (string nameSpace, string typeDiagram) GenerateType(IType type, bool isParent = false)
     {
-      var types = new Dictionary<string, LinkedList<string>>(StringComparer.OrdinalIgnoreCase);
-      var relations = new LinkedList<string>();
-
-      // ReSharper disable once VariableHidesOuterVariable
-      (string nameSpace, string typeDiagram) GenerateType(IType type, bool isParent = false)
+      var rawTitle = type.RawName.Replace('`', '_');
+      var typeName = type switch
       {
-        string GenerateTitle(IInterface? inter = default)
-        {
-          var generics = inter is not null && inter.Generics.Keys.Any()
-            ? $"<{string.Join(",", inter.Generics.Keys)}>"
-            : string.Empty;
+        IRecord r => $"class {rawTitle}{GenerateTitle(r)} << (R, orchid) >>",
+        IClass c => $"{(c.IsAbstract ? "abstract " : "")}class {rawTitle}{GenerateTitle(c)}",
+        IInterface i => $"interface {rawTitle}{GenerateTitle(i)}",
+        IEnum => $"enum {rawTitle}{GenerateTitle()}",
+        _ => throw new NotSupportedException("The given type is not supported")
+      };
 
-          var highlightedTitle = isParent
-            ? $" as \"**{type.Name}**{generics}\""
-            : $" as \"{type.Name}{generics}\"";
+      return (type.TypeNamespace, typeName);
 
-          return highlightedTitle;
-        }
-
-        var rawTitle = type.RawName.Replace('`', '_');
-        var typeName = type switch
-        {
-          IRecord r => $"class {rawTitle}{GenerateTitle(r)} << (R, orchid) >>",
-          IClass c => $"{(c.IsAbstract ? "abstract " : "")}class {rawTitle}{GenerateTitle(c)}",
-          IInterface i => $"interface {rawTitle}{GenerateTitle(i)}",
-          IEnum => $"enum {rawTitle}{GenerateTitle()}",
-          _ => throw new NotSupportedException("The given type is not supported")
-        };
-
-        return (type.TypeNamespace, typeName);
-      }
-
-      // ReSharper disable once VariableHidesOuterVariable
-      (string nameSpace, string typeDiagram) GenerateResType(IResType type)
-        => type.Reference.Value is not null
-          // ReSharper disable once AssignNullToNotNullAttribute
-          ? GenerateType(type.Reference.Value)
-          : (type.TypeNamespace, $"{type.RawName.Replace('`', '_')} << External >>");
-
-      void ExtractTypes(IType parent, bool isParent)
+      string GenerateTitle(IInterface? inter = null)
       {
-        AddToDictionary(types, GenerateType(parent, isParent));
+        var generics = inter is not null && inter.Generics.Keys.Any()
+          ? $"<{string.Join(",", inter.Generics.Keys)}>"
+          : string.Empty;
 
-        if (parent is not IInterface interfaceType)
-          return;
+        var highlightedTitle = isParent
+          ? $" as \"**{type.Name}**{generics}\""
+          : $" as \"{type.Name}{generics}\"";
 
-        foreach (var item in interfaceType.InheritedTypesFlat)
-        {
-          relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {item.RawName.Replace('`', '_')}");
-          AddToDictionary(types, GenerateResType(item));
-        }
-
-        if (parent is not IClass classType || classType.BaseClass is null)
-          return;
-
-        var baseType = GenerateResType(classType.BaseClass!);
-
-        relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {classType.BaseClass!.RawName.Replace('`', '_')}");
-        AddToDictionary(types, baseType);
+        return highlightedTitle;
       }
-
-      ExtractTypes(type, true);
-
-      diagram = (type.RawName.Replace('`', '_'), string.Join(Environment.NewLine, PackTypes(types).Concat(relations)));
-      return true;
     }
 
-    private static IEnumerable<string> PackTypes(IReadOnlyDictionary<string, LinkedList<string>> types)
-      => types.Select(type => $"package {type.Key} <<Rectangle>> {{ {Environment.NewLine} { string.Join(Environment.NewLine, type.Value) } {Environment.NewLine} }}").ToList();
+    // ReSharper disable once VariableHidesOuterVariable
+    (string nameSpace, string typeDiagram) GenerateResType(IResType type)
+      => type.Reference.Value is not null
+        // ReSharper disable once AssignNullToNotNullAttribute
+        ? GenerateType(type.Reference.Value)
+        : (type.TypeNamespace, $"{type.RawName.Replace('`', '_')} << External >>");
 
-    private static void AddToDictionary(IDictionary<string, LinkedList<string>> target, (string key, string value) data)
+    void ExtractTypes(IType parent, bool isParent)
     {
-      var (key, value) = data;
-      if (target.ContainsKey(key))
-        target[key].AddLast(value);
-      else
+      AddToDictionary(types, GenerateType(parent, isParent));
+
+      if (parent is not IInterface interfaceType)
+        return;
+
+      foreach (var item in interfaceType.InheritedTypesFlat)
       {
-        var list = new LinkedList<string>();
-        list.AddLast(value);
-        target.Add(key, list);
+        relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {item.RawName.Replace('`', '_')}");
+        AddToDictionary(types, GenerateResType(item));
       }
+
+      if (parent is not IClass classType || classType.BaseClass is null)
+        return;
+
+      var baseType = GenerateResType(classType.BaseClass!);
+
+      relations.AddLast($"{parent.RawName.Replace('`', '_')} <-- {classType.BaseClass!.RawName.Replace('`', '_')}");
+      AddToDictionary(types, baseType);
+    }
+  }
+
+  private static IEnumerable<string> PackTypes(IReadOnlyDictionary<string, LinkedList<string>> types)
+    => types.Select(type => $"package {type.Key} <<Rectangle>> {{ {Environment.NewLine} { string.Join(Environment.NewLine, type.Value) } {Environment.NewLine} }}").ToList();
+
+  private static void AddToDictionary(IDictionary<string, LinkedList<string>> target, (string key, string value) data)
+  {
+    var (key, value) = data;
+    if (target.ContainsKey(key))
+      target[key].AddLast(value);
+    else
+    {
+      var list = new LinkedList<string>();
+      list.AddLast(value);
+      target.Add(key, list);
     }
   }
 }

@@ -78,9 +78,6 @@ namespace UT.Members.MemberTests
 
     public static IEnumerable<object[]> GetMethodRawNameData()
     {
-      static string FormatRawName(string methodName)
-        => string.Format($"{Constants.METHODS_NAMESPACE}.{Constants.METHODS_CLASS}.{{0}}", methodName);
-
       var data = new []
       {
         new object[] {Constants.METHOD_PUBLIC, FormatRawName($"{Constants.METHOD_PUBLIC}()")},
@@ -196,6 +193,9 @@ namespace UT.Members.MemberTests
       return data.ComposeData(
         resolver => resolver.FindMemberParent<IClass>(Constants.METHODS_NAMESPACE, Constants.METHODS_CLASS),
         Constants.TEST_ASSEMBLY);
+
+      static string FormatRawName(string methodName)
+        => string.Format($"{Constants.METHODS_NAMESPACE}.{Constants.METHODS_CLASS}.{{0}}", methodName);
     }
 
     public static IEnumerable<object[]> GetMethodInheritanceData()

@@ -8,8 +8,10 @@ module private Structure =
   /// <summary>
   /// Helper method for generating link structures
   /// </summary>
-  /// <param name="input">Dictionary of types group by their namespaces</param>
+  /// <param name="input">Dictionary of types grouped by their namespaces</param>
   /// <param name="platform">Platform for which the structure is to be generated for</param>
+  /// <param name="toWiki"></param>
+  /// <param name="structured"></param>
   /// <returns>Paired types to their output location</returns>
   let generateStructure (input: IReadOnlyDictionary<string, IReadOnlyCollection<IType>>) (platform: GitPlatform) (toWiki: bool) (structured: bool) =
     let result = Dictionary<IType, string>()

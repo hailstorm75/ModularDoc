@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ModularDoc;
 using ModularDoc.Composer;
 using ModularDoc.Core;
 using ModularDoc.Linker;
@@ -45,9 +44,6 @@ namespace ModularDoc.Printer.Markdown
     /// <inheritdoc />
     public async Task Print(IEnumerable<IType> types, string path)
     {
-      Task PrintIntermediate(IType type)
-        => Print(m_composer.Compose(type), type, path);
-
       m_processLogger.State = IProcess.ProcessState.Running;
 
       // Prepare the tasks of printing out pages for each respective type
@@ -57,6 +53,10 @@ namespace ModularDoc.Printer.Markdown
       await Task.WhenAll(tasks).ConfigureAwait(false);
 
       m_processLogger.State = IProcess.ProcessState.Success;
+      return;
+
+      Task PrintIntermediate(IType type)
+        => Print(m_composer.Compose(type), type, path);
     }
 
     private async Task Print(IElement element, IType type, string output)

@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace ModularDoc.Core
+namespace ModularDoc.Core;
+
+/// <summary>
+/// Interface for settings of libraries
+/// </summary>
+public interface ILibrarySettings
 {
   /// <summary>
-  /// Interface for settings of libraries
+  /// Settings id
   /// </summary>
-  public interface ILibrarySettings
-  {
-    /// <summary>
-    /// Settings id
-    /// </summary>
-    Guid Id { get; }
-  }
+  Guid Id { get; }
 }

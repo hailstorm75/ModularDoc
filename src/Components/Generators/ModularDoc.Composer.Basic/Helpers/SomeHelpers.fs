@@ -7,7 +7,7 @@ module internal SomeHelpers =
   /// <param name="input">Input sequence</param>
   /// <returns>Optioned sequence</returns>
   let emptyToNone input =
-    // if the sequence is empty..
+    // if the sequence is empty...
     if Seq.isEmpty input then
       // return nothing
       None
@@ -29,7 +29,7 @@ module internal SomeHelpers =
     |> Seq.map Option.get
 
   /// <summary>
-  /// Filters out tupled items from the <paramref name="input"/> sequence which have the first item equal to <see cref="None"/>
+  /// Filters out tuple items from the <paramref name="input"/> sequence which have the first item equal to <see cref="None"/>
   /// </summary>
   /// <param name="input">Tuple sequence</param>
   /// <returns>Filter tuple sequence</returns>

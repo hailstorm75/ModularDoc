@@ -1,10 +1,9 @@
-﻿namespace ModularDoc.Core
+﻿namespace ModularDoc.Core;
+
+/// <summary>
+/// Interface for indefinite processes
+/// </summary>
+public interface IIndefiniteProcess
+  : IProcess
 {
-  /// <summary>
-  /// Interface for indefinite processes
-  /// </summary>
-  public interface IIndefiniteProcess
-    : IProcess
-  {
-  }
 }

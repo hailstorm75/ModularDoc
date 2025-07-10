@@ -1,8 +1,7 @@
-﻿namespace ModularDoc.Helpers
+﻿namespace ModularDoc.Helpers;
+
+public interface IComponentMetadata
 {
-  public interface IComponentMetadata
-  {
-    string Id { get; set; }
-    string Name { get; set; }
-  }
+  string Id { get; set; }
+  string Name { get; set; }
 }

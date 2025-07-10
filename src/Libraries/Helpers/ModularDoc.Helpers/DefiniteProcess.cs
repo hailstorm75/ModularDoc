@@ -3,33 +3,32 @@ using ModularDoc;
 using ModularDoc.Core;
 using ReactiveUI;
 
-namespace ModularDoc.Helpers
+namespace ModularDoc.Helpers;
+
+public class DefiniteProcess
+  : BaseProcess, IDefiniteProcess
 {
-  public class DefiniteProcess
-    : BaseProcess, IDefiniteProcess
+  private int m_current;
+
+  /// <inheritdoc />
+  public double Complete { get; private set; }
+
+  /// <inheritdoc />
+  public int Current => m_current;
+
+  /// <inheritdoc />
+  public int Max { get; }
+
+  /// <inheritdoc />
+  public DefiniteProcess(string name, int max) : base(name)
+    => Max = max;
+
+  /// <inheritdoc />
+  public void IncreaseCompletion()
   {
-    private int m_current;
+    Complete = Interlocked.Increment(ref m_current) / (double)Max;
 
-    /// <inheritdoc />
-    public double Complete { get; private set; }
-
-    /// <inheritdoc />
-    public int Current => m_current;
-
-    /// <inheritdoc />
-    public int Max { get; }
-
-    /// <inheritdoc />
-    public DefiniteProcess(string name, int max) : base(name)
-      => Max = max;
-
-    /// <inheritdoc />
-    public void IncreaseCompletion()
-    {
-      Complete = Interlocked.Increment(ref m_current) / (double)Max;
-
-      this.RaisePropertyChanged(nameof(Complete));
-      this.RaisePropertyChanged(nameof(Current));
-    }
+    this.RaisePropertyChanged(nameof(Complete));
+    this.RaisePropertyChanged(nameof(Current));
   }
 }

@@ -42,7 +42,7 @@ type MarkdownLinker(memberResolver, linkerSettings: ILinkerSettings) =
       link + ".md"
 
   let createResLink (source: IType, target: IResType) =
-    // If the target reference is not null..
+    // If the target reference is not null...
     if target.Reference.Value |> (isNull >> not) then
       // create a link
       createLink(source, target.Reference.Value)
@@ -55,7 +55,7 @@ type MarkdownLinker(memberResolver, linkerSettings: ILinkerSettings) =
     let mutable result = null
     // Ensure that everything is done lazily
     lazy(
-      // If the member is known..
+      // If the member is known...
       if m_anchors.TryGetValue(input, &result) then
         // attempt to create an anchor for it
         match Anchor.createAnchor(result, createLink(page, page), m_platform) with

@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 
-namespace ModularDoc.Helpers
+namespace ModularDoc.Helpers;
+
+public class TrieNode<T> where T : notnull
 {
-  public class TrieNode<T> where T : notnull
+  private readonly Dictionary<T, TrieNode<T>> m_roots;
+
+  public IReadOnlyDictionary<T, TrieNode<T>> Nodes
+    => m_roots;
+
+  public TrieNode()
+    => m_roots = new Dictionary<T, TrieNode<T>>();
+
+  public TrieNode<T> Add(T item)
   {
-    private readonly Dictionary<T, TrieNode<T>> m_roots;
+    if (m_roots.TryGetValue(item, out var add))
+      return add;
 
-    public IReadOnlyDictionary<T, TrieNode<T>> Nodes
-      => m_roots;
+    var node = new TrieNode<T>();
+    m_roots.Add(item, node);
 
-    public TrieNode()
-      => m_roots = new Dictionary<T, TrieNode<T>>();
-
-    public TrieNode<T> Add(T item)
-    {
-      if (m_roots.ContainsKey(item))
-        return m_roots[item];
-
-      var node = new TrieNode<T>();
-      m_roots.Add(item, node);
-
-      return node;
-    }
+    return node;
   }
 }

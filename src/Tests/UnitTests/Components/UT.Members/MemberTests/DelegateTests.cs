@@ -16,9 +16,6 @@ namespace UT.Members.MemberTests
 
     public static IEnumerable<object?[]> GetDelegateRawNameData()
     {
-      static string FormatRawName(string methodName)
-        => string.Format($"{Constants.DELEGATES_NAMESPACE}.{Constants.DELEGATES_CLASS}.{{0}}", methodName);
-
       var data = new []
       {
         new object[] { Constants.DELEGATE_PUBLIC, FormatRawName($"{Constants.DELEGATE_PUBLIC}()") },
@@ -29,6 +26,9 @@ namespace UT.Members.MemberTests
       return data.ComposeData(
         resolver => resolver.FindMemberParent<IClass>(Constants.DELEGATES_NAMESPACE, Constants.DELEGATES_CLASS),
         Constants.TEST_ASSEMBLY);
+
+      static string FormatRawName(string methodName)
+        => string.Format($"{Constants.DELEGATES_NAMESPACE}.{Constants.DELEGATES_CLASS}.{{0}}", methodName);
     }
 
     public static IEnumerable<object[]> GetDelegateNameData()

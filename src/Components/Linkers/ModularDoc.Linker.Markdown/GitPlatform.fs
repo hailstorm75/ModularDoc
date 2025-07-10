@@ -6,20 +6,19 @@ open System.ComponentModel
 /// Git platform types
 /// </summary>
 type GitPlatform =
-  /// <summary>
-  /// GitHub platform
-  /// </summary>
-  | [<Description("GitHub")>]       GitHub = 0
-  /// <summary>
-  /// GitLab platform
-  /// </summary>
-  | [<Description("GitLab")>]       GitLab = 1
-  /// <summary>
-  /// Azure platform
-  /// </summary>
-  | [<Description("Azure DevOps")>] Azure = 2
-  /// <summary>
-  /// Bitbucket platform
-  /// </summary>
-  | [<Description("Bitbucket")>]    Bitbucket = 3 
-
+    /// <summary>
+    /// GitHub platform
+    /// </summary>
+    | [<Description("GitHub")>] GitHub = 0
+    /// <summary>
+    /// GitLab platform
+    /// </summary>
+    | [<Description("GitLab")>] GitLab = 1
+    /// <summary>
+    /// Azure platform
+    /// </summary>
+    | [<Description("Azure DevOps")>] Azure = 2
+    /// <summary>
+    /// Bitbucket platform
+    /// </summary>
+    | [<Description("Bitbucket")>] Bitbucket = 3

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace ModularDoc.Elements.Markdown
 {
   /// <summary>
-  /// Class for representing markdown links
+  /// Class for representing Markdown links
   /// </summary>
-  public class Link
+  public sealed class Link
     : ILink
   {
     #region Properties
@@ -33,20 +33,20 @@ namespace ModularDoc.Elements.Markdown
     /// <inheritdoc />
     public IEnumerable<string> Print()
     {
-      // If the reference does not exist..
+      // If the reference does not exist...
       if (string.IsNullOrEmpty(Reference.Value))
       {
-        // for every element of the content..
+        // for every element of the content...
         foreach (var line in Content.Print())
           // print it out
           yield return line;
       }
-      // Otherwise..
+      // Otherwise...
       else
       {
         // print the begging of the link
         yield return "[";
-        // for every element of the content..
+        // for every element of the content...
         foreach (var line in Content.Print())
           // print it out
           yield return line;

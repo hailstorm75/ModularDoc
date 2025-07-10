@@ -25,7 +25,7 @@ namespace ModularDoc.Elements.Markdown
       };
 
     /// <summary>
-    /// Converts given <paramref name="heading"/> string to a markdown heading of a given <paramref name="level"/>
+    /// Converts given <paramref name="heading"/> string to a Markdown heading of a given <paramref name="level"/>
     /// </summary>
     /// <param name="heading">Heading to use</param>
     /// <param name="level">Heading level to set</param>

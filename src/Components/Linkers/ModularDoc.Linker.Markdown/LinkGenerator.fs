@@ -6,7 +6,7 @@ open System.Collections.Generic
 
 module private Link =
   let private processTarget source target =
-    // If the linker source is equal to the target..
+    // If the linker source is equal to the target...
     if source = target then
       // return the target as the link
       target
@@ -25,17 +25,17 @@ module private Link =
       let index =
         seq [
           for i in 0 .. min foldersSource.Length foldersTarget.Length - 1 do
-            yield foldersSource.[i].Equals(foldersTarget.[i], StringComparison.Ordinal)
+            yield foldersSource[i].Equals(foldersTarget[i], StringComparison.Ordinal)
         ]
         |> Seq.findIndex not
         
       if foldersSource.Length = foldersTarget.Length && index = foldersSource.Length - 1 then
-        "./" + foldersTarget.[index]
+        "./" + foldersTarget[index]
       else
         // Create parts for the new link
         let link =
           seq [
-            // For every non-matching part of the source..
+            // For every non-matching part of the source...
             for _ in 0 .. foldersSource.Length - index - 2 do
               // go up a level
               yield ".."
@@ -43,7 +43,7 @@ module private Link =
             // For every non-matching part of the target
             for i in index .. foldersTarget.Length - 1 do
               // go down a level
-              yield foldersTarget.[i]
+              yield foldersTarget[i]
           ]
 
         // Compose the link

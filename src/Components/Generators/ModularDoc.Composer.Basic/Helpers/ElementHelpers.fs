@@ -6,7 +6,7 @@ open System.Collections.Generic
 /// <summary>
 /// Element types
 /// </summary>
-/// <typeparam name="M">Wraped text type</typeparam>
+/// <typeparam name="M">Wrapped text type</typeparam>
 type internal Element<'M when 'M :> ITextContent> =
   /// <summary>
   /// Element containing text
@@ -52,7 +52,7 @@ module internal ElementHelpers =
   /// Gets the content of the provided sequence of text elements
   /// </summary>
   /// <param name="text">Text for processing</param>
-  /// <typeparam name="M">Wraped text type</typeparam>
+  /// <typeparam name="M">Wrapped text type</typeparam>
   /// <returns>Extracted text content</returns>
   let getTextContent (text: 'M Element seq when 'M :> ITextContent) =
     let extractor element =

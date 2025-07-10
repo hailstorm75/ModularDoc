@@ -1,7 +1,6 @@
 ﻿namespace ModularDoc.Composer.Basic
 
 open ModularDoc.Documentation.Tags
-open ModularDoc.Members.Enums
 open ModularDoc.Members.Members
 open ModularDoc.Members.Types
 open ModularDoc.Elements
@@ -71,7 +70,7 @@ module internal ContentHelpers =
       // Compose each exception into a row of its type and description
       |> Seq.map (fun x -> seq [ TypeHelpers.processReference input x.Reference tools; TagHelpers.tagShort input x tools ] |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement) |> Linq.ToReadOnlyCollection)
 
-    // If there are no exceptions documented..
+    // If there are no exceptions documented...
     if Seq.isEmpty exceptions then
       // return nothing
       None
@@ -88,7 +87,7 @@ module internal ContentHelpers =
       // Extract the references
       |> Seq.map (fun x -> TagHelpers.tagShort input x tools |> TextHelpers.processText |> applyTools |> ElementHelpers.toElement)
 
-    // If there are no additional references..
+    // If there are no additional references...
     if Seq.isEmpty seeAlsos then
       // return nothing
       None
@@ -112,7 +111,7 @@ module internal ContentHelpers =
       let description =
         seq [
           let mutable value: IElement = null
-          // If there is documentation..
+          // If there is documentation...
           if argumentDocs.TryGetValue(argument.Name, &value) then
             // return it
             yield value
@@ -124,7 +123,7 @@ module internal ContentHelpers =
         let typeParts = seq [
           // Get the modifier string representation
           let modifier = argument |> StringConverters.argumentTypeStr
-          // If the modifier name is valid..
+          // If the modifier name is valid...
           if not (String.IsNullOrEmpty modifier) then
             // return it
             yield modifier |> InlineCode
@@ -155,11 +154,11 @@ module internal ContentHelpers =
         // Compose a row of argument information
         |> Seq.map processArguments
 
-      // If there no arguments..
+      // If there are no arguments...
       if (Seq.isEmpty argumentsProcessed) then
         // return nothing
         None
-      // Otherwise..
+      // Otherwise...
       else
         // compose a documentation table of the member arguments
         seq [ tools.creator.CreateTable(argumentsProcessed, TextHelpers.createHeadings (seq [ "Type"; "Name"; "Description" ]) tools) |> ElementHelpers.toElement ] |> Some
@@ -177,7 +176,7 @@ module internal ContentHelpers =
         (TypeHelpers.getTypeName t |> Normal, tools.linker.CreateLink(input, t)) |> LinkElement
 
       let mutable result: IInterface = null
-      // If the member is inherited..
+      // If the member is inherited...
       if interfaceType.InheritedTypeMembers.Value.TryGetValue(typeMember, &result) then
         Some(seq [ typeReference result |> ElementHelpers.initialize |> applyTools ])
       // Otherwise..

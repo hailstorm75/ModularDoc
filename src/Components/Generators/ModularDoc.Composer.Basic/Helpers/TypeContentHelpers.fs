@@ -126,7 +126,7 @@ module TypeContentHelpers =
   let private single x input tools =
     // Get the documentation tag for given type
     let tag = TagHelpers.findTypeTag input x tools |> Seq.tryExactlyOne
-    // If no tag was found..
+    // If no tag was found...
     if Option.isNone tag then
       // return nothing
       None
@@ -142,7 +142,7 @@ module TypeContentHelpers =
       // Compose a section for every item after processing it
       |> Seq.mapi (fun x y -> registerSection (processItem(x, y)) tools 3 |> ElementHelpers.toElement)
 
-    // If there are no items..
+    // If there are no items...
     if Seq.isEmpty provider then
       // return nothing
       None
@@ -186,7 +186,7 @@ module TypeContentHelpers =
     // Materialize the sequence to a dictionary
     |> dict
   let private overloadFormat overloadCount overloadIndex =
-    // If there are overloads..
+    // If there are overloads...
     if overloadCount > 1 then
       // then print them
       String.Format(" [{0}/{1}]", overloadIndex + 1, overloadCount)
@@ -247,7 +247,7 @@ module TypeContentHelpers =
       |> Seq.map (fun x -> ElementHelpers.initialize (TypeHelpers.processResType input x tools |> TextElement) tools)
 
     let createList elements =
-      // If there are no elements..
+      // If there are no elements...
       if (Seq.isEmpty elements) then
         // return nothing
         None
@@ -261,7 +261,7 @@ module TypeContentHelpers =
     | :? IClass as classType ->
       // Get the inherited base class
       let baseType =
-        // If there is no base class..
+        // If there is no base class...
         if (isNull classType.BaseClass) then
           // return nothing
           None
@@ -294,10 +294,10 @@ module TypeContentHelpers =
         // Get the type generics
         let generics = (input :?> IInterface).Generics
         let getConstraints (tag: ITag) =
-          // If the given tag references an existing generic type..
+          // If the given tag references an existing generic type...
           if generics.ContainsKey(tag.Reference) then
             // Get the generic constraints
-            let types = generics.[tag.Reference].ToTuple()
+            let types = generics[tag.Reference].ToTuple()
                         // Get the generics constraint types
                         |> snd
                         // Compose generic type constraints
@@ -314,11 +314,11 @@ module TypeContentHelpers =
           let result = seq [
             // Get the constraint name
             yield tag.Reference |> InlineCode
-            // If the given tag references an existing generic type..
-            if (generics.ContainsKey(tag.Reference)) then
+            // If the given tag references an existing generic type...
+            if generics.ContainsKey(tag.Reference) then
               // Get the constraint variance type
-              let variance = generics.[tag.Reference].ToTuple() |> fst
-              // if the constraint is a variant type..
+              let variance = generics[tag.Reference].ToTuple() |> fst
+              // if the constraint is a variant type...
               if (variance <> Variance.NonVariant) then
                 // print the variance type
                 yield variance |> StringConverters.varianceStr |> InlineCode
@@ -331,10 +331,10 @@ module TypeContentHelpers =
         seq [
           // Get the generic constraint name
           yield getName tag
-          // Get the documention
+          // Get the documentation
           yield TagHelpers.tagShort input tag tools
 
-          // If there are any constraints..
+          // If there are any constraints...
           if (Option.isSome constraints) then
             // return them
             yield constraints |> Option.get
@@ -342,7 +342,7 @@ module TypeContentHelpers =
         // Compose to elements
         |> Seq.map (TextHelpers.processText >> applyTools >> ElementHelpers.toElement)
 
-      // If the input type can have type constraints..
+      // If the input type can have type constraints...
       if input :? IInterface then
         // Get the documentation for the given input type
         TagHelpers.findTypeTag input ITag.TagType.Typeparam tools
@@ -354,7 +354,7 @@ module TypeContentHelpers =
         // return nothing
         None
 
-    // If there are generics..
+    // If there are generics...
     if (Option.isSome getTypeParams && getTypeParams |> (Option.get >> Seq.isEmpty >> not)) then
       // create a table of generics documentation
       seq [ tools.creator.CreateTable(getTypeParams |> Option.get, TextHelpers.createHeadings (seq [ "Type"; "Description"; "Constraints" ]) tools) |> ElementHelpers.toElement ] |> Some
@@ -365,7 +365,7 @@ module TypeContentHelpers =
 
   let private constructors (input: IType) tools =
     let extractor =
-      // If the input is a class, return the constructors. Otherwise return an empty collection
+      // If the input is a class, return the constructors. Otherwise, return an empty collection
       match input with
       | :? IClass as x -> x.Constructors
       | _ -> LinkedList<IConstructor>() :> IReadOnlyCollection<IConstructor>
@@ -396,14 +396,14 @@ module TypeContentHelpers =
 
   let private methods (input: IType) tools =
     let extractor =
-      // If the input can have methods, return the methods. Otherwise return an empty collection
+      // If the input can have methods, return the methods. Otherwise, return an empty collection
       match input with
       | :? IInterface as x -> x.Methods
       | _ -> LinkedList<IMethod>() :> IReadOnlyCollection<IMethod>
     let processMethod (_, method: IMethod) =
       let getOverloads = 
-        let overloads = (overloads extractor).[method.Name]
-        overloadFormat overloads.Count overloads.[method.RawName]
+        let overloads = (overloads extractor)[method.Name]
+        overloadFormat overloads.Count overloads[method.RawName]
 
       let signature =
         SignatureHelpers.generateSignature "{0}{1}{2} {3}{4}{5} {6}{7}({8}){9}" (seq [
@@ -439,7 +439,7 @@ module TypeContentHelpers =
 
   let private properties (input: IType) tools =
     let extractor = 
-      // If the input can have properties, return the properties. Otherwise return an empty collection
+      // If the input can have properties, return the properties. Otherwise, return an empty collection
       match input with
       | :? IInterface as x -> x.Properties
       | _ -> LinkedList<IProperty>() :> IReadOnlyCollection<IProperty>
@@ -474,7 +474,7 @@ module TypeContentHelpers =
 
   let private events (input: IType) tools =
     let extractor = 
-      // If the input can have events, return the events. Otherwise return an empty collection
+      // If the input can have events, return the events. Otherwise, return an empty collection
       match input with
       | :? IInterface as x -> x.Events
       | _ -> LinkedList<IEvent>() :> IReadOnlyCollection<IEvent>
@@ -506,14 +506,14 @@ module TypeContentHelpers =
 
   let private delegates (input: IType) tools =
     let extractor = 
-      // If the input can have delegates, return the delegates. Otherwise return an empty collection
+      // If the input can have delegates, return the delegates. Otherwise, return an empty collection
       match input with
       | :? IInterface as x -> x.Delegates
       | _ -> LinkedList<IDelegate>() :> IReadOnlyCollection<IDelegate>
     let processDelegate (_, deleg: IDelegate) =
       let getOverloads = 
-        let overloads = (overloads extractor).[deleg.Name]
-        overloadFormat overloads.Count overloads.[deleg.RawName]
+        let overloads = (overloads extractor)[deleg.Name]
+        overloadFormat overloads.Count overloads[deleg.RawName]
 
       let signature =
         SignatureHelpers.generateSignature "{0}{1} delegate {2} {3}{4}({5}){6}" (seq [
@@ -545,7 +545,7 @@ module TypeContentHelpers =
 
   let private enumFields (input: IType) tools =
     let extractor =
-      // If the input is an enum, return its fields. Otherwise return an empty collection
+      // If the input is an enum, return its fields. Otherwise, return an empty collection
       match input with
       | :? IEnum as e -> e.Fields
       | _ -> LinkedList<IEnumField>() :> IReadOnlyCollection<IEnumField>
@@ -578,7 +578,7 @@ module TypeContentHelpers =
 
   let private typeFields (input: IType) tools = 
     let extractor = 
-      // If the input can have events, return the events. Otherwise return an empty collection
+      // If the input can have events, return the events. Otherwise, return an empty collection
       match input with
       | :? IClass as x -> x.Fields
       | _ -> LinkedList<IField>() :> IReadOnlyCollection<IField>
@@ -645,7 +645,7 @@ module TypeContentHelpers =
   let processTableOfContents (input: IType) tools =
     let applyTools input = input tools
     let memberNameSummary name (summary: ITag option) =
-      // If the given member has a tag..
+      // If the given member has a tag...
       match summary with
       // print its name with the tag
       | Some x -> JoinedText (seq [ name; TagHelpers.tagShort input x tools ], Environment.NewLine)
@@ -676,7 +676,7 @@ module TypeContentHelpers =
             // Join the signature with the property summary
             memberNameSummary anchor ((TagHelpers.findTag input property ITag.TagType.Summary tools) |> Seq.tryExactlyOne)
 
-          // Compose a sequence of property signature parts and for each part..
+          // Compose a sequence of property signature parts and for each part...
           seq [ TypeHelpers.processResType input property.Type tools; processName; InlineCode (SignatureHelpers.getPropertyMethods property) ]
           // Initialize each part
           |> Seq.map (TextElement >> ElementHelpers.initialize >> applyTools)
@@ -686,7 +686,7 @@ module TypeContentHelpers =
         // Get the content for the table
         let content = createContent properties createRow
 
-        // If there are no properties..
+        // If there are no properties...
         if (Seq.isEmpty properties) then
           // return nothing
           None
@@ -770,7 +770,7 @@ module TypeContentHelpers =
         // Get the content for the table
         let content = createContent (methodsArray |> Seq.distinctBy(fun x -> x.Name)) createRow
 
-        // If there are no methods..
+        // If there are no methods...
         if (Seq.isEmpty methods) then
           // return nothing
           None
@@ -818,7 +818,7 @@ module TypeContentHelpers =
       // Create sections of tables
       |> Seq.map(fun x -> Section(x |> fst |> Seq.map (ElementHelpers.initialize >> applyTools), snd x, 2) |> ElementHelpers.initialize)
 
-    // If the input type is..
+    // If the input type is...
     match input with
     // an interface, then process it
     | :? IInterface as x -> processInterface x

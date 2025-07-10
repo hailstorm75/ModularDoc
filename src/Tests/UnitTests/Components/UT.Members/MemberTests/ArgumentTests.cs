@@ -16,6 +16,18 @@ namespace UT.Members.MemberTests
 
     public static IEnumerable<object?[]> GetArgumentNameData()
     {
+      foreach (var resolver in new ResolversProvider().WhereNotNull())
+      {
+        resolver.Resolve(Constants.TEST_ASSEMBLY);
+
+        var parent = resolver.FindMemberParent<IClass>(Constants.ARGUMENTS_NAMESPACE, Constants.ARGUMENTS_CLASS);
+        var data = DataProvider(parent, Constants.GetMethod).Concat(DataProvider(parent, Constants.GetDelegate));
+        foreach (object?[] item in data)
+          yield return item;
+      }
+
+      yield break;
+
       static IEnumerable<object?[]> DataProvider(IInterface? type, Func<string, string> getter)
       {
         yield return new object?[] {type, getter(Constants.ARGUMENT_ONE), 0, "a"};
@@ -28,7 +40,10 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, "e"};
         yield return new object?[] {type, getter(Constants.ARGUMENT_PARAMATERS), 0, "a"};
       }
+    }
 
+    public static IEnumerable<object?[]> GetArgumentTypeData()
+    {
       foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
         resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -38,10 +53,9 @@ namespace UT.Members.MemberTests
         foreach (object?[] item in data)
           yield return item;
       }
-    }
 
-    public static IEnumerable<object?[]> GetArgumentTypeData()
-    {
+      yield break;
+
       static IEnumerable<object?[]> DataProvider(IInterface? type, Func<string, string> getter)
       {
         const string intType = "int";
@@ -56,7 +70,10 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, intType};
         yield return new object?[] {type, getter(Constants.ARGUMENT_PARAMATERS), 0, intType};
       }
+    }
 
+    public static IEnumerable<object?[]> GetArgumentModifierData()
+    {
       foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
         resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -66,10 +83,9 @@ namespace UT.Members.MemberTests
         foreach (object?[] item in data)
           yield return item;
       }
-    }
 
-    public static IEnumerable<object?[]> GetArgumentModifierData()
-    {
+      yield break;
+
       static IEnumerable<object?[]> DataProvider(IInterface? type, Func<string, string> getter)
       {
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 0, ArgumentType.Normal};
@@ -78,16 +94,6 @@ namespace UT.Members.MemberTests
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 3, ArgumentType.Ref};
         yield return new object?[] {type, getter(Constants.ARGUMENT_MODIFIERS), 4, ArgumentType.Optional};
         yield return new object?[] {type, getter(Constants.ARGUMENT_PARAMATERS), 0, ArgumentType.Param};
-      }
-
-      foreach (var resolver in new ResolversProvider().WhereNotNull())
-      {
-        resolver.Resolve(Constants.TEST_ASSEMBLY);
-
-        var parent = resolver.FindMemberParent<IClass>(Constants.ARGUMENTS_NAMESPACE, Constants.ARGUMENTS_CLASS);
-        var data = DataProvider(parent, Constants.GetMethod).Concat(DataProvider(parent, Constants.GetDelegate));
-        foreach (object?[] item in data)
-          yield return item;
       }
     }
 

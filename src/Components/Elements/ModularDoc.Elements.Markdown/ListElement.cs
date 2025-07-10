@@ -6,9 +6,9 @@ using static ModularDoc.Elements.IList;
 namespace ModularDoc.Elements.Markdown
 {
   /// <summary>
-  /// Class for representing markdown lists
+  /// Class for representing Markdown lists
   /// </summary>
-  public class ListElement
+  public sealed class ListElement
     : BaseElement, IList
   {
     #region Properties
@@ -53,7 +53,7 @@ namespace ModularDoc.Elements.Markdown
     /// <returns>Strings to export</returns>
     public IEnumerable<string> Print(int indent)
     {
-      // If there is a heading..
+      // If there is a heading...
       if (!string.IsNullOrEmpty(Heading))
       {
         // print it
@@ -75,10 +75,10 @@ namespace ModularDoc.Elements.Markdown
 
       foreach (var item in Content)
       {
-        // If the element is a list..
+        // If the element is a list...
         if (item is IList list)
         {
-          // For event element in the nested list..
+          // For event element in the nested list...
           foreach (var line in list.Print(indent + 1))
             // print it
             yield return line;
@@ -94,7 +94,7 @@ namespace ModularDoc.Elements.Markdown
         else if (Type == ListType.Dotted)
           yield return "- ";
 
-        // For every part of the element..
+        // For every part of the element...
         foreach (var line in item.Print())
         {
           // print it

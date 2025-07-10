@@ -8,7 +8,7 @@ namespace ModularDoc.Elements.Markdown
   /// <summary>
   /// Class for markdown section
   /// </summary>
-  public class Section
+  public sealed class Section
     : BaseElement, ISection
   {
     #region Properties
@@ -40,7 +40,7 @@ namespace ModularDoc.Elements.Markdown
     /// <inheritdoc />
     public override IEnumerable<string> Print()
     {
-      // If there is a heading..
+      // If there is a heading...
       if (!string.IsNullOrEmpty(Heading))
       {
         // print the heading
@@ -49,10 +49,10 @@ namespace ModularDoc.Elements.Markdown
         yield return Environment.NewLine;
       }
 
-      // For every element except the last..
+      // For every element except the last...
       foreach (var element in Content.Take(Content.Count - 1))
       {
-        // for every part of the element..
+        // for every part of the element...
         foreach (var line in element.Print())
           // print it
           yield return line;
@@ -63,7 +63,7 @@ namespace ModularDoc.Elements.Markdown
 
       // Assume the last printed line is an empty string
       var last = "";
-      // For every part of the last element..
+      // For every part of the last element...
       foreach (var line in Content.Last().Print())
       {
         // track the printed line
@@ -72,7 +72,7 @@ namespace ModularDoc.Elements.Markdown
         yield return line;
       }
 
-      // If the last line was not a line break..
+      // If the last line was not a line break...
       if (!last.Equals(Environment.NewLine, StringComparison.InvariantCultureIgnoreCase))
         // print a line break
         yield return Environment.NewLine;

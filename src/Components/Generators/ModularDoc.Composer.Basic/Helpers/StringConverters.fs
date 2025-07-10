@@ -17,7 +17,7 @@ module internal StringConverters =
   /// <param name="argument">Input argument</param>
   /// <returns>String representation of the input <paramref name="argument"/></returns>
   let argumentTypeStr (argument: IArgument) =
-    // Retuns the respective string representation of the argument type
+    // Returns the respective string representation of the argument type
     match argument.Keyword with
     | ArgumentType.In -> "in"
     | ArgumentType.Out -> "out"

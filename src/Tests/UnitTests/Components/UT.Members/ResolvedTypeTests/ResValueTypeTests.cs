@@ -88,16 +88,6 @@ namespace UT.Members.ResolvedTypeTests
 
     public static IEnumerable<object[]> GetValueTypeArgumentNameData()
     {
-      static IEnumerable<object[]> DataProvider(Func<string, IReadOnlyCollection<IArgument>> getter)
-      {
-        yield return new object[] { getter(Constants.METHOD_RES_DYNR_OBJA).ElementAt(0), "object" };
-        yield return new object[] { getter(Constants.METHOD_RES_OBJR_DYNA).ElementAt(0), "dynamic" };
-        yield return new object[] { getter(Constants.METHOD_RES_DYNR_MIXA).ElementAt(0), "object" };
-        yield return new object[] { getter(Constants.METHOD_RES_OBJR_MIXA).ElementAt(0), "object" };
-        yield return new object[] { getter(Constants.METHOD_RES_DYNR_MIXA).ElementAt(1), "dynamic" };
-        yield return new object[] { getter(Constants.METHOD_RES_OBJR_MIXA).ElementAt(1), "dynamic" };
-      }
-
       foreach (var resolver in new ResolversProvider().WhereNotNull())
       {
         resolver.Resolve(Constants.TEST_ASSEMBLY);
@@ -106,6 +96,18 @@ namespace UT.Members.ResolvedTypeTests
         var data = DataProvider(x => parent.Methods.FindMember(x).Arguments).ToArray();
         foreach (object[] item in data)
           yield return item;
+      }
+
+      yield break;
+
+      static IEnumerable<object[]> DataProvider(Func<string, IReadOnlyCollection<IArgument>> getter)
+      {
+        yield return new object[] { getter(Constants.METHOD_RES_DYNR_OBJA).ElementAt(0), "object" };
+        yield return new object[] { getter(Constants.METHOD_RES_OBJR_DYNA).ElementAt(0), "dynamic" };
+        yield return new object[] { getter(Constants.METHOD_RES_DYNR_MIXA).ElementAt(0), "object" };
+        yield return new object[] { getter(Constants.METHOD_RES_OBJR_MIXA).ElementAt(0), "object" };
+        yield return new object[] { getter(Constants.METHOD_RES_DYNR_MIXA).ElementAt(1), "dynamic" };
+        yield return new object[] { getter(Constants.METHOD_RES_OBJR_MIXA).ElementAt(1), "dynamic" };
       }
     }
 
